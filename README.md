@@ -18,7 +18,7 @@ A highly skilled and experienced Lead Rust Developer with a remarkable track rec
 ## Work Experience
 
 ### Lead Rust Developer @ YADRO | [www.yadro.com](https://www.yadro.com)
-*March 2023 — September 2023 (7 months)*
+*March 2023 — Now (1 year)*
 
 - Designed the architecture of a hardware-software complex for deduplication-based backup solutions.
 - Conducted research on optimizing RoksDB and enhancing NVMe disk performance.
