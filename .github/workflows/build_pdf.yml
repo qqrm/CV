@@ -26,7 +26,7 @@ jobs:
         working-directory: latex/ru
         run: latexmk -pdf -quiet Belyakov_ru.tex
       - name: Upload PDFs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cv-pdfs
           path: |
