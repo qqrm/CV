@@ -1,0 +1,34 @@
+name: Build CV PDFs
+
+on:
+  push:
+    paths:
+      - 'latex/**.tex'
+      - '.github/workflows/build_pdf.yml'
+  pull_request:
+    paths:
+      - 'latex/**.tex'
+      - '.github/workflows/build_pdf.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install LaTeX packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-lang-cyrillic latexmk
+      - name: Build English PDF
+        working-directory: latex/en
+        run: latexmk -pdf -quiet Belyakov_en.tex
+      - name: Build Russian PDF
+        working-directory: latex/ru
+        run: latexmk -pdf -quiet Belyakov_ru.tex
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v3
+        with:
+          name: cv-pdfs
+          path: |
+            latex/en/Belyakov_en.pdf
+            latex/ru/Belyakov_ru.pdf
