@@ -1,0 +1,35 @@
+name: Manual Build CV PDFs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set build date
+        id: date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      - name: Install LaTeX packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-lang-cyrillic latexmk
+      - name: Build English PDF
+        working-directory: latex/en
+        run: |
+          sed '/^\\author/a \\date{'"$DATE"'}' Belyakov_en.tex > build.tex
+          latexmk -pdf -quiet -jobname=Belyakov_en build.tex
+      - name: Build Russian PDF
+        working-directory: latex/ru
+        run: |
+          sed '/^\\author/a \\date{'"$DATE"'}' Belyakov_ru.tex > build.tex
+          latexmk -pdf -quiet -jobname=Belyakov_ru build.tex
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-pdfs-${{ env.DATE }}
+          path: |
+            latex/en/Belyakov_en.pdf
+            latex/ru/Belyakov_ru.pdf
+
