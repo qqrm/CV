@@ -1,0 +1,55 @@
+name: Release Sitegen
+
+on:
+  push:
+    paths:
+      - 'sitegen/**'
+      - 'Cargo.toml'
+      - '.github/workflows/sitegen_release.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            sitegen/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+      - name: Build
+        run: cargo build --release --manifest-path sitegen/Cargo.toml
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitegen
+          path: sitegen/target/release/sitegen
+      - name: Delete previous releases
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          ids=$(gh api repos/${{ github.repository }}/releases --jq '.[].id')
+          echo "$ids" | tail -n +2 | while read id; do
+            gh api repos/${{ github.repository }}/releases/$id -X DELETE
+          done
+      - name: Create Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: sitegen-${{ github.run_number }}
+          files: sitegen/target/release/sitegen
+
