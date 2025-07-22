@@ -4,11 +4,15 @@ on:
   push:
     paths:
       - 'README.md'
+      - 'README_ru.md'
+      - 'docs/style.css'
       - 'sitegen/**'
       - '.github/workflows/sitegen.yml'
   pull_request:
     paths:
       - 'README.md'
+      - 'README_ru.md'
+      - 'docs/style.css'
       - 'sitegen/**'
       - '.github/workflows/sitegen.yml'
 
@@ -29,6 +33,12 @@ jobs:
         run: cargo build --release --manifest-path sitegen/Cargo.toml
       - name: Generate site
         run: cargo run --release --manifest-path sitegen/Cargo.toml
+      - name: Copy PDFs and README_ru
+        run: |
+          mkdir -p docs/latex/en docs/latex/ru
+          cp latex/en/Belyakov_en.pdf docs/latex/en/
+          cp latex/ru/Belyakov_ru.pdf docs/latex/ru/
+          cp README_ru.md docs/
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
