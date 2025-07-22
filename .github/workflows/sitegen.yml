@@ -31,7 +31,7 @@ jobs:
             "https://github.com/${{ github.repository }}/releases/latest/download/sitegen"
           chmod +x sitegen
       - name: Generate site
-        run: cargo run --release --manifest-path sitegen/Cargo.toml
+        run: ./sitegen
       - name: Install LaTeX packages
         run: |
           sudo apt-get update
