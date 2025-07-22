@@ -4,11 +4,15 @@ on:
   push:
     paths:
       - 'README.md'
+      - 'README_ru.md'
+      - 'latex/**'
       - 'sitegen/**'
       - '.github/workflows/sitegen.yml'
   pull_request:
     paths:
       - 'README.md'
+      - 'README_ru.md'
+      - 'latex/**'
       - 'sitegen/**'
       - '.github/workflows/sitegen.yml'
 
