@@ -7,3 +7,4 @@
 # Rust build
 /target/
 sitegen/target/
+/index.html
