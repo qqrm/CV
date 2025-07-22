@@ -24,7 +24,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 *March 2024 – Present  (1 year)*
 
 - Led a 12-person backend team (part of a 40+ overall project staff) in an import substitution initiative to migrate business processes from SAP to a custom Rust-based microservices ecosystem.
-Architected and maintained microservices using Actix Web, RabbitMQ, PostgreSQL, and other technologies, ensuring high throughput and reliability.
+- Architected and maintained microservices using Actix Web, RabbitMQ, PostgreSQL, and other technologies, ensuring high throughput and reliability.
 - Introduced and enforced Agile practices (Scrum, sprints, daily standups, retrospectives), increasing development velocity by ~20% and reducing rework.
 - Defined infrastructure requirements (CI/CD pipelines, test environments) and coordinated with DevOps to streamline deployments in a corporate on-premise environment.
 - Spearheaded the hiring and onboarding process: expanded the backend team from 5 to 12 developers, reducing average onboarding time by ~30%.
@@ -66,7 +66,7 @@ Architected and maintained microservices using Actix Web, RabbitMQ, PostgreSQL, 
 - Led a team of 4 Rust developers to build a blockchain-based database using Solana smart contracts, focusing on DAO and card game frameworks.
 - Architected and implemented low-level data storage structures, versioning, and table migrations, reducing code complexity by ~20%.
 - Formulated requirements from user stories, bridging technical and business aspects for clear deliverables.
-Coordinated sprints, assigned tasks, tracked timelines, and ensured on-time delivery of features.
+- Coordinated sprints, assigned tasks, tracked timelines, and ensured on-time delivery of features.
 - Conducted code reviews, reducing production bugs by ~30% through early detection of issues.
 
 #### Key Achievements
@@ -81,7 +81,7 @@ Coordinated sprints, assigned tasks, tracked timelines, and ensured on-time deli
 
 - Maintained and enhanced a blockchain-based voting service built on Exonum, adding weight-based voting functionalities.
 - Expanded integration and unit test coverage to ~75%, strengthening overall code quality.
-Facilitated the migration to the Microsoft ecosystem, refining CI/CD pipelines for more efficient deployments.
+- Facilitated the migration to the Microsoft ecosystem, refining CI/CD pipelines for more efficient deployments.
 
 #### Key Achievements
 
