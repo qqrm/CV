@@ -163,6 +163,3 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Built a web application for MT4 server management.
 
 **Technologies**: C++, Boost, C#, JS.
-
-## Site Generation
-Run `cargo run --manifest-path sitegen/Cargo.toml` to generate `docs/index.html`.
