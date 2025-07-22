@@ -27,11 +27,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Download sitegen binary
         run: |
-          curl -L -o sitegen \
+          curl -L -o sitegen_binary \
             "https://github.com/${{ github.repository }}/releases/latest/download/sitegen"
-          chmod +x sitegen
+          chmod +x sitegen_binary
       - name: Generate site
-        run: ./sitegen
+        run: ./sitegen_binary
       - name: Install LaTeX packages
         run: |
           sudo apt-get update
