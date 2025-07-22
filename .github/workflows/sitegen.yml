@@ -23,16 +23,13 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-      - name: Build
-        run: cargo build --release --manifest-path sitegen/Cargo.toml
+      - name: Download sitegen binary
+        run: |
+          curl -L -o sitegen \
+            "https://github.com/${{ github.repository }}/releases/latest/download/sitegen"
+          chmod +x sitegen
       - name: Generate site
-        run: cargo run --release --manifest-path sitegen/Cargo.toml
+        run: ./sitegen
       - name: Copy PDFs and README_ru
         run: |
           mkdir -p docs/latex/en docs/latex/ru
@@ -53,6 +50,7 @@ jobs:
           path: './docs'
 
   deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
