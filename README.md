@@ -163,3 +163,6 @@ Facilitated the migration to the Microsoft ecosystem, refining CI/CD pipelines f
 - Built a web application for MT4 server management.
 
 **Technologies**: C++, Boost, C#, JS.
+
+## Site Generation
+Run `cargo run --manifest-path sitegen/Cargo.toml` to generate `docs/index.html`.
