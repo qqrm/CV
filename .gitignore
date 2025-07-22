@@ -8,3 +8,5 @@
 /target/
 sitegen/target/
 /index.html
+docs/index.html
+latex/**/*.pdf

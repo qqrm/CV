@@ -6,6 +6,7 @@ on:
       - 'README.md'
       - 'README_ru.md'
       - 'docs/style.css'
+      - 'latex/**'
       - 'sitegen/**'
       - '.github/workflows/sitegen.yml'
   pull_request:
@@ -13,6 +14,7 @@ on:
       - 'README.md'
       - 'README_ru.md'
       - 'docs/style.css'
+      - 'latex/**'
       - 'sitegen/**'
       - '.github/workflows/sitegen.yml'
 
@@ -29,18 +31,24 @@ jobs:
             "https://github.com/${{ github.repository }}/releases/latest/download/sitegen"
           chmod +x sitegen
       - name: Generate site
-        run: ./sitegen
+        run: cargo run --release --manifest-path sitegen/Cargo.toml
+      - name: Install LaTeX packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended texlive-lang-cyrillic latexmk
+      - name: Build English PDF
+        working-directory: latex/en
+        run: latexmk -pdf -quiet Belyakov_en.tex
+      - name: Build Russian PDF
+        working-directory: latex/ru
+        run: latexmk -pdf -quiet Belyakov_ru.tex
       - name: Copy PDFs and README_ru
         run: |
           mkdir -p docs/latex/en docs/latex/ru
           cp latex/en/Belyakov_en.pdf docs/latex/en/
           cp latex/ru/Belyakov_ru.pdf docs/latex/ru/
           cp README_ru.md docs/
-      - name: Upload generated index.html
-        uses: actions/upload-artifact@v4
-        with:
-          name: index-html
-          path: docs/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
