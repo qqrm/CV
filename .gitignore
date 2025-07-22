@@ -4,3 +4,6 @@
 **/*.log
 **/*.out
 **/*.synctex.gz
+# Rust build
+/target/
+sitegen/target/
