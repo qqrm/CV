@@ -32,7 +32,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if !docs_dir.exists() {
         fs::create_dir_all(docs_dir)?;
     }
-    fs::write(docs_dir.join("index.html"), html_template_en)?;
+    fs::write(docs_dir.join("index.html"), html_template)?;
 
     let ru_dir = docs_dir.join("ru");
     if !ru_dir.exists() {
