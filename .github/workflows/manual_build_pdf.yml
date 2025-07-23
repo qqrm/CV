@@ -16,13 +16,19 @@ jobs:
           sed -i '/^\\author/a \\date{'"$DATE"'}' latex/en/Belyakov_en.tex
           sed -i '/^\\author/a \\date{'"$DATE"'}' latex/ru/Belyakov_ru.tex
       - uses: ./.github/actions/setup-cv
+      - name: Prepare release PDFs
+        run: |
+          cp latex/en/Belyakov_en.pdf latex/en/Belyakov_en_latex.pdf
+          cp latex/ru/Belyakov_ru.pdf latex/ru/Belyakov_ru_latex.pdf
+          cp typst/en/Belyakov_en.pdf typst/en/Belyakov_en_typst.pdf
+          cp typst/ru/Belyakov_ru.pdf typst/ru/Belyakov_ru_typst.pdf
       - name: Upload PDFs
         uses: actions/upload-artifact@v4
         with:
           name: cv-pdfs-${{ env.DATE }}
           path: |
-            latex/en/Belyakov_en.pdf
-            latex/ru/Belyakov_ru.pdf
-            typst/en/Belyakov_en.pdf
-            typst/ru/Belyakov_ru.pdf
+            latex/en/Belyakov_en_latex.pdf
+            latex/ru/Belyakov_ru_latex.pdf
+            typst/en/Belyakov_en_typst.pdf
+            typst/ru/Belyakov_ru_typst.pdf
 
