@@ -9,7 +9,7 @@
 
 - **Phone:** +7 (911) 261-70-72
 - **Telegram:** #link("https://leqqrm.t.me")[leqqrm.t.me]
-- **Email:** #link("mailto:qqrm@vivaldi.net")[qqrm@vivaldi.net]
+- **Email:** #link("mailto:qqrm@vivaldi.net")[qqrm\@vivaldi.net]
 - **GitHub:** #link("https://github.com/qqrm")[github.com/qqrm]
 
 Languages:
