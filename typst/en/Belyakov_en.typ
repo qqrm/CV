@@ -8,9 +8,9 @@
 ]
 
 - **Phone:** +7 (911) 261-70-72
-- **Telegram:** [leqqrm.t.me](https://leqqrm.t.me)
-- **Email:** qqrm\@vivaldi.net
-- **GitHub:** [github.com/qqrm](https://github.com/qqrm)
+- **Telegram:** #link("https://leqqrm.t.me")[leqqrm.t.me]
+- **Email:** #link("mailto:qqrm@vivaldi.net")[qqrm@vivaldi.net]
+- **GitHub:** #link("https://github.com/qqrm")[github.com/qqrm]
 
 Languages:
 - Russian (Native)
@@ -23,7 +23,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 == Work Experience
 
-=== Rust Team Lead \@ Inline Group | [www.inlinegroup.ru](https://www.inlinegroup.ru)
+=== Rust Team Lead \@ Inline Group | #link("https://www.inlinegroup.ru")[www.inlinegroup.ru]
 *March 2024 – Present  (1 year)*
 
 - Led a 12-person backend team (part of a 40+ overall project staff) in an import substitution initiative to migrate business processes from SAP to a custom Rust-based microservices ecosystem.
@@ -43,7 +43,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Clippy, cargo-audit, SonarQube
 
-=== Lead Rust Developer \@ YADRO | [www.yadro.com](https://www.yadro.com)
+=== Lead Rust Developer \@ YADRO | #link("https://www.yadro.com")[www.yadro.com]
 *March 2023 — March 2024 (1 year)*
 
 - Enhanced the architecture of a hardware-software complex for deduplication-based backup solutions.
@@ -79,7 +79,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: Rust, Solana Test Validator, Git, GitHub.
 
-=== Senior Rust Developer \@ Kaspersky Lab | [www.kaspersky.ru](https://www.kaspersky.ru)
+=== Senior Rust Developer \@ Kaspersky Lab | #link("https://www.kaspersky.ru")[www.kaspersky.ru]
 *May 2021 — March 2022 (11 months)*
 
 - Maintained and enhanced a blockchain-based voting service built on Exonum, adding weight-based voting functionalities.
@@ -93,7 +93,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: Rust, Exonum, Protocol Buffers, Serde, Git.
 
-=== Rust Developer \@ Kryptonite | [www.kryptonite.ru](https://www.kryptonite.ru)
+=== Rust Developer \@ Kryptonite | #link("https://www.kryptonite.ru")[www.kryptonite.ru]
 *May 2020 — May 2021 (1 year 1 month)*
 
 - Migrated a legacy Scala-based voice call processing system to Rust, improving performance and reducing memory usage.
@@ -108,7 +108,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: Rust, PostgreSQL, nalgebra, Serde, Protocol Buffers, Tokio, Git.
 
-=== Senior C++/Go Developer \@ B2Broker | [www.b2broker.com](https://www.b2broker.com)
+=== Senior C++/Go Developer \@ B2Broker | #link("https://www.b2broker.com")[www.b2broker.com]
 *November 2018 — March 2020 (1 year 6 months)*
 
 - Developed financial software using MT4/MT5 APIs, including trade copiers in C++ and Go.
@@ -118,7 +118,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
 
-=== Middle->Senior C++ Developer \@ ASCON | [www.ascon.ru](https://www.ascon.ru)
+=== Middle->Senior C++ Developer \@ ASCON | #link("https://www.ascon.ru")[www.ascon.ru]
 *May 2016 — November 2018 (2 years 7 months)*
 
 - Developed libraries for architectural design (KOMPAS), adding a “Change View Plane” feature to enhance 3D modeling capabilities.
@@ -151,14 +151,14 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: Myri10GE API, libpcap, PF_RING, C++11, Boost, Python.
 
-=== Middle C++/JS Developer \@ LiveTex | [www.livetex.ru](https://www.livetex.ru)
+=== Middle C++/JS Developer \@ LiveTex | #link("https://www.livetex.ru")[www.livetex.ru]
 *July 2014 — March 2015 (7 months)*
 
 - Created wrapper modules for PostgreSQL and ZeroMQ for Node.js.
 
 **Technologies**: gcc, C++, node.js, JS.
 
-=== Junior C++ Developer \@ Tools for Brokers | [t4b.com](https://www.t4b.com)
+=== Junior C++ Developer \@ Tools for Brokers | #link("https://www.t4b.com")[t4b.com]
 *November 2013 — July 2014 (9 months)*
 
 - Developed for the MetaTrader 4 and 5 platforms.
