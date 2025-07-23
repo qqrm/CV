@@ -58,7 +58,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Leveraged PyO3 to accelerate critical code paths, achieving ~25% faster data processing.
 - Designed automated tests to ensure reliability and maintainability of the hybrid Python-Rust solution.
 
-**Technologies**: Rust (Programming Language), Python3, PyO3, Git
+**Technologies**: Rust, Python3, PyO3, Git
 
 ### Rust Team Lead @ Solcery
 *March 2022 — March 2023 (1 year)*
