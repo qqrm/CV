@@ -3,7 +3,8 @@ use std::fs;
 use std::path::Path;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const AVATAR_URL: &str = "https://media.licdn.com/dms/image/v2/D4E03AQFCGQAKN1uYvw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1720862027144?e=2147483647&v=beta&t=WVbFPqJfgl6EtHuQOyOjyggtRPVVoFvp3w2S2hNW0v4";
+    const AVATAR_SRC_EN: &str = "avatar.jpg";
+    const AVATAR_SRC_RU: &str = "../avatar.jpg";
     // Generate English version
     let markdown_input = fs::read_to_string("README.md")?;
     let parser = Parser::new_ext(&markdown_input, Options::all());
@@ -17,7 +18,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let html_template = format!(
         "<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Alexey Belyakov - CV</title>\n    <link rel='stylesheet' href='style.css'>\n</head>\n<body>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='latex/en/Belyakov_en.pdf'>Download PDF (EN)</a></p>\n    <p><a href='latex/ru/Belyakov_ru.pdf'>Скачать PDF (RU)</a></p>\n</footer>\n</body>\n</html>\n",
-        AVATAR_URL, html_body
+        AVATAR_SRC_EN, html_body
     );
 
     // Generate Russian version
@@ -32,13 +33,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let html_template_ru = format!(
         "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='../latex/en/Belyakov_en.pdf'>Download PDF (EN)</a></p>\n    <p><a href='../latex/ru/Belyakov_ru.pdf'>Скачать PDF (RU)</a></p>\n</footer>\n</body>\n</html>\n",
-        AVATAR_URL, html_body_ru
+        AVATAR_SRC_RU, html_body_ru
     );
 
     let docs_dir = Path::new("docs");
     if !docs_dir.exists() {
         fs::create_dir_all(docs_dir)?;
     }
+    fs::copy("content/avatar.jpg", docs_dir.join("avatar.jpg"))?;
     fs::write(docs_dir.join("index.html"), html_template)?;
 
     let ru_dir = docs_dir.join("ru");
