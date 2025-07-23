@@ -14,3 +14,6 @@ latexmk -pdf -quiet -cd latex/ru/Belyakov_ru.tex
 typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
 typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
 ```
+
+Перед коммитом убедитесь, что бинарные файлы (например, PDF) не
+попадают в diff и не добавляются в репозиторий.

@@ -1,7 +1,7 @@
 = Алексей Леонидович Беляков
 
 #align(center)[
-  circle(
+  #circle(
     radius: 2.5cm,
     fill: image("../../content/avatar.jpg", fit: cover)
   )
