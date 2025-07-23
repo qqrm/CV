@@ -8,6 +8,7 @@ on:
       - 'docs/style.css'
       - 'latex/**'
       - 'sitegen/**'
+      - 'content/**'
       - '.github/workflows/sitegen.yml'
   pull_request:
     paths:
@@ -16,6 +17,7 @@ on:
       - 'docs/style.css'
       - 'latex/**'
       - 'sitegen/**'
+      - 'content/**'
       - '.github/workflows/sitegen.yml'
 
 jobs:
