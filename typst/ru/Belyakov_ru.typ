@@ -1,4 +1,11 @@
 = Алексей Леонидович Беляков
+
+#align(center)[
+  circle(
+    radius: 2.5cm,
+    fill: image("../../content/avatar.jpg", fit: cover)
+  )
+]
 - **Телефон**: +7 (911) 261-70-72
 - **Telegram**: [leqqrm.t.me](https://leqqrm.t.me)
 - **Почта**: [qqrm\@vivaldi.net](mailto:qqrm\@vivaldi.net)

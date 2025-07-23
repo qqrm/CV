@@ -5,6 +5,8 @@
 \usepackage{geometry}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
 
 \geometry{a4paper, total={170mm,257mm}, left=20mm, top=20mm}
 
@@ -12,9 +14,19 @@
 \author{Алексей Леонидович Беляков}
 \date{\today}
 
+\newcommand{\avatar}{%
+    \begin{center}
+        \begin{tikzpicture}
+            \clip (0,0) circle (1.5cm);
+            \node at (0,0) {\includegraphics[width=3cm,height=3cm]{../../content/avatar.jpg}};
+        \end{tikzpicture}
+    \end{center}}
+
 \begin{document}
 
 \maketitle
+
+\avatar
 
 \begin{center}
     \begin{tabular}{rl}
