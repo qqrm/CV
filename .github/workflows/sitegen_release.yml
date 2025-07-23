@@ -40,6 +40,8 @@ jobs:
             sitegen/target/release/sitegen
             latex/en/Belyakov_en.pdf
             latex/ru/Belyakov_ru.pdf
+            typst/en/Belyakov_en.pdf
+            typst/ru/Belyakov_ru.pdf
       - name: Delete previous releases
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
@@ -58,4 +60,6 @@ jobs:
             sitegen/target/release/sitegen
             latex/en/Belyakov_en.pdf
             latex/ru/Belyakov_ru.pdf
+            typst/en/Belyakov_en.pdf
+            typst/ru/Belyakov_ru.pdf
 

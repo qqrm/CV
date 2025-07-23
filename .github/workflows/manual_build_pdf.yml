@@ -15,6 +15,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-lang-cyrillic latexmk
+      - name: Install Typst
+        run: cargo install typst-cli --locked
       - name: Build English PDF
         working-directory: latex/en
         run: |
@@ -25,6 +27,10 @@ jobs:
         run: |
           sed '/^\\author/a \\date{'"$DATE"'}' Belyakov_ru.tex > build.tex
           latexmk -pdf -quiet -jobname=Belyakov_ru build.tex
+      - name: Build Typst English PDF
+        run: typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
+      - name: Build Typst Russian PDF
+        run: typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
       - name: Upload PDFs
         uses: actions/upload-artifact@v4
         with:
@@ -32,4 +38,6 @@ jobs:
           path: |
             latex/en/Belyakov_en.pdf
             latex/ru/Belyakov_ru.pdf
+            typst/en/Belyakov_en.pdf
+            typst/ru/Belyakov_ru.pdf
 
