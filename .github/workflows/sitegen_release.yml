@@ -32,6 +32,7 @@ jobs:
           override: true
       - name: Build
         run: cargo build --release --manifest-path sitegen/Cargo.toml
+      - uses: ./.github/actions/setup-cv
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
