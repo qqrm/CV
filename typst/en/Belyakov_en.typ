@@ -1,4 +1,11 @@
-= Alexey Leonidovich Belyakov 
+= Alexey Leonidovich Belyakov
+
+#align(center)[
+  circle(
+    radius: 2.5cm,
+    fill: image("../../content/avatar.jpg", fit: cover)
+  )
+]
 
 - **Phone:** +7 (911) 261-70-72
 - **Telegram:** [leqqrm.t.me](https://leqqrm.t.me)
