@@ -1,0 +1,28 @@
+name: 'Setup LaTeX and Typst and build PDFs'
+description: 'Install dependencies and build both LaTeX and Typst PDFs.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install LaTeX packages
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-latex-recommended texlive-latex-extra \
+          texlive-fonts-recommended texlive-lang-cyrillic latexmk
+    - name: Install Typst
+      shell: bash
+      run: cargo install typst-cli --locked
+    - name: Build English PDF
+      shell: bash
+      working-directory: latex/en
+      run: latexmk -pdf -quiet Belyakov_en.tex
+    - name: Build Russian PDF
+      shell: bash
+      working-directory: latex/ru
+      run: latexmk -pdf -quiet Belyakov_ru.tex
+    - name: Build Typst English PDF
+      shell: bash
+      run: typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
+    - name: Build Typst Russian PDF
+      shell: bash
+      run: typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf

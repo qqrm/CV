@@ -17,22 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install LaTeX packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-lang-cyrillic latexmk
-      - name: Install Typst
-        run: cargo install typst-cli --locked
-      - name: Build English PDF
-        working-directory: latex/en
-        run: latexmk -pdf -quiet Belyakov_en.tex
-      - name: Build Russian PDF
-        working-directory: latex/ru
-        run: latexmk -pdf -quiet Belyakov_ru.tex
-      - name: Build Typst English PDF
-        run: typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
-      - name: Build Typst Russian PDF
-        run: typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
+      - uses: ./.github/actions/setup-cv
       - name: Upload PDFs
         uses: actions/upload-artifact@v4
         with:
