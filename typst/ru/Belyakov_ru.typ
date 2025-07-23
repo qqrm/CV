@@ -1,7 +1,7 @@
 = Алексей Леонидович Беляков
 - **Телефон**: +7 (911) 261-70-72
 - **Telegram**: #link("https://leqqrm.t.me")[leqqrm.t.me]
-- **Почта**: #link("mailto:qqrm@vivaldi.net")[qqrm@vivaldi.net]
+- **Почта**: #link("mailto:qqrm@vivaldi.net")[qqrm\@vivaldi.net]
 - **GitHub**: #link("https://github.com/qqrm")[github.com/qqrm]
 **Языки**:
 - Русский (родной)
