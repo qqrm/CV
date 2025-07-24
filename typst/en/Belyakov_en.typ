@@ -1,4 +1,6 @@
 #align(center)[= Alexey Leonidovich Belyakov]
+#align(center)[*Rust Team Lead*]
+#align(center)[#datetime.today().display()]
 
 #align(center)[
   #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true)[
