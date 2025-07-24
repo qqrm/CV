@@ -3,6 +3,15 @@ description: 'Install dependencies and build both LaTeX and Typst PDFs.'
 runs:
   using: 'composite'
   steps:
+    - name: Cache APT packages
+      id: apt-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          /var/cache/apt/archives
+          /var/lib/apt/lists
+        key: ${{ runner.os }}-apt-latex-${{ hashFiles('.github/actions/setup-cv/action.yml') }}
+        restore-keys: ${{ runner.os }}-apt-latex-
     - name: Install LaTeX packages
       shell: bash
       run: |
