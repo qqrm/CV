@@ -1,4 +1,4 @@
-= Alexey Leonidovich Belyakov
+#align(center)[= Alexey Leonidovich Belyakov]
 
 #align(center)[
   #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true)[
@@ -6,11 +6,11 @@
   ]
 ]
 
-- **Phone:** +7 (911) 261-70-72
-- **Telegram:** #link("https://leqqrm.t.me")[leqqrm.t.me]
-- **Email:** #link("mailto:qqrm@vivaldi.net")[qqrm\@vivaldi.net]
-- **GitHub:** #link("https://github.com/qqrm")[github.com/qqrm]
-- **Docs:** #link("https://qqrm.github.io/CV/")[qqrm.github.io/CV]
+- *Phone:* +7 (911) 261-70-72
+- *Telegram:* #link("https://leqqrm.t.me")[leqqrm.t.me]
+- *Email:* #link("mailto:qqrm@vivaldi.net")[qqrm\@vivaldi.net]
+- *GitHub:* #link("https://github.com/qqrm")[github.com/qqrm]
+- *Docs:* #link("https://qqrm.github.io/CV/")[qqrm.github.io/CV]
 
 Languages:
 - Russian (Native)
@@ -41,7 +41,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Improved sprint predictability by ~25% through more accurate estimation and better backlog refinement.
 - Established transparent reporting and roadmap tracking for stakeholders, enhancing cross-team communication and aligning business priorities with technical execution.
 
-**Technologies**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Clippy, cargo-audit, SonarQube
+*Technologies*: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Clippy, cargo-audit, SonarQube
 
 === Lead Rust Developer \@ YADRO | #link("https://www.yadro.com")[www.yadro.com]
 *March 2023 — March 2024 (1 year)*
@@ -52,7 +52,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Resolved bugs and improved compression and deduplication modules.
 - Conducted code reviews and delivered internal lectures on Rust to transition ex-C++ developers to idiomatic Rust, decreasing onboarding time by 30%.
 
-**Technologies**: Rust, Tokio, Protocol Buffers, Serde, RoksDB, Git.
+*Technologies*: Rust, Tokio, Protocol Buffers, Serde, RoksDB, Git.
 
 === Senior Rust/Python Developer (Part-Time) \@ Ultima-bi
 *Nov 2022 - Mar 2023 (5 months)*
@@ -61,7 +61,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Leveraged PyO3 to accelerate critical code paths, achieving ~25% faster data processing.
 - Designed automated tests to ensure reliability and maintainability of the hybrid Python-Rust solution.
 
-**Technologies**: Rust (Programming Language), Python3, PyO3, Git
+*Technologies*: Rust (Programming Language), Python3, PyO3, Git
 
 === Rust Team Lead \@ Solcery
 *March 2022 — March 2023 (1 year)*
@@ -77,7 +77,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Streamlined the Rust development workflow, cutting average code review time by 40%.
 - Established best practices for versioning and migrations, enabling seamless DAO-based solutions for card game frameworks.
 
-**Technologies**: Rust, Solana Test Validator, Git, GitHub.
+*Technologies*: Rust, Solana Test Validator, Git, GitHub.
 
 === Senior Rust Developer \@ Kaspersky Lab | #link("https://www.kaspersky.ru")[www.kaspersky.ru]
 *May 2021 — March 2022 (11 months)*
@@ -91,7 +91,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Reduced post-deployment issues by ~25% through improved test coverage and robust CI processes.
 - Refactored the codebase for better maintainability, simplifying future feature additions.
 
-**Technologies**: Rust, Exonum, Protocol Buffers, Serde, Git.
+*Technologies*: Rust, Exonum, Protocol Buffers, Serde, Git.
 
 === Rust Developer \@ Kryptonite | #link("https://www.kryptonite.ru")[www.kryptonite.ru]
 *May 2020 — May 2021 (1 year 1 month)*
@@ -106,7 +106,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Achieved ~20% performance boost compared to the Scala version, enabling faster call analysis.
 - Reduced memory footprint by ~25% through optimized concurrency patterns in Rust.
 
-**Technologies**: Rust, PostgreSQL, nalgebra, Serde, Protocol Buffers, Tokio, Git.
+*Technologies*: Rust, PostgreSQL, nalgebra, Serde, Protocol Buffers, Tokio, Git.
 
 === Senior C++/Go Developer \@ B2Broker | #link("https://www.b2broker.com")[www.b2broker.com]
 *November 2018 — March 2020 (1 year 6 months)*
@@ -116,7 +116,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Designed microservices in C++ and Go for data normalization and delivery from MT4/MT5 to widgets, ensuring real-time data updates.
 - Implemented data collectors for statistical analysis, providing better insights for brokers.
 
-**Technologies**: MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
+*Technologies*: MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
 
 === Middle->Senior C++ Developer \@ ASCON | #link("https://www.ascon.ru")[www.ascon.ru]
 *May 2016 — November 2018 (2 years 7 months)*
@@ -126,7 +126,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Participated in a major codebase refactoring, transitioning to C++17.
 - Introduced Git, Slack, and integration tests, streamlining collaboration processes.
 
-**Technologies**: MSVC, C++, Boost, kompas-api, python, git, svn, CMake.
+*Technologies*: MSVC, C++, Boost, kompas-api, python, git, svn, CMake.
 
 === Middle С++ Developer \@ Con Certeza
 *March 2015 — April 2016 (1 year 2 months)*
@@ -148,15 +148,14 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
     - Telephone calls
 - Created integration tests for the implemented functionality using Python.
 
-
-**Technologies**: Myri10GE API, libpcap, PF_RING, C++11, Boost, Python.
+*Technologies*: Myri10GE API, libpcap, PF_RING, C++11, Boost, Python.
 
 === Middle C++/JS Developer \@ LiveTex | #link("https://www.livetex.ru")[www.livetex.ru]
 *July 2014 — March 2015 (7 months)*
 
 - Created wrapper modules for PostgreSQL and ZeroMQ for Node.js.
 
-**Technologies**: gcc, C++, node.js, JS.
+*Technologies*: gcc, C++, node.js, JS.
 
 === Junior C++ Developer \@ Tools for Brokers | #link("https://www.t4b.com")[t4b.com]
 *November 2013 — July 2014 (9 months)*
@@ -165,5 +164,4 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Enhanced and debugged a plug-in for mutual fund investments (UMAM).
 - Built a web application for MT4 server management.
 
-**Technologies**: C++, Boost, C\#, JS.
-
+*Technologies*: C++, Boost, C\#, JS.
