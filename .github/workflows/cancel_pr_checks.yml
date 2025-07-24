@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v6
+        env:
+          ACTIONS_PAT: ${{ secrets.ACTIONS_PAT }}
         with:
           script: |
             const pr = context.payload.pull_request;
@@ -31,4 +33,6 @@ jobs:
                 });
               }
             }
+
+        github-token: ${{ env.ACTIONS_PAT }}
 
