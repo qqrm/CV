@@ -10,6 +10,7 @@
 - **Telegram:** #link("https://leqqrm.t.me")[leqqrm.t.me]
 - **Email:** #link("mailto:qqrm@vivaldi.net")[qqrm\@vivaldi.net]
 - **GitHub:** #link("https://github.com/qqrm")[github.com/qqrm]
+- **Docs:** #link("https://qqrm.github.io/CV/")[qqrm.github.io/CV]
 
 Languages:
 - Russian (Native)

@@ -9,6 +9,7 @@
 - **Telegram**: #link("https://leqqrm.t.me")[leqqrm.t.me]
 - **Почта**: #link("mailto:qqrm@vivaldi.net")[qqrm\@vivaldi.net]
 - **GitHub**: #link("https://github.com/qqrm")[github.com/qqrm]
+- **Docs**: #link("https://qqrm.github.io/CV/")[qqrm.github.io/CV]
 **Языки**:
 - Русский (родной)
 - Английский (B2 — продвинутый уровень)
