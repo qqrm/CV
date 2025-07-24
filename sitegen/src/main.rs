@@ -102,7 +102,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let html_template_ru = format!(
-        "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='../latex/en/Belyakov_en.pdf'>Download PDF (EN)</a></p>\n    <p><a href='../typst/en/Belyakov_en.pdf'>Download PDF (Typst EN)</a></p>\n    <p><a href='../latex/ru/Belyakov_ru.pdf'>Скачать PDF (RU)</a></p>\n    <p><a href='../typst/ru/Belyakov_ru.pdf'>Скачать PDF (Typst RU)</a></p>\n</footer>\n</body>\n</html>\n",
+        "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n<p><em><a href='../'>Ссылка на английскую версию</a></em><br /><em><a href='../latex/ru/Belyakov_ru.pdf'>Ссылка на PDF</a></em><br /><em><a href='../latex/en/Belyakov_en.pdf'>Ссылка на английский PDF</a></em></p>\n{}\n</div>\n<footer>\n    <p><a href='../latex/en/Belyakov_en.pdf'>Download PDF (EN)</a></p>\n    <p><a href='../typst/en/Belyakov_en.pdf'>Download PDF (Typst EN)</a></p>\n    <p><a href='../latex/ru/Belyakov_ru.pdf'>Скачать PDF (RU)</a></p>\n    <p><a href='../typst/ru/Belyakov_ru.pdf'>Скачать PDF (Typst RU)</a></p>\n</footer>\n</body>\n</html>\n",
         AVATAR_SRC_RU, html_body_ru
     );
 
