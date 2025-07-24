@@ -1,0 +1,33 @@
+name: PR Checks
+
+on:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            latex:
+              - 'latex/**/*.tex'
+            typst:
+              - 'typst/**/*.typ'
+            rust:
+              - 'sitegen/**'
+              - 'Cargo.toml'
+      - uses: actions-rs/toolchain@v1
+        if: steps.filter.outputs.rust == 'true'
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+      - name: Cargo build
+        if: steps.filter.outputs.rust == 'true'
+        run: cargo build --manifest-path sitegen/Cargo.toml
+      - name: Build PDFs
+        if: steps.filter.outputs.latex == 'true' || steps.filter.outputs.typst == 'true'
+        uses: ./.github/actions/setup-cv
