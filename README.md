@@ -5,7 +5,7 @@
 
 - **Phone:** +7 (911) 261-70-72
 - **Telegram:** [leqqrm.t.me](https://leqqrm.t.me)
-- **Email:** qqrm@vivaldi.net
+- **Email:** [qqrm@vivaldi.net](mailto:qqrm@vivaldi.net)
 - **GitHub:** [github.com/qqrm](https://github.com/qqrm)
 
 Languages:
@@ -14,8 +14,7 @@ Languages:
 
 Work Schedule: Remote work, full-time
 
-Objective:
-====================
+## Objective
 A highly skilled Rust Team Lead with nearly 10 years of software development and system architecture experience. Committed to driving innovation in robust, high-performance systems and empowering teams to deliver impactful solutions. Seeking to leverage deep technical expertise, leadership skills, and microservices best practices to build high-performing development teams, streamline processes, and achieve business objectives in cutting-edge projects.
 
 ## Work Experience
