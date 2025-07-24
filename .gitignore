@@ -13,3 +13,4 @@ docs/avatar.jpg
 latex/**/*.pdf
 
 typst/**/*.pdf
+docs/**/*.pdf

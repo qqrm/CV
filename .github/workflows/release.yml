@@ -7,8 +7,8 @@ on:
       - 'sitegen/**'
       - 'content/**'
       - 'docs/**'
-      - 'latex/**'
-      - 'typst/**'
+      - 'latex/**/*.tex'
+      - 'typst/**/*.typ'
       - 'Cargo.toml'
       - '.github/workflows/release.yml'
   workflow_dispatch:
