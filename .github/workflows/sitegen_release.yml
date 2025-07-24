@@ -6,6 +6,8 @@ on:
       - 'sitegen/**'
       - 'Cargo.toml'
       - '.github/workflows/sitegen_release.yml'
+      - 'latex/**.tex'
+      - 'typst/**.typ'
   workflow_dispatch:
 
 jobs:
