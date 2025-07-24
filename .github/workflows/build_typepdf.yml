@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.6.0
       - name: Install TypePDF
         run: cargo install typepdf --locked
       - name: Build English PDF with TypePDF
@@ -15,7 +15,7 @@ jobs:
       - name: Build Russian PDF with TypePDF
         run: typepdf typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru_typepdf.pdf
       - name: Upload PDFs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: typepdf-pdfs
           path: |
