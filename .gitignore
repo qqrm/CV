@@ -1,4 +1,5 @@
 **/*.aux
+**/*.pdf
 **/*.fdb_latexmk
 **/*.fls
 **/*.log
@@ -11,6 +12,5 @@ sitegen/target/
 docs/index.html
 docs/avatar.jpg
 latex/**/*.pdf
-
 typst/**/*.pdf
 docs/**/*.pdf
