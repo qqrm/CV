@@ -2,7 +2,7 @@
 
 #align(center)[
   #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true)[
-    #image("../../content/avatar.jpg", width: 5cm, height: 5cm)
+    #image("avatar.jpg", width: 5cm, height: 5cm)
   ]
 ]
 - **Телефон**: +7 (911) 261-70-72
