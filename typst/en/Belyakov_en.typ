@@ -1,7 +1,10 @@
 = Alexey Leonidovich Belyakov
 
 #align(center)[
-  image("../../content/avatar.jpg", width: 5cm, height: 5cm)
+  #frame(
+    image("../../content/avatar.jpg", width: 5cm, height: 5cm),
+    clip: circle(2.5cm),
+  )
 ]
 
 - **Phone:** +7 (911) 261-70-72
