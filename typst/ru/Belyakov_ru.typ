@@ -1,10 +1,9 @@
 = Алексей Леонидович Беляков
 
 #align(center)[
-  #frame(
-    image("../../content/avatar.jpg", width: 5cm, height: 5cm),
-    clip: circle(2.5cm),
-  )
+  #box(width: 5cm, height: 5cm, radius: 2.5cm)[
+    image("../../content/avatar.jpg", width: 5cm, height: 5cm)
+  ]
 ]
 - **Телефон**: +7 (911) 261-70-72
 - **Telegram**: #link("https://leqqrm.t.me")[leqqrm.t.me]
