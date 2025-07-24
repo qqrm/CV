@@ -24,7 +24,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 == Work Experience
 
 === Rust Team Lead \@ Inline Group | #link("https://www.inlinegroup.ru")[www.inlinegroup.ru]
-*March 2024 – Present  (1 year)*
+*March 2024 – Present  (1 year 4 months)*
 
 - Led a 12-person backend team (part of a 40+ overall project staff) in an import substitution initiative to migrate business processes from SAP to a custom Rust-based microservices ecosystem.
 - Architected and maintained microservices using Actix Web, RabbitMQ, PostgreSQL, and other technologies, ensuring high throughput and reliability.
