@@ -68,6 +68,8 @@ jobs:
         uses: actions/download-artifact@v4.3.0
         with:
           name: sitegen-assets
+      - name: Move sitegen binary
+        run: mv sitegen/target/release/sitegen ./sitegen
       - name: Make binary executable
         run: chmod +x sitegen
       - name: Generate site
