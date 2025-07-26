@@ -2,7 +2,6 @@ use chrono::{Datelike, NaiveDate, Utc};
 use pulldown_cmark::{Options, Parser, html::push_html};
 use std::fs;
 use std::path::Path;
-use chrono::{Datelike, NaiveDate, Utc};
 use regex::Regex;
 
 fn month_from_en(name: &str) -> Option<u32> {
