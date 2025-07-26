@@ -1,7 +1,9 @@
-use pulldown_cmark::{html::push_html, Options, Parser};
+use chrono::{Datelike, NaiveDate, Utc};
+use pulldown_cmark::{Options, Parser, html::push_html};
 use std::fs;
 use std::path::Path;
-use chrono::{Datelike, NaiveDate, Utc};
+use std::process::Command;
+use which::which;
 
 fn format_duration_en(total_months: i32) -> String {
     let years = total_months / 12;
@@ -55,13 +57,35 @@ fn format_duration_ru(total_months: i32) -> String {
     }
 }
 
+fn check_tool(tool: &str) -> Result<(), String> {
+    if which(tool).is_err() {
+        return Err(format!(
+            "Не удалось найти утилиту '{}'. Пожалуйста, установите её и убедитесь, что она доступна в PATH.",
+            tool,
+        ));
+    }
+    if Command::new(tool).arg("--version").output().is_err() {
+        return Err(format!(
+            "Не удалось запустить '{}'. Проверьте корректность установки.",
+            tool,
+        ));
+    }
+    Ok(())
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    for tool in ["latexmk", "typst"] {
+        if let Err(msg) = check_tool(tool) {
+            eprintln!("{}", msg);
+            std::process::exit(1);
+        }
+    }
     const AVATAR_SRC_EN: &str = "avatar.jpg";
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
 
-    let start_date = NaiveDate::from_ymd_opt(INLINE_START.0, INLINE_START.1, 1)
-        .expect("Invalid start date");
+    let start_date =
+        NaiveDate::from_ymd_opt(INLINE_START.0, INLINE_START.1, 1).expect("Invalid start date");
     let today = Utc::now().date_naive();
     let total_months = (today.year() - start_date.year()) * 12
         + (today.month() as i32 - start_date.month() as i32);
