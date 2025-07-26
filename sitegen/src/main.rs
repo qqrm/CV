@@ -74,14 +74,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pdf_typst_en = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf";
     let pdf_typst_ru = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf";
 
-    let markdown_input = fs::read_to_string("README.md")?;
+    let markdown_input = fs::read_to_string("cv.md")?;
     let parser = Parser::new_ext(&markdown_input, Options::all());
     let mut html_body = String::new();
     push_html(&mut html_body, parser);
     html_body = html_body.replace("./latex/en/Belyakov_en.pdf", pdf_latex_en);
     html_body = html_body.replace("./latex/ru/Belyakov_ru.pdf", pdf_latex_ru);
     html_body = html_body.replace("./latex/", "latex/");
-    html_body = html_body.replace("./README_ru.md", "ru/");
+    html_body = html_body.replace("./cv.ru.md", "ru/");
     html_body = html_body.replace(
         "March 2024 – Present  (1 year)",
         &format!("March 2024 – Present  ({})", duration_en),
@@ -102,7 +102,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
 
     // Generate Russian version
-    let markdown_ru = fs::read_to_string("README_ru.md")?;
+    let markdown_ru = fs::read_to_string("cv.ru.md")?;
     let parser_ru = Parser::new_ext(&markdown_ru, Options::all());
     let mut html_body_ru = String::new();
     push_html(&mut html_body_ru, parser_ru);
