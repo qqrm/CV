@@ -5,6 +5,74 @@ use std::path::Path;
 use chrono::{Datelike, NaiveDate, Utc};
 use regex::Regex;
 
+fn month_from_en(name: &str) -> Option<u32> {
+    match name {
+        "January" => Some(1),
+        "February" => Some(2),
+        "March" => Some(3),
+        "April" => Some(4),
+        "May" => Some(5),
+        "June" => Some(6),
+        "July" => Some(7),
+        "August" => Some(8),
+        "September" => Some(9),
+        "October" => Some(10),
+        "November" => Some(11),
+        "December" => Some(12),
+        _ => None,
+    }
+}
+
+fn month_from_ru(name: &str) -> Option<u32> {
+    match name {
+        "Январь" => Some(1),
+        "Февраль" => Some(2),
+        "Март" => Some(3),
+        "Апрель" => Some(4),
+        "Май" => Some(5),
+        "Июнь" => Some(6),
+        "Июль" => Some(7),
+        "Август" => Some(8),
+        "Сентябрь" => Some(9),
+        "Октябрь" => Some(10),
+        "Ноябрь" => Some(11),
+        "Декабрь" => Some(12),
+        _ => None,
+    }
+}
+
+fn read_inline_start() -> Option<(i32, u32)> {
+    let content = std::fs::read_to_string("README.md").ok()?;
+    for line in content.lines() {
+        if let Some((month_str, year_str)) = line
+            .trim()
+            .strip_prefix('*')
+            .and_then(|s| s.split_once('–'))
+            .or_else(|| {
+                line.trim()
+                    .strip_prefix('*')
+                    .and_then(|s| s.split_once('—'))
+            })
+        {
+            let year_str = year_str.trim();
+            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время")
+            {
+                let parts: Vec<&str> = month_str.trim().split_whitespace().collect();
+                if parts.len() == 2 {
+                    let (month_text, year_text) = (parts[0], parts[1]);
+                    let year: i32 = year_text.parse().ok()?;
+                    if let Some(month) =
+                        month_from_en(month_text).or_else(|| month_from_ru(month_text))
+                    {
+                        return Some((year, month));
+                    }
+                }
+            }
+        }
+    }
+    None
+}
+
 fn format_duration_en(total_months: i32) -> String {
     let years = total_months / 12;
     let months = total_months % 12;
@@ -88,10 +156,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     const AVATAR_SRC_EN: &str = "avatar.jpg";
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
-
     let inline_start = read_inline_start().unwrap_or(INLINE_START);
-    let start_date = NaiveDate::from_ymd_opt(inline_start.0, inline_start.1, 1)
-        .expect("Invalid start date");
+    let start_date =
+        NaiveDate::from_ymd_opt(inline_start.0, inline_start.1, 1).expect("Invalid start date");
     let today = Utc::now().date_naive();
     let total_months = (today.year() - start_date.year()) * 12
         + (today.month() as i32 - start_date.month() as i32);
