@@ -73,14 +73,8 @@ jobs:
       - name: Generate site
         run: ./sitegen
       - uses: ./.github/actions/setup-cv
-      - name: Copy PDFs and README_ru
+      - name: Copy README_ru
         run: |
-          mkdir -p docs/latex/en docs/latex/ru
-          cp latex/en/Belyakov_en.pdf docs/latex/en/
-          cp latex/ru/Belyakov_ru.pdf docs/latex/ru/
-          mkdir -p docs/typst/en docs/typst/ru
-          cp typst/en/Belyakov_en.pdf docs/typst/en/
-          cp typst/ru/Belyakov_ru.pdf docs/typst/ru/
           cp README_ru.md docs/
       - name: Setup Pages
         uses: actions/configure-pages@v5.0.0

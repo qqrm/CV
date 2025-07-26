@@ -1,4 +1,5 @@
-use pulldown_cmark::{html::push_html, Options, Parser};
+use chrono::{Datelike, NaiveDate, Utc};
+use pulldown_cmark::{Options, Parser, html::push_html};
 use std::fs;
 use std::path::Path;
 use chrono::{Datelike, NaiveDate, Utc};
@@ -98,10 +99,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let duration_ru = format_duration_ru(total_months);
     let date_str = today.format("%Y-%m-%d").to_string();
     // Generate English version
+    let pdf_latex_en = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_latex.pdf";
+    let pdf_latex_ru = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_latex.pdf";
+    let pdf_typst_en = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf";
+    let pdf_typst_ru = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf";
+
     let markdown_input = fs::read_to_string("README.md")?;
     let parser = Parser::new_ext(&markdown_input, Options::all());
     let mut html_body = String::new();
     push_html(&mut html_body, parser);
+    html_body = html_body.replace("./latex/en/Belyakov_en.pdf", pdf_latex_en);
+    html_body = html_body.replace("./latex/ru/Belyakov_ru.pdf", pdf_latex_ru);
     html_body = html_body.replace("./latex/", "latex/");
     html_body = html_body.replace("./README_ru.md", "ru/");
     html_body = html_body.replace(
@@ -113,8 +121,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let html_template = format!(
-        "<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Alexey Belyakov - CV</title>\n    <link rel='stylesheet' href='style.css'>\n</head>\n<body>\n<header>\n    <h1>Alexey Belyakov</h1>\n    <p><strong>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='latex/en/Belyakov_en.pdf'>Download PDF (EN)</a></p>\n    <p><a href='typst/en/Belyakov_en.pdf'>Download PDF (Typst EN)</a></p>\n    <p><a href='latex/ru/Belyakov_ru.pdf'>Скачать PDF (RU)</a></p>\n    <p><a href='typst/ru/Belyakov_ru.pdf'>Скачать PDF (Typst RU)</a></p>\n</footer>\n</body>\n</html>\n",
-        date_str, AVATAR_SRC_EN, html_body
+        "<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Alexey Belyakov - CV</title>\n    <link rel='stylesheet' href='style.css'>\n</head>\n<body>\n<header>\n    <h1>Alexey Belyakov</h1>\n    <p><strong>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_latex_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_en}'>Download PDF (Typst EN)</a></p>\n    <p><a href='{pdf_latex_ru}'>Скачать PDF (RU)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (Typst RU)</a></p>\n</footer>\n</body>\n</html>\n",
+        date_str,
+        AVATAR_SRC_EN,
+        html_body,
+        pdf_latex_en = pdf_latex_en,
+        pdf_typst_en = pdf_typst_en,
+        pdf_latex_ru = pdf_latex_ru,
+        pdf_typst_ru = pdf_typst_ru,
     );
 
     // Generate Russian version
@@ -122,6 +136,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let parser_ru = Parser::new_ext(&markdown_ru, Options::all());
     let mut html_body_ru = String::new();
     push_html(&mut html_body_ru, parser_ru);
+    html_body_ru = html_body_ru.replace("./latex/en/Belyakov_en.pdf", pdf_latex_en);
+    html_body_ru = html_body_ru.replace("./latex/ru/Belyakov_ru.pdf", pdf_latex_ru);
     html_body_ru = html_body_ru.replace("./latex/", "../latex/");
     html_body_ru = html_body_ru.replace(
         "март 2024 – настоящее время (около 1 года)",
@@ -132,8 +148,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let html_template_ru = format!(
-        "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n    <p><strong>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n<p><em><a href='../'>Ссылка на английскую версию</a></em><br /><em><a href='../latex/ru/Belyakov_ru.pdf'>Ссылка на PDF</a></em><br /><em><a href='../latex/en/Belyakov_en.pdf'>Ссылка на английский PDF</a></em></p>\n{}\n</div>\n<footer>\n    <p><a href='../latex/en/Belyakov_en.pdf'>Download PDF (EN)</a></p>\n    <p><a href='../typst/en/Belyakov_en.pdf'>Download PDF (Typst EN)</a></p>\n    <p><a href='../latex/ru/Belyakov_ru.pdf'>Скачать PDF (RU)</a></p>\n    <p><a href='../typst/ru/Belyakov_ru.pdf'>Скачать PDF (Typst RU)</a></p>\n</footer>\n</body>\n</html>\n",
-        date_str, AVATAR_SRC_RU, html_body_ru
+        "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n    <p><strong>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n<p><em><a href='../'>Ссылка на английскую версию</a></em><br /><em><a href='{pdf_latex_ru}'>Ссылка на PDF</a></em><br /><em><a href='{pdf_latex_en}'>Ссылка на английский PDF</a></em></p>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_latex_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_en}'>Download PDF (Typst EN)</a></p>\n    <p><a href='{pdf_latex_ru}'>Скачать PDF (RU)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (Typst RU)</a></p>\n</footer>\n</body>\n</html>\n",
+        date_str,
+        AVATAR_SRC_RU,
+        html_body_ru,
+        pdf_latex_ru = pdf_latex_ru,
+        pdf_latex_en = pdf_latex_en,
+        pdf_typst_en = pdf_typst_en,
+        pdf_typst_ru = pdf_typst_ru,
     );
 
     let docs_dir = Path::new("docs");
