@@ -2,6 +2,7 @@ use pulldown_cmark::{html::push_html, Options, Parser};
 use std::fs;
 use std::path::Path;
 use chrono::{Datelike, NaiveDate, Utc};
+use regex::Regex;
 
 fn format_duration_en(total_months: i32) -> String {
     let years = total_months / 12;
@@ -55,12 +56,40 @@ fn format_duration_ru(total_months: i32) -> String {
     }
 }
 
+fn month_from_english(month: &str) -> Option<u32> {
+    match month {
+        "January" => Some(1),
+        "February" => Some(2),
+        "March" => Some(3),
+        "April" => Some(4),
+        "May" => Some(5),
+        "June" => Some(6),
+        "July" => Some(7),
+        "August" => Some(8),
+        "September" => Some(9),
+        "October" => Some(10),
+        "November" => Some(11),
+        "December" => Some(12),
+        _ => None,
+    }
+}
+
+fn read_inline_start() -> Option<(i32, u32)> {
+    let content = fs::read_to_string("README.md").ok()?;
+    let re = Regex::new(r"\*([A-Za-z]+)\s+(\d{4})\s+–\s+Present").ok()?;
+    let caps = re.captures(&content)?;
+    let month = month_from_english(&caps[1])?;
+    let year: i32 = caps[2].parse().ok()?;
+    Some((year, month))
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     const AVATAR_SRC_EN: &str = "avatar.jpg";
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
 
-    let start_date = NaiveDate::from_ymd_opt(INLINE_START.0, INLINE_START.1, 1)
+    let inline_start = read_inline_start().unwrap_or(INLINE_START);
+    let start_date = NaiveDate::from_ymd_opt(inline_start.0, inline_start.1, 1)
         .expect("Invalid start date");
     let today = Utc::now().date_naive();
     let total_months = (today.year() - start_date.year()) * 12
