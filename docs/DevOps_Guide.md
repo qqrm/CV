@@ -10,3 +10,8 @@ This document describes how we work with CI/CD and infrastructure in our project
 - Use `.gitlab-ci.yml` or a similar configuration to automatically run tests and builds.
 - Keep all secrets in CI/CD environment variables, not in the repository.
 - Before merging into the main branch, make sure all checks have passed.
+
+## Automatic pull request merging
+- The `.github/workflows/auto_merge.yml` workflow merges pull requests as soon as all checks succeed.
+- Do not remove or disable this workflow. Auto-merge helps keep the main branch healthy.
+
