@@ -2,7 +2,6 @@ use chrono::{Datelike, NaiveDate, Utc};
 use pulldown_cmark::{Options, Parser, html::push_html};
 use std::fs;
 use std::path::Path;
-use regex::Regex;
 
 fn month_from_en(name: &str) -> Option<u32> {
     match name {
@@ -41,7 +40,7 @@ fn month_from_ru(name: &str) -> Option<u32> {
 }
 
 fn read_inline_start() -> Option<(i32, u32)> {
-    let content = std::fs::read_to_string("README.md").ok()?;
+    let content = std::fs::read_to_string("cv.md").ok()?;
     for line in content.lines() {
         if let Some((month_str, year_str)) = line
             .trim()
