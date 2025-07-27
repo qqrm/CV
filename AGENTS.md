@@ -1,12 +1,14 @@
-В этом репозитории README файлы обычно редактируются вручную. Не изменяйте README.md и README_ru.md, если только в задании явно не просят их изменить.
+All documentation in this repository is maintained in English. Source code comments must also be written in English.
 
-Перед коммитами запускайте тесты:
+README files are usually edited manually. Do not change `README.md` or `README_ru.md` unless the task explicitly requires it.
+
+Before committing, run the tests:
 
 ```
 cargo test --manifest-path sitegen/Cargo.toml
 ```
 
-Также проверяйте локальную сборку PDF через LaTeX и Typst:
+Also verify local PDF builds with LaTeX and Typst:
 
 ```
 latexmk -pdf -quiet -cd latex/en/Belyakov_en.tex
@@ -15,5 +17,8 @@ typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
 typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
 ```
 
-Перед коммитом убедитесь, что бинарные файлы (например, PDF) не
-попадают в diff и не добавляются в репозиторий.
+If any of the PDF build tools (`latexmk` or `typst`) are missing, try installing
+them with `apt-get` (for LaTeX) or `cargo install typst-cli`. When installation
+fails because of network or permission issues, note this in the PR summary.
+
+Ensure binary files (for example PDFs) do not appear in the diff and are not added to the repository.
