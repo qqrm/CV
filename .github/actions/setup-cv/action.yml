@@ -29,9 +29,23 @@ runs:
       shell: bash
       working-directory: latex/ru
       run: latexmk -pdf -quiet Belyakov_ru.tex
+    - name: Build English Manager PDF
+      shell: bash
+      working-directory: latex/en
+      run: latexmk -pdf -quiet Belyakov_en_manager.tex
+    - name: Build Russian Manager PDF
+      shell: bash
+      working-directory: latex/ru
+      run: latexmk -pdf -quiet Belyakov_ru_manager.tex
     - name: Build Typst English PDF
       shell: bash
       run: typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
     - name: Build Typst Russian PDF
       shell: bash
       run: typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
+    - name: Build Typst English Manager PDF
+      shell: bash
+      run: typst compile typst/en/Belyakov_en_manager.typ typst/en/Belyakov_en_manager.pdf
+    - name: Build Typst Russian Manager PDF
+      shell: bash
+      run: typst compile typst/ru/Belyakov_ru_manager.typ typst/ru/Belyakov_ru_manager.pdf

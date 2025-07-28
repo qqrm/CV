@@ -1,0 +1,242 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\geometry{a4paper, total={170mm,257mm}, left=20mm, top=20mm}
+
+\title{\textbf{Engineering Manager}}
+\author{Alexey Leonidovich Belyakov}
+\date{\today}
+
+\newcommand{\avatar}{%
+    \begin{center}
+        \begin{tikzpicture}
+            \clip (0,0) circle (1.5cm);
+            \node at (0,0) {\includegraphics[width=3cm,height=3cm]{../../content/avatar.jpg}};
+        \end{tikzpicture}
+    \end{center}}
+
+\begin{document}
+
+\maketitle
+
+\avatar
+
+\begin{center}
+    \begin{tabular}{rl}
+        \textbf{Phone:} & +7 (911) 261-70-72 \\
+        \textbf{Telegram:} & \href{https://leqqrm.t.me}{leqqrm.t.me} \\
+        \textbf{Email:} & \href{mailto:qqrm@vivaldi.net}{qqrm@vivaldi.net} \\
+        \textbf{GitHub:} & \href{https://github.com/qqrm}{github.com/qqrm} \\
+        \textbf{Docs:} & \href{https://qqrm.github.io/CV/}{qqrm.github.io/CV} \\
+    \end{tabular}
+\end{center}
+
+\vspace{5mm}
+
+\section*{Languages}
+\begin{itemize}[leftmargin=15pt]
+    \item Russian (Native)
+    \item English (B2 — Advanced)
+\end{itemize}
+
+\section*{Objective}
+An experienced engineering leader currently serving as a Rust Team Lead with nearly 10 years of software development and system architecture experience. Seeking an Engineering Manager role to leverage deep technical expertise, leadership skills, and microservices best practices to build high-performing development teams, streamline processes, and achieve business objectives in cutting-edge projects.
+
+\section*{Work Experience}
+
+\subsection*{Rust Team Lead @ Inline Group}
+
+\quad Mar 2024 – Present, 1 year
+
+\begin{itemize}[leftmargin=15pt]
+    \item Led a 12-person backend team (part of a 40+ overall project staff) in an import substitution initiative to migrate business processes from SAP to a custom Rust-based microservices ecosystem.
+    \item Architected and maintained microservices using \textbf{Actix Web}, \textbf{RabbitMQ}, \textbf{PostgreSQL}, and other technologies, ensuring high throughput and reliability.
+    \item Introduced and enforced Agile practices (Scrum, sprints, daily standups, retrospectives), increasing development velocity by \(\sim 20\%\) and reducing rework.
+    \item Defined infrastructure requirements (CI/CD pipelines, test environments) and coordinated with DevOps to streamline deployments in a corporate on-premise environment.
+    \item Spearheaded the hiring and onboarding process: expanded the backend team from 5 to 12 developers, reducing average onboarding time by \(\sim 30\%\).
+    \item Implemented a custom Cargo registry to meet stringent security requirements, integrating static code analysis (Clippy, cargo-audit, SonarQube) into the pipeline.
+    \item Oversaw architectural decisions, code reviews, and performance optimizations; decreased bug backlog by \(\sim 30\%\) after instituting more rigorous QA and review practices.
+    \item Collaborated with business analysts and key stakeholders to transform high-level SAP-based requirements into microservice-oriented solutions, cutting turnaround time for new features by \(\sim 25\%\).
+\end{itemize}
+
+\textbf{Key Achievements:}
+\begin{itemize}[leftmargin=15pt]
+    \item Improved sprint productivity by \(\sim 15\%\) through implementing async and personal sprint planning.
+    \item Increased sprint predictability by \(\sim 25\%\) via more accurate estimation and better backlog refinement.
+    \item Established transparent reporting and roadmap tracking for stakeholders, enhancing cross-team communication and aligning business priorities with technical execution.
+\end{itemize}
+
+\textbf{Technologies}: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Clippy, cargo-audit, SonarQube
+
+\vspace{3mm}
+
+\subsection*{Lead Rust Developer @ YADRO}
+
+\quad Mar 2023 – Mar 2024, 1 year
+
+\begin{itemize}[leftmargin=15pt]
+    \item Enhanced the architecture of a hardware-software complex for deduplication-based backup solutions.
+    \item Conducted research on optimizing \textbf{RocksDB} and enhancing NVMe disk performance.
+    \item Implemented data structures for efficient storage of hashes and hash-hashes.
+    \item Resolved bugs and improved compression and deduplication modules.
+    \item Conducted code reviews and delivered internal Rust lectures, facilitating ex-C++ developers' transition to idiomatic Rust and decreasing onboarding time by \(\sim 30\%\).
+\end{itemize}
+
+\textbf{Technologies}: Rust, Tokio, Protocol Buffers, Serde, RocksDB, Git
+
+\vspace{3mm}
+
+\subsection*{Senior Rust/Python Developer (Part-Time) @ Ultima-bi}
+
+\quad Nov 2022 – Mar 2023, 5 months
+
+\begin{itemize}[leftmargin=15pt]
+    \item Developed \textbf{Python wrappers} and a caching system for a data science tool based on \textbf{Polars}, ensuring seamless Rust \(\leftrightarrow\) Python integration.
+    \item Leveraged \textbf{PyO3} to accelerate critical code paths, achieving \(\sim 25\%\) faster data processing.
+    \item Designed automated tests to ensure reliability and maintainability of the hybrid Python-Rust solution.
+\end{itemize}
+
+\textbf{Technologies}: Rust, Python3, PyO3, Git
+
+\vspace{3mm}
+
+\subsection*{Rust Team Lead @ Solcery}
+
+\quad Mar 2022 – Mar 2023, 1 year
+
+\begin{itemize}[leftmargin=15pt]
+    \item Led a team of 4 Rust developers to build a blockchain-based database using \textbf{Solana} smart contracts, focusing on DAO and card game frameworks.
+    \item Architected and implemented low-level data storage structures, versioning, and table migrations, reducing code complexity by \(\sim 20\%\).
+    \item Formulated requirements from user stories, bridging technical and business aspects for clear deliverables.
+    \item Coordinated sprints, assigned tasks, tracked timelines, and ensured on-time delivery of features.
+    \item Conducted code reviews, reducing production bugs by \(\sim 30\%\) through early detection of issues.
+\end{itemize}
+
+\textbf{Key Achievements:}
+\begin{itemize}[leftmargin=15pt]
+    \item Streamlined the Rust development workflow, cutting average code review time by 40\%.
+    \item Established best practices for versioning and migrations, enabling seamless DAO-based solutions for card game frameworks.
+\end{itemize}
+
+\textbf{Technologies}: Rust, Solana Test Validator, Git, GitHub
+
+\vspace{3mm}
+
+\subsection*{Senior Rust Developer @ Kaspersky Lab} 
+
+\quad May 2021 – Mar 2022, 11 months
+
+\begin{itemize}[leftmargin=15pt]
+    \item Maintained and enhanced a blockchain-based voting service built on Exonum, adding weight-based voting functionalities.
+    \item Expanded integration and unit test coverage to \(\sim 75\%\), strengthening overall code quality.
+    \item Facilitated the migration to the Microsoft ecosystem, refining CI/CD pipelines for more efficient deployments.
+\end{itemize}
+
+\textbf{Key Achievements:}
+\begin{itemize}[leftmargin=15pt]
+    \item Reduced post-deployment issues by \(\sim 25\%\) through improved test coverage and robust CI processes.
+    \item Refactored the codebase for better maintainability, simplifying future feature additions.
+\end{itemize}
+
+\textbf{Technologies}: Rust, Exonum, Protocol Buffers, Serde, Git
+
+\vspace{3mm}
+
+\subsection*{Rust Developer @ Kryptonite}
+
+\quad May 2020 – May 2021, 1 year 1 month
+
+\begin{itemize}[leftmargin=15pt]
+    \item Migrated a legacy Scala-based voice call processing system to Rust, improving performance and reducing memory usage.
+    \item Implemented voice recording normalization and embeddings-based analysis for high-accuracy indexing.
+    \item Developed synchronization modules for multi-track dialogues, increasing data integrity.
+    \item Created comprehensive unit test suites to validate new features and maintain stability.
+\end{itemize}
+
+\textbf{Key Achievements:}
+\begin{itemize}[leftmargin=15pt]
+    \item Achieved \(\sim 20\%\) performance boost compared to the Scala version, enabling faster call analysis.
+    \item Reduced memory footprint by \(\sim 25\%\) through optimized concurrency patterns in Rust.
+\end{itemize}
+
+\textbf{Technologies}: Rust, PostgreSQL, nalgebra, Serde, Protocol Buffers, Tokio, Git
+
+\vspace{3mm}
+
+\subsection*{Senior C++/Go Developer @ B2Broker} 
+
+\quad Nov 2018 – Mar 2020, 1 year 6 months
+
+\begin{itemize}[leftmargin=15pt]
+    \item Developed financial software using MT4/MT5 APIs, including trade copiers in C++ and Go.
+    \item Built a Multi Account Manager for flexible fund delegation and reward calculation, boosting operational efficiency by \(\sim 15\%\).
+    \item Designed microservices in C++ and Go for data normalization and delivery from MT4/MT5 to widgets, ensuring real-time data updates.
+    \item Implemented data collectors for statistical analysis, providing better insights for brokers.
+\end{itemize}
+
+\textbf{Technologies}: MSVC, CMake, Protocol Buffers, gRPC, NATS, PostgreSQL, Vcpkg, Git
+
+\vspace{3mm}
+
+\subsection*{Middle → Senior C++ Developer @ ASCON} 
+
+\quad May 2016 – Nov 2018, 2 years 7 months
+
+\begin{itemize}[leftmargin=15pt]
+    \item Contributed to the development of libraries for architectural design (KOMPAS), adding a “Change View Plane” feature to enhance 3D modeling capabilities.
+    \item Implemented an automated testing framework (C++/Python), reducing manual QA overhead by \(\sim 30\%\).
+    \item Participated in a major codebase refactoring, transitioning to C++17.
+    \item Introduced Git, Slack, and integration tests, streamlining collaboration processes.
+\end{itemize}
+
+\textbf{Technologies}: MSVC, C++, Boost, kompas-api, Python, Git, SVN, CMake
+
+\vspace{3mm}
+
+\subsection*{Middle C++ Developer @ Con Certeza} 
+
+\quad Mar 2015 – Apr 2016, 1 year 2 months
+
+\begin{itemize}[leftmargin=15pt]
+    \item Developed a sniffer and parser for signaling traffic (covering the entire SS7 protocol stack) as part of the SORM system for MTS.
+    \item Authored parsers for INAP, RANAP, MAP, TCAP, CAP, MTP3, MTP2, SCCP, SIP.
+    \item Designed and implemented modules to gather information from traffic based on RFC protocols (SMS, subscriber movements, telephone calls).
+    \item Created integration tests for the implemented functionality using Python.
+\end{itemize}
+
+\textbf{Technologies}: Myri10GE API, libpcap, PF\_RING, C++11, Boost, Python
+
+\vspace{3mm}
+
+\subsection*{Middle C++/JS Developer @ LiveTex}
+
+\quad Jul 2014 – Mar 2015, 7 months
+
+\begin{itemize}[leftmargin=15pt]
+    \item Created wrapper modules for \textbf{PostgreSQL} and \textbf{ZeroMQ} for Node.js, reducing query latency by \(\sim 10\%\).
+\end{itemize}
+
+\textbf{Technologies}: GCC, C++, Node.js, JavaScript
+
+\vspace{3mm}
+
+\subsection*{Junior C++ Developer @ Tools for Brokers} 
+
+\quad Nov 2013 – Jul 2014, 9 months
+
+\begin{itemize}[leftmargin=15pt]
+    \item Developed for the MetaTrader 4 and 5 platforms.
+    \item Enhanced and debugged a plug-in for mutual fund investments (UMAM).
+    \item Built a web application for MT4 server management, improving admin efficiency by \(\sim 15\%\).
+\end{itemize}
+
+\textbf{Technologies}: C++, Boost, C\#, JavaScript
+
+\end{document}
