@@ -44,6 +44,10 @@ jobs:
           cp latex/ru/Belyakov_ru.pdf latex/ru/Belyakov_ru_latex.pdf
           cp typst/en/Belyakov_en.pdf typst/en/Belyakov_en_typst.pdf
           cp typst/ru/Belyakov_ru.pdf typst/ru/Belyakov_ru_typst.pdf
+          for role in tl em hod tech; do
+            cp typst/en/Belyakov_en_${role}.pdf typst/en/Belyakov_en_${role}_typst.pdf
+            cp typst/ru/Belyakov_ru_${role}.pdf typst/ru/Belyakov_ru_${role}_typst.pdf
+          done
       - name: Upload artifacts
         uses: actions/upload-artifact@v4.6.2
         with:
@@ -54,6 +58,14 @@ jobs:
             latex/ru/Belyakov_ru_latex.pdf
             typst/en/Belyakov_en_typst.pdf
             typst/ru/Belyakov_ru_typst.pdf
+            typst/en/Belyakov_en_tl_typst.pdf
+            typst/en/Belyakov_en_em_typst.pdf
+            typst/en/Belyakov_en_hod_typst.pdf
+            typst/en/Belyakov_en_tech_typst.pdf
+            typst/ru/Belyakov_ru_tl_typst.pdf
+            typst/ru/Belyakov_ru_em_typst.pdf
+            typst/ru/Belyakov_ru_hod_typst.pdf
+            typst/ru/Belyakov_ru_tech_typst.pdf
 
   site:
     needs: build_sitegen
@@ -105,3 +117,11 @@ jobs:
             latex/ru/Belyakov_ru_latex.pdf
             typst/en/Belyakov_en_typst.pdf
             typst/ru/Belyakov_ru_typst.pdf
+            typst/en/Belyakov_en_tl_typst.pdf
+            typst/en/Belyakov_en_em_typst.pdf
+            typst/en/Belyakov_en_hod_typst.pdf
+            typst/en/Belyakov_en_tech_typst.pdf
+            typst/ru/Belyakov_ru_tl_typst.pdf
+            typst/ru/Belyakov_ru_em_typst.pdf
+            typst/ru/Belyakov_ru_hod_typst.pdf
+            typst/ru/Belyakov_ru_tech_typst.pdf
