@@ -15,3 +15,16 @@ This document describes how we work with CI/CD and infrastructure in our project
 - The `.github/workflows/auto_merge.yml` workflow merges pull requests as soon as all checks succeed.
 - Do not remove or disable this workflow. Auto-merge helps keep the main branch healthy.
 
+
+## Local PDF builds
+To compile PDFs locally, install LaTeX packages:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-lang-cyrillic latexmk
+```
+
+### Local pipeline runs
+CI workflows are defined in GitHub Actions. To execute them locally you can install
+the [`act`](https://github.com/nektos/act) tool and run `act` from the repository root.
+
