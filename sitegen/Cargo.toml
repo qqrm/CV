@@ -8,3 +8,4 @@ pulldown-cmark = "0.9"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 toml = "0.8"
 serde = { version = "1", features = ["derive"] }
+pathdiff = "0.2"

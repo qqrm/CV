@@ -1,9 +1,10 @@
 use chrono::{Datelike, NaiveDate, Utc};
-use pulldown_cmark::{html::push_html, Options, Parser};
+use pulldown_cmark::{Options, Parser, html::push_html};
+use serde::Deserialize;
+use sitegen::pdfgen;
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
-use serde::Deserialize;
 
 fn month_from_en(name: &str) -> Option<u32> {
     match name {
@@ -143,11 +144,13 @@ fn read_roles() -> BTreeMap<String, String> {
         })
 }
 
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     const AVATAR_SRC_EN: &str = "avatar.jpg";
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
+
+    // Regenerate LaTeX and Typst sources from Markdown before building PDFs
+    pdfgen::generate().expect("Failed to generate sources");
     let inline_start = read_inline_start().unwrap_or(INLINE_START);
     let roles = read_roles();
     let roles_js = {

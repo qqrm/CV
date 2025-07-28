@@ -17,10 +17,13 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get install -y texlive-latex-recommended texlive-latex-extra \
-          texlive-fonts-recommended texlive-lang-cyrillic latexmk
+          texlive-fonts-recommended texlive-lang-cyrillic latexmk pandoc
     - name: Install Typst
       shell: bash
       run: cargo install typst-cli --locked
+    - name: Generate LaTeX and Typst sources
+      shell: bash
+      run: cargo run --bin generate_pdfs --manifest-path sitegen/Cargo.toml
     - name: Build English PDF
       shell: bash
       working-directory: latex/en
