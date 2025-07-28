@@ -1,7 +1,9 @@
 use chrono::{Datelike, NaiveDate, Utc};
-use pulldown_cmark::{Options, Parser, html::push_html};
+use pulldown_cmark::{html::push_html, Options, Parser};
+use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
+use serde::Deserialize;
 
 fn month_from_en(name: &str) -> Option<u32> {
     match name {
@@ -123,12 +125,38 @@ fn format_duration_ru(total_months: i32) -> String {
     }
 }
 
+#[derive(Deserialize)]
+struct RolesFile {
+    roles: BTreeMap<String, String>,
+}
+
+fn read_roles() -> BTreeMap<String, String> {
+    fs::read_to_string("roles.toml")
+        .ok()
+        .and_then(|text| toml::from_str::<RolesFile>(&text).ok())
+        .map(|r| r.roles)
+        .unwrap_or_else(|| {
+            BTreeMap::from([
+                ("tl".to_string(), "Team Lead".to_string()),
+                ("tech".to_string(), "Tech Lead".to_string()),
+            ])
+        })
+}
+
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     const AVATAR_SRC_EN: &str = "avatar.jpg";
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
     let inline_start = read_inline_start().unwrap_or(INLINE_START);
+    let roles = read_roles();
+    let roles_js = {
+        let pairs: Vec<String> = roles
+            .iter()
+            .map(|(k, v)| format!("{}: '{}'", k, v))
+            .collect();
+        format!("{{ {} }}", pairs.join(", "))
+    };
     let start_date =
         NaiveDate::from_ymd_opt(inline_start.0, inline_start.1, 1).expect("Invalid start date");
     let today = Utc::now().date_naive();
@@ -160,7 +188,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let html_template = format!(
-        "<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Alexey Belyakov - CV</title>\n    <link rel='stylesheet' href='style.css'>\n</head>\n<body>\n<header>\n    <h1>Alexey Belyakov</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_latex_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_en}'>Download PDF (Typst EN)</a></p>\n    <p><a href='{pdf_latex_ru}'>Скачать PDF (RU)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (Typst RU)</a></p>\n</footer>\n<script>\n    const positions = {{ tl: 'Team Lead', em: 'Engineering Manager', hod: 'Head of Development' }};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
+        "<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Alexey Belyakov - CV</title>\n    <link rel='stylesheet' href='style.css'>\n</head>\n<body>\n<header>\n    <h1>Alexey Belyakov</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_latex_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_en}'>Download PDF (Typst EN)</a></p>\n    <p><a href='{pdf_latex_ru}'>Скачать PDF (RU)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (Typst RU)</a></p>\n</footer>\n<script>\n    const positions = {roles_js};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
         date_str,
         AVATAR_SRC_EN,
         html_body,
@@ -187,7 +215,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let html_template_ru = format!(
-        "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n<p><em><a href='../'>Ссылка на английскую версию</a></em><br /><em><a href='{pdf_latex_ru}'>Ссылка на PDF</a></em><br /><em><a href='{pdf_latex_en}'>Английская версия резюме (PDF)</a></em></p>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_latex_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_en}'>Download PDF (Typst EN)</a></p>\n    <p><a href='{pdf_latex_ru}'>Скачать PDF (RU)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (Typst RU)</a></p>\n</footer>\n<script>\n    const positions = {{ tl: 'Team Lead', em: 'Engineering Manager', hod: 'Head of Development' }};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
+        "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n<p><em><a href='../'>Ссылка на английскую версию</a></em><br /><em><a href='{pdf_latex_ru}'>Ссылка на PDF</a></em><br /><em><a href='{pdf_latex_en}'>Английская версия резюме (PDF)</a></em></p>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_latex_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_en}'>Download PDF (Typst EN)</a></p>\n    <p><a href='{pdf_latex_ru}'>Скачать PDF (RU)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (Typst RU)</a></p>\n</footer>\n<script>\n    const positions = {roles_js};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
         date_str,
         AVATAR_SRC_RU,
         html_body_ru,

@@ -1,0 +1,5 @@
+[roles]
+tl = "Team Lead"
+em = "Engineering Manager"
+hod = "Head of Development"
+tech = "Tech Lead"
