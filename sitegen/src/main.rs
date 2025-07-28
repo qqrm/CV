@@ -230,13 +230,28 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         fs::create_dir_all(docs_dir)?;
     }
     fs::copy("content/avatar.jpg", docs_dir.join("avatar.jpg"))?;
-    fs::write(docs_dir.join("index.html"), html_template)?;
+    fs::write(docs_dir.join("index.html"), &html_template)?;
 
     let ru_dir = docs_dir.join("ru");
     if !ru_dir.exists() {
         fs::create_dir_all(&ru_dir)?;
     }
-    fs::write(ru_dir.join("index.html"), html_template_ru)?;
+    fs::write(ru_dir.join("index.html"), &html_template_ru)?;
+
+    // Generate role-specific copies for both languages
+    for role in roles.keys() {
+        let en_role_dir = docs_dir.join(role);
+        if !en_role_dir.exists() {
+            fs::create_dir_all(&en_role_dir)?;
+        }
+        fs::write(en_role_dir.join("index.html"), &html_template)?;
+
+        let ru_role_dir = ru_dir.join(role);
+        if !ru_role_dir.exists() {
+            fs::create_dir_all(&ru_role_dir)?;
+        }
+        fs::write(ru_role_dir.join("index.html"), &html_template_ru)?;
+    }
 
     Ok(())
 }
