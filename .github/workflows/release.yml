@@ -3,13 +3,6 @@ name: Release
 on:
   push:
     branches: [main]
-    paths:
-      - 'sitegen/**'
-      - 'content/**'
-      - 'docs/**'
-      - 'typst/**/*.typ'
-      - 'Cargo.toml'
-      - '.github/workflows/release.yml'
   workflow_dispatch:
 
 jobs:
