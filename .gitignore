@@ -11,6 +11,5 @@ sitegen/target/
 /index.html
 docs/index.html
 docs/avatar.jpg
-latex/**/*.pdf
 typst/**/*.pdf
 docs/**/*.pdf

@@ -1,14 +1,12 @@
-name: Build PDFs
+name: Build Typst PDFs
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'latex/**/*.tex'
       - 'typst/**/*.typ'
   pull_request:
     paths:
-      - 'latex/**/*.tex'
       - 'typst/**/*.typ'
 
 jobs:
@@ -22,7 +20,5 @@ jobs:
         with:
           name: cv-pdfs
           path: |
-            latex/en/Belyakov_en.pdf
-            latex/ru/Belyakov_ru.pdf
             typst/en/Belyakov_en.pdf
             typst/ru/Belyakov_ru.pdf
