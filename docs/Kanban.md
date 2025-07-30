@@ -4,13 +4,13 @@ This repository organizes work items using a simple directory based Kanban board
 
 ## Directory structure
 
-- `tasks/backlog/` – new tasks are created here as individual Markdown files.
-- `tasks/in-progress/` – move a task file here when work on it begins.
-- `tasks/done/` – completed tasks are archived in this directory.
+ - `backlog/tasks/` – new tasks are created here as individual Markdown files.
+ - `tasks/in-progress/` – move a task file here when work on it begins.
+ - `tasks/done/` – completed tasks are archived in this directory.
 
 ## Recommended workflow
 
-1. Create a new Markdown file in `tasks/backlog/` describing the task.
+1. Create a new Markdown file in `backlog/tasks/` describing the task.
 2. When you start working on it, move the file to `tasks/in-progress/`.
 3. After finishing the work, move the file to `tasks/done/`.
 
