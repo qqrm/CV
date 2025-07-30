@@ -1,12 +1,15 @@
 # Alexey Belyakov CV
 
-Это репозиторий с исходниками моего резюме. Здесь хранятся Markdown-версии CV, из которых с помощью автоматизации собираются PDF и статический сайт.
+This repository contains the source files for my CV. The Markdown versions are
+automatically converted into PDFs and a static website.
 
 - [English CV](./cv.md)
-- [Русская версия CV](./cv.ru.md)
+- [Russian CV](./cv.ru.md)
 - [PDF (en)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_latex.pdf)
 - [PDF (ru)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_latex.pdf)
 - [Web version (en)](https://qqrm.github.io/CV/)
-- [Веб-версия (ru)](https://qqrm.github.io/CV/ru/)
+- [Web version (ru)](https://qqrm.github.io/CV/ru/)
 
-Инструкции по сборке находятся в директории `sitegen` и `latex`/`typst`.
+Build instructions can be found in the `sitegen` and `latex`/`typst` folders.
+
+For the Russian README, see [README_ru.md](./README_ru.md).
