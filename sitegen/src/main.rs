@@ -240,17 +240,32 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Generate role-specific copies for both languages
     for role in roles.keys() {
+        let pdf_typst_en_role = format!(
+            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_{}_typst.pdf",
+            role
+        );
+        let pdf_typst_ru_role = format!(
+            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_{}_typst.pdf",
+            role
+        );
+
         let en_role_dir = docs_dir.join(role);
         if !en_role_dir.exists() {
             fs::create_dir_all(&en_role_dir)?;
         }
-        fs::write(en_role_dir.join("index.html"), &html_template)?;
+        let role_template_en = html_template
+            .replace(pdf_typst_en, &pdf_typst_en_role)
+            .replace(pdf_typst_ru, &pdf_typst_ru_role);
+        fs::write(en_role_dir.join("index.html"), role_template_en)?;
 
         let ru_role_dir = ru_dir.join(role);
         if !ru_role_dir.exists() {
             fs::create_dir_all(&ru_role_dir)?;
         }
-        fs::write(ru_role_dir.join("index.html"), &html_template_ru)?;
+        let role_template_ru = html_template_ru
+            .replace(pdf_typst_en, &pdf_typst_en_role)
+            .replace(pdf_typst_ru, &pdf_typst_ru_role);
+        fs::write(ru_role_dir.join("index.html"), role_template_ru)?;
     }
 
     Ok(())
