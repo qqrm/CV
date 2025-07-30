@@ -12,8 +12,6 @@ jobs:
         uses: dorny/paths-filter@v2
         with:
           filters: |
-            latex:
-              - 'latex/**/*.tex'
             typst:
               - 'typst/**/*.typ'
             rust:
@@ -29,5 +27,5 @@ jobs:
         if: steps.filter.outputs.rust == 'true'
         run: cargo build --manifest-path sitegen/Cargo.toml
       - name: Build PDFs
-        if: steps.filter.outputs.latex == 'true' || steps.filter.outputs.typst == 'true'
+        if: steps.filter.outputs.typst == 'true'
         uses: ./.github/actions/setup-cv

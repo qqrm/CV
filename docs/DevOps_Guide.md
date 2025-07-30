@@ -17,11 +17,10 @@ This document describes how we work with CI/CD and infrastructure in our project
 
 
 ## Local PDF builds
-To compile PDFs locally, install LaTeX packages:
+To compile PDFs locally, install the Typst CLI:
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-lang-cyrillic latexmk
+cargo install typst-cli
 ```
 
 ### Local pipeline runs
