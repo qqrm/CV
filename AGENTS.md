@@ -21,3 +21,9 @@ fails because of network or permission issues, note this in the PR summary.
 To replicate CI pipelines locally you can use the `act` tool.
 
 Ensure binary files (for example PDFs) do not appear in the diff and are not added to the repository.
+
+When analyzing incoming tasks, apply the following roles:
+- **R Business Analytica** reviews initial requirements and creates backlog items.
+- **Architect** provides technical input after the analyst stage.
+- **R DevOps** handles CI or infrastructure related tasks.
+- **Seniora** (senior developer) responds to general development tasks.
