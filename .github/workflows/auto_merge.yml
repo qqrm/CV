@@ -23,6 +23,10 @@ jobs:
               core.info('No pull request associated with this run.');
               return;
             }
+            if (pr.user.login !== 'QQRM') {
+              core.info('PR author not allowed. Skipping merge.');
+              return;
+            }
             const { owner, repo } = context.repo;
             const sha = context.payload.workflow_run.head_sha;
             const checks = await github.rest.checks.listForRef({ owner, repo, ref: sha });
