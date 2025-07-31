@@ -8,7 +8,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Security check
+        id: security
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            if [ "${{ github.event.pull_request.user.login }}" = "QQRM" ]; then
+              echo "authorized=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "authorized=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "authorized=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Skip untrusted PR
+        if: steps.security.outputs.authorized != 'true'
+        run: echo "Pipeline disabled for untrusted author."
       - id: filter
+        if: steps.security.outputs.authorized == 'true'
         uses: dorny/paths-filter@v2
         with:
           filters: |
@@ -18,14 +34,14 @@ jobs:
               - 'sitegen/**'
               - 'Cargo.toml'
       - uses: actions-rs/toolchain@v1
-        if: steps.filter.outputs.rust == 'true'
+        if: steps.security.outputs.authorized == 'true' && steps.filter.outputs.rust == 'true'
         with:
           toolchain: stable
           profile: minimal
           override: true
       - name: Cargo build
-        if: steps.filter.outputs.rust == 'true'
+        if: steps.security.outputs.authorized == 'true' && steps.filter.outputs.rust == 'true'
         run: cargo build --manifest-path sitegen/Cargo.toml
       - name: Build PDFs
-        if: steps.filter.outputs.typst == 'true'
+        if: steps.security.outputs.authorized == 'true' && steps.filter.outputs.typst == 'true'
         uses: ./.github/actions/setup-cv
