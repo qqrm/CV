@@ -28,6 +28,16 @@ jobs:
               return;
             }
             const { owner, repo } = context.repo;
+            const fullPr = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: pr.number
+            });
+            const allowedAuthors = ['qqrm'];
+            if (!allowedAuthors.includes(fullPr.data.user.login)) {
+              core.info(`PR author ${fullPr.data.user.login} is not allowed to auto-merge.`);
+              return;
+            }
             const sha = context.payload.workflow_run.head_sha;
             const checks = await github.rest.checks.listForRef({ owner, repo, ref: sha });
             const failed = checks.data.check_runs.some(c => ['failure', 'cancelled', 'timed_out'].includes(c.conclusion));
