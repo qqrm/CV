@@ -27,3 +27,12 @@ cargo install typst-cli
 CI workflows are defined in GitHub Actions. To execute them locally you can install
 the [`act`](https://github.com/nektos/act) tool and run `act` from the repository root.
 
+
+## Avatars directory
+Role descriptions in Markdown format are stored in the `avatars/` folder at the repository root. Each file describes a typical project role and can be reused in documentation or onboarding materials.
+
+## Documentation guidelines
+All Markdown (`.md`) and Mermaid (`.mmd`) files must use **uppercase** filenames. See `docs/GUIDELINES.md` for details.
+
+## Tooling reference
+For the list of recommended CLI utilities and installation instructions see `tools/ENVIRONMENT.md`.
