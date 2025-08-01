@@ -1,7 +1,7 @@
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
-use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 struct CvJson {
@@ -33,8 +33,25 @@ fn main() -> std::io::Result<()> {
 }
 
 fn generate_templates(cv: &CvJson) -> std::io::Result<()> {
-    let template_en = fs::read_to_string("typst/en/Belyakov_en.typ")?;
-    let template_ru = fs::read_to_string("typst/ru/Belyakov_ru.typ")?;
+    let base = fs::read_to_string("template/base.typ")?;
+
+    let en_body = fs::read_to_string("typst/en/Belyakov_en.typ")?
+        .lines()
+        .skip(9)
+        .collect::<Vec<_>>()
+        .join("\n");
+    let ru_body = fs::read_to_string("typst/ru/Belyakov_ru.typ")?
+        .lines()
+        .skip(9)
+        .collect::<Vec<_>>()
+        .join("\n");
+
+    let template_en = base
+        .replace("{{NAME}}", "Alexey Leonidovich Belyakov")
+        .replace("{{BODY}}", &en_body);
+    let template_ru = base
+        .replace("{{NAME}}", "Алексей Леонидович Беляков")
+        .replace("{{BODY}}", &ru_body);
 
     for (slug, role) in &cv.roles {
         let dir_te = Path::new("typst/en").join(slug);
@@ -42,8 +59,14 @@ fn generate_templates(cv: &CvJson) -> std::io::Result<()> {
         fs::create_dir_all(&dir_te)?;
         fs::create_dir_all(&dir_tr)?;
 
-        fs::write(dir_te.join("Belyakov_en.typ"), template_en.replace("Rust Team Lead", role))?;
-        fs::write(dir_tr.join("Belyakov_ru.typ"), template_ru.replace("Rust Team Lead", role))?;
+        fs::write(
+            dir_te.join("Belyakov_en.typ"),
+            template_en.replace("{{ROLE}}", role),
+        )?;
+        fs::write(
+            dir_tr.join("Belyakov_ru.typ"),
+            template_ru.replace("{{ROLE}}", role),
+        )?;
     }
     Ok(())
 }
