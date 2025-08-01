@@ -1,0 +1,51 @@
+name: Build and Release CV
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Build app
+        run: cargo build --release --manifest-path sitegen/Cargo.toml
+      - name: Validate input files
+        run: cargo run --release --manifest-path sitegen/Cargo.toml -- validate
+      - name: Generate PDFs and HTML
+        run: cargo run --release --manifest-path sitegen/Cargo.toml -- generate
+      - name: Check generated files
+        run: |
+          ls dist/
+          find dist -type f -size 0 -print && exit 1 || true
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Build and generate artifacts
+        run: |
+          cargo build --release --manifest-path sitegen/Cargo.toml
+          cargo run --release --manifest-path sitegen/Cargo.toml -- generate
+      - name: Release PDFs
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.pdf
+      - name: Deploy GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          publish_dir: ./pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
