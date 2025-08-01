@@ -13,3 +13,7 @@ docs/index.html
 docs/avatar.jpg
 typst/**/*.pdf
 docs/**/*.pdf
+
+# Build outputs
+/dist/
+docs/ru/index.html
