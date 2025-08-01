@@ -1,9 +1,26 @@
 use chrono::{Datelike, NaiveDate, Utc};
-use pulldown_cmark::{html::push_html, Options, Parser};
+use clap::{Parser, Subcommand};
+use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
+use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
-use serde::Deserialize;
+use std::process::Command;
+
+#[derive(Parser)]
+#[command(author, version, about)]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    /// Check Markdown and TOML for consistency
+    Validate,
+    /// Generate PDFs and HTML into /dist
+    Generate,
+}
 
 fn month_from_en(name: &str) -> Option<u32> {
     match name {
@@ -143,13 +160,56 @@ fn read_roles() -> BTreeMap<String, String> {
         })
 }
 
+fn validate() -> Result<(), Box<dyn std::error::Error>> {
+    fs::read_to_string("cv.md")?;
+    fs::read_to_string("cv.ru.md")?;
+    let content = fs::read_to_string("roles.toml")?;
+    toml::from_str::<RolesFile>(&content)?;
+    println!("Validation successful");
+    Ok(())
+}
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn generate() -> Result<(), Box<dyn std::error::Error>> {
     const AVATAR_SRC_EN: &str = "avatar.jpg";
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
     let inline_start = read_inline_start().unwrap_or(INLINE_START);
     let roles = read_roles();
+    // Build base PDFs
+    let dist_dir = Path::new("dist");
+    if !dist_dir.exists() {
+        fs::create_dir_all(dist_dir)?;
+    }
+    Command::new("typst")
+        .args([
+            "compile",
+            "typst/en/Belyakov_en.typ",
+            "dist/Belyakov_en.pdf",
+        ])
+        .status()?;
+    Command::new("typst")
+        .args([
+            "compile",
+            "typst/ru/Belyakov_ru.typ",
+            "dist/Belyakov_ru.pdf",
+        ])
+        .status()?;
+    let template_en = fs::read_to_string("typst/en/Belyakov_en.typ")?;
+    let template_ru = fs::read_to_string("typst/ru/Belyakov_ru.typ")?;
+    for (slug, role) in &roles {
+        let temp_en = format!("dist/tmp_en_{slug}.typ");
+        fs::write(&temp_en, template_en.replace("Rust Team Lead", role))?;
+        Command::new("typst")
+            .args(["compile", &temp_en, &format!("dist/Belyakov_en_{slug}.pdf")])
+            .status()?;
+        fs::remove_file(&temp_en)?;
+        let temp_ru = format!("dist/tmp_ru_{slug}.typ");
+        fs::write(&temp_ru, template_ru.replace("Rust Team Lead", role))?;
+        Command::new("typst")
+            .args(["compile", &temp_ru, &format!("dist/Belyakov_ru_{slug}.pdf")])
+            .status()?;
+        fs::remove_file(&temp_ru)?;
+    }
     let roles_js = {
         let pairs: Vec<String> = roles
             .iter()
@@ -170,7 +230,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pdf_typst_ru = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf";
 
     let markdown_input = fs::read_to_string("cv.md")?;
-    let parser = Parser::new_ext(&markdown_input, Options::all());
+    let parser = CmarkParser::new_ext(&markdown_input, Options::all());
     let mut html_body = String::new();
     push_html(&mut html_body, parser);
     html_body = html_body.replace("./cv.ru.md", "ru/");
@@ -193,7 +253,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Generate Russian version
     let markdown_ru = fs::read_to_string("cv.ru.md")?;
-    let parser_ru = Parser::new_ext(&markdown_ru, Options::all());
+    let parser_ru = CmarkParser::new_ext(&markdown_ru, Options::all());
     let mut html_body_ru = String::new();
     push_html(&mut html_body_ru, parser_ru);
     html_body_ru = html_body_ru.replace(
@@ -213,11 +273,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         pdf_typst_ru = pdf_typst_ru,
     );
 
-    let docs_dir = Path::new("docs");
+    let docs_dir = Path::new("dist");
     if !docs_dir.exists() {
         fs::create_dir_all(docs_dir)?;
     }
     fs::copy("content/avatar.jpg", docs_dir.join("avatar.jpg"))?;
+    if Path::new("docs/style.css").exists() {
+        fs::copy("docs/style.css", docs_dir.join("style.css"))?;
+    }
     fs::write(docs_dir.join("index.html"), &html_template)?;
 
     let ru_dir = docs_dir.join("ru");
@@ -257,4 +320,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     Ok(())
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let cli = Cli::parse();
+    match cli.command {
+        Commands::Validate => validate(),
+        Commands::Generate => generate(),
+    }
 }
