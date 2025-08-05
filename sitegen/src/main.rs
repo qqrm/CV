@@ -244,7 +244,7 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let html_template = format!(
-        "<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Alexey Belyakov - CV</title>\n    <link rel='stylesheet' href='style.css'>\n</head>\n<body>\n<header>\n    <h1>Alexey Belyakov</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_typst_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (RU)</a></p>\n</footer>\n<script>\n    const positions = {roles_js};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
+        "<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Alexey Belyakov - CV</title>\n    <link rel='icon' href='favicon.svg' type='image/svg+xml'>\n    <link rel='stylesheet' href='style.css'>\n</head>\n<body>\n<header>\n    <h1>Alexey Belyakov</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_typst_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (RU)</a></p>\n</footer>\n<script>\n    const positions = {roles_js};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
         date_str,
         AVATAR_SRC_EN,
         html_body,
@@ -266,7 +266,7 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let html_template_ru = format!(
-        "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n<p><em><a href='../'>Ссылка на английскую версию</a></em></p>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_typst_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (RU)</a></p>\n</footer>\n<script>\n    const positions = {roles_js};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
+        "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='icon' href='../favicon.svg' type='image/svg+xml'>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n<p><em><a href='../'>Ссылка на английскую версию</a></em></p>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_typst_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (RU)</a></p>\n</footer>\n<script>\n    const positions = {roles_js};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
         date_str,
         AVATAR_SRC_RU,
         html_body_ru,
@@ -280,6 +280,9 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     }
     if Path::new("docs/style.css").exists() {
         fs::copy("docs/style.css", docs_dir.join("style.css"))?;
+    }
+    if Path::new("docs/favicon.svg").exists() {
+        fs::copy("docs/favicon.svg", docs_dir.join("favicon.svg"))?;
     }
     fs::write(docs_dir.join("index.html"), &html_template)?;
 
