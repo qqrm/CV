@@ -86,6 +86,7 @@ This repository implements an automated, multilingual, AI-friendly CV generator 
   - Attach all generated PDFs.
   - Explicitly list checksums and direct links.
 - Deploy to GitHub Pages (`/pages`):
+  - Remove any existing published files to ensure a clean deployment.
   - Upload `index.html` and all static assets/json for frontend.
   - Site must be live at `https://<user>.github.io/cv/` and pass a basic availability check.
 
@@ -150,6 +151,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist/*.pdf
+
+      - name: Clean previous Pages content
+        run: rm -rf pages
 
       - name: Deploy GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
