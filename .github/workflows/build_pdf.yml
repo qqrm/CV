@@ -11,15 +11,15 @@ on:
 
 jobs:
   build:
-    if: github.event_name == 'push' || github.event.pull_request.user.login == 'qqrm'
+    if: github.event_name == 'push' || github.actor == 'qqrm'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Security check
         id: security
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            if [ "${{ github.event.pull_request.user.login }}" = "QQRM" ]; then
+            if [ "$GITHUB_ACTOR" = "qqrm" ]; then
               echo "authorized=true" >> "$GITHUB_OUTPUT"
             else
               echo "authorized=false" >> "$GITHUB_OUTPUT"

@@ -13,7 +13,7 @@ This document describes how we work with CI/CD and infrastructure in our project
 
 ### Security check
 All automated workflows start with a security step. If the author of a pull
-request is not `QQRM`, the pipeline stops immediately and no jobs run.
+request is not `qqrm`, the pipeline stops immediately and no jobs run.
 
 ## Automatic pull request merging
 - The `.github/workflows/auto_merge.yml` workflow merges pull requests as soon as all checks succeed.

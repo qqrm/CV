@@ -8,7 +8,7 @@ on:
 
 jobs:
   automerge:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success' && github.actor == 'qqrm'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -23,10 +23,6 @@ jobs:
               core.info('No pull request associated with this run.');
               return;
             }
-            if (pr.user.login !== 'QQRM') {
-              core.info('PR author not allowed. Skipping merge.');
-              return;
-            }
             const { owner, repo } = context.repo;
             const fullPr = await github.rest.pulls.get({
               owner,
@@ -34,8 +30,13 @@ jobs:
               pull_number: pr.number
             });
             const allowedAuthors = ['qqrm'];
-            if (!allowedAuthors.includes(fullPr.data.user.login)) {
-              core.info(`PR author ${fullPr.data.user.login} is not allowed to auto-merge.`);
+            if (!allowedAuthors.includes(pr.user.login)) {
+              core.info('PR author not allowed. Skipping merge.');
+              return;
+            }
+            const hasLabel = fullPr.data.labels.some(l => l.name === 'automerge');
+            if (!hasLabel) {
+              core.info('PR lacks required label. Skipping merge.');
               return;
             }
             const sha = context.payload.workflow_run.head_sha;
