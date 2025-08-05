@@ -118,10 +118,10 @@ jobs:
         run: cargo build --release
 
       - name: Validate input files
-        run: cargo run --release -- validate
+        run: cargo run --release --bin sitegen -- validate
 
       - name: Generate PDFs and HTML
-        run: cargo run --release -- generate
+        run: cargo run --release --bin sitegen -- generate
 
       - name: Check generated files
         run: |
@@ -144,7 +144,7 @@ jobs:
       - name: Build and generate artifacts
         run: |
           cargo build --release
-          cargo run --release -- generate
+          cargo run --release --bin sitegen -- generate
 
       - name: Release PDFs
         uses: softprops/action-gh-release@v2
@@ -162,8 +162,8 @@ jobs:
 
 ## 8. CLI Interface (Recommended)
 
-- `cargo run --release -- validate` — Validate all data sources.
-- `cargo run --release -- generate` — Generate all PDFs and HTML.
+- `cargo run --release --bin sitegen -- validate` — Validate all data sources.
+- `cargo run --release --bin sitegen -- generate` — Generate all PDFs and HTML.
 - (Optional) `--lang en` or `--lang ru` — restrict to a given language.
 
 ---
