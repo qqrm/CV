@@ -17,9 +17,9 @@ jobs:
       - name: Build app
         run: cargo build --release --manifest-path sitegen/Cargo.toml
       - name: Validate input files
-        run: cargo run --release --manifest-path sitegen/Cargo.toml -- validate
+        run: cargo run --release --manifest-path sitegen/Cargo.toml --bin sitegen -- validate
       - name: Generate PDFs and HTML
-        run: cargo run --release --manifest-path sitegen/Cargo.toml -- generate
+        run: cargo run --release --manifest-path sitegen/Cargo.toml --bin sitegen -- generate
       - name: Check generated files
         run: |
           ls dist/
@@ -39,7 +39,7 @@ jobs:
       - name: Build and generate artifacts
         run: |
           cargo build --release --manifest-path sitegen/Cargo.toml
-          cargo run --release --manifest-path sitegen/Cargo.toml -- generate
+          cargo run --release --manifest-path sitegen/Cargo.toml --bin sitegen -- generate
       - name: Release PDFs
         uses: softprops/action-gh-release@v2
         with:
