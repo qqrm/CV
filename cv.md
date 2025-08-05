@@ -114,13 +114,15 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
 
-### Middle->Senior C++ Developer @ ASCON | [www.ascon.ru](https://www.ascon.ru)
+### Middle → Senior C++ Developer → Teamlead @ ASCON | [www.ascon.ru](https://www.ascon.ru)
 *May 2016 — November 2018 (2 years 7 months)*
 
 - Developed libraries for architectural design (KOMPAS), adding a “Change View Plane” feature to enhance 3D modeling capabilities.
 - Implemented an automated testing framework (C++/Python), reducing manual QA overhead by ~30%.
 - Participated in a major codebase refactoring, transitioning to C++17.
-- Introduced Git, Slack, and integration tests, streamlining collaboration processes.
+- Handled People Management: recruiting, interviewing, and offboarding developers (one case).
+- Led the team: prioritized tasks and provided architectural oversight.
+- Migrated the team to a modern tool stack: moved from SVN to Git, replaced Skype with Slack, introduced documentation guidelines, and established Scrum practices.
 
 **Technologies**: MSVC, C++, Boost, kompas-api, python, git, svn, CMake.
 

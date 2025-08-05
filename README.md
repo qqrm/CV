@@ -5,11 +5,11 @@ automatically converted into PDFs and a static website.
 
 - [English CV](./cv.md)
 - [Russian CV](./cv.ru.md)
-- [PDF (en)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_latex.pdf)
-- [PDF (ru)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_latex.pdf)
+- [PDF (en)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf)
+- [PDF (ru)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf)
 - [Web version (en)](https://qqrm.github.io/CV/)
 - [Web version (ru)](https://qqrm.github.io/CV/ru/)
 
-Build instructions can be found in the `sitegen` and `latex`/`typst` folders.
+Build instructions can be found in the `typst` folder.
 
 For the Russian README, see [README_ru.md](./README_ru.md).
