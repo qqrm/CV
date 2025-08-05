@@ -37,7 +37,10 @@ jobs:
       - name: Check generated files
         run: |
           ls dist/
-          find dist -type f -size 0 -print && exit 1 || true
+          if find dist -type f -size 0 -print -quit | grep -q .; then
+            echo "Empty files detected"
+            exit 1
+          fi
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
