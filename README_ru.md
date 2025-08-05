@@ -10,4 +10,4 @@
 - [PDF на русском](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf)
 - [Сайт](https://qqrm.github.io/CV/)
 
-Подробности сборки смотрите в каталоге `typst`.
+Все инструкции по сборке находятся в каталоге `typst`.
