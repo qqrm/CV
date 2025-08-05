@@ -1,8 +1,7 @@
 # Task: Analyze Static Site Build Pipeline
 
 ## Description
-The GitHub Pages site sometimes serves outdated content. After removing LaTeX files from the repository they still appear on the deployed site.
-Investigate the existing build pipeline and update it so that generated pages are always consistent with the repository contents.
+The GitHub Pages site sometimes serves outdated content. Investigate the existing build pipeline and update it so that generated pages are always consistent with the repository contents.
 
 ## Related files
 - .github/workflows/release.yml
