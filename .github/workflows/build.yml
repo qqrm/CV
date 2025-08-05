@@ -16,6 +16,7 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
+            ~/.cargo/bin
             sitegen/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
@@ -23,6 +24,8 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+      - name: Install Typst CLI
+        run: cargo install typst-cli --locked
       - name: Build app
         run: cargo build --release --manifest-path sitegen/Cargo.toml
       - name: Run tests
