@@ -20,6 +20,9 @@ fails because of network or permission issues, note this in the PR summary.
 
 To replicate CI pipelines locally you can use the `act` tool.
 
+The GitHub CLI (`gh`) is available for interacting with GitHub.
+Always rebase your work onto the latest `main` branch before pushing.
+
 Ensure binary files (for example PDFs) do not appear in the diff and are not added to the repository.
 
 When analyzing incoming tasks, apply the following roles:
