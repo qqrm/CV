@@ -180,6 +180,7 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     if !dist_dir.exists() {
         fs::create_dir_all(dist_dir)?;
     }
+    fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
     Command::new("typst")
         .args([
             "compile",
@@ -277,7 +278,6 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     if !docs_dir.exists() {
         fs::create_dir_all(docs_dir)?;
     }
-    fs::copy("content/avatar.jpg", docs_dir.join("avatar.jpg"))?;
     if Path::new("docs/style.css").exists() {
         fs::copy("docs/style.css", docs_dir.join("style.css"))?;
     }
