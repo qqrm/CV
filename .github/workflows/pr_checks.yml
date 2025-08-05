@@ -5,27 +5,10 @@ on:
 
 jobs:
   check:
-    if: github.actor == 'qqrm'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Security check
-        id: security
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            if [ "$GITHUB_ACTOR" = "qqrm" ]; then
-              echo "authorized=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "authorized=false" >> "$GITHUB_OUTPUT"
-            fi
-          else
-            echo "authorized=true" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Skip untrusted PR
-        if: steps.security.outputs.authorized != 'true'
-        run: echo "Pipeline disabled for untrusted author."
       - id: filter
-        if: steps.security.outputs.authorized == 'true'
         uses: dorny/paths-filter@v2
         with:
           filters: |
@@ -35,7 +18,7 @@ jobs:
               - 'sitegen/**'
               - 'Cargo.toml'
       - name: Cache cargo
-        if: steps.security.outputs.authorized == 'true' && steps.filter.outputs.rust == 'true'
+        if: steps.filter.outputs.rust == 'true'
         uses: actions/cache@v4
         with:
           path: |
@@ -45,17 +28,17 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
       - uses: actions-rs/toolchain@v1
-        if: steps.security.outputs.authorized == 'true' && steps.filter.outputs.rust == 'true'
+        if: steps.filter.outputs.rust == 'true'
         with:
           toolchain: stable
           profile: minimal
           override: true
       - name: Cargo build
-        if: steps.security.outputs.authorized == 'true' && steps.filter.outputs.rust == 'true'
+        if: steps.filter.outputs.rust == 'true'
         run: cargo build --manifest-path sitegen/Cargo.toml
       - name: Cargo test
-        if: steps.security.outputs.authorized == 'true' && steps.filter.outputs.rust == 'true'
+        if: steps.filter.outputs.rust == 'true'
         run: cargo test --manifest-path sitegen/Cargo.toml
       - name: Build PDFs
-        if: steps.security.outputs.authorized == 'true' && steps.filter.outputs.typst == 'true'
+        if: steps.filter.outputs.typst == 'true'
         uses: ./.github/actions/setup-cv

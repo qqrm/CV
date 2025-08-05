@@ -11,16 +11,9 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            const allowedAuthors = ['qqrm'];
+            const allowedAuthors = ['qqrm', 'BelyakovAI'];
             const author = context.payload.pull_request.user.login;
             if (!allowedAuthors.includes(author)) {
-              core.info(`Closing unauthorized pull request from ${author}`);
-              await github.rest.pulls.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-                state: 'closed'
-              });
-              core.setFailed('Unauthorized pull request');
+              core.setFailed(`Unauthorized pull request from ${author}`);
             }
 

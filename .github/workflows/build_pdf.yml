@@ -11,29 +11,11 @@ on:
 
 jobs:
   build:
-    if: github.event_name == 'push' || github.actor == 'qqrm'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Security check
-        id: security
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            if [ "$GITHUB_ACTOR" = "qqrm" ]; then
-              echo "authorized=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "authorized=false" >> "$GITHUB_OUTPUT"
-            fi
-          else
-            echo "authorized=true" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Skip untrusted PR
-        if: steps.security.outputs.authorized != 'true'
-        run: echo "Pipeline disabled for untrusted author."
       - uses: ./.github/actions/setup-cv
-        if: steps.security.outputs.authorized == 'true'
       - name: Upload PDFs
-        if: steps.security.outputs.authorized == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: cv-pdfs
