@@ -10,6 +10,6 @@ automatically converted into PDFs and a static website.
 - [Web version (en)](https://qqrm.github.io/CV/)
 - [Web version (ru)](https://qqrm.github.io/CV/ru/)
 
-Build instructions can be found in the `typst` folder.
+All build instructions are located in the `typst` folder.
 
 For the Russian README, see [README_ru.md](./README_ru.md).
