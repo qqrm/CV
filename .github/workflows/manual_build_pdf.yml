@@ -5,9 +5,10 @@ on:
 
 jobs:
   build:
+    if: github.actor == 'qqrm'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.6.0
+      - uses: actions/checkout@v4
       - name: Set build date
         id: date
         run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV

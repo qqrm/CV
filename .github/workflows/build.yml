@@ -10,12 +10,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            sitegen/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
       - name: Build app
         run: cargo build --release --manifest-path sitegen/Cargo.toml
+      - name: Run tests
+        run: cargo test --manifest-path sitegen/Cargo.toml
       - name: Validate input files
         run: cargo run --release --manifest-path sitegen/Cargo.toml --bin sitegen -- validate
       - name: Generate PDFs and HTML
@@ -32,6 +43,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            sitegen/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:

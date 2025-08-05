@@ -3,6 +3,15 @@ description: 'Install dependencies and build Typst PDFs.'
 runs:
   using: 'composite'
   steps:
+    - name: Cache cargo
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          ~/.cargo/bin
+        key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+        restore-keys: ${{ runner.os }}-cargo-
     - name: Install Typst
       shell: bash
       run: cargo install typst-cli --locked
