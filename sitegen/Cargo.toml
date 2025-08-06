@@ -10,3 +10,10 @@ toml = "0.8"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 clap = { version = "4", features = ["derive"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[[bin]]
+name = "templategen"
+path = "src/templategen.rs"
