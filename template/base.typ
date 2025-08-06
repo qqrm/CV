@@ -4,7 +4,7 @@
 
 #align(center)[
   #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true)[
-    #image("avatar.jpg", width: 5cm, height: 5cm)
+    #image("content/avatar.jpg", width: 5cm, height: 5cm)
   ]
 ]
 
