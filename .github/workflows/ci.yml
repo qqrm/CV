@@ -1,24 +1,14 @@
-name: PR Checks
+name: CI
 
 on:
   pull_request:
 
 jobs:
-  check:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - id: filter
-        uses: dorny/paths-filter@v2
-        with:
-          filters: |
-            typst:
-              - 'typst/**/*.typ'
-            rust:
-              - 'sitegen/**'
-              - 'Cargo.toml'
       - name: Cache cargo
-        if: steps.filter.outputs.rust == 'true'
         uses: actions/cache@v4
         with:
           path: |
@@ -28,17 +18,17 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
       - uses: actions-rs/toolchain@v1
-        if: steps.filter.outputs.rust == 'true'
         with:
           toolchain: stable
           profile: minimal
           override: true
+      - name: Install Typst CLI
+        run: cargo install typst-cli --locked
       - name: Cargo build
-        if: steps.filter.outputs.rust == 'true'
         run: cargo build --manifest-path sitegen/Cargo.toml
       - name: Cargo test
-        if: steps.filter.outputs.rust == 'true'
         run: cargo test --manifest-path sitegen/Cargo.toml
+      - name: Generate site
+        run: cargo run --manifest-path sitegen/Cargo.toml --bin sitegen -- generate
       - name: Build PDFs
-        if: steps.filter.outputs.typst == 'true'
         uses: ./.github/actions/setup-cv
