@@ -175,41 +175,39 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     const INLINE_START: (i32, u32) = (2024, 3);
     let inline_start = read_inline_start().unwrap_or(INLINE_START);
     let roles = read_roles();
-    // Build base PDFs
+    // Build PDFs from template
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {
         fs::create_dir_all(dist_dir)?;
     }
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
-    Command::new("typst")
-        .args([
-            "compile",
-            "typst/en/Belyakov_en.typ",
-            "dist/Belyakov_en.pdf",
-        ])
-        .status()?;
-    Command::new("typst")
-        .args([
-            "compile",
-            "typst/ru/Belyakov_ru.typ",
-            "dist/Belyakov_ru.pdf",
-        ])
-        .status()?;
-    let template_en = fs::read_to_string("typst/en/Belyakov_en.typ")?;
-    let template_ru = fs::read_to_string("typst/ru/Belyakov_ru.typ")?;
+    for lang in ["en", "ru"] {
+        Command::new("typst")
+            .args([
+                "compile",
+                "templates/resume.typ",
+                &format!("dist/Belyakov_{lang}.pdf"),
+                "--input",
+                &format!("lang={}", lang),
+                "--input",
+                "role=Rust Team Lead",
+            ])
+            .status()?;
+    }
     for (slug, role) in &roles {
-        let temp_en = format!("dist/tmp_en_{slug}.typ");
-        fs::write(&temp_en, template_en.replace("Rust Team Lead", role))?;
-        Command::new("typst")
-            .args(["compile", &temp_en, &format!("dist/Belyakov_en_{slug}.pdf")])
-            .status()?;
-        fs::remove_file(&temp_en)?;
-        let temp_ru = format!("dist/tmp_ru_{slug}.typ");
-        fs::write(&temp_ru, template_ru.replace("Rust Team Lead", role))?;
-        Command::new("typst")
-            .args(["compile", &temp_ru, &format!("dist/Belyakov_ru_{slug}.pdf")])
-            .status()?;
-        fs::remove_file(&temp_ru)?;
+        for lang in ["en", "ru"] {
+            Command::new("typst")
+                .args([
+                    "compile",
+                    "templates/resume.typ",
+                    &format!("dist/Belyakov_{lang}_{slug}.pdf"),
+                    "--input",
+                    &format!("lang={}", lang),
+                    "--input",
+                    &format!("role={}", role),
+                ])
+                .status()?;
+        }
     }
     let roles_js = {
         let pairs: Vec<String> = roles
