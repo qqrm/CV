@@ -1,0 +1,64 @@
+name: Manual Build CV PDFs
+
+on:
+  workflow_dispatch:
+    inputs:
+      builder:
+        description: 'PDF builder to use'
+        required: true
+        default: typst
+        type: choice
+        options:
+          - typst
+          - typepdf
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set build date
+        id: date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      - if: ${{ inputs.builder == 'typst' }}
+        uses: ./.github/actions/setup-cv
+      - if: ${{ inputs.builder == 'typst' }}
+        name: Prepare release PDFs
+        run: |
+          cp typst/en/Belyakov_en.pdf typst/en/Belyakov_en_typst.pdf
+          cp typst/ru/Belyakov_ru.pdf typst/ru/Belyakov_ru_typst.pdf
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Install TypePDF
+        run: cargo install typepdf --locked
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Build English PDF with TypePDF
+        run: typepdf typst/en/Belyakov_en.typ typst/en/Belyakov_en_typepdf.pdf
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Build Russian PDF with TypePDF
+        run: typepdf typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru_typepdf.pdf
+      - if: ${{ inputs.builder == 'typst' }}
+        name: Upload PDFs
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: cv-pdfs-typst-${{ env.DATE }}
+          path: |
+            typst/en/Belyakov_en_typst.pdf
+            typst/ru/Belyakov_ru_typst.pdf
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Upload PDFs
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: cv-pdfs-typepdf-${{ env.DATE }}
+          path: |
+            typst/en/Belyakov_en_typepdf.pdf
+            typst/ru/Belyakov_ru_typepdf.pdf
