@@ -13,6 +13,7 @@ jobs:
         env:
           ACTIONS_PAT: ${{ secrets.ACTIONS_PAT }}
         with:
+          github-token: ${{ env.ACTIONS_PAT }}
           script: |
             const pr = context.payload.pull_request;
             const { owner, repo } = context.repo;
@@ -33,6 +34,4 @@ jobs:
                 });
               }
             }
-
-        github-token: ${{ env.ACTIONS_PAT }}
 
