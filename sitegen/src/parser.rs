@@ -1,8 +1,39 @@
 use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::fs;
-use crate::InlineStartError;
+use std::fmt;
+use std::io;
 use phf::phf_map;
+
+#[derive(Debug)]
+pub enum InlineStartError {
+    Io(io::Error),
+    Parse,
+}
+
+impl fmt::Display for InlineStartError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            InlineStartError::Io(_) => write!(f, "failed to read cv.md"),
+            InlineStartError::Parse => write!(f, "could not parse inline start"),
+        }
+    }
+}
+
+impl std::error::Error for InlineStartError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            InlineStartError::Io(err) => Some(err),
+            InlineStartError::Parse => None,
+        }
+    }
+}
+
+impl From<io::Error> for InlineStartError {
+    fn from(err: io::Error) -> Self {
+        InlineStartError::Io(err)
+    }
+}
 
 static EN_MONTHS: phf::Map<&'static str, u32> = phf_map! {
     "January" => 1,

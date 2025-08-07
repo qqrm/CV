@@ -8,10 +8,10 @@ The `sitegen` tool transforms Markdown and Typst sources into HTML pages and PDF
 ### Module structure
 The `sitegen` crate separates responsibilities between two modules:
 
-- `parser` handles input parsing such as month names, inline CV start dates and role definitions.
-- `renderer` formats data for display, including human-readable duration strings.
+- `parser` converts raw files into structured data. It exposes helpers such as `month_from_en`, `month_from_ru`, `read_inline_start`, `read_roles`, and the `InlineStartError` type.
+- `renderer` produces template-friendly strings, for example `format_duration_en` and `format_duration_ru`.
 
-Binary entry points like `generate` and `validate` build on these modules to produce the final artifacts.
+These modules are independent and are re-exported by the crate root so the binaries can rely on a concise API without cross-module coupling. Binary entry points like `generate` and `validate` build on these modules to produce the final artifacts.
 
 ### Dynamic role titles and language switching
 Generated HTML pages include a small JavaScript snippet that reads `roles.toml`, injects the role title based on the current URL, and enables language switching.
