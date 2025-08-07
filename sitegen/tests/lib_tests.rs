@@ -1,4 +1,4 @@
-use sitegen::{month_from_en, month_from_ru, read_inline_start, InlineStartError};
+use sitegen::{month_from_en, month_from_ru, read_inline_start, read_roles, InlineStartError};
 use std::env;
 use std::fs;
 
@@ -51,6 +51,7 @@ fn unknown_months_return_none() {
 }
 
 #[test]
+#[serial_test::serial]
 fn reads_inline_start_from_markdown() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
@@ -63,6 +64,7 @@ fn reads_inline_start_from_markdown() {
 
 
 #[test]
+#[serial_test::serial]
 fn read_inline_start_returns_error_for_invalid_file() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
@@ -76,6 +78,21 @@ fn read_inline_start_returns_error_for_invalid_file() {
 }
 
 #[test]
+#[serial_test::serial]
+fn read_inline_start_returns_error_for_invalid_month() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    fs::write("cv.md", "* Smarch 2024 – Present").unwrap();
+    let result = read_inline_start();
+    env::set_current_dir(original).unwrap();
+    let err = result.expect_err("expected parse error");
+    assert!(matches!(err, InlineStartError::Parse));
+    assert_eq!(err.to_string(), "could not parse inline start");
+}
+
+#[test]
+#[serial_test::serial]
 fn read_inline_start_returns_error_when_file_missing() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
@@ -85,4 +102,18 @@ fn read_inline_start_returns_error_when_file_missing() {
     let err = result.expect_err("expected io error");
     assert!(matches!(err, InlineStartError::Io(_)));
     assert_eq!(err.to_string(), "failed to read cv.md");
+}
+
+#[test]
+#[serial_test::serial]
+fn read_roles_returns_default_for_invalid_file() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    fs::write("roles.toml", "[roles]\ninvalid").unwrap();
+    let roles = read_roles();
+    env::set_current_dir(original).unwrap();
+    assert_eq!(roles.get("tl"), Some(&"Team Lead".to_string()));
+    assert_eq!(roles.get("tech"), Some(&"Tech Lead".to_string()));
+    assert_eq!(roles.len(), 2);
 }
