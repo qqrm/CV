@@ -1,4 +1,4 @@
-use sitegen::RolesFile;
+use sitegen::parser::RolesFile;
 use std::error::Error;
 use std::fs;
 
@@ -10,4 +10,3 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("Validation successful");
     Ok(())
 }
-
