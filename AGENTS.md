@@ -30,6 +30,8 @@ Tooling notes:
   3. `git checkout <your-branch>`
   4. `git rebase origin/main`
 
+- When the user explicitly requests a rebase, update `main` to the latest state and reapply the task solution from scratch.
+
 Ensure binary files (for example PDFs) do not appear in the diff and are not added to the repository.
 
 When analyzing incoming tasks, apply the following roles:
