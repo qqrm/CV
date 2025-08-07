@@ -1,6 +1,7 @@
 use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::fs;
+use crate::InlineStartError;
 
 /// Convert an English month name into its number.
 ///
@@ -54,8 +55,8 @@ pub fn month_from_ru(name: &str) -> Option<u32> {
 /// "Настоящее время" (Russian).
 ///
 /// Returns a pair `(year, month)` on success.
-pub fn read_inline_start() -> Option<(i32, u32)> {
-    let content = std::fs::read_to_string("cv.md").ok()?;
+pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
+    let content = std::fs::read_to_string("cv.md").map_err(InlineStartError::Io)?;
     for line in content.lines() {
         if let Some((month_str, year_str)) = line
             .trim()
@@ -73,17 +74,19 @@ pub fn read_inline_start() -> Option<(i32, u32)> {
                 let parts: Vec<&str> = month_str.trim().split_whitespace().collect();
                 if parts.len() == 2 {
                     let (month_text, year_text) = (parts[0], parts[1]);
-                    let year: i32 = year_text.parse().ok()?;
+                    let year: i32 = year_text
+                        .parse()
+                        .map_err(|_| InlineStartError::InvalidFormat)?;
                     if let Some(month) =
                         month_from_en(month_text).or_else(|| month_from_ru(month_text))
                     {
-                        return Some((year, month));
+                        return Ok((year, month));
                     }
                 }
             }
         }
     }
-    None
+    Err(InlineStartError::InvalidFormat)
 }
 
 #[derive(Deserialize)]
