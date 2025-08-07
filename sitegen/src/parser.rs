@@ -1,42 +1,38 @@
 use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::fs;
-use std::sync::LazyLock;
 use crate::InlineStartError;
+use phf::phf_map;
 
-static EN_MONTHS: LazyLock<BTreeMap<&'static str, u32>> = LazyLock::new(|| {
-    BTreeMap::from([
-        ("January", 1),
-        ("February", 2),
-        ("March", 3),
-        ("April", 4),
-        ("May", 5),
-        ("June", 6),
-        ("July", 7),
-        ("August", 8),
-        ("September", 9),
-        ("October", 10),
-        ("November", 11),
-        ("December", 12),
-    ])
-});
+static EN_MONTHS: phf::Map<&'static str, u32> = phf_map! {
+    "January" => 1,
+    "February" => 2,
+    "March" => 3,
+    "April" => 4,
+    "May" => 5,
+    "June" => 6,
+    "July" => 7,
+    "August" => 8,
+    "September" => 9,
+    "October" => 10,
+    "November" => 11,
+    "December" => 12,
+};
 
-static RU_MONTHS: LazyLock<BTreeMap<&'static str, u32>> = LazyLock::new(|| {
-    BTreeMap::from([
-        ("Январь", 1),
-        ("Февраль", 2),
-        ("Март", 3),
-        ("Апрель", 4),
-        ("Май", 5),
-        ("Июнь", 6),
-        ("Июль", 7),
-        ("Август", 8),
-        ("Сентябрь", 9),
-        ("Октябрь", 10),
-        ("Ноябрь", 11),
-        ("Декабрь", 12),
-    ])
-});
+static RU_MONTHS: phf::Map<&'static str, u32> = phf_map! {
+    "Январь" => 1,
+    "Февраль" => 2,
+    "Март" => 3,
+    "Апрель" => 4,
+    "Май" => 5,
+    "Июнь" => 6,
+    "Июль" => 7,
+    "Август" => 8,
+    "Сентябрь" => 9,
+    "Октябрь" => 10,
+    "Ноябрь" => 11,
+    "Декабрь" => 12,
+};
 
 /// Convert an English month name into its number.
 ///

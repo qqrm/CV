@@ -45,6 +45,12 @@ fn parses_russian_months() {
 }
 
 #[test]
+fn unknown_months_return_none() {
+    assert_eq!(month_from_en("Smarch"), None);
+    assert_eq!(month_from_ru("Смарч"), None);
+}
+
+#[test]
 fn reads_inline_start_from_markdown() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
