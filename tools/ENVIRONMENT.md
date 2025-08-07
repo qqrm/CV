@@ -28,3 +28,6 @@ This toolset is provided as standard for every new team member.
 ```bash
 cargo install cargo-make cargo-watch cargo-edit cargo-nextest cargo-audit proptest cargo-fuzz cargo-tarpaulin mdbook zola svgbob gitui delta helix fd bat ripgrep
 ```
+
+
+Builds and tests run exclusively in GitHub CI; no local Makefile is provided.

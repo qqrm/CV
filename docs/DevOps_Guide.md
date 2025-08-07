@@ -33,6 +33,8 @@ To compile PDFs locally, install the Typst CLI:
 cargo install typst-cli
 ```
 
+Builds, tests, and Typst compilation run in GitHub CI. No local Makefile is provided.
+
 ### Local pipeline runs
 CI workflows are defined in GitHub Actions. Use the [`act`](https://github.com/nektos/act) tool to execute them locally.
 

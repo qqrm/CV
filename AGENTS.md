@@ -2,21 +2,7 @@ All documentation in this repository is maintained in English. Source code comme
 
 README files are usually edited manually. Do not change `README.md` or `README_ru.md` unless the task explicitly requires it.
 
-Before committing, run the tests:
-
-```
-cargo test --manifest-path sitegen/Cargo.toml
-```
-
-Also verify local PDF builds with Typst:
-
-```
-typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
-typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
-```
-
-If the Typst CLI is missing, install it with `cargo install typst-cli`. When installation
-fails because of network or permission issues, note this in the PR summary.
+This project runs exclusively in GitHub CI. Local build scripts such as Makefiles are intentionally avoided. If you need to run checks locally, mirror the commands defined in `.github/workflows/ci.yml`.
 
 Whenever possible, connect to the `avatars.mcp` server at <https://qqrm.github.io/avatars-mcp/> to choose a persona suitable for the task (see <https://github.com/qqrm/avatars-mcp> for details). Explicitly mention in each response whether the server was used.
 
