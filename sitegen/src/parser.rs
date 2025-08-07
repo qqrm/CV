@@ -1,3 +1,4 @@
+use log::{debug, info, warn};
 use phf::phf_map;
 use serde::Deserialize;
 use std::collections::BTreeMap;
@@ -90,6 +91,7 @@ pub fn month_from_ru(name: &str) -> Option<u32> {
 ///
 /// Returns a pair `(year, month)` on success.
 pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
+    debug!("Scanning cv.md for inline start");
     let content = std::fs::read_to_string("cv.md")?;
     for line in content.lines() {
         if let Some((month_str, year_str)) = line
@@ -112,12 +114,14 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
                     if let Some(month) =
                         month_from_en(month_text).or_else(|| month_from_ru(month_text))
                     {
+                        info!("Inline start parsed: {month_text} {year}");
                         return Ok((year, month));
                     }
                 }
             }
         }
     }
+    warn!("Failed to parse inline start from cv.md");
     Err(InlineStartError::Parse)
 }
 
@@ -175,11 +179,15 @@ impl From<io::Error> for RolesError {
 /// Returns a map of role slugs to titles. Missing files fall back to a
 /// default set. Invalid entries produce descriptive errors.
 pub fn read_roles() -> Result<BTreeMap<String, String>, RolesError> {
+    debug!("Loading roles from roles.toml");
     let defaults = default_roles();
 
     let content = match fs::read_to_string("roles.toml") {
         Ok(text) => text,
-        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(defaults),
+        Err(e) if e.kind() == io::ErrorKind::NotFound => {
+            warn!("roles.toml not found, using defaults");
+            return Ok(defaults);
+        }
         Err(e) => return Err(RolesError::Io(e)),
     };
 
@@ -193,6 +201,7 @@ pub fn read_roles() -> Result<BTreeMap<String, String>, RolesError> {
 
     let mut roles = defaults;
     roles.extend(parsed.roles);
+    info!("Loaded {} roles", roles.len());
     Ok(roles)
 }
 
