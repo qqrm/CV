@@ -30,8 +30,6 @@ fn main() -> Result<(), Box<dyn Error>> {
                 &format!("lang={lang}"),
                 "--input",
                 &format!("role={DEFAULT_ROLE}"),
-                "--root",
-                ".",
             ])
             .status()?;
 
@@ -45,8 +43,6 @@ fn main() -> Result<(), Box<dyn Error>> {
                     &format!("lang={lang}"),
                     "--input",
                     &format!("role={title}"),
-                    "--root",
-                    ".",
                 ])
                 .status()?;
         }
