@@ -1,5 +1,5 @@
 use chrono::{Datelike, NaiveDate, Utc};
-use log::info;
+use log::{info, warn};
 use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
 use sitegen::parser::{read_inline_start, read_roles};
 use sitegen::renderer::{format_duration_en, format_duration_ru};
@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let inline_start = match read_inline_start() {
         Ok(v) => v,
         Err(e) => {
-            eprintln!("Failed to read inline start: {e}");
+            warn!("Failed to read inline start: {e}");
             INLINE_START
         }
     };
