@@ -1,6 +1,7 @@
-use sitegen::{month_from_en, month_from_ru, read_inline_start, InlineStartError};
+use sitegen::{month_from_en, month_from_ru, read_inline_start, read_roles, InlineStartError};
 use std::env;
 use std::fs;
+use std::collections::BTreeMap;
 
 #[test]
 fn parses_english_months() {
@@ -45,6 +46,16 @@ fn parses_russian_months() {
 }
 
 #[test]
+fn returns_none_for_invalid_english_month() {
+    assert_eq!(month_from_en("NotAMonth"), None);
+}
+
+#[test]
+fn returns_none_for_invalid_russian_month() {
+    assert_eq!(month_from_ru("НеМесяц"), None);
+}
+
+#[test]
 fn reads_inline_start_from_markdown() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
@@ -75,4 +86,19 @@ fn read_inline_start_returns_error_when_file_missing() {
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
     assert!(matches!(result, Err(InlineStartError::Io(_))));
+}
+
+#[test]
+fn read_roles_returns_default_for_malformed_file() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    fs::write("roles.toml", "[roles").unwrap();
+    let roles = read_roles();
+    env::set_current_dir(original).unwrap();
+    let expected = BTreeMap::from([
+        ("tl".to_string(), "Team Lead".to_string()),
+        ("tech".to_string(), "Tech Lead".to_string()),
+    ]);
+    assert_eq!(roles, expected);
 }
