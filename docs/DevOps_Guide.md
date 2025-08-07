@@ -15,6 +15,12 @@ This document describes how we work with CI/CD and infrastructure in our project
 All automated workflows start with a security step. If the author of a pull
 request is not `qqrm`, the pipeline stops immediately and no jobs run.
 
+### Workflow permissions and secrets
+- Define a `permissions` block in each GitHub Actions workflow.
+- Grant only the scopes required by the jobs (for example, `contents: read` or `actions: write`).
+- Reference sensitive data through GitHub Secrets and avoid hardcoding credentials.
+- Validate and sanitize all external inputs when using `workflow_dispatch` or other triggers.
+
 ## Automatic pull request merging
 - The `.github/workflows/auto_merge.yml` workflow merges pull requests as soon as all checks succeed.
 - Do not remove or disable this workflow. Auto-merge helps keep the main branch healthy.
