@@ -1,4 +1,4 @@
-use sitegen::{month_from_en, month_from_ru, read_inline_start};
+use sitegen::{InlineStartError, month_from_en, month_from_ru, read_inline_start};
 use std::env;
 use std::fs;
 
@@ -20,7 +20,18 @@ fn reads_inline_start_from_markdown() {
     let original = env::current_dir().unwrap();
     env::set_current_dir(dir.path()).unwrap();
     fs::write("cv.md", "* March 2024 – Present").unwrap();
+    let result = read_inline_start().unwrap();
+    env::set_current_dir(original).unwrap();
+    assert_eq!(result, (2024, 3));
+}
+
+#[test]
+fn fails_on_invalid_markdown() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    fs::write("cv.md", "invalid").unwrap();
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
-    assert_eq!(result, Some((2024, 3)));
+    assert!(matches!(result, Err(InlineStartError::Parse)));
 }

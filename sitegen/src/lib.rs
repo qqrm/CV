@@ -3,10 +3,29 @@
 /// This module provides helpers for month name parsing,
 /// extracting the start date of the most recent CV entry,
 /// formatting durations and reading role definitions.
-
 use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::fs;
+
+/// Error type for [`read_inline_start`].
+#[derive(Debug)]
+pub enum InlineStartError {
+    /// Error while reading the `cv.md` file.
+    Io(std::io::Error),
+    /// The file format did not match the expected pattern.
+    Parse,
+}
+
+impl std::fmt::Display for InlineStartError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            InlineStartError::Io(e) => write!(f, "IO error: {e}"),
+            InlineStartError::Parse => write!(f, "failed to parse inline start"),
+        }
+    }
+}
+
+impl std::error::Error for InlineStartError {}
 
 /// Convert an English month name into its number.
 ///
@@ -59,9 +78,9 @@ pub fn month_from_ru(name: &str) -> Option<u32> {
 /// an en dash or em dash and the word "Present" (English) or
 /// "Настоящее время" (Russian).
 ///
-/// Returns a pair `(year, month)` on success.
-pub fn read_inline_start() -> Option<(i32, u32)> {
-    let content = std::fs::read_to_string("cv.md").ok()?;
+/// Returns a pair `(year, month)` on success or an [`InlineStartError`].
+pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
+    let content = std::fs::read_to_string("cv.md").map_err(InlineStartError::Io)?;
     for line in content.lines() {
         if let Some((month_str, year_str)) = line
             .trim()
@@ -79,17 +98,17 @@ pub fn read_inline_start() -> Option<(i32, u32)> {
                 let parts: Vec<&str> = month_str.trim().split_whitespace().collect();
                 if parts.len() == 2 {
                     let (month_text, year_text) = (parts[0], parts[1]);
-                    let year: i32 = year_text.parse().ok()?;
+                    let year: i32 = year_text.parse().map_err(|_| InlineStartError::Parse)?;
                     if let Some(month) =
                         month_from_en(month_text).or_else(|| month_from_ru(month_text))
                     {
-                        return Some((year, month));
+                        return Ok((year, month));
                     }
                 }
             }
         }
     }
-    None
+    Err(InlineStartError::Parse)
 }
 
 /// Format a duration in months into a human readable English string.

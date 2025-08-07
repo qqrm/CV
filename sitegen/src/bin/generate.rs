@@ -11,7 +11,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
     const DEFAULT_ROLE: &str = "Rust Team Lead";
-    let inline_start = read_inline_start().unwrap_or(INLINE_START);
+    let inline_start = match read_inline_start() {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("Failed to read inline start: {e}");
+            INLINE_START
+        }
+    };
     let roles = read_roles();
     // Build base PDFs
     let dist_dir = Path::new("dist");
@@ -48,10 +54,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
     let roles_js = {
-        let pairs: Vec<String> = roles
-            .iter()
-            .map(|(k, v)| format!("{k}: '{v}'"))
-            .collect();
+        let pairs: Vec<String> = roles.iter().map(|(k, v)| format!("{k}: '{v}'")).collect();
         format!("{{ {} }}", pairs.join(", "))
     };
     let start_date =
@@ -130,10 +133,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Generate role-specific copies for both languages
     for role in roles.keys() {
-        let pdf_typst_en_role =
-            format!("https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_{}_typst.pdf", role);
-        let pdf_typst_ru_role =
-            format!("https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_{}_typst.pdf", role);
+        let pdf_typst_en_role = format!(
+            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_{}_typst.pdf",
+            role
+        );
+        let pdf_typst_ru_role = format!(
+            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_{}_typst.pdf",
+            role
+        );
 
         let en_role_dir = docs_dir.join(role);
         if !en_role_dir.exists() {
@@ -156,4 +163,3 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
-
