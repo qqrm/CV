@@ -3,15 +3,45 @@ use std::env;
 use std::fs;
 
 #[test]
-fn parses_english_month() {
-    assert_eq!(month_from_en("March"), Some(3));
-    assert_eq!(month_from_en("December"), Some(12));
+fn parses_all_english_months() {
+    let cases = [
+        ("January", 1),
+        ("February", 2),
+        ("March", 3),
+        ("April", 4),
+        ("May", 5),
+        ("June", 6),
+        ("July", 7),
+        ("August", 8),
+        ("September", 9),
+        ("October", 10),
+        ("November", 11),
+        ("December", 12),
+    ];
+    for (name, value) in cases {
+        assert_eq!(month_from_en(name), Some(value));
+    }
 }
 
 #[test]
-fn parses_russian_month() {
-    assert_eq!(month_from_ru("Март"), Some(3));
-    assert_eq!(month_from_ru("Декабрь"), Some(12));
+fn parses_all_russian_months() {
+    let cases = [
+        ("Январь", 1),
+        ("Февраль", 2),
+        ("Март", 3),
+        ("Апрель", 4),
+        ("Май", 5),
+        ("Июнь", 6),
+        ("Июль", 7),
+        ("Август", 8),
+        ("Сентябрь", 9),
+        ("Октябрь", 10),
+        ("Ноябрь", 11),
+        ("Декабрь", 12),
+    ];
+    for (name, value) in cases {
+        assert_eq!(month_from_ru(name), Some(value));
+    }
 }
 
 #[test]

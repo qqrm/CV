@@ -3,31 +3,53 @@
 /// This module provides helpers for month name parsing,
 /// extracting the start date of the most recent CV entry,
 /// formatting durations and reading role definitions.
-
 use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::fs;
+use std::sync::LazyLock;
+
+/// English month lookup table.
+static MONTHS_EN: LazyLock<BTreeMap<&'static str, u32>> = LazyLock::new(|| {
+    BTreeMap::from([
+        ("January", 1),
+        ("February", 2),
+        ("March", 3),
+        ("April", 4),
+        ("May", 5),
+        ("June", 6),
+        ("July", 7),
+        ("August", 8),
+        ("September", 9),
+        ("October", 10),
+        ("November", 11),
+        ("December", 12),
+    ])
+});
+
+/// Russian month lookup table.
+static MONTHS_RU: LazyLock<BTreeMap<&'static str, u32>> = LazyLock::new(|| {
+    BTreeMap::from([
+        ("Январь", 1),
+        ("Февраль", 2),
+        ("Март", 3),
+        ("Апрель", 4),
+        ("Май", 5),
+        ("Июнь", 6),
+        ("Июль", 7),
+        ("Август", 8),
+        ("Сентябрь", 9),
+        ("Октябрь", 10),
+        ("Ноябрь", 11),
+        ("Декабрь", 12),
+    ])
+});
 
 /// Convert an English month name into its number.
 ///
 /// Returns `Some(1)` for January through `Some(12)` for December,
 /// or `None` if the name is unknown.
 pub fn month_from_en(name: &str) -> Option<u32> {
-    match name {
-        "January" => Some(1),
-        "February" => Some(2),
-        "March" => Some(3),
-        "April" => Some(4),
-        "May" => Some(5),
-        "June" => Some(6),
-        "July" => Some(7),
-        "August" => Some(8),
-        "September" => Some(9),
-        "October" => Some(10),
-        "November" => Some(11),
-        "December" => Some(12),
-        _ => None,
-    }
+    MONTHS_EN.get(name).copied()
 }
 
 /// Convert a Russian month name into its number.
@@ -35,21 +57,7 @@ pub fn month_from_en(name: &str) -> Option<u32> {
 /// Returns `Some(1)` for "Январь" through `Some(12)` for "Декабрь",
 /// or `None` if the name is unknown.
 pub fn month_from_ru(name: &str) -> Option<u32> {
-    match name {
-        "Январь" => Some(1),
-        "Февраль" => Some(2),
-        "Март" => Some(3),
-        "Апрель" => Some(4),
-        "Май" => Some(5),
-        "Июнь" => Some(6),
-        "Июль" => Some(7),
-        "Август" => Some(8),
-        "Сентябрь" => Some(9),
-        "Октябрь" => Some(10),
-        "Ноябрь" => Some(11),
-        "Декабрь" => Some(12),
-        _ => None,
-    }
+    MONTHS_RU.get(name).copied()
 }
 
 /// Read the starting month and year of the most recent CV entry.
