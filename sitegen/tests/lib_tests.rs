@@ -1,4 +1,11 @@
-use sitegen::{month_from_en, month_from_ru, read_inline_start, read_roles, InlineStartError};
+use sitegen::{
+    month_from_en,
+    month_from_ru,
+    read_inline_start,
+    read_roles,
+    InlineStartError,
+    RolesError,
+};
 use std::env;
 use std::fs;
 
@@ -106,14 +113,56 @@ fn read_inline_start_returns_error_when_file_missing() {
 
 #[test]
 #[serial_test::serial]
-fn read_roles_returns_default_for_invalid_file() {
+fn read_roles_returns_default_when_missing() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
     env::set_current_dir(dir.path()).unwrap();
-    fs::write("roles.toml", "[roles]\ninvalid").unwrap();
-    let roles = read_roles();
+    let roles = read_roles().expect("default roles");
     env::set_current_dir(original).unwrap();
     assert_eq!(roles.get("tl"), Some(&"Team Lead".to_string()));
     assert_eq!(roles.get("tech"), Some(&"Tech Lead".to_string()));
     assert_eq!(roles.len(), 2);
+}
+
+#[test]
+#[serial_test::serial]
+fn read_roles_merges_with_defaults() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    fs::write("roles.toml", "[roles]\nfoo='Bar'").unwrap();
+    let roles = read_roles().expect("merged roles");
+    env::set_current_dir(original).unwrap();
+    assert_eq!(roles.get("tl"), Some(&"Team Lead".to_string()));
+    assert_eq!(roles.get("foo"), Some(&"Bar".to_string()));
+    assert_eq!(roles.len(), 3);
+}
+
+#[test]
+#[serial_test::serial]
+fn read_roles_returns_error_for_invalid_file() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    fs::write("roles.toml", "[roles]\ninvalid").unwrap();
+    let err = read_roles().expect_err("expected parse error");
+    env::set_current_dir(original).unwrap();
+    assert!(matches!(err, RolesError::Parse(_)));
+    assert_eq!(err.to_string(), "could not parse roles.toml");
+}
+
+#[test]
+#[serial_test::serial]
+fn read_roles_returns_error_for_empty_title() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    fs::write("roles.toml", "[roles]\ntl = ''").unwrap();
+    let err = read_roles().expect_err("expected empty title error");
+    env::set_current_dir(original).unwrap();
+    match &err {
+        RolesError::EmptyTitle { slug } => assert_eq!(slug, "tl"),
+        _ => panic!("unexpected error"),
+    }
+    assert_eq!(err.to_string(), "role 'tl' has empty title");
 }

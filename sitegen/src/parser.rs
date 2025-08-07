@@ -121,22 +121,76 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
 #[derive(Deserialize)]
 pub struct RolesFile {
     /// Mapping from role slug to human readable title.
+    #[serde(default)]
     pub roles: BTreeMap<String, String>,
+}
+
+fn default_roles() -> BTreeMap<String, String> {
+    BTreeMap::from([
+        ("tl".to_string(), "Team Lead".to_string()),
+        ("tech".to_string(), "Tech Lead".to_string()),
+    ])
+}
+
+#[derive(Debug)]
+pub enum RolesError {
+    Io(io::Error),
+    Parse(toml::de::Error),
+    EmptyTitle { slug: String },
+}
+
+impl fmt::Display for RolesError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            RolesError::Io(_) => write!(f, "failed to read roles.toml"),
+            RolesError::Parse(_) => write!(f, "could not parse roles.toml"),
+            RolesError::EmptyTitle { slug } => {
+                write!(f, "role '{slug}' has empty title")
+            }
+        }
+    }
+}
+
+impl std::error::Error for RolesError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            RolesError::Io(err) => Some(err),
+            RolesError::Parse(err) => Some(err),
+            RolesError::EmptyTitle { .. } => None,
+        }
+    }
+}
+
+impl From<io::Error> for RolesError {
+    fn from(err: io::Error) -> Self {
+        RolesError::Io(err)
+    }
 }
 
 /// Read role definitions from `roles.toml` if present.
 ///
-/// Returns a map of role slugs to titles. When the file is missing or
-/// invalid, a small default set is returned instead.
-pub fn read_roles() -> BTreeMap<String, String> {
-    fs::read_to_string("roles.toml")
-        .ok()
-        .and_then(|text| toml::from_str::<RolesFile>(&text).ok())
-        .map(|r| r.roles)
-        .unwrap_or_else(|| {
-            BTreeMap::from([
-                ("tl".to_string(), "Team Lead".to_string()),
-                ("tech".to_string(), "Tech Lead".to_string()),
-            ])
-        })
+/// Returns a map of role slugs to titles. Missing files fall back to a
+/// default set. Invalid entries produce descriptive errors.
+pub fn read_roles() -> Result<BTreeMap<String, String>, RolesError> {
+    let defaults = default_roles();
+
+    let content = match fs::read_to_string("roles.toml") {
+        Ok(text) => text,
+        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(defaults),
+        Err(e) => return Err(RolesError::Io(e)),
+    };
+
+    let parsed: RolesFile = toml::from_str(&content).map_err(RolesError::Parse)?;
+
+    for (slug, title) in &parsed.roles {
+        if title.trim().is_empty() {
+            return Err(RolesError::EmptyTitle {
+                slug: slug.clone(),
+            });
+        }
+    }
+
+    let mut roles = defaults;
+    roles.extend(parsed.roles);
+    Ok(roles)
 }

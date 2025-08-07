@@ -1,5 +1,5 @@
 use log::info;
-use sitegen::parser::RolesFile;
+use sitegen::parser::read_roles;
 use std::error::Error;
 use std::fs;
 
@@ -8,8 +8,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     info!("Starting validation");
     fs::read_to_string("cv.md")?;
     fs::read_to_string("cv.ru.md")?;
-    let content = fs::read_to_string("roles.toml")?;
-    toml::from_str::<RolesFile>(&content)?;
+    fs::read_to_string("roles.toml")?;
+    read_roles()?;
     info!("Validation successful");
     Ok(())
 }
