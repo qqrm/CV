@@ -1,5 +1,8 @@
 name: release
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
 
@@ -7,7 +10,8 @@ jobs:
   build_sitegen:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - name: Cache cargo registry
@@ -60,6 +64,7 @@ jobs:
       contents: write
       pages: write
       id-token: write
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - name: Download built assets

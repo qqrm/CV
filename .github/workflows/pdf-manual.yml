@@ -1,5 +1,8 @@
 name: pdf-manual
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -15,6 +18,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - name: Set build date
