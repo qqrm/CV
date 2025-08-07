@@ -14,7 +14,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     const AVATAR_SRC_EN: &str = "avatar.jpg";
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
-    const DEFAULT_ROLE: &str = "Rust Team Lead";
+    const DEFAULT_ROLE: &str = "";
     let inline_start = match read_inline_start() {
         Ok(v) => v,
         Err(e) => {
@@ -34,17 +34,18 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     for lang in ["en", "ru"] {
         info!("Building PDF for language: {}", lang);
-        Command::new("typst")
-            .args([
-                "compile",
-                "templates/resume.typ",
-                &format!("dist/Belyakov_{lang}_typst.pdf"),
-                "--input",
-                &format!("lang={lang}"),
-                "--input",
-                &format!("role={DEFAULT_ROLE}"),
-            ])
-            .status()?;
+        let mut cmd = Command::new("typst");
+        cmd.args([
+            "compile",
+            "templates/resume.typ",
+            &format!("dist/Belyakov_{lang}_typst.pdf"),
+            "--input",
+            &format!("lang={lang}"),
+        ]);
+        if !DEFAULT_ROLE.is_empty() {
+            cmd.args(["--input", &format!("role={DEFAULT_ROLE}")]);
+        }
+        cmd.status()?;
 
         for (slug, title) in &roles {
             Command::new("typst")
@@ -72,6 +73,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let duration_en = format_duration_en(total_months);
     let duration_ru = format_duration_ru(total_months);
     let date_str = today.format("%Y-%m-%d").to_string();
+    let position_block = if DEFAULT_ROLE.is_empty() {
+        String::new()
+    } else {
+        format!("<p><strong id='position'>{DEFAULT_ROLE}</strong></p>")
+    };
     // Generate English version
     let pdf_typst_en = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf";
     let pdf_typst_ru = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf";
@@ -90,12 +96,44 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     let html_template = format!(
-        "<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Alexey Belyakov - CV</title>\n    <link rel='icon' href='favicon.svg' type='image/svg+xml'>\n    <link rel='stylesheet' href='style.css'>\n</head>\n<body>\n<header>\n    <h1>Alexey Belyakov</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_typst_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (RU)</a></p>\n</footer>\n<script>\n    const positions = {roles_js};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
-        date_str,
-        AVATAR_SRC_EN,
-        html_body,
+        "<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Alexey Belyakov - CV</title>
+    <link rel='icon' href='favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+<header>
+    <h1>Alexey Belyakov</h1>
+    {position_block}
+    <p>{date_str}</p>
+</header>
+<div class='content'>
+<img class='avatar' src='{avatar_src}' alt='Avatar'>
+{html_body}
+</div>
+<footer>
+    <p><a href='{pdf_typst_en}'>Download PDF (EN)</a></p>
+    <p><a href='{pdf_typst_ru}'>Скачать PDF (RU)</a></p>
+</footer>
+<script>
+    const positions = {roles_js};
+    const seg = window.location.pathname.split('/').filter(Boolean).pop();
+    const position = document.getElementById('position');
+    if (position && positions[seg]) {{ position.textContent = positions[seg]; }}
+</script>
+</body>
+</html>
+",
+        position_block = position_block,
+        date_str = date_str,
+        avatar_src = AVATAR_SRC_EN,
+        html_body = html_body,
         pdf_typst_en = pdf_typst_en,
         pdf_typst_ru = pdf_typst_ru,
+        roles_js = roles_js,
     );
 
     // Generate Russian version
@@ -112,12 +150,45 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     let html_template_ru = format!(
-        "<!DOCTYPE html>\n<html lang='ru'>\n<head>\n    <meta charset='UTF-8'>\n    <title>Алексей Беляков - Резюме</title>\n    <link rel='icon' href='../favicon.svg' type='image/svg+xml'>\n    <link rel='stylesheet' href='../style.css'>\n</head>\n<body>\n<header>\n    <h1>Алексей Беляков</h1>\n    <p><strong id='position'>Rust Team Lead</strong></p>\n    <p>{}</p>\n</header>\n<div class='content'>\n<img class='avatar' src='{}' alt='Avatar'>\n<p><em><a href='../'>Ссылка на английскую версию</a></em></p>\n{}\n</div>\n<footer>\n    <p><a href='{pdf_typst_en}'>Download PDF (EN)</a></p>\n    <p><a href='{pdf_typst_ru}'>Скачать PDF (RU)</a></p>\n</footer>\n<script>\n    const positions = {roles_js};\n    const seg = window.location.pathname.split('/').filter(Boolean).pop();\n    if (positions[seg]) {{ document.getElementById('position').textContent = positions[seg]; }}\n</script>\n</body>\n</html>\n",
-        date_str,
-        AVATAR_SRC_RU,
-        html_body_ru,
+        "<!DOCTYPE html>
+<html lang='ru'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Алексей Беляков - Резюме</title>
+    <link rel='icon' href='../favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='../style.css'>
+</head>
+<body>
+<header>
+    <h1>Алексей Беляков</h1>
+    {position_block}
+    <p>{date_str}</p>
+</header>
+<div class='content'>
+<img class='avatar' src='{avatar_src}' alt='Avatar'>
+<p><em><a href='../'>Ссылка на английскую версию</a></em></p>
+{html_body}
+</div>
+<footer>
+    <p><a href='{pdf_typst_en}'>Download PDF (EN)</a></p>
+    <p><a href='{pdf_typst_ru}'>Скачать PDF (RU)</a></p>
+</footer>
+<script>
+    const positions = {roles_js};
+    const seg = window.location.pathname.split('/').filter(Boolean).pop();
+    const position = document.getElementById('position');
+    if (position && positions[seg]) {{ position.textContent = positions[seg]; }}
+</script>
+</body>
+</html>
+",
+        position_block = position_block,
+        date_str = date_str,
+        avatar_src = AVATAR_SRC_RU,
+        html_body = html_body_ru,
         pdf_typst_en = pdf_typst_en,
         pdf_typst_ru = pdf_typst_ru,
+        roles_js = roles_js,
     );
 
     let docs_dir = Path::new("dist");
@@ -155,7 +226,16 @@ fn main() -> Result<(), Box<dyn Error>> {
         if !en_role_dir.exists() {
             fs::create_dir_all(&en_role_dir)?;
         }
-        let role_template_en = html_template
+        let base_en = if DEFAULT_ROLE.is_empty() {
+            html_template.replacen(
+                "<h1>Alexey Belyakov</h1>\n    \n",
+                "<h1>Alexey Belyakov</h1>\n    <p><strong id='position'></strong></p>\n    ",
+                1,
+            )
+        } else {
+            html_template.clone()
+        };
+        let role_template_en = base_en
             .replace(pdf_typst_en, &pdf_typst_en_role)
             .replace(pdf_typst_ru, &pdf_typst_ru_role);
         fs::write(en_role_dir.join("index.html"), role_template_en)?;
@@ -164,7 +244,16 @@ fn main() -> Result<(), Box<dyn Error>> {
         if !ru_role_dir.exists() {
             fs::create_dir_all(&ru_role_dir)?;
         }
-        let role_template_ru = html_template_ru
+        let base_ru = if DEFAULT_ROLE.is_empty() {
+            html_template_ru.replacen(
+                "<h1>Алексей Беляков</h1>\n    \n",
+                "<h1>Алексей Беляков</h1>\n    <p><strong id='position'></strong></p>\n    ",
+                1,
+            )
+        } else {
+            html_template_ru.clone()
+        };
+        let role_template_ru = base_ru
             .replace(pdf_typst_en, &pdf_typst_en_role)
             .replace(pdf_typst_ru, &pdf_typst_ru_role);
         fs::write(ru_role_dir.join("index.html"), role_template_ru)?;
