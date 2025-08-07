@@ -5,6 +5,14 @@ This document outlines how the resume is generated and how the CI/CD pipeline op
 ## CV Generation Workflow
 The `sitegen` tool transforms Markdown and Typst sources into HTML pages and PDF files.
 
+### Module structure
+The `sitegen` crate separates responsibilities between two modules:
+
+- `parser` handles input parsing such as month names, inline CV start dates and role definitions.
+- `renderer` formats data for display, including human-readable duration strings.
+
+Binary entry points like `generate` and `validate` build on these modules to produce the final artifacts.
+
 ### Dynamic role titles and language switching
 Generated HTML pages include a small JavaScript snippet that reads `roles.toml`, injects the role title based on the current URL, and enables language switching.
 

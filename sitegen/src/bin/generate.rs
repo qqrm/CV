@@ -1,6 +1,7 @@
 use chrono::{Datelike, NaiveDate, Utc};
 use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
-use sitegen::{format_duration_en, format_duration_ru, read_inline_start, read_roles};
+use sitegen::parser::{read_inline_start, read_roles};
+use sitegen::renderer::{format_duration_en, format_duration_ru};
 use std::error::Error;
 use std::fs;
 use std::path::Path;
@@ -48,10 +49,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
     let roles_js = {
-        let pairs: Vec<String> = roles
-            .iter()
-            .map(|(k, v)| format!("{k}: '{v}'"))
-            .collect();
+        let pairs: Vec<String> = roles.iter().map(|(k, v)| format!("{k}: '{v}'")).collect();
         format!("{{ {} }}", pairs.join(", "))
     };
     let start_date =
@@ -130,10 +128,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Generate role-specific copies for both languages
     for role in roles.keys() {
-        let pdf_typst_en_role =
-            format!("https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_{}_typst.pdf", role);
-        let pdf_typst_ru_role =
-            format!("https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_{}_typst.pdf", role);
+        let pdf_typst_en_role = format!(
+            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_{}_typst.pdf",
+            role
+        );
+        let pdf_typst_ru_role = format!(
+            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_{}_typst.pdf",
+            role
+        );
 
         let en_role_dir = docs_dir.join(role);
         if !en_role_dir.exists() {
@@ -156,4 +158,3 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
-
