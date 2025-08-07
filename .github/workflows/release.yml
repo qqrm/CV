@@ -70,6 +70,8 @@ jobs:
         run: mv sitegen/target/release/sitegen ./sitegen_bin
       - name: Make binary executable
         run: chmod +x sitegen_bin
+      - name: Install Typst CLI
+        run: cargo install typst-cli --locked
       - name: Clean previous site output
         run: |
           rm -rf docs
@@ -78,7 +80,6 @@ jobs:
         run: ./sitegen_bin generate
       - name: Prepare Pages directory
         run: mv dist docs
-      - uses: ./.github/actions/setup-cv
       - name: Copy README_ru
         run: |
           cp README_ru.md docs/
