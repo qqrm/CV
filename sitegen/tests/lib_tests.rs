@@ -1,3 +1,4 @@
+use serial_test::serial;
 use sitegen::{month_from_en, month_from_ru, read_inline_start, InlineStartError};
 use std::env;
 use std::fs;
@@ -45,6 +46,7 @@ fn parses_russian_months() {
 }
 
 #[test]
+#[serial]
 fn reads_inline_start_from_markdown() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
@@ -57,6 +59,7 @@ fn reads_inline_start_from_markdown() {
 
 
 #[test]
+#[serial]
 fn read_inline_start_returns_error_for_invalid_file() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
@@ -68,6 +71,7 @@ fn read_inline_start_returns_error_for_invalid_file() {
 }
 
 #[test]
+#[serial]
 fn read_inline_start_returns_error_when_file_missing() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
