@@ -32,7 +32,7 @@ This repository implements an automated, multilingual, AI-friendly CV generator 
     index.html
     ...
   /.github/
-    workflows/build.yml
+    workflows/ci.yml
 ```
 
 ---

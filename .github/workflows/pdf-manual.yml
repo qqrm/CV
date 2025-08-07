@@ -1,4 +1,4 @@
-name: Manual Build CV PDFs
+name: pdf-manual
 
 on:
   workflow_dispatch:
