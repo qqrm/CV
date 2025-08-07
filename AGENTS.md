@@ -24,13 +24,14 @@ To replicate CI pipelines locally you can use the `act` tool.
 
 Tooling notes:
 - The GitHub CLI (`gh`) is available for interacting with GitHub.
-- Always rebase your work onto the latest `main` branch before starting work or pushing. Use this procedure:
+- Always base your work on the latest `main` branch before starting work or pushing. To recreate your branch from an updated `main`, use:
   1. `git fetch origin`
   2. `git checkout main && git pull origin main`
-  3. `git checkout <your-branch>`
-  4. `git rebase origin/main`
+  3. `git branch -D <your-branch>` # remove the old branch if it exists locally
+  4. `git checkout -b <your-branch> main`
+  5. reapply your changes
 
-- When the user explicitly requests a rebase, update `main` to the latest state and reapply the task solution from scratch.
+- When the user explicitly requests a rebase, update `main` to the latest state and reapply the task solution from scratch using the above procedure.
 
 Ensure binary files (for example PDFs) do not appear in the diff and are not added to the repository.
 
