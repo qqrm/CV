@@ -2,6 +2,7 @@ use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::fs;
 use std::sync::LazyLock;
+use crate::InlineStartError;
 
 static EN_MONTHS: LazyLock<BTreeMap<&'static str, u32>> = LazyLock::new(|| {
     BTreeMap::from([
@@ -61,8 +62,8 @@ pub fn month_from_ru(name: &str) -> Option<u32> {
 /// "Настоящее время" (Russian).
 ///
 /// Returns a pair `(year, month)` on success.
-pub fn read_inline_start() -> Option<(i32, u32)> {
-    let content = std::fs::read_to_string("cv.md").ok()?;
+pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
+    let content = std::fs::read_to_string("cv.md").map_err(InlineStartError::Io)?;
     for line in content.lines() {
         if let Some((month_str, year_str)) = line
             .trim()
@@ -75,22 +76,19 @@ pub fn read_inline_start() -> Option<(i32, u32)> {
             })
         {
             let year_str = year_str.trim();
-            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время")
-            {
+            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время") {
                 let parts: Vec<&str> = month_str.trim().split_whitespace().collect();
                 if parts.len() == 2 {
                     let (month_text, year_text) = (parts[0], parts[1]);
-                    let year: i32 = year_text.parse().ok()?;
-                    if let Some(month) =
-                        month_from_en(month_text).or_else(|| month_from_ru(month_text))
-                    {
-                        return Some((year, month));
+                    let year: i32 = year_text.parse().map_err(|_| InlineStartError::Parse)?;
+                    if let Some(month) = month_from_en(month_text).or_else(|| month_from_ru(month_text)) {
+                        return Ok((year, month));
                     }
                 }
             }
         }
     }
-    None
+    Err(InlineStartError::Parse)
 }
 
 #[derive(Deserialize)]
