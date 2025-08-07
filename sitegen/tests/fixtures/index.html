@@ -9,7 +9,7 @@
 <body>
 <header>
     <h1>Alexey Belyakov</h1>
-    <p><strong id='position'>Rust Team Lead</strong></p>
+    
     <p>DATE</p>
 </header>
 <div class='content'>
@@ -181,7 +181,8 @@
 <script>
     const positions = { em: 'Engineering Manager', hod: 'Head of Development', tech: 'Tech Lead', tl: 'Team Lead' };
     const seg = window.location.pathname.split('/').filter(Boolean).pop();
-    if (positions[seg]) { document.getElementById('position').textContent = positions[seg]; }
+    const position = document.getElementById('position');
+    if (position && positions[seg]) { position.textContent = positions[seg]; }
 </script>
 </body>
 </html>
