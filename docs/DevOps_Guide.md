@@ -27,6 +27,12 @@ To compile PDFs locally, install the Typst CLI:
 cargo install typst-cli
 ```
 
+Then generate the resume PDF:
+
+```bash
+typst compile templates/resume.typ resume.pdf
+```
+
 ### Local pipeline runs
 CI workflows are defined in GitHub Actions. To execute them locally you can install
 the [`act`](https://github.com/nektos/act) tool and run `act` from the repository root.

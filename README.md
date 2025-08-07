@@ -10,6 +10,12 @@ automatically converted into PDFs and a static website.
 - [Web version (en)](https://qqrm.github.io/CV/)
 - [Web version (ru)](https://qqrm.github.io/CV/ru/)
 
-All build instructions are located in the `typst` folder.
+The Typst resume template lives in the `templates` directory.
+Install the Typst CLI and generate a PDF:
+
+```bash
+cargo install typst-cli
+typst compile templates/resume.typ resume.pdf
+```
 
 For the Russian README, see [README_ru.md](./README_ru.md).
