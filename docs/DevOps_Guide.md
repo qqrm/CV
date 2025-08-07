@@ -28,8 +28,39 @@ cargo install typst-cli
 ```
 
 ### Local pipeline runs
-CI workflows are defined in GitHub Actions. To execute them locally you can install
-the [`act`](https://github.com/nektos/act) tool and run `act` from the repository root.
+CI workflows are defined in GitHub Actions. Use the [`act`](https://github.com/nektos/act) tool to execute them locally.
+
+#### Prerequisites
+- Docker Engine installed and running.
+- The `act` binary in your `PATH`.
+
+##### Install Docker on Debian/Ubuntu
+```bash
+sudo apt-get update
+sudo apt-get install -y docker.io
+sudo dockerd >/tmp/dockerd.log 2>&1 &
+```
+
+##### Install act
+```bash
+curl -sSL https://raw.githubusercontent.com/nektos/act/master/install.sh | \
+  sudo bash -s -- -b /usr/local/bin
+act --version
+# act version 0.2.80
+```
+
+#### Running workflows
+Run the CI workflow for a pull request from the repository root:
+```bash
+act pull_request
+```
+
+For a dry run that displays the planned steps without executing them:
+```bash
+act pull_request -n
+# *DRYRUN* [ci/ci] 🚀  Start image=catthehacker/ubuntu:act-latest
+# Error: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+```
 
 
 ## Avatars directory
