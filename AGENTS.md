@@ -18,7 +18,7 @@ typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
 If the Typst CLI is missing, install it with `cargo install typst-cli`. When installation
 fails because of network or permission issues, note this in the PR summary.
 
-Whenever possible, connect to the `avatars.mcp` server to choose a persona suitable for the task, referencing <https://github.com/qqrm/avatars-mcp>. Explicitly mention in each response whether the server was used.
+Whenever possible, connect to the `avatars.mcp` server at <https://qqrm.github.io/avatars-mcp/> to choose a persona suitable for the task (see <https://github.com/qqrm/avatars-mcp> for details). Explicitly mention in each response whether the server was used.
 
 To replicate CI pipelines locally you can use the `act` tool.
 
