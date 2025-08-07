@@ -1,9 +1,10 @@
+use log::{debug, info};
+use phf::phf_map;
 use serde::Deserialize;
 use std::collections::BTreeMap;
-use std::fs;
 use std::fmt;
+use std::fs;
 use std::io;
-use phf::phf_map;
 
 #[derive(Debug)]
 pub enum InlineStartError {
@@ -103,12 +104,16 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
             })
         {
             let year_str = year_str.trim();
-            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время") {
+            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время")
+            {
                 let parts: Vec<&str> = month_str.trim().split_whitespace().collect();
                 if parts.len() == 2 {
                     let (month_text, year_text) = (parts[0], parts[1]);
                     let year: i32 = year_text.parse().map_err(|_| InlineStartError::Parse)?;
-                    if let Some(month) = month_from_en(month_text).or_else(|| month_from_ru(month_text)) {
+                    if let Some(month) =
+                        month_from_en(month_text).or_else(|| month_from_ru(month_text))
+                    {
+                        debug!("Detected inline start {year}-{month}");
                         return Ok((year, month));
                     }
                 }
@@ -173,10 +178,17 @@ impl From<io::Error> for RolesError {
 /// default set. Invalid entries produce descriptive errors.
 pub fn read_roles() -> Result<BTreeMap<String, String>, RolesError> {
     let defaults = default_roles();
+    info!("Loading roles from roles.toml");
 
     let content = match fs::read_to_string("roles.toml") {
-        Ok(text) => text,
-        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(defaults),
+        Ok(text) => {
+            debug!("roles.toml found");
+            text
+        }
+        Err(e) if e.kind() == io::ErrorKind::NotFound => {
+            info!("roles.toml not found, using defaults");
+            return Ok(defaults);
+        }
         Err(e) => return Err(RolesError::Io(e)),
     };
 
@@ -184,13 +196,12 @@ pub fn read_roles() -> Result<BTreeMap<String, String>, RolesError> {
 
     for (slug, title) in &parsed.roles {
         if title.trim().is_empty() {
-            return Err(RolesError::EmptyTitle {
-                slug: slug.clone(),
-            });
+            return Err(RolesError::EmptyTitle { slug: slug.clone() });
         }
     }
 
     let mut roles = defaults;
     roles.extend(parsed.roles);
+    info!("Loaded {} role definitions", roles.len());
     Ok(roles)
 }

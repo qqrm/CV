@@ -84,7 +84,14 @@ act pull_request -n
 RUST_LOG=info cargo run --bin generate
 ```
 
-Use `debug` for more verbose messages or `warn` to reduce noise.
+Use module filters for finer control:
+
+```bash
+RUST_LOG=sitegen=debug cargo run --bin generate
+```
+
+Replace `debug` with `warn` to reduce noise or with `trace` for
+maximum verbosity.
 
 ## Avatars directory
 Role descriptions in Markdown format are stored in the `avatars/` folder at the repository root. Each file describes a typical project role and can be reused in documentation or onboarding materials.

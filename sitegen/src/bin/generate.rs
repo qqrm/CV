@@ -22,7 +22,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             INLINE_START
         }
     };
+    info!("Using inline start: {}-{}", inline_start.0, inline_start.1);
     let roles = read_roles().expect("failed to read roles");
+    info!("Loaded {} roles", roles.len());
     // Build base PDFs
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {
