@@ -1,108 +1,12 @@
 use chrono::{Datelike, NaiveDate, Utc};
-use clap::{Parser, Subcommand};
 use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
-use serde::Deserialize;
-use sitegen::read_inline_start;
-use std::collections::BTreeMap;
+use sitegen::{format_duration_en, format_duration_ru, read_inline_start, read_roles};
+use std::error::Error;
 use std::fs;
 use std::path::Path;
 use std::process::Command;
 
-#[derive(Parser)]
-#[command(author, version, about)]
-struct Cli {
-    #[command(subcommand)]
-    command: Commands,
-}
-
-#[derive(Subcommand)]
-enum Commands {
-    /// Check Markdown and TOML for consistency
-    Validate,
-    /// Generate PDFs and HTML into /dist
-    Generate,
-}
-
-fn format_duration_en(total_months: i32) -> String {
-    let years = total_months / 12;
-    let months = total_months % 12;
-    let mut parts = Vec::new();
-    if years > 0 {
-        if years == 1 {
-            parts.push("1 year".to_string());
-        } else {
-            parts.push(format!("{} years", years));
-        }
-    }
-    if months > 0 {
-        if months == 1 {
-            parts.push("1 month".to_string());
-        } else {
-            parts.push(format!("{} months", months));
-        }
-    }
-    if parts.is_empty() {
-        "0 months".to_string()
-    } else {
-        parts.join(" ")
-    }
-}
-
-fn format_duration_ru(total_months: i32) -> String {
-    let years = total_months / 12;
-    let months = total_months % 12;
-    let mut parts = Vec::new();
-    if years > 0 {
-        let year_word = match years {
-            1 => "год",
-            2 | 3 | 4 => "года",
-            _ => "лет",
-        };
-        parts.push(format!("{} {}", years, year_word));
-    }
-    if months > 0 {
-        let month_word = match months {
-            1 => "месяц",
-            2 | 3 | 4 => "месяца",
-            _ => "месяцев",
-        };
-        parts.push(format!("{} {}", months, month_word));
-    }
-    if parts.is_empty() {
-        "0 месяцев".to_string()
-    } else {
-        parts.join(" ")
-    }
-}
-
-#[derive(Deserialize)]
-struct RolesFile {
-    roles: BTreeMap<String, String>,
-}
-
-fn read_roles() -> BTreeMap<String, String> {
-    fs::read_to_string("roles.toml")
-        .ok()
-        .and_then(|text| toml::from_str::<RolesFile>(&text).ok())
-        .map(|r| r.roles)
-        .unwrap_or_else(|| {
-            BTreeMap::from([
-                ("tl".to_string(), "Team Lead".to_string()),
-                ("tech".to_string(), "Tech Lead".to_string()),
-            ])
-        })
-}
-
-fn validate() -> Result<(), Box<dyn std::error::Error>> {
-    fs::read_to_string("cv.md")?;
-    fs::read_to_string("cv.ru.md")?;
-    let content = fs::read_to_string("roles.toml")?;
-    toml::from_str::<RolesFile>(&content)?;
-    println!("Validation successful");
-    Ok(())
-}
-
-fn generate() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     const AVATAR_SRC_EN: &str = "avatar.jpg";
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
@@ -150,7 +54,7 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     let roles_js = {
         let pairs: Vec<String> = roles
             .iter()
-            .map(|(k, v)| format!("{}: '{}'", k, v))
+            .map(|(k, v)| format!("{k}: '{v}'"))
             .collect();
         format!("{{ {} }}", pairs.join(", "))
     };
@@ -230,14 +134,10 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
 
     // Generate role-specific copies for both languages
     for role in roles.keys() {
-        let pdf_typst_en_role = format!(
-            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_{}_typst.pdf",
-            role
-        );
-        let pdf_typst_ru_role = format!(
-            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_{}_typst.pdf",
-            role
-        );
+        let pdf_typst_en_role =
+            format!("https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_{}_typst.pdf", role);
+        let pdf_typst_ru_role =
+            format!("https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_{}_typst.pdf", role);
 
         let en_role_dir = docs_dir.join(role);
         if !en_role_dir.exists() {
@@ -261,10 +161,3 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let cli = Cli::parse();
-    match cli.command {
-        Commands::Validate => validate(),
-        Commands::Generate => generate(),
-    }
-}
