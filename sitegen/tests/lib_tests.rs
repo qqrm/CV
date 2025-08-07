@@ -19,7 +19,7 @@ fn reads_inline_start_from_markdown() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
     env::set_current_dir(dir.path()).unwrap();
-    fs::write("cv.md", "* March 2024 – Present").unwrap();
+    fs::write("cv.en.md", "* March 2024 – Present").unwrap();
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
     assert_eq!(result, Some((2024, 3)));

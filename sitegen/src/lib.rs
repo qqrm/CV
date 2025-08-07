@@ -49,14 +49,14 @@ pub fn month_from_ru(name: &str) -> Option<u32> {
 
 /// Read the starting month and year of the most recent CV entry.
 ///
-/// The function expects a `cv.md` file in the current directory and
+/// The function expects a `cv.en.md` file in the current directory and
 /// looks for a list item starting with the month and year followed by
 /// an en dash or em dash and the word "Present" (English) or
 /// "Настоящее время" (Russian).
 ///
 /// Returns a pair `(year, month)` on success.
 pub fn read_inline_start() -> Option<(i32, u32)> {
-    let content = std::fs::read_to_string("cv.md").ok()?;
+    let content = std::fs::read_to_string("cv.en.md").ok()?;
     for line in content.lines() {
         if let Some((month_str, year_str)) = line
             .trim()
