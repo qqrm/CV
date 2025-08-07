@@ -1,9 +1,9 @@
+use phf::phf_map;
 use serde::Deserialize;
 use std::collections::BTreeMap;
-use std::fs;
 use std::fmt;
+use std::fs;
 use std::io;
-use phf::phf_map;
 
 #[derive(Debug)]
 pub enum InlineStartError {
@@ -103,12 +103,15 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
             })
         {
             let year_str = year_str.trim();
-            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время") {
+            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время")
+            {
                 let parts: Vec<&str> = month_str.trim().split_whitespace().collect();
                 if parts.len() == 2 {
                     let (month_text, year_text) = (parts[0], parts[1]);
                     let year: i32 = year_text.parse().map_err(|_| InlineStartError::Parse)?;
-                    if let Some(month) = month_from_en(month_text).or_else(|| month_from_ru(month_text)) {
+                    if let Some(month) =
+                        month_from_en(month_text).or_else(|| month_from_ru(month_text))
+                    {
                         return Ok((year, month));
                     }
                 }
@@ -184,13 +187,64 @@ pub fn read_roles() -> Result<BTreeMap<String, String>, RolesError> {
 
     for (slug, title) in &parsed.roles {
         if title.trim().is_empty() {
-            return Err(RolesError::EmptyTitle {
-                slug: slug.clone(),
-            });
+            return Err(RolesError::EmptyTitle { slug: slug.clone() });
         }
     }
 
     let mut roles = defaults;
     roles.extend(parsed.roles);
     Ok(roles)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{month_from_en, month_from_ru};
+
+    #[test]
+    fn parses_english_months() {
+        let months = [
+            ("January", 1),
+            ("February", 2),
+            ("March", 3),
+            ("April", 4),
+            ("May", 5),
+            ("June", 6),
+            ("July", 7),
+            ("August", 8),
+            ("September", 9),
+            ("October", 10),
+            ("November", 11),
+            ("December", 12),
+        ];
+        for (name, number) in months {
+            assert_eq!(month_from_en(name), Some(number));
+        }
+    }
+
+    #[test]
+    fn parses_russian_months() {
+        let months = [
+            ("Январь", 1),
+            ("Февраль", 2),
+            ("Март", 3),
+            ("Апрель", 4),
+            ("Май", 5),
+            ("Июнь", 6),
+            ("Июль", 7),
+            ("Август", 8),
+            ("Сентябрь", 9),
+            ("Октябрь", 10),
+            ("Ноябрь", 11),
+            ("Декабрь", 12),
+        ];
+        for (name, number) in months {
+            assert_eq!(month_from_ru(name), Some(number));
+        }
+    }
+
+    #[test]
+    fn unknown_months_return_none() {
+        assert_eq!(month_from_en("Smarch"), None);
+        assert_eq!(month_from_ru("Смарч"), None);
+    }
 }
