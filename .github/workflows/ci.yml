@@ -50,12 +50,12 @@ jobs:
           test -s dist/ru/index.html
       - name: Build Typst PDFs
         run: |
-          typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
-          typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
+          set -e
+          for file in typst/**/*.typ; do
+            typst compile "$file" "${file%.typ}.pdf"
+          done
       - name: Upload Typst PDFs
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v4
         with:
           name: typst-pdfs
-          path: |
-            typst/en/*.pdf
-            typst/ru/*.pdf
+          path: typst/**/*.pdf
