@@ -1,10 +1,10 @@
 // Resume template rendered through the `resume` function.
 
-#let resume(lang: "en", role: "Rust Team Lead") = [
+#let resume(lang: "en", role: "") = [
   #let name = if lang == "ru" { "Алексей Леонидович Беляков" } else { "Alexey Leonidovich Belyakov" }
 
   #align(center)[= {name}]
-  #align(center)[*{role}*]
+  #if role != "" [#align(center)[*{role}*]]
   #align(center)[#datetime.today().display()]
 
   #align(center)[
