@@ -117,21 +117,7 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
 
     for lang in ["en", "ru"] {
-        Command::new("typst")
-            .args([
-                "compile",
-                "templates/resume.typ",
-                &format!("dist/Belyakov_{lang}_typst.pdf"),
-                "--input",
-                &format!("lang={lang}"),
-                "--input",
-                &format!("role={DEFAULT_ROLE}"),
-                "--root",
-                ".",
-            ])
-            .status()?;
-
-        for (slug, title) in &roles {
+        let compile = |slug: &str, title: &str| -> Result<(), std::io::Error> {
             Command::new("typst")
                 .args([
                     "compile",
@@ -144,7 +130,13 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
                     "--root",
                     ".",
                 ])
-                .status()?;
+                .status()
+                .map(|_| ())
+        };
+
+        compile("typst", DEFAULT_ROLE)?;
+        for (slug, title) in &roles {
+            compile(slug, title)?;
         }
     }
     let roles_js = {
