@@ -1,4 +1,5 @@
 use chrono::{Datelike, NaiveDate, Utc};
+use log::info;
 use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
 use sitegen::parser::{read_inline_start, read_roles};
 use sitegen::renderer::{format_duration_en, format_duration_ru};
@@ -8,6 +9,8 @@ use std::path::Path;
 use std::process::Command;
 
 fn main() -> Result<(), Box<dyn Error>> {
+    env_logger::init();
+    info!("Starting site generation");
     const AVATAR_SRC_EN: &str = "avatar.jpg";
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
@@ -18,10 +21,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {
         fs::create_dir_all(dist_dir)?;
+        info!("Created dist directory");
     }
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
+    info!("Copied avatar to dist directory");
 
     for lang in ["en", "ru"] {
+        info!("Building PDF for language: {}", lang);
         Command::new("typst")
             .args([
                 "compile",
@@ -119,12 +125,14 @@ fn main() -> Result<(), Box<dyn Error>> {
         fs::copy("docs/favicon.svg", docs_dir.join("favicon.svg"))?;
     }
     fs::write(docs_dir.join("index.html"), &html_template)?;
+    info!("Wrote English HTML to dist/index.html");
 
     let ru_dir = docs_dir.join("ru");
     if !ru_dir.exists() {
         fs::create_dir_all(&ru_dir)?;
     }
     fs::write(ru_dir.join("index.html"), &html_template_ru)?;
+    info!("Wrote Russian HTML to dist/ru/index.html");
 
     // Generate role-specific copies for both languages
     for role in roles.keys() {
@@ -155,6 +163,6 @@ fn main() -> Result<(), Box<dyn Error>> {
             .replace(pdf_typst_ru, &pdf_typst_ru_role);
         fs::write(ru_role_dir.join("index.html"), role_template_ru)?;
     }
-
+    info!("Site generation completed");
     Ok(())
 }

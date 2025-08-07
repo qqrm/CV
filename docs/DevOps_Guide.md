@@ -32,6 +32,16 @@ CI workflows are defined in GitHub Actions. To execute them locally you can inst
 the [`act`](https://github.com/nektos/act) tool and run `act` from the repository root.
 
 
+## Enabling Logs
+`sitegen` binaries use [`env_logger`](https://docs.rs/env_logger/) for logging. Set the
+`RUST_LOG` environment variable to control log output:
+
+```bash
+RUST_LOG=info cargo run --bin generate
+```
+
+Use `debug` for more verbose messages or `warn` to reduce noise.
+
 ## Avatars directory
 Role descriptions in Markdown format are stored in the `avatars/` folder at the repository root. Each file describes a typical project role and can be reused in documentation or onboarding materials.
 
