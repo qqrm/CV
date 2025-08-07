@@ -530,6 +530,7 @@ dependencies = [
  "log",
  "phf",
  "pulldown-cmark",
+ "regex",
  "serde",
  "tempfile",
  "toml",
