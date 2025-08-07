@@ -24,7 +24,11 @@ To replicate CI pipelines locally you can use the `act` tool.
 
 Tooling notes:
 - The GitHub CLI (`gh`) is available for interacting with GitHub.
-- Always rebase your work onto the latest `main` branch before pushing.
+- Always rebase your work onto the latest `main` branch before starting work or pushing. Use this procedure:
+  1. `git fetch origin`
+  2. `git checkout main && git pull origin main`
+  3. `git checkout <your-branch>`
+  4. `git rebase origin/main`
 
 Ensure binary files (for example PDFs) do not appear in the diff and are not added to the repository.
 
