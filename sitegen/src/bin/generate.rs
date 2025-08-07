@@ -22,7 +22,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             INLINE_START
         }
     };
-    let roles = read_roles();
+    let roles = read_roles().expect("failed to read roles");
     // Build base PDFs
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {

@@ -6,6 +6,7 @@ pub mod renderer;
 pub use parser::{
     InlineStartError,
     RolesFile,
+    RolesError,
     month_from_en,
     month_from_ru,
     read_inline_start,
