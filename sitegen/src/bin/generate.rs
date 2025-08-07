@@ -15,7 +15,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     const AVATAR_SRC_RU: &str = "../avatar.jpg";
     const INLINE_START: (i32, u32) = (2024, 3);
     const DEFAULT_ROLE: &str = "Rust Team Lead";
-    let inline_start = read_inline_start().unwrap_or(INLINE_START);
+    let inline_start = match read_inline_start() {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("Failed to read inline start: {e}");
+            INLINE_START
+        }
+    };
     let roles = read_roles();
     // Build base PDFs
     let dist_dir = Path::new("dist");
