@@ -63,7 +63,7 @@ pub fn month_from_ru(name: &str) -> Option<u32> {
 ///
 /// Returns a pair `(year, month)` on success.
 pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
-    let content = std::fs::read_to_string("cv.md").map_err(InlineStartError::Io)?;
+    let content = std::fs::read_to_string("cv.md")?;
     for line in content.lines() {
         if let Some((month_str, year_str)) = line
             .trim()

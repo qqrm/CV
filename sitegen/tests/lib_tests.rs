@@ -64,7 +64,9 @@ fn read_inline_start_returns_error_for_invalid_file() {
     fs::write("cv.md", "* Not a valid entry").unwrap();
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
-    assert!(matches!(result, Err(InlineStartError::Parse)));
+    let err = result.expect_err("expected parse error");
+    assert!(matches!(err, InlineStartError::Parse));
+    assert_eq!(err.to_string(), "could not parse inline start");
 }
 
 #[test]
@@ -74,5 +76,7 @@ fn read_inline_start_returns_error_when_file_missing() {
     env::set_current_dir(dir.path()).unwrap();
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
-    assert!(matches!(result, Err(InlineStartError::Io(_))));
+    let err = result.expect_err("expected io error");
+    assert!(matches!(err, InlineStartError::Io(_)));
+    assert_eq!(err.to_string(), "failed to read cv.md");
 }

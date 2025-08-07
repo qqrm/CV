@@ -30,5 +30,11 @@ impl std::error::Error for InlineStartError {
     }
 }
 
+impl From<io::Error> for InlineStartError {
+    fn from(err: io::Error) -> Self {
+        InlineStartError::Io(err)
+    }
+}
+
 pub use parser::{RolesFile, month_from_en, month_from_ru, read_inline_start, read_roles};
 pub use renderer::{format_duration_en, format_duration_ru};
