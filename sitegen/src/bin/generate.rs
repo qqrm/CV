@@ -1,7 +1,7 @@
 use chrono::{Datelike, NaiveDate, Utc};
 use log::info;
 use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
-use sitegen::parser::{read_inline_start, read_roles};
+use sitegen::parser::{default_roles, read_inline_start, read_roles};
 use sitegen::renderer::{format_duration_en, format_duration_ru};
 use std::error::Error;
 use std::fs;
@@ -22,7 +22,13 @@ fn main() -> Result<(), Box<dyn Error>> {
             INLINE_START
         }
     };
-    let roles = read_roles();
+    let roles = match read_roles() {
+        Ok(r) => r,
+        Err(e) => {
+            eprintln!("Failed to read roles: {e}");
+            default_roles()
+        }
+    };
     // Build base PDFs
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {

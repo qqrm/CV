@@ -1,8 +1,8 @@
+use crate::{InlineStartError, RolesError};
 use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::fs;
 use std::sync::LazyLock;
-use crate::InlineStartError;
 
 static EN_MONTHS: LazyLock<BTreeMap<&'static str, u32>> = LazyLock::new(|| {
     BTreeMap::from([
@@ -76,12 +76,15 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
             })
         {
             let year_str = year_str.trim();
-            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время") {
+            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время")
+            {
                 let parts: Vec<&str> = month_str.trim().split_whitespace().collect();
                 if parts.len() == 2 {
                     let (month_text, year_text) = (parts[0], parts[1]);
                     let year: i32 = year_text.parse().map_err(|_| InlineStartError::Parse)?;
-                    if let Some(month) = month_from_en(month_text).or_else(|| month_from_ru(month_text)) {
+                    if let Some(month) =
+                        month_from_en(month_text).or_else(|| month_from_ru(month_text))
+                    {
                         return Ok((year, month));
                     }
                 }
@@ -91,25 +94,38 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
     Err(InlineStartError::Parse)
 }
 
+/// Default role mappings used when `roles.toml` is missing or does not
+/// define any roles.
+pub fn default_roles() -> BTreeMap<String, String> {
+    BTreeMap::from([
+        ("tl".to_string(), "Team Lead".to_string()),
+        ("tech".to_string(), "Tech Lead".to_string()),
+    ])
+}
+
 #[derive(Deserialize)]
 pub struct RolesFile {
     /// Mapping from role slug to human readable title.
+    #[serde(default = "default_roles")]
     pub roles: BTreeMap<String, String>,
 }
 
 /// Read role definitions from `roles.toml` if present.
 ///
-/// Returns a map of role slugs to titles. When the file is missing or
-/// invalid, a small default set is returned instead.
-pub fn read_roles() -> BTreeMap<String, String> {
-    fs::read_to_string("roles.toml")
-        .ok()
-        .and_then(|text| toml::from_str::<RolesFile>(&text).ok())
-        .map(|r| r.roles)
-        .unwrap_or_else(|| {
-            BTreeMap::from([
-                ("tl".to_string(), "Team Lead".to_string()),
-                ("tech".to_string(), "Tech Lead".to_string()),
-            ])
-        })
+/// Returns a map of role slugs to titles. When the file is missing, a
+/// small default set is returned instead. Invalid entries produce an
+/// error containing the offending slug.
+pub fn read_roles() -> Result<BTreeMap<String, String>, RolesError> {
+    let text = match fs::read_to_string("roles.toml") {
+        Ok(t) => t,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(default_roles()),
+        Err(e) => return Err(RolesError::Io(e)),
+    };
+    let RolesFile { roles } = toml::from_str::<RolesFile>(&text).map_err(RolesError::Parse)?;
+    for (slug, title) in &roles {
+        if title.trim().is_empty() {
+            return Err(RolesError::EmptyTitle(slug.clone()));
+        }
+    }
+    Ok(roles)
 }

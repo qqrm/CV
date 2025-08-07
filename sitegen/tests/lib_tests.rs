@@ -1,4 +1,7 @@
-use sitegen::{month_from_en, month_from_ru, read_inline_start, InlineStartError};
+use sitegen::{
+    InlineStartError, RolesError, default_roles, month_from_en, month_from_ru, read_inline_start,
+    read_roles,
+};
 use std::env;
 use std::fs;
 
@@ -55,7 +58,6 @@ fn reads_inline_start_from_markdown() {
     assert_eq!(result.unwrap(), (2024, 3));
 }
 
-
 #[test]
 fn read_inline_start_returns_error_for_invalid_file() {
     let dir = tempfile::tempdir().expect("temp dir");
@@ -75,4 +77,36 @@ fn read_inline_start_returns_error_when_file_missing() {
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
     assert!(matches!(result, Err(InlineStartError::Io(_))));
+}
+
+#[test]
+fn read_roles_returns_defaults_when_file_missing() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    let roles = read_roles().unwrap();
+    env::set_current_dir(original).unwrap();
+    assert_eq!(roles, default_roles());
+}
+
+#[test]
+fn read_roles_parses_valid_file() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    fs::write("roles.toml", "[roles]\nfoo = \"Bar\"\n").unwrap();
+    let roles = read_roles().unwrap();
+    env::set_current_dir(original).unwrap();
+    assert_eq!(roles.get("foo"), Some(&"Bar".to_string()));
+}
+
+#[test]
+fn read_roles_returns_error_for_empty_title() {
+    let dir = tempfile::tempdir().expect("temp dir");
+    let original = env::current_dir().unwrap();
+    env::set_current_dir(dir.path()).unwrap();
+    fs::write("roles.toml", "[roles]\ntl = \"\"\n").unwrap();
+    let result = read_roles();
+    env::set_current_dir(original).unwrap();
+    assert!(matches!(result, Err(RolesError::EmptyTitle(slug)) if slug == "tl"));
 }
