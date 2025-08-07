@@ -21,6 +21,12 @@ jobs:
             sitegen/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
+      - name: Cache Typst
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/typst
+          key: ${{ runner.os }}-typst-${{ hashFiles('typst/**/*.typ') }}
+          restore-keys: ${{ runner.os }}-typst-
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -38,3 +44,14 @@ jobs:
         run: |
           test -s dist/index.html
           test -s dist/ru/index.html
+      - name: Build Typst PDFs
+        run: |
+          typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
+          typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
+      - name: Upload Typst PDFs
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: typst-pdfs
+          path: |
+            typst/en/*.pdf
+            typst/ru/*.pdf
