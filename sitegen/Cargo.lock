@@ -707,6 +707,7 @@ dependencies = [
  "log",
  "phf",
  "pulldown-cmark",
+ "regex",
  "serde",
  "serial_test",
  "tempfile",
