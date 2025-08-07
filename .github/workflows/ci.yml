@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            sitegen/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+      - name: Install Typst CLI
+        run: cargo install typst-cli --locked
+      - name: Cargo build
+        run: cargo build --manifest-path sitegen/Cargo.toml
+      - name: Cargo test
+        run: cargo test --manifest-path sitegen/Cargo.toml
+      - name: Generate site
+        run: cargo run --manifest-path sitegen/Cargo.toml --bin sitegen -- generate
+      - name: Verify generated artifacts
+        run: |
+          test -s dist/index.html
+          test -s dist/ru/index.html
