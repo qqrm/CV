@@ -9,7 +9,11 @@ The `sitegen` tool transforms Markdown and Typst sources into HTML pages and PDF
 The `sitegen` crate separates responsibilities between two modules:
 
 - `parser` handles input parsing such as month names, inline CV start dates and role definitions.
-- `renderer` formats data for display, including human-readable duration strings.
+  - `month_from_en`/`month_from_ru` convert localized month names to numbers.
+  - `read_inline_start` extracts the latest CV entry start date and reports errors via `InlineStartError`.
+  - `read_roles` loads role titles from `roles.toml`.
+- `renderer` formats data for display.
+  - `format_duration_en` and `format_duration_ru` render human-readable duration strings.
 
 Binary entry points like `generate` and `validate` build on these modules to produce the final artifacts.
 

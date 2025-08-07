@@ -2,7 +2,32 @@ use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::fs;
 use std::sync::LazyLock;
-use crate::InlineStartError;
+use std::{fmt, io};
+
+/// Errors that can occur while parsing the CV start marker.
+#[derive(Debug)]
+pub enum InlineStartError {
+    Io(io::Error),
+    Parse,
+}
+
+impl fmt::Display for InlineStartError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            InlineStartError::Io(_) => write!(f, "failed to read cv.md"),
+            InlineStartError::Parse => write!(f, "could not parse inline start"),
+        }
+    }
+}
+
+impl std::error::Error for InlineStartError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            InlineStartError::Io(err) => Some(err),
+            InlineStartError::Parse => None,
+        }
+    }
+}
 
 static EN_MONTHS: LazyLock<BTreeMap<&'static str, u32>> = LazyLock::new(|| {
     BTreeMap::from([
@@ -76,12 +101,15 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
             })
         {
             let year_str = year_str.trim();
-            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время") {
+            if year_str.starts_with("Present") || year_str.starts_with("Настоящее время")
+            {
                 let parts: Vec<&str> = month_str.trim().split_whitespace().collect();
                 if parts.len() == 2 {
                     let (month_text, year_text) = (parts[0], parts[1]);
                     let year: i32 = year_text.parse().map_err(|_| InlineStartError::Parse)?;
-                    if let Some(month) = month_from_en(month_text).or_else(|| month_from_ru(month_text)) {
+                    if let Some(month) =
+                        month_from_en(month_text).or_else(|| month_from_ru(month_text))
+                    {
                         return Ok((year, month));
                     }
                 }
