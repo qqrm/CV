@@ -1,25 +1,12 @@
 use chrono::{Datelike, NaiveDate, Utc};
 use clap::{Parser, Subcommand};
-use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
+use pulldown_cmark::{html::push_html, Options, Parser as CmarkParser};
 use serde::Deserialize;
 use sitegen::read_inline_start;
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
 use std::process::Command;
-
-// Unified Typst template for all locales and roles
-const TYPST_TEMPLATE: &str = r#"#align(center)[= {{NAME}}]
-#align(center)[*{{ROLE}}*]
-#align(center)[#datetime.today().display()]
-
-#align(center)[
-  #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true)[
-    #image("avatar.jpg", width: 5cm, height: 5cm)
-  ]
-]
-
-{{BODY}}"#;
 
 #[derive(Parser)]
 #[command(author, version, about)]
@@ -122,52 +109,38 @@ fn generate() -> Result<(), Box<dyn std::error::Error>> {
     const DEFAULT_ROLE: &str = "Rust Team Lead";
     let inline_start = read_inline_start().unwrap_or(INLINE_START);
     let roles = read_roles();
-    // Build base PDFs
+    // Build PDFs using a single Typst template
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {
         fs::create_dir_all(dist_dir)?;
     }
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
 
-    let en_body = fs::read_to_string("typst/en/Belyakov_en.typ")?
-        .lines()
-        .skip(9)
-        .collect::<Vec<_>>()
-        .join("\n");
-    let ru_body = fs::read_to_string("typst/ru/Belyakov_ru.typ")?
-        .lines()
-        .skip(9)
-        .collect::<Vec<_>>()
-        .join("\n");
-
-    let locales: [(&str, &str, &String); 2] = [
-        ("en", "Alexey Leonidovich Belyakov", &en_body),
-        ("ru", "Алексей Леонидович Беляков", &ru_body),
-    ];
-
-    for (code, name, body) in locales {
-        let template = TYPST_TEMPLATE
-            .replace("{{NAME}}", name)
-            .replace("{{BODY}}", body);
-
-        let tmp_base = format!("dist/tmp_{code}.typ");
-        fs::write(&tmp_base, template.replace("{{ROLE}}", DEFAULT_ROLE))?;
+    for lang in ["en", "ru"] {
         Command::new("typst")
-            .args(["compile", &tmp_base, &format!("dist/Belyakov_{code}.pdf")])
+            .args([
+                "compile",
+                "templates/resume.typ",
+                &format!("dist/Belyakov_{lang}.pdf"),
+                "--input",
+                &format!("lang={lang}"),
+                "--input",
+                &format!("role={}", DEFAULT_ROLE),
+            ])
             .status()?;
-        fs::remove_file(&tmp_base)?;
 
         for (slug, role) in &roles {
-            let tmp_role = format!("dist/tmp_{code}_{slug}.typ");
-            fs::write(&tmp_role, template.replace("{{ROLE}}", role))?;
             Command::new("typst")
                 .args([
                     "compile",
-                    &tmp_role,
-                    &format!("dist/Belyakov_{code}_{slug}.pdf"),
+                    "templates/resume.typ",
+                    &format!("dist/Belyakov_{lang}_{slug}.pdf"),
+                    "--input",
+                    &format!("lang={lang}"),
+                    "--input",
+                    &format!("role={}", role),
                 ])
                 .status()?;
-            fs::remove_file(&tmp_role)?;
         }
     }
     let roles_js = {
