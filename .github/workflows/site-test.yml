@@ -1,0 +1,15 @@
+name: site-test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  site-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Run site checker
+        run: |
+          cargo run --manifest-path TOOLS/site_check/Cargo.toml --quiet
