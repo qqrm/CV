@@ -25,7 +25,7 @@ jobs:
       - name: Cargo test
         run: cargo test --manifest-path sitegen/Cargo.toml --quiet
       - name: Generate site
-        run: cargo run --quiet --manifest-path sitegen/Cargo.toml --bin sitegen -- generate
+        run: cargo run --quiet --manifest-path sitegen/Cargo.toml --bin generate -- generate
       - name: Verify generated artifacts
         run: |
           test -s dist/index.html
