@@ -8,7 +8,7 @@ fn reads_inline_start_from_markdown() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
     env::set_current_dir(dir.path()).unwrap();
-    fs::write("cv.md", "* March 2024 – Present").unwrap();
+    fs::write("CV.MD", "* March 2024 – Present").unwrap();
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
     assert_eq!(result.unwrap(), (2024, 3));
@@ -20,7 +20,7 @@ fn read_inline_start_returns_error_for_invalid_file() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
     env::set_current_dir(dir.path()).unwrap();
-    fs::write("cv.md", "* Not a valid entry").unwrap();
+    fs::write("CV.MD", "* Not a valid entry").unwrap();
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
     let err = result.expect_err("expected parse error");
@@ -34,7 +34,7 @@ fn read_inline_start_returns_error_for_invalid_month() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
     env::set_current_dir(dir.path()).unwrap();
-    fs::write("cv.md", "* Smarch 2024 – Present").unwrap();
+    fs::write("CV.MD", "* Smarch 2024 – Present").unwrap();
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
     let err = result.expect_err("expected parse error");
@@ -52,5 +52,5 @@ fn read_inline_start_returns_error_when_file_missing() {
     env::set_current_dir(original).unwrap();
     let err = result.expect_err("expected io error");
     assert!(matches!(err, InlineStartError::Io(_)));
-    assert_eq!(err.to_string(), "failed to read cv.md");
+    assert_eq!(err.to_string(), "failed to read CV.MD");
 }

@@ -3,8 +3,8 @@
 This repository contains the source files for my CV. The Markdown versions are
 automatically converted into PDFs and a static website.
 
-- [English CV](./cv.md)
-- [Russian CV](./cv.ru.md)
+- [English CV](./CV.MD)
+- [Russian CV](./CV_RU.MD)
 - [PDF (en)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf)
 - [PDF (ru)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf)
 - [Web version (en)](https://qqrm.github.io/CV/)
@@ -12,4 +12,4 @@ automatically converted into PDFs and a static website.
 
 All build instructions are located in the `typst` folder.
 
-For the Russian README, see [README_ru.md](./README_ru.md).
+For the Russian README, see [README_RU.MD](./README_RU.MD).

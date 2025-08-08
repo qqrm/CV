@@ -1,5 +1,5 @@
 # Alexey Leonidovich Belyakov 
-*[Link to russian version](./cv.ru.md)* \\
+*[Link to russian version](./CV_RU.MD)* \\
 *[Link to PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf)* \\
 *[Link to russian PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf)*
 

@@ -104,11 +104,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let pdf_typst_en = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf";
     let pdf_typst_ru = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf";
 
-    let markdown_input = fs::read_to_string("cv.md")?;
+    let markdown_input = fs::read_to_string("CV.MD")?;
     let parser = CmarkParser::new_ext(&markdown_input, Options::all());
     let mut html_body_en = String::new();
     push_html(&mut html_body_en, parser);
-    html_body_en = html_body_en.replace("./cv.ru.md", "ru/");
+    html_body_en = html_body_en.replace("./CV_RU.MD", "ru/");
     html_body_en = html_body_en.replace(
         "March 2024 – Present  (1 year)",
         &format!("March 2024 – Present  ({})", duration_en),
@@ -117,7 +117,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_body_en = html_body_en[end + 5..].trim_start().to_string();
     }
 
-    let markdown_ru = fs::read_to_string("cv.ru.md")?;
+    let markdown_ru = fs::read_to_string("CV_RU.MD")?;
     let parser_ru = CmarkParser::new_ext(&markdown_ru, Options::all());
     let mut html_body_ru = String::new();
     push_html(&mut html_body_ru, parser_ru);
@@ -164,11 +164,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     if !docs_dir.exists() {
         fs::create_dir_all(docs_dir)?;
     }
-    if Path::new("docs/style.css").exists() {
-        fs::copy("docs/style.css", docs_dir.join("style.css"))?;
+    if Path::new("DOCS/style.css").exists() {
+        fs::copy("DOCS/style.css", docs_dir.join("style.css"))?;
     }
-    if Path::new("docs/favicon.svg").exists() {
-        fs::copy("docs/favicon.svg", docs_dir.join("favicon.svg"))?;
+    if Path::new("DOCS/favicon.svg").exists() {
+        fs::copy("DOCS/favicon.svg", docs_dir.join("favicon.svg"))?;
     }
     fs::write(docs_dir.join("index.html"), &html_template)?;
     info!("Wrote English HTML to dist/index.html");

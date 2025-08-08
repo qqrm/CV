@@ -13,6 +13,6 @@
     ]
   ]
 
-  #let cv_path = if lang == "ru" { "../cv.ru.md" } else { "../cv.md" }
+  #let cv_path = if lang == "ru" { "../CV_RU.MD" } else { "../CV.MD" }
   #raw(read(cv_path))
 ]

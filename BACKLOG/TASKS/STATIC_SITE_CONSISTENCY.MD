@@ -7,7 +7,7 @@ Investigate the existing build pipeline and update it so that generated pages ar
 ## Related files
 - .github/workflows/release.yml
 - sitegen/src/*
-- docs/
+- DOCS/
 
 ## Acceptance criteria
 - The workflow reliably rebuilds the site on each push to `main`.

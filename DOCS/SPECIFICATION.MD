@@ -6,7 +6,7 @@
 
 This repository implements an automated, multilingual, AI-friendly CV generator and publisher, featuring:
 
-- Centralized markdown sources for career information (`cv.en.md`, `cv.ru.md`).
+- Centralized markdown sources for career information (`CV.MD`, `CV_RU.MD`).
 - A TOML file listing target roles with short codes and full titles (`roles.toml`).
 - A Typst template for generating PDF CVs (`/template/base.typ`).
 - A Rust application for parsing, validating, and generating all artifacts.
@@ -18,8 +18,8 @@ This repository implements an automated, multilingual, AI-friendly CV generator 
 
 ```
 /
-  cv.en.md
-  cv.ru.md
+  CV.MD
+  CV_RU.MD
   roles.toml
   /template/
     base.typ
@@ -44,7 +44,7 @@ This repository implements an automated, multilingual, AI-friendly CV generator 
 
 - Parse source markdown and TOML files for all supported languages.
 - Generate PDF for each role and language (`/dist/EM.en.pdf`, `/dist/EM.ru.pdf`, etc.).
-- Generate a general PDF per language (`/dist/cv.en.pdf`, `/dist/cv.ru.pdf`).
+- Generate a general PDF per language (`/dist/CV.en.pdf`, `/dist/CV.ru.pdf`).
 - Generate a multilingual static website (`index.html`) for GitHub Pages:
   - **Main page**: shows personal info, full career story, and a list of download links for all PDFs in all languages.
   - **Role pages**: rendered from a shared HTML template. `sitegen` emits generic HTML and a small JS snippet reads the role from the URL and injects the proper title/summary without reloading.
