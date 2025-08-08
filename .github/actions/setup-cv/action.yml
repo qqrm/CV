@@ -17,7 +17,10 @@ runs:
         restore-keys: ${{ runner.os }}-cargo-
     - name: Install Typst
       shell: bash
-      run: cargo install typst-cli --locked --quiet
+      run: |
+        if ! command -v typst >/dev/null 2>&1; then
+          cargo install typst-cli --locked --quiet
+        fi
     - name: Build Typst English PDF
       shell: bash
       run: typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
