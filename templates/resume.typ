@@ -1,8 +1,9 @@
 // Resume template rendered through the `resume` function.
 #import "@preview/cmarker:0.1.6"
 
-#let resume(lang: "en", role: "") = [
-  #let name = if lang == "ru" { "Алексей Леонидович Беляков" } else { "Alexey Leonidovich Belyakov" }
+#let resume(lang: "en", role: "", name: none) = [
+  #let default_name = if lang == "ru" { "Алексей Леонидович Беляков" } else { "Alexey Leonidovich Belyakov" }
+  #let name = if name == none { default_name } else { name }
 
   #align(center)[= {name}]
   #if role != "" [#align(center)[*{role}*]]
@@ -15,5 +16,8 @@
   ]
 
   #let cv_path = if lang == "ru" { "../CV_RU.MD" } else { "../CV.MD" }
-  #cmarker.render(read(cv_path))
+  #let raw_md = read(cv_path)
+  #let replaced_md = raw_md.replace("{NAME}", name)
+  #let replaced_md = replaced_md.split("\n").slice(1).join("\n")
+  #cmarker.render(replaced_md)
 ]
