@@ -8,6 +8,8 @@
 # Rust build
 /target/
 sitegen/target/
+TOOLS/site_check/target/
+site_check.log
 /index.html
 docs/index.html
 docs/avatar.jpg

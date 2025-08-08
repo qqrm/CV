@@ -1,0 +1,10 @@
+[package]
+name = "site_check"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+reqwest = { version = "0.11", features = ["blocking", "rustls-tls"] }
+scraper = "0.19"
+url = "2"
+lopdf = "0.32"
