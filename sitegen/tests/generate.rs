@@ -51,5 +51,17 @@ fn generates_expected_dist() {
     assert_eq!(index_normalized, index_expected);
     assert_eq!(index_ru_normalized, index_ru_expected);
 
+    // Ensure role-specific pages link to the correct PDFs
+    let em_page = fs::read_to_string(dist.join("em").join("index.html")).expect("read em/index.html");
+    assert!(
+        em_page.contains("Belyakov_en_em_typst.pdf"),
+        "missing English EM PDF link"
+    );
+    let em_ru_page = fs::read_to_string(dist.join("ru").join("em").join("index.html")).expect("read ru/em/index.html");
+    assert!(
+        em_ru_page.contains("Belyakov_ru_em_typst.pdf"),
+        "missing Russian EM PDF link"
+    );
+
     fs::remove_dir_all(&dist).expect("failed to remove dist");
 }
