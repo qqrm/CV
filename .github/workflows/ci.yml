@@ -4,6 +4,9 @@ permissions:
   contents: read
   actions: write
 
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
 on:
   pull_request:
 
@@ -18,11 +21,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-cv
       - name: Cargo build
-        run: cargo build --manifest-path sitegen/Cargo.toml
+        run: cargo build --manifest-path sitegen/Cargo.toml --quiet
       - name: Cargo test
-        run: cargo test --manifest-path sitegen/Cargo.toml
+        run: cargo test --manifest-path sitegen/Cargo.toml --quiet
       - name: Generate site
-        run: cargo run --manifest-path sitegen/Cargo.toml --bin sitegen -- generate
+        run: cargo run --quiet --manifest-path sitegen/Cargo.toml --bin sitegen -- generate
       - name: Verify generated artifacts
         run: |
           test -s dist/index.html

@@ -3,6 +3,9 @@ name: pdf-manual
 permissions:
   contents: read
 
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
 on:
   workflow_dispatch:
     inputs:
@@ -44,7 +47,7 @@ jobs:
           restore-keys: ${{ runner.os }}-cargo-
       - if: ${{ inputs.builder == 'typepdf' }}
         name: Install TypePDF
-        run: cargo install typepdf --locked
+        run: cargo install typepdf --locked --quiet
       - if: ${{ inputs.builder == 'typepdf' }}
         name: Build PDFs with TypePDF
         run: |

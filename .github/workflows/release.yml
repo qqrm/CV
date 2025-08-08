@@ -3,6 +3,9 @@ name: release
 permissions:
   contents: read
 
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
 on:
   workflow_dispatch:
 
@@ -30,7 +33,7 @@ jobs:
           profile: minimal
           override: true
       - name: Build
-        run: cargo build --release --manifest-path sitegen/Cargo.toml
+        run: cargo build --release --manifest-path sitegen/Cargo.toml --quiet
       - uses: ./.github/actions/setup-cv
       - name: Prepare release PDFs
         run: |
@@ -76,7 +79,7 @@ jobs:
       - name: Make binary executable
         run: chmod +x sitegen_bin
       - name: Install Typst CLI
-        run: cargo install typst-cli --locked
+        run: cargo install typst-cli --locked --quiet
       - name: Clean previous site output
         run: |
           rm -rf docs
