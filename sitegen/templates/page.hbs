@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang='{{lang}}'>
+<head>
+    <meta charset='UTF-8'>
+    <title>{{title}}</title>
+    <link rel='icon' href='{{prefix}}favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='{{prefix}}style.css'>
+</head>
+<body>
+<header>
+    <h1>{{name}}</h1>
+    {{{position_block}}}
+    <p>{{date_str}}</p>
+</header>
+<div class='content'>
+<img class='avatar' src='{{avatar_src}}' alt='Avatar'>
+{{#if link_to_en}}<p><em><a href='{{link_to_en}}'>Ссылка на английскую версию</a></em></p>{{/if}}
+{{{html_body}}}
+</div>
+<footer>
+    <p><a href='{{pdf_typst_en}}'>Download PDF (EN)</a></p>
+    <p><a href='{{pdf_typst_ru}}'>Скачать PDF (RU)</a></p>
+</footer>
+<script>
+    const positions = {{{roles_js}}};
+    const seg = window.location.pathname.split('/').filter(Boolean).pop();
+    const position = document.getElementById('position');
+    if (position && positions[seg]) { position.textContent = positions[seg]; }
+</script>
+</body>
+</html>
