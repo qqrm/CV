@@ -78,8 +78,6 @@ jobs:
         run: mv sitegen/target/release/generate ./sitegen_bin
       - name: Make binary executable
         run: chmod +x sitegen_bin
-      - name: Install Typst CLI
-        run: cargo install typst-cli --locked --quiet
       - name: Clean previous site output
         run: |
           rm -rf docs

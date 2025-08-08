@@ -8,7 +8,6 @@ use sitegen::renderer::{format_duration_en, format_duration_ru};
 use std::error::Error;
 use std::fs;
 use std::path::Path;
-use std::process::Command;
 
 #[derive(Serialize)]
 struct TemplateData<'a> {
@@ -45,7 +44,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
     let roles = read_roles().expect("failed to read roles");
-    // Build base PDFs
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {
         fs::create_dir_all(dist_dir)?;
@@ -54,35 +52,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
     info!("Copied avatar to dist directory");
 
-    for lang in ["en", "ru"] {
-        info!("Building PDF for language: {}", lang);
-        let mut cmd = Command::new("typst");
-        cmd.args([
-            "compile",
-            "templates/resume.typ",
-            &format!("dist/Belyakov_{lang}_typst.pdf"),
-            "--input",
-            &format!("lang={lang}"),
-        ]);
-        if !DEFAULT_ROLE.is_empty() {
-            cmd.args(["--input", &format!("role={DEFAULT_ROLE}")]);
-        }
-        cmd.status()?;
-
-        for (slug, title) in &roles {
-            Command::new("typst")
-                .args([
-                    "compile",
-                    "templates/resume.typ",
-                    &format!("dist/Belyakov_{lang}_{slug}.pdf"),
-                    "--input",
-                    &format!("lang={lang}"),
-                    "--input",
-                    &format!("role={title}"),
-                ])
-                .status()?;
-        }
-    }
     let roles_js = {
         let pairs: Vec<String> = roles.iter().map(|(k, v)| format!("{k}: '{v}'")).collect();
         format!("{{ {} }}", pairs.join(", "))
