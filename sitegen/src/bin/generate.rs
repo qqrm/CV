@@ -142,11 +142,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     fs::write(docs_dir.join("index.html"), &html_template)?;
     info!("Wrote English HTML to dist/index.html");
 
-    let ru_dir = docs_dir.join("ru");
-    if !ru_dir.exists() {
-        fs::create_dir_all(&ru_dir)?;
+    let ru_root_dir = docs_dir.join("ru");
+    if !ru_root_dir.exists() {
+        fs::create_dir_all(&ru_root_dir)?;
     }
-    fs::write(ru_dir.join("index.html"), &html_template_ru)?;
+    fs::write(ru_root_dir.join("index.html"), &html_template_ru)?;
     info!("Wrote Russian HTML to dist/ru/index.html");
 
     // Generate role-specific copies for both languages
@@ -185,11 +185,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         })?;
         fs::write(en_role_dir.join("index.html"), en_role_html)?;
 
-        let ru_role_dir = ru_dir.join(role);
+        let ru_role_dir = en_role_dir.join("ru");
         if !ru_role_dir.exists() {
             fs::create_dir_all(&ru_role_dir)?;
         }
-        let cross_link = format!("../../{}/", role);
         let position_block_role = if DEFAULT_ROLE.is_empty() {
             "<p><strong id='position'></strong></p>"
         } else {
@@ -207,7 +206,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             pdf_typst_en: &pdf_typst_en_role,
             pdf_typst_ru: &pdf_typst_ru_role,
             roles_js: &roles_js,
-            link_to_en: Some(&cross_link),
+            link_to_en: Some("../"),
         })?;
         fs::write(ru_role_dir.join("index.html"), ru_role_html)?;
     }
