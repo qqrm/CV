@@ -86,9 +86,9 @@ jobs:
         run: ./sitegen_bin
       - name: Prepare Pages directory
         run: mv dist docs
-      - name: Copy README_ru
+      - name: Copy README_RU
         run: |
-          cp README_ru.md docs/
+          cp README_RU.MD docs/
       - name: Setup Pages
         uses: actions/configure-pages@v5.0.0
       - name: Upload artifact
