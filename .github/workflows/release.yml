@@ -45,7 +45,7 @@ jobs:
         with:
           name: sitegen-assets
           path: |
-            sitegen/target/release/sitegen
+            sitegen/target/release/generate
             typst/en/Belyakov_en_typst.pdf
             typst/ru/Belyakov_ru_typst.pdf
             typst/en/Belyakov_en_tl_typst.pdf
@@ -72,7 +72,7 @@ jobs:
         with:
           name: sitegen-assets
       - name: Move sitegen binary
-        run: mv sitegen/target/release/sitegen ./sitegen_bin
+        run: mv sitegen/target/release/generate ./sitegen_bin
       - name: Make binary executable
         run: chmod +x sitegen_bin
       - name: Install Typst CLI
@@ -82,7 +82,7 @@ jobs:
           rm -rf docs
           rm -rf dist
       - name: Generate site
-        run: ./sitegen_bin generate
+        run: ./sitegen_bin
       - name: Prepare Pages directory
         run: mv dist docs
       - name: Copy README_ru
