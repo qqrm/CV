@@ -57,7 +57,7 @@ fn generates_expected_dist() {
         em_page.contains("Belyakov_en_em_typst.pdf"),
         "missing English EM PDF link"
     );
-    let em_ru_page = fs::read_to_string(dist.join("ru").join("em").join("index.html")).expect("read ru/em/index.html");
+    let em_ru_page = fs::read_to_string(dist.join("em").join("ru").join("index.html")).expect("read em/ru/index.html");
     assert!(
         em_ru_page.contains("Belyakov_ru_em_typst.pdf"),
         "missing Russian EM PDF link"
