@@ -1,6 +1,6 @@
 use chrono::{Datelike, NaiveDate, Utc};
 use log::{info, warn};
-use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
+use pulldown_cmark::{html::push_html, Options, Parser as CmarkParser};
 use sitegen::parser::{read_inline_start, read_roles};
 use sitegen::renderer::{format_duration_en, format_duration_ru};
 use std::error::Error;
@@ -253,7 +253,16 @@ fn main() -> Result<(), Box<dyn Error>> {
         } else {
             html_template_ru.clone()
         };
+        // Point Russian role pages back to their English counterparts
+        let cross_link_ru = format!(
+            "<p><em><a href='../../{role}/'>Ссылка на английскую версию</a></em></p>",
+            role = role
+        );
         let role_template_ru = base_ru
+            .replace(
+                "<p><em><a href='../'>Ссылка на английскую версию</a></em></p>",
+                &cross_link_ru,
+            )
             .replace(pdf_typst_en, &pdf_typst_en_role)
             .replace(pdf_typst_ru, &pdf_typst_ru_role);
         fs::write(ru_role_dir.join("index.html"), role_template_ru)?;
