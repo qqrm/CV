@@ -11,8 +11,8 @@ cargo test --manifest-path sitegen/Cargo.toml
 Also verify local PDF builds with Typst:
 
 ```
-typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
-typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
+typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
+typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
 ```
 
 If the Typst CLI is missing, install it with `cargo install typst-cli`. When installation

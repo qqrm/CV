@@ -17,18 +17,18 @@ runs:
       run: cargo install typst-cli --locked
     - name: Build Typst English PDF
       shell: bash
-      run: typst compile typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
+      run: typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
     - name: Build Typst Russian PDF
       shell: bash
-      run: typst compile typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
+      run: typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
     - name: Build role-based Typst PDFs
       shell: bash
       run: |
         for role in tl em hod tech; do
           name=$(grep "^$role =" roles.toml | cut -d '"' -f2)
-          sed "s/Rust Team Lead/$name/" typst/en/Belyakov_en.typ > temp.typ
-          typst compile temp.typ "typst/en/Belyakov_en_${role}.pdf"
-          sed "s/Rust Team Lead/$name/" typst/ru/Belyakov_ru.typ > temp.typ
-          typst compile temp.typ "typst/ru/Belyakov_ru_${role}.pdf"
+          sed "s/Rust Team Lead/$name/" typst/en/Belyakov_en.typ > typst/en/temp.typ
+          typst compile --root . typst/en/temp.typ "typst/en/Belyakov_en_${role}.pdf"
+          sed "s/Rust Team Lead/$name/" typst/ru/Belyakov_ru.typ > typst/ru/temp.typ
+          typst compile --root . typst/ru/temp.typ "typst/ru/Belyakov_ru_${role}.pdf"
         done
-        rm temp.typ
+        rm typst/en/temp.typ typst/ru/temp.typ
