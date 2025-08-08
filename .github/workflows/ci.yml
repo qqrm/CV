@@ -16,28 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Cache cargo
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            sitegen/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
-      - name: Cache Typst
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/typst
-          key: ${{ runner.os }}-typst-${{ hashFiles('typst/**/*.typ') }}
-          restore-keys: ${{ runner.os }}-typst-
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-      - name: Install Typst CLI
-        run: cargo install typst-cli --locked
+      - uses: ./.github/actions/setup-cv
       - name: Cargo build
         run: cargo build --manifest-path sitegen/Cargo.toml
       - name: Cargo test
@@ -48,12 +27,6 @@ jobs:
         run: |
           test -s dist/index.html
           test -s dist/ru/index.html
-      - name: Build Typst PDFs
-        run: |
-          set -e
-          for file in typst/**/*.typ; do
-            typst compile "$file" "${file%.typ}.pdf"
-          done
       - name: Upload Typst PDFs
         uses: actions/upload-artifact@v4
         with:
