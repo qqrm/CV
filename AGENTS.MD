@@ -1,6 +1,6 @@
 All documentation in this repository is maintained in English. Source code comments must also be written in English.
 
-README files are usually edited manually. Do not change `README.md` or `README_ru.md` unless the task explicitly requires it.
+README files are usually edited manually. Do not change `README.MD` or `README_RU.MD` unless the task explicitly requires it.
 
 Before committing, run the tests:
 
