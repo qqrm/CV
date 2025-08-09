@@ -14,6 +14,10 @@
 </head>
 <body>
 <header>
+    <button id="theme-toggle" aria-label="Toggle theme">
+        <img id="sun-icon" src="sun.svg" alt="Light theme">
+        <img id="moon-icon" src="moon.svg" alt="Dark theme" style="display:none;">
+    </button>
     <h1>Alexey Belyakov</h1>
     
     <p>DATE</p>
@@ -190,6 +194,33 @@
     const seg = window.location.pathname.split('/').filter(Boolean).pop();
     const position = document.getElementById('position');
     if (position && positions[seg]) { position.textContent = positions[seg]; }
+</script>
+<script>
+    (function() {
+        const getCookie = name => document.cookie.split("; ").find(r => r.startsWith(name + "="))?.split("=")[1];
+        const setCookie = (name, value) => { document.cookie = name + "=" + value + "; path=/; max-age=31536000"; };
+        const body = document.body;
+        const button = document.getElementById("theme-toggle");
+        const sun = document.getElementById("sun-icon");
+        const moon = document.getElementById("moon-icon");
+        const apply = theme => {
+            if (theme === "dark") {
+                body.classList.add("dark-theme");
+                sun.style.display = "none";
+                moon.style.display = "";
+            } else {
+                body.classList.remove("dark-theme");
+                sun.style.display = "";
+                moon.style.display = "none";
+            }
+        };
+        apply(getCookie("theme"));
+        button?.addEventListener("click", () => {
+            const dark = body.classList.toggle("dark-theme");
+            setCookie("theme", dark ? "dark" : "light");
+            apply(dark ? "dark" : "light");
+        });
+    })();
 </script>
 </body>
 </html>
