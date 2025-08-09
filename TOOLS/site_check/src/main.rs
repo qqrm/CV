@@ -82,6 +82,40 @@ fn check_page(
     }
 }
 
+fn probe_variant(client: &Client, url: &Url, errors: &mut Vec<String>) {
+    let alt = if url.path().ends_with('/') {
+        let trimmed = url.path().trim_end_matches('/');
+        if trimmed.is_empty() {
+            return;
+        }
+        let mut u = url.clone();
+        u.set_path(trimmed);
+        u
+    } else {
+        let mut u = url.clone();
+        let new_path = format!("{}/", url.path());
+        u.set_path(&new_path);
+        u
+    };
+    match client.get(alt.clone()).send() {
+        Ok(resp) => {
+            let status = resp.status();
+            if status.is_client_error() || status.is_server_error() {
+                let msg = format!("{} returned {}", alt, status);
+                errors.push(msg.clone());
+                log_line(&format!("ERROR {}: {}", status, alt));
+            } else {
+                log_line(&format!("OK {}: {}", status, alt));
+            }
+        }
+        Err(e) => {
+            let msg = format!("{} exception {}", alt, e);
+            errors.push(msg.clone());
+            log_line(&format!("ERROR exception: {} - {}", alt, e));
+        }
+    }
+}
+
 fn check_pdf(client: &Client, url: &Url, pdf_status: &mut Vec<String>) {
     match client.get(url.clone()).send() {
         Ok(resp) => {
@@ -161,6 +195,7 @@ fn main() -> std::process::ExitCode {
         }
         visited.insert(current.clone());
         let (links, pdfs) = check_page(&client, &current, &base, &mut errors);
+        probe_variant(&client, &current, &mut errors);
         for link in links {
             if !visited.contains(&link) {
                 queue.push_back(link);

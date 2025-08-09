@@ -2,6 +2,12 @@
 <html lang='ru'>
 <head>
     <meta charset='UTF-8'>
+    <script>
+        const p = window.location.pathname;
+        if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+            window.location.replace(p + '/' + window.location.search + window.location.hash);
+        }
+    </script>
     <title>Алексей Беляков - Резюме</title>
     <link rel='icon' href='../favicon.svg' type='image/svg+xml'>
     <link rel='stylesheet' href='../style.css'>
