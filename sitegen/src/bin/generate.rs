@@ -44,6 +44,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
     let roles = read_roles().expect("failed to read roles");
+    let base_url = "https://qqrm.github.io/CV/";
+    let mut sitemap_urls = vec![base_url.to_string(), format!("{base_url}ru/")];
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {
         fs::create_dir_all(dist_dir)?;
@@ -151,6 +153,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Generate role-specific copies for both languages
     for role in roles.keys() {
+        sitemap_urls.push(format!("{base_url}{role}/"));
+        sitemap_urls.push(format!("{base_url}{role}/ru/"));
         let pdf_typst_en_role = format!(
             "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_{}_typst.pdf",
             role
@@ -210,6 +214,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         })?;
         fs::write(ru_role_dir.join("index.html"), ru_role_html)?;
     }
+    let sitemap_content = sitemap_urls.join("\n") + "\n";
+    fs::write(docs_dir.join("sitemap.txt"), sitemap_content)?;
+    info!("Wrote sitemap to dist/sitemap.txt");
     info!("Site generation completed");
     Ok(())
 }
