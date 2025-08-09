@@ -1,4 +1,4 @@
-use lopdf::Document;
+use lopdf::{Document, Object};
 use reqwest::blocking::Client;
 use reqwest::header::CONTENT_TYPE;
 use scraper::{Html, Selector};
@@ -10,6 +10,8 @@ use url::Url;
 
 const BASE_URL: &str = "https://qqrm.github.io/CV/";
 const LOG_FILE: &str = "site_check.log";
+const EXPECTED_PAGES: usize = 1;
+const MAX_PDF_SIZE: usize = 1_000_000; // 1 MB
 
 fn log_line(message: &str) {
     println!("{}", message);
@@ -116,12 +118,13 @@ fn probe_variant(client: &Client, url: &Url, errors: &mut Vec<String>) {
     }
 }
 
-fn check_pdf(client: &Client, url: &Url, pdf_status: &mut Vec<String>) {
+fn check_pdf(client: &Client, url: &Url, pdf_status: &mut Vec<String>, errors: &mut Vec<String>) {
     match client.get(url.clone()).send() {
         Ok(resp) => {
             let status = resp.status();
             if status.is_client_error() || status.is_server_error() {
                 let msg = format!("ERROR {}: {}", status, url);
+                errors.push(msg.clone());
                 pdf_status.push(msg.clone());
                 log_line(&format!("PDF ERROR {}: {}", status, url));
                 return;
@@ -133,36 +136,88 @@ fn check_pdf(client: &Client, url: &Url, pdf_status: &mut Vec<String>) {
             {
                 if !ct.contains("application/pdf") {
                     let msg = format!("ERROR not pdf: {}", url);
+                    errors.push(msg.clone());
                     pdf_status.push(msg.clone());
                     log_line(&format!("PDF ERROR not pdf: {}", url));
                     return;
                 }
             } else {
                 let msg = format!("ERROR no content-type: {}", url);
+                errors.push(msg.clone());
                 pdf_status.push(msg.clone());
                 log_line(&format!("PDF ERROR no content-type: {}", url));
                 return;
             }
             match resp.bytes() {
-                Ok(bytes) => match Document::load_mem(&bytes) {
-                    Ok(doc) => {
-                        if doc.get_pages().is_empty() {
-                            let msg = format!("ERROR empty pdf: {}", url);
+                Ok(bytes) => {
+                    if bytes.len() > MAX_PDF_SIZE {
+                        let msg = format!("ERROR size {} bytes: {}", bytes.len(), url);
+                        errors.push(msg.clone());
+                        pdf_status.push(msg.clone());
+                        log_line(&format!("PDF ERROR size {} bytes: {}", bytes.len(), url));
+                        return;
+                    }
+                    match Document::load_mem(&bytes) {
+                        Ok(doc) => {
+                            let pages = doc.get_pages();
+                            if pages.len() != EXPECTED_PAGES {
+                                let msg = format!(
+                                    "ERROR page count {} expected {}: {}",
+                                    pages.len(),
+                                    EXPECTED_PAGES,
+                                    url
+                                );
+                                errors.push(msg.clone());
+                                pdf_status.push(msg.clone());
+                                log_line(&format!(
+                                    "PDF ERROR page count {} expected {}: {}",
+                                    pages.len(),
+                                    EXPECTED_PAGES,
+                                    url
+                                ));
+                                return;
+                            }
+                            let mut missing = Vec::new();
+                            if let Ok(&Object::Reference(info_ref)) = doc.trailer.get(b"Info") {
+                                if let Ok(Object::Dictionary(info_dict)) = doc.get_object(info_ref)
+                                {
+                                    if info_dict.get(b"Title").is_err() {
+                                        missing.push("Title");
+                                    }
+                                    if info_dict.get(b"Author").is_err() {
+                                        missing.push("Author");
+                                    }
+                                } else {
+                                    missing.push("Info");
+                                }
+                            } else {
+                                missing.push("Info");
+                            }
+                            if !missing.is_empty() {
+                                let msg = format!("ERROR missing {}: {}", missing.join(","), url);
+                                errors.push(msg.clone());
+                                pdf_status.push(msg.clone());
+                                log_line(&format!(
+                                    "PDF ERROR missing {}: {}",
+                                    missing.join(","),
+                                    url
+                                ));
+                            } else {
+                                pdf_status.push(format!("OK: {}", url));
+                                log_line(&format!("PDF OK: {}", url));
+                            }
+                        }
+                        Err(e) => {
+                            let msg = format!("ERROR parse {}: {}", url, e);
+                            errors.push(msg.clone());
                             pdf_status.push(msg.clone());
-                            log_line(&format!("PDF ERROR empty pdf: {}", url));
-                        } else {
-                            pdf_status.push(format!("OK: {}", url));
-                            log_line(&format!("PDF OK: {}", url));
+                            log_line(&format!("PDF ERROR parse: {} - {}", url, e));
                         }
                     }
-                    Err(e) => {
-                        let msg = format!("ERROR parse {}: {}", url, e);
-                        pdf_status.push(msg.clone());
-                        log_line(&format!("PDF ERROR parse: {} - {}", url, e));
-                    }
-                },
+                }
                 Err(e) => {
                     let msg = format!("ERROR bytes {}: {}", url, e);
+                    errors.push(msg.clone());
                     pdf_status.push(msg.clone());
                     log_line(&format!("PDF ERROR bytes: {} - {}", url, e));
                 }
@@ -170,6 +225,7 @@ fn check_pdf(client: &Client, url: &Url, pdf_status: &mut Vec<String>) {
         }
         Err(e) => {
             let msg = format!("ERROR exception {}: {}", e, url);
+            errors.push(msg.clone());
             pdf_status.push(msg.clone());
             log_line(&format!("PDF ERROR exception: {} - {}", url, e));
         }
@@ -202,7 +258,7 @@ fn main() -> std::process::ExitCode {
             }
         }
         for pdf in pdfs {
-            check_pdf(&client, &pdf, &mut pdf_status);
+            check_pdf(&client, &pdf, &mut pdf_status, &mut errors);
         }
     }
 
