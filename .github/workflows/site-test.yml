@@ -10,6 +10,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
+      - name: Build site
+        run: |
+          cargo run --manifest-path sitegen/Cargo.toml --quiet
       - name: Run site checker
         run: |
-          cargo run --manifest-path TOOLS/site_check/Cargo.toml --quiet
+          cargo run --manifest-path TOOLS/site_check/Cargo.toml --quiet -- --sitemap dist/sitemap.txt

@@ -1,8 +1,6 @@
 use lopdf::Document;
 use reqwest::blocking::Client;
 use reqwest::header::CONTENT_TYPE;
-use scraper::{Html, Selector};
-use std::collections::{HashSet, VecDeque};
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::Duration;
@@ -18,12 +16,7 @@ fn log_line(message: &str) {
     }
 }
 
-fn check_page(
-    client: &Client,
-    url: &Url,
-    base: &Url,
-    errors: &mut Vec<String>,
-) -> (Vec<Url>, Vec<Url>) {
+fn check_page(client: &Client, url: &Url, errors: &mut Vec<String>) {
     match client.get(url.clone()).send() {
         Ok(resp) => {
             let status = resp.status();
@@ -31,53 +24,14 @@ fn check_page(
                 let msg = format!("{} returned {}", url, status);
                 errors.push(msg.clone());
                 log_line(&format!("ERROR {}: {}", status, url));
-                return (Vec::new(), Vec::new());
+            } else {
+                log_line(&format!("OK {}: {}", status, url));
             }
-            log_line(&format!("OK {}: {}", status, url));
-            let body = match resp.text() {
-                Ok(b) => b,
-                Err(e) => {
-                    let msg = format!("{} text error {}", url, e);
-                    errors.push(msg.clone());
-                    log_line(&format!("ERROR text: {} - {}", url, e));
-                    return (Vec::new(), Vec::new());
-                }
-            };
-            let document = Html::parse_document(&body);
-            let selector = Selector::parse("a[href]").unwrap();
-            let mut pages = Vec::new();
-            let mut pdfs = Vec::new();
-            for element in document.select(&selector) {
-                if let Some(href) = element.value().attr("href") {
-                    let href = href.split('#').next().unwrap_or("");
-                    if href.is_empty() {
-                        continue;
-                    }
-                    if let Ok(full) = url.join(href) {
-                        if full.domain() != base.domain() {
-                            continue;
-                        }
-                        if !full.path().starts_with(base.path()) {
-                            continue;
-                        }
-                        if full.as_str() == url.as_str() {
-                            continue;
-                        }
-                        if full.path().to_lowercase().ends_with(".pdf") {
-                            pdfs.push(full);
-                        } else {
-                            pages.push(full);
-                        }
-                    }
-                }
-            }
-            (pages, pdfs)
         }
         Err(e) => {
             let msg = format!("{} exception {}", url, e);
             errors.push(msg.clone());
             log_line(&format!("ERROR exception: {} - {}", url, e));
-            (Vec::new(), Vec::new())
         }
     }
 }
@@ -177,32 +131,55 @@ fn check_pdf(client: &Client, url: &Url, pdf_status: &mut Vec<String>) {
 }
 
 fn main() -> std::process::ExitCode {
+    let mut args = std::env::args();
+    args.next(); // skip binary name
+    let mut sitemap_path =
+        std::env::var("SITEMAP_PATH").unwrap_or_else(|_| "dist/sitemap.txt".to_string());
+    while let Some(arg) = args.next() {
+        if arg == "--sitemap" {
+            if let Some(path) = args.next() {
+                sitemap_path = path;
+            }
+        }
+    }
+
     let client = Client::builder()
         .timeout(Duration::from_secs(10))
         .build()
         .expect("client");
 
     let base = Url::parse(BASE_URL).expect("base url");
-    let mut visited: HashSet<Url> = HashSet::new();
     let mut errors = Vec::new();
     let mut pdf_status = Vec::new();
-    let mut queue: VecDeque<Url> = VecDeque::new();
-    queue.push_back(base.clone());
 
-    while let Some(current) = queue.pop_front() {
-        if visited.contains(&current) {
+    let content = match std::fs::read_to_string(&sitemap_path) {
+        Ok(c) => c,
+        Err(e) => {
+            log_line(&format!("ERROR reading sitemap {}: {}", sitemap_path, e));
+            return std::process::ExitCode::from(1);
+        }
+    };
+
+    for line in content.lines() {
+        let line = line.trim();
+        if line.is_empty() {
             continue;
         }
-        visited.insert(current.clone());
-        let (links, pdfs) = check_page(&client, &current, &base, &mut errors);
-        probe_variant(&client, &current, &mut errors);
-        for link in links {
-            if !visited.contains(&link) {
-                queue.push_back(link);
-            }
-        }
-        for pdf in pdfs {
-            check_pdf(&client, &pdf, &mut pdf_status);
+        let url = match Url::parse(line) {
+            Ok(u) => u,
+            Err(_) => match base.join(line) {
+                Ok(u) => u,
+                Err(e) => {
+                    errors.push(format!("invalid url {}: {}", line, e));
+                    continue;
+                }
+            },
+        };
+        if url.path().to_lowercase().ends_with(".pdf") {
+            check_pdf(&client, &url, &mut pdf_status);
+        } else {
+            check_page(&client, &url, &mut errors);
+            probe_variant(&client, &url, &mut errors);
         }
     }
 
