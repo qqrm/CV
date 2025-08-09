@@ -1,0 +1,33 @@
+name: pdf-pdfx
+
+permissions:
+  contents: read
+  actions: write
+
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pdfx-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pdfx
+        run: cargo install pdfx --locked --quiet
+      - name: Run pdfx
+        run: |
+          mkdir -p reports
+          shopt -s nullglob
+          for pdf in docs/*.pdf; do
+            pdfx "$pdf" &> "reports/$(basename "$pdf").log"
+          done
+      - name: Upload pdfx reports
+        if: ${{ hashFiles('reports/*.log') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdfx-reports
+          path: reports/
