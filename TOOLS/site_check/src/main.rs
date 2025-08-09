@@ -1,21 +1,38 @@
 use lopdf::Document;
+use pdf_extract::extract_text_from_mem;
+use regex::Regex;
 use reqwest::blocking::Client;
 use reqwest::header::CONTENT_TYPE;
 use scraper::{Html, Selector};
 use std::collections::{HashSet, VecDeque};
-use std::fs::OpenOptions;
+use std::fs::{OpenOptions, read_to_string};
 use std::io::Write;
+use std::path::Path;
 use std::time::Duration;
 use url::Url;
 
 const BASE_URL: &str = "https://qqrm.github.io/CV/";
 const LOG_FILE: &str = "site_check.log";
+const EN_NAME: &str = "Alexey Leonidovich Belyakov";
+const RU_NAME: &str = "Алексей Леонидович Беляков";
 
 fn log_line(message: &str) {
     println!("{}", message);
     if let Ok(mut file) = OpenOptions::new().create(true).append(true).open(LOG_FILE) {
         let _ = writeln!(file, "{}", message);
     }
+}
+
+fn parse_companies(path: &Path) -> HashSet<String> {
+    let content = match read_to_string(path) {
+        Ok(c) => c,
+        Err(_) => return HashSet::new(),
+    };
+    let re = Regex::new(r"^### .* @ ([^|\n]+)").unwrap();
+    content
+        .lines()
+        .filter_map(|line| re.captures(line).map(|cap| cap[1].trim().to_string()))
+        .collect()
 }
 
 fn check_page(
@@ -116,7 +133,15 @@ fn probe_variant(client: &Client, url: &Url, errors: &mut Vec<String>) {
     }
 }
 
-fn check_pdf(client: &Client, url: &Url, pdf_status: &mut Vec<String>) {
+fn check_pdf(
+    client: &Client,
+    url: &Url,
+    pdf_status: &mut Vec<String>,
+    en_name: &str,
+    en_companies: &HashSet<String>,
+    ru_name: &str,
+    ru_companies: &HashSet<String>,
+) {
     match client.get(url.clone()).send() {
         Ok(resp) => {
             let status = resp.status();
@@ -151,8 +176,42 @@ fn check_pdf(client: &Client, url: &Url, pdf_status: &mut Vec<String>) {
                             pdf_status.push(msg.clone());
                             log_line(&format!("PDF ERROR empty pdf: {}", url));
                         } else {
-                            pdf_status.push(format!("OK: {}", url));
-                            log_line(&format!("PDF OK: {}", url));
+                            match extract_text_from_mem(&bytes) {
+                                Ok(text) => {
+                                    let (name, companies) = if url.as_str().contains("ru") {
+                                        (ru_name, ru_companies)
+                                    } else {
+                                        (en_name, en_companies)
+                                    };
+                                    let mut missing = Vec::new();
+                                    if !text.contains(name) {
+                                        missing.push(format!("name {}", name));
+                                    }
+                                    for comp in companies {
+                                        if !text.contains(comp) {
+                                            missing.push(format!("company {}", comp));
+                                        }
+                                    }
+                                    if missing.is_empty() {
+                                        pdf_status.push(format!("OK: {}", url));
+                                        log_line(&format!("PDF OK: {}", url));
+                                    } else {
+                                        for item in missing {
+                                            let msg = format!("ERROR missing {}: {}", item, url);
+                                            pdf_status.push(msg.clone());
+                                            log_line(&format!(
+                                                "PDF ERROR missing {}: {}",
+                                                item, url
+                                            ));
+                                        }
+                                    }
+                                }
+                                Err(e) => {
+                                    let msg = format!("ERROR text {}: {}", url, e);
+                                    pdf_status.push(msg.clone());
+                                    log_line(&format!("PDF ERROR text: {} - {}", url, e));
+                                }
+                            }
                         }
                     }
                     Err(e) => {
@@ -183,6 +242,13 @@ fn main() -> std::process::ExitCode {
         .expect("client");
 
     let base = Url::parse(BASE_URL).expect("base url");
+    let manifest_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let repo_root = manifest_dir
+        .parent()
+        .and_then(|p| p.parent())
+        .expect("repo root");
+    let en_companies = parse_companies(&repo_root.join("CV.MD"));
+    let ru_companies = parse_companies(&repo_root.join("CV_RU.MD"));
     let mut visited: HashSet<Url> = HashSet::new();
     let mut errors = Vec::new();
     let mut pdf_status = Vec::new();
@@ -202,7 +268,15 @@ fn main() -> std::process::ExitCode {
             }
         }
         for pdf in pdfs {
-            check_pdf(&client, &pdf, &mut pdf_status);
+            check_pdf(
+                &client,
+                &pdf,
+                &mut pdf_status,
+                EN_NAME,
+                &en_companies,
+                RU_NAME,
+                &ru_companies,
+            );
         }
     }
 
