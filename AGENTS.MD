@@ -1,42 +1,76 @@
-All documentation in this repository is maintained in English. Source code comments must also be written in English.
+# Agent guide
 
-README files are usually edited manually. Do not change `README.MD` or `README_RU.MD` unless the task explicitly requires it.
+All documentation and code comments must be in English.
 
-Before committing, run the tests:
+Do not edit README.md or README\_RU.md unless the task explicitly requires it.
 
-```
+Before committing, run tests:
+
+```bash
 cargo test --manifest-path sitegen/Cargo.toml
 ```
 
-Also verify local PDF builds with Typst:
+Verify local PDF builds with Typst:
 
-```
+```bash
 typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
 typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
 ```
 
-If the Typst CLI is missing, install it with `cargo install typst-cli`. When installation
-fails because of network or permission issues, note this in the PR summary.
+Always connect to the avatars.mcp server at https\://qqrm.github.io/avatars-mcp/ and pick an avatar for the task. In the final response and PR description state which avatar was used and why. If the server is unreachable, note this in the PR.
 
-Always connect to the `avatars.mcp` server at <https://qqrm.github.io/avatars-mcp/> to choose an avatar persona for each task (see <https://github.com/qqrm/avatars-mcp> for details). In your final response for each task and in the PR description, state which avatar was selected and briefly why; if no avatar is used, explicitly note this. If the server is unreachable, mention this in the PR.
+Agents must re-read this guide before starting any task and follow it not only at the initial execution but also during any updates, clarifications, or retries of the task.
 
-To replicate CI pipelines locally you can use the `act` tool.
+## Git and PR workflow
 
-Tooling notes:
-- The GitHub CLI (`gh`) is available for interacting with GitHub.
-- Always base your work on the latest `main` branch before starting work or pushing. To recreate your branch from an updated `main`, use:
-  1. `git fetch origin`
-  2. `git checkout main && git pull origin main`
-  3. `git branch -D <your-branch>` # remove the old branch if it exists locally
-  4. `git checkout -b <your-branch> main`
-  5. reapply your changes
+Always start from a fresh branch created off the latest origin/main. Never try to rebase an existing branch. On each run or retry, recreate the branch from origin/main and reapply the solution.
 
-- When the user explicitly requests a rebase, update `main` to the latest state and reapply the task solution from scratch using the above procedure.
+### Procedure
 
-Ensure binary files (for example PDFs) do not appear in the diff and are not added to the repository.
+> All commands must be executed from the repository root.
 
-When analyzing incoming tasks, apply the following roles:
-- **R Business Analytica** reviews initial requirements and creates backlog items.
-- **Architect** provides technical input after the analyst stage.
-- **R DevOps** handles CI or infrastructure related tasks.
-- **Seniora** (senior developer) responds to general development tasks.
+1. Fetch the latest changes from origin:
+
+```bash
+git fetch origin
+```
+
+2. Reset local changes and remove untracked files:
+
+```bash
+git reset --hard
+git clean -fdx
+```
+
+3. Create a new branch from origin/main:
+
+```bash
+git switch -C "<task-branch>" origin/main
+```
+
+4. Implement and commit your changes:
+
+```bash
+git add -A
+git commit -m "task: <short summary>"
+```
+
+5. Push and create/update PR:
+
+```bash
+git push -u origin "<task-branch>" --force-with-lease
+# If PR already exists, update instead of creating
+if gh pr view --head "<task-branch>" >/dev/null 2>&1; then
+  gh pr edit --title "task: <short summary>"
+else
+  gh pr create --base main --head "<task-branch>" --fill
+fi
+```
+
+Branch naming:
+
+```
+codex/<date>-<short-slug>
+# example: codex/2025-08-09-typst-lint
+```
+
