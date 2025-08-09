@@ -7,6 +7,8 @@ env:
   CARGO_TERM_PROGRESS_WHEN: never
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -84,6 +86,8 @@ jobs:
           rm -rf dist
       - name: Generate site
         run: ./sitegen_bin
+      - name: Verify role pages
+        run: test -s dist/tl/ru/index.html
       - name: Prepare Pages directory
         run: mv dist docs
       - name: Copy README_RU
