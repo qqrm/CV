@@ -2,6 +2,7 @@
 #import "@preview/cmarker:0.1.6"
 
 #let resume(lang: "en", role: "", name: none) = [
+  #set text(font: "Latin Modern Roman")
   #let default_name = if lang == "ru" { "Алексей Леонидович Беляков" } else { "Alexey Leonidovich Belyakov" }
   #let name = if name == none { default_name } else { name }
 
