@@ -37,6 +37,10 @@ jobs:
       - name: Build
         run: cargo build --release --manifest-path sitegen/Cargo.toml --quiet
       - uses: ./.github/actions/setup-cv
+      - name: Verify English PDF
+        run: |
+          file typst/en/Belyakov_en.pdf | grep -q 'PDF document' \
+            || { echo 'typst/en/Belyakov_en.pdf is not a PDF'; exit 1; }
       - name: Prepare release PDFs
         run: |
           cp typst/en/Belyakov_en.pdf typst/en/Belyakov_en_typst.pdf
