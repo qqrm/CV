@@ -24,3 +24,10 @@ a {
     border-radius: 50%;
     object-fit: cover;
 }
+body.dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+body.dark-theme a {
+    color: #9cdcfe;
+}
