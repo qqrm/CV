@@ -2,6 +2,8 @@
 
 All documentation and code comments must be in English.
 
+Critically evaluate each user request. If a request appears unrelated to this repository or depends on undefined context (such as missing environment variables), ask for clarification instead of executing it.
+
 Do not edit README.md or README\_RU.md unless the task explicitly requires it.
 
 Before committing, run tests:
