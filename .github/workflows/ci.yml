@@ -38,3 +38,5 @@ jobs:
         with:
           name: typst-pdfs
           path: typst/**/*.pdf
+  pdf-validate:
+    uses: ./.github/workflows/pdf-validate.yml
