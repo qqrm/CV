@@ -14,15 +14,26 @@ on:
 jobs:
   pdfx-check:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install pdfx
-        run: cargo install pdfx --locked --quiet
-      - name: Run pdfx
-        run: |
-          mkdir -p reports
-          shopt -s nullglob
-          for pdf in docs/*.pdf; do
+      steps:
+        - uses: actions/checkout@v4
+        - name: Cache cargo
+          uses: actions/cache@v4
+          with:
+            path: |
+              ~/.cargo/bin
+              ~/.cargo/registry/index
+              ~/.cargo/registry/cache
+              ~/.cargo/git/db
+            key: ${{ runner.os }}-pdfx-261a426f
+            restore-keys: |
+              ${{ runner.os }}-pdfx-
+        - name: Install pdfx
+          run: cargo install pdfx --git https://github.com/jdiaz97/pdfx --rev 261a426f23075993e889fc2236183e56b8af4bc6 --locked --quiet
+        - name: Run pdfx
+          run: |
+            mkdir -p reports
+            shopt -s nullglob
+            for pdf in docs/*.pdf; do
             pdfx "$pdf" &> "reports/$(basename "$pdf").log"
           done
       - name: Upload pdfx reports
