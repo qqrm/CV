@@ -7,17 +7,17 @@ use toml::Value;
 
 fn normalize_en(content: &str) -> String {
     let date_re = Regex::new(r"<p>\d{4}-\d{2}-\d{2}</p>").unwrap();
-    let dur_re = Regex::new(r"March 2024 – Present  \([^)]*\)").unwrap();
+    let dur_re = Regex::new(r"([A-Za-z]+ \d{4} – Present)  \([^)]*\)").unwrap();
     let tmp = date_re.replace(content, "<p>DATE</p>");
-    let tmp = dur_re.replace(&tmp, "March 2024 – Present  (DURATION)");
+    let tmp = dur_re.replace(&tmp, "$1  (DURATION)");
     tmp.to_string()
 }
 
 fn normalize_ru(content: &str) -> String {
     let date_re = Regex::new(r"<p>\d{4}-\d{2}-\d{2}</p>").unwrap();
-    let dur_re = Regex::new(r"март 2024 – настоящее время \([^)]*\)").unwrap();
+    let dur_re = Regex::new(r"(\p{L}+ \d{4} – настоящее время) \([^)]*\)").unwrap();
     let tmp = date_re.replace(content, "<p>DATE</p>");
-    let tmp = dur_re.replace(&tmp, "март 2024 – настоящее время (DURATION)");
+    let tmp = dur_re.replace(&tmp, "$1 (DURATION)");
     tmp.to_string()
 }
 
