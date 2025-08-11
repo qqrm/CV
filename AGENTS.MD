@@ -69,6 +69,8 @@ else
 fi
 ```
 
+6. Verify that the current branch's HEAD matches `origin/main`. If `origin/main` has moved ahead, restart the task on the latest commit.
+
 Branch naming:
 
 ```
