@@ -92,6 +92,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let parser_ru = CmarkParser::new_ext(&markdown_ru, Options::all());
     let mut html_body_ru = String::new();
     push_html(&mut html_body_ru, parser_ru);
+    html_body_ru = html_body_ru.replace("./CV.MD", "../");
     html_body_ru = html_body_ru.replace(
         "март 2024 – настоящее время (около 1 года)",
         &format!("март 2024 – настоящее время ({})", duration_ru),
@@ -128,7 +129,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         pdf_typst_en,
         pdf_typst_ru,
         roles_js: &roles_js,
-        link_to_en: Some("../"),
+        link_to_en: None,
     })?;
 
     let docs_dir = Path::new("dist");
@@ -210,7 +211,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             pdf_typst_en: &pdf_typst_en_role,
             pdf_typst_ru: &pdf_typst_ru_role,
             roles_js: &roles_js,
-            link_to_en: Some("../"),
+            link_to_en: None,
         })?;
         fs::write(ru_role_dir.join("index.html"), ru_role_html)?;
     }
