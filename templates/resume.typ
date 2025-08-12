@@ -16,9 +16,11 @@
     ]
   ]
 
+  #align(center)[#link("https://qqrm.github.io/CV/")[https://qqrm.github.io/CV/]]
+
   #let cv_path = if lang == "ru" { "../CV_RU.MD" } else { "../CV.MD" }
   #let raw_md = read(cv_path)
   #let replaced_md = raw_md.replace("{NAME}", name)
-  #let replaced_md = replaced_md.split("\n").slice(1).join("\n")
+  #let replaced_md = replaced_md.split("\n").slice(5).join("\n")
   #cmarker.render(replaced_md)
 ]
