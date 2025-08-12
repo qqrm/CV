@@ -19,6 +19,6 @@ typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
 typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
 ```
 
-Before starting any task, connect to the avatars.mcp server at https\://qqrm.github.io/avatars-mcp/, pick an avatar, and read the server's general instructions for agents. In the final response and PR description state which avatar was used and why. If the server is unreachable, note this in the PR.
+Before starting any task, connect to the avatars.mcp server at https\://qqrm.github.io/, pick an avatar, and read the server's general instructions for agents. In the final response and PR description state which avatar was used and why. If the server is unreachable, note this in the PR.
 
 Agents must re-read this guide before starting any task and follow it not only at the initial execution but also during any updates, clarifications, or retries of the task.
