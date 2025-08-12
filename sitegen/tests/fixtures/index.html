@@ -8,16 +8,21 @@
             window.location.replace(p + '/' + window.location.search + window.location.hash);
         }
     </script>
+    <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+    </script>
     <title>Alexey Belyakov - CV</title>
     <link rel='icon' href='favicon.svg' type='image/svg+xml'>
     <link rel='stylesheet' href='style.css'>
 </head>
 <body>
 <header>
-    <button id="theme-toggle" aria-label="Toggle theme">
-        <img id="sun-icon" src="sun.svg" alt="Light theme">
-        <img id="moon-icon" src="moon.svg" alt="Dark theme" style="display:none;">
-    </button>
     <h1>Alexey Belyakov</h1>
     
     <p>DATE</p>
@@ -189,6 +194,10 @@
     <p><a href='https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf'>Download PDF (EN)</a></p>
     <p><a href='https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf'>Скачать PDF (RU)</a></p>
 </footer>
+<button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
+  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
+</button>
 <script>
     const positions = { em: 'Engineering Manager', hod: 'Head of Development', tech: 'Tech Lead', tl: 'Team Lead' };
     const seg = window.location.pathname.split('/').filter(Boolean).pop();
@@ -196,31 +205,32 @@
     if (position && positions[seg]) { position.textContent = positions[seg]; }
 </script>
 <script>
-    (function() {
-        const getCookie = name => document.cookie.split("; ").find(r => r.startsWith(name + "="))?.split("=")[1];
-        const setCookie = (name, value) => { document.cookie = name + "=" + value + "; path=/; max-age=31536000"; };
-        const body = document.body;
-        const button = document.getElementById("theme-toggle");
-        const sun = document.getElementById("sun-icon");
-        const moon = document.getElementById("moon-icon");
-        const apply = theme => {
-            if (theme === "dark") {
-                body.classList.add("dark-theme");
-                sun.style.display = "none";
-                moon.style.display = "";
-            } else {
-                body.classList.remove("dark-theme");
-                sun.style.display = "";
-                moon.style.display = "none";
-            }
-        };
-        apply(getCookie("theme"));
-        button?.addEventListener("click", () => {
-            const dark = body.classList.toggle("dark-theme");
-            setCookie("theme", dark ? "dark" : "light");
-            apply(dark ? "dark" : "light");
-        });
-    })();
+(function(){
+  var root = document.documentElement;
+  var key = 'theme';
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var next = theme === 'light' ? 'dark' : 'light';
+    btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+    btn.setAttribute('title', 'Switch to ' + next + ' theme');
+  }
+  var saved = localStorage.getItem(key);
+  var start = saved || root.getAttribute('data-theme') || 'light';
+  apply(start);
+  localStorage.setItem(key, start);
+
+  var btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(key, next);
+      apply(next);
+    });
+  }
+})();
 </script>
 </body>
 </html>

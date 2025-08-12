@@ -24,10 +24,32 @@ a {
     border-radius: 50%;
     object-fit: cover;
 }
-body.dark-theme {
+html[data-theme="dark"] {
     background-color: #121212;
     color: #e0e0e0;
 }
-body.dark-theme a {
+html[data-theme="dark"] a {
     color: #9cdcfe;
 }
+
+.theme-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: 0;
+    padding: 6px;
+    line-height: 0;
+    cursor: pointer;
+    opacity: .9;
+}
+.theme-toggle:hover { opacity: 1; }
+.theme-toggle svg { width: 24px; height: 24px; display: none; }
+
+/* Light theme */
+html[data-theme="light"] .theme-toggle { color: #111; }
+html[data-theme="light"] .theme-toggle .icon-moon { display: inline; }
+
+/* Dark theme */
+html[data-theme="dark"] .theme-toggle { color: #fff; }
+html[data-theme="dark"] .theme-toggle .icon-sun { display: inline; }
