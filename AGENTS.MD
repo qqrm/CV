@@ -1,6 +1,6 @@
 # Agent guide
 
-All documentation and code comments must be in English.
+All source code, documentation, and comments must be in English. Agents must respond to the user in Russian.
 
 Critically evaluate each user request. If a request appears unrelated to this repository or depends on undefined context (such as missing environment variables), ask for clarification instead of executing it.
 
