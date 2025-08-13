@@ -16,6 +16,7 @@ jobs:
         tool: [qpdf, pdfcpu, pdfx]
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-cv
 
       - name: Install qpdf
         if: matrix.tool == 'qpdf'
@@ -35,15 +36,15 @@ jobs:
 
       - name: Install pdfx
         if: matrix.tool == 'pdfx'
-        run: cargo install pdfx --locked --quiet
+        run: cargo install pdfx --locked --quiet --git https://github.com/jdiaz97/pdfx --rev 261a426f23075993e889fc2236183e56b8af4bc6
 
       - name: Run qpdf checks
         if: matrix.tool == 'qpdf'
         run: |
           mkdir -p reports
-          shopt -s nullglob
+          shopt -s nullglob globstar
           status=0
-          for pdf in docs/*.pdf; do
+          for pdf in typst/**/*.pdf; do
             echo "Checking $pdf"
             qpdf --check "$pdf" > "reports/$(basename "$pdf").log" || status=1
           done
@@ -53,8 +54,8 @@ jobs:
         if: matrix.tool == 'pdfcpu'
         run: |
           mkdir -p reports
-          shopt -s nullglob
-          for pdf in docs/*.pdf; do
+          shopt -s nullglob globstar
+          for pdf in typst/**/*.pdf; do
             pdfcpu validate -mode strict "$pdf" > "reports/$(basename "$pdf" .pdf).txt"
           done
 
@@ -62,8 +63,8 @@ jobs:
         if: matrix.tool == 'pdfx'
         run: |
           mkdir -p reports
-          shopt -s nullglob
-          for pdf in docs/*.pdf; do
+          shopt -s nullglob globstar
+          for pdf in typst/**/*.pdf; do
             pdfx "$pdf" &> "reports/$(basename "$pdf").log"
           done
 
