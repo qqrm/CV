@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-cv
 
       - name: Cache cargo
         uses: actions/cache@v4
@@ -29,8 +30,8 @@ jobs:
       - name: Run pdfx
         run: |
           mkdir -p reports
-          shopt -s nullglob
-          for pdf in docs/*.pdf; do
+          shopt -s nullglob globstar
+          for pdf in typst/**/*.pdf; do
             pdfx "$pdf" &> "reports/$(basename "$pdf").log"
           done
 
