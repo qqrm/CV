@@ -33,10 +33,8 @@ jobs:
       - if: ${{ inputs.builder == 'typst' }}
         name: Prepare Typst release PDFs
         run: |
-          cp typst/en/Belyakov_en.pdf typst/en/Belyakov_en_typst.pdf
-          cp typst/ru/Belyakov_ru.pdf typst/ru/Belyakov_ru_typst.pdf
-          cp typst/en/Belyakov_pm_en.pdf typst/en/Belyakov_pm_full_en_typst.pdf
-          cp typst/ru/Belyakov_pm_ru.pdf typst/ru/Belyakov_pm_full_ru_typst.pdf
+          cp typst/en/Belyakov_pm_en.pdf typst/en/Belyakov_pm_full_en.pdf
+          cp typst/ru/Belyakov_pm_ru.pdf typst/ru/Belyakov_pm_full_ru.pdf
       - if: ${{ inputs.builder == 'typepdf' }}
         name: Cache cargo
         uses: actions/cache@v4
@@ -57,12 +55,23 @@ jobs:
           typepdf typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru_typepdf.pdf
           typepdf typst/en/Belyakov_pm_en.typ typst/en/Belyakov_pm_en_typepdf.pdf
           typepdf typst/ru/Belyakov_pm_ru.typ typst/ru/Belyakov_pm_ru_typepdf.pdf
-      - name: Upload PDFs
+      - if: ${{ inputs.builder == 'typst' }}
+        name: Upload PDFs
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: cv-pdfs-${{ inputs.builder }}-${{ env.DATE }}
+          name: cv-pdfs-typst-${{ env.DATE }}
           path: |
-            typst/en/Belyakov_en_${{ inputs.builder }}.pdf
-            typst/ru/Belyakov_ru_${{ inputs.builder }}.pdf
-            typst/en/Belyakov_pm_en_${{ inputs.builder }}.pdf
-            typst/ru/Belyakov_pm_ru_${{ inputs.builder }}.pdf
+            typst/en/Belyakov_en.pdf
+            typst/ru/Belyakov_ru.pdf
+            typst/en/Belyakov_pm_full_en.pdf
+            typst/ru/Belyakov_pm_full_ru.pdf
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Upload PDFs
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: cv-pdfs-typepdf-${{ env.DATE }}
+          path: |
+            typst/en/Belyakov_en_typepdf.pdf
+            typst/ru/Belyakov_ru_typepdf.pdf
+            typst/en/Belyakov_pm_en_typepdf.pdf
+            typst/ru/Belyakov_pm_ru_typepdf.pdf
