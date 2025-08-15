@@ -16,13 +16,28 @@
     ]
   ]
 
-  #align(center)[#link("https://qqrm.github.io/CV/")[https://qqrm.github.io/CV/]]
+    #let slugs = (
+      "Team Lead": "tl",
+      "Engineering Manager": "em",
+      "Head of Development": "hod",
+      "Product Manager": "pm",
+      "Tech Lead": "tech",
+    )
+    #let base = "https://qqrm.github.io/CV/"
+    #let slug = if role == "" {
+        if lang == "ru" { "ru/" } else { "" }
+      } else {
+        let s = slugs.at(role, role.to-lower()) + "/"
+        if lang == "ru" { s + "ru/" } else { s }
+      }
+    #let cv_url = base + slug
 
-  #let cv_path = if md_path == none {
-      if lang == "ru" { "../CV_RU.MD" } else { "../CV.MD" }
-    } else { md_path }
-  #let raw_md = read(cv_path)
-  #let replaced_md = raw_md.replace("{NAME}", name)
-  #let replaced_md = replaced_md.split("\n").slice(5).join("\n")
-  #cmarker.render(replaced_md)
+    #let cv_path = if md_path == none {
+        if lang == "ru" { "../CV_RU.MD" } else { "../CV.MD" }
+      } else { md_path }
+    #let raw_md = read(cv_path)
+    #let replaced_md = raw_md.replace("{NAME}", name)
+    #let lines = replaced_md.split("\n").slice(5)
+    #let replaced_md = ("- **CV:** [" + cv_url + "](" + cv_url + ")\n" + lines.join("\n"))
+    #cmarker.render(replaced_md)
 ]

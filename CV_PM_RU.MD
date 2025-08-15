@@ -3,7 +3,7 @@
 *[Скачать PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_full_ru_typst.pdf)* \\
 *[Download PDF (EN)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_full_en_typst.pdf)*
 
-- **Телеграм:** [@ник](https://t.me/nik)
+- **Телеграм:** [@leqqrm](https://t.me/leqqrm)
 - **Email:** [mail@example.com](mailto:mail@example.com)
 - **Телефон:** +7 (...)
 - **Город:** Город
