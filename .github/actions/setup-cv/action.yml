@@ -27,6 +27,12 @@ runs:
     - name: Build Typst Russian PDF
       shell: bash
       run: typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
+    - name: Build Product Manager English PDF
+      shell: bash
+      run: typst compile --root . typst/en/Belyakov_pm_en.typ typst/en/Belyakov_pm_en.pdf
+    - name: Build Product Manager Russian PDF
+      shell: bash
+      run: typst compile --root . typst/ru/Belyakov_pm_ru.typ typst/ru/Belyakov_pm_ru.pdf
     - name: Build role-based Typst PDFs
       shell: bash
       run: |
