@@ -65,6 +65,26 @@ fn generates_expected_dist() {
         .expect("roles table");
 
     for slug in roles.keys() {
+        if slug == "pm" {
+            let role_dir = dist.join("resume").join("pm");
+            let en_path = role_dir.join("index.html");
+            assert!(en_path.exists(), "missing resume/pm/index.html");
+            let en_page = fs::read_to_string(&en_path).expect("read pm resume index");
+            assert!(
+                en_page.contains("Belyakov_pm_en_typst.pdf"),
+                "missing English pm PDF link"
+            );
+
+            let ru_path = role_dir.join("ru").join("index.html");
+            assert!(ru_path.exists(), "missing resume/pm/ru/index.html");
+            let ru_page = fs::read_to_string(&ru_path).expect("read pm resume ru index");
+            assert!(
+                ru_page.contains("Belyakov_pm_ru_typst.pdf"),
+                "missing Russian pm PDF link"
+            );
+            continue;
+        }
+
         let role_dir = dist.join(slug);
         let en_path = role_dir.join("index.html");
         assert!(en_path.exists(), "missing {}/index.html", slug);

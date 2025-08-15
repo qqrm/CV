@@ -101,6 +101,25 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_body_ru = html_body_ru[end + 5..].trim_start().to_string();
     }
 
+    // Prepare Product Manager resume bodies
+    let markdown_resume_en = fs::read_to_string("RESUME_PM.MD")?;
+    let parser_resume_en = CmarkParser::new_ext(&markdown_resume_en, Options::all());
+    let mut html_resume_en = String::new();
+    push_html(&mut html_resume_en, parser_resume_en);
+    html_resume_en = html_resume_en.replace("./RESUME_PM_RU.MD", "ru/");
+    if let Some(end) = html_resume_en.find("</h1>") {
+        html_resume_en = html_resume_en[end + 5..].trim_start().to_string();
+    }
+
+    let markdown_resume_ru = fs::read_to_string("RESUME_PM_RU.MD")?;
+    let parser_resume_ru = CmarkParser::new_ext(&markdown_resume_ru, Options::all());
+    let mut html_resume_ru = String::new();
+    push_html(&mut html_resume_ru, parser_resume_ru);
+    html_resume_ru = html_resume_ru.replace("./RESUME_PM.MD", "../");
+    if let Some(end) = html_resume_ru.find("</h1>") {
+        html_resume_ru = html_resume_ru[end + 5..].trim_start().to_string();
+    }
+
     // Render base pages
     let html_template = render_page(&TemplateData {
         lang: "en",
@@ -215,6 +234,51 @@ fn main() -> Result<(), Box<dyn Error>> {
         })?;
         fs::write(ru_role_dir.join("index.html"), ru_role_html)?;
     }
+
+    // Generate Product Manager resume pages
+    sitemap_urls.push(format!("{base_url}resume/pm/"));
+    sitemap_urls.push(format!("{base_url}resume/pm/ru/"));
+
+    let resume_dir = docs_dir.join("resume/pm");
+    if !resume_dir.exists() {
+        fs::create_dir_all(&resume_dir)?;
+    }
+    let resume_ru_dir = resume_dir.join("ru");
+    if !resume_ru_dir.exists() {
+        fs::create_dir_all(&resume_ru_dir)?;
+    }
+    let resume_position = "<p><strong>Product Manager</strong></p>";
+    let resume_en_html = render_page(&TemplateData {
+        lang: "en",
+        title: "Alexey Belyakov - Product Manager Resume",
+        name: "Alexey Belyakov",
+        prefix: "../../",
+        position_block: resume_position,
+        date_str: &date_str,
+        avatar_src: "../../avatar.jpg",
+        html_body: &html_resume_en,
+        pdf_typst_en: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en_typst.pdf",
+        pdf_typst_ru: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru_typst.pdf",
+        roles_js: &roles_js,
+        link_to_en: None,
+    })?;
+    fs::write(resume_dir.join("index.html"), resume_en_html)?;
+
+    let resume_ru_html = render_page(&TemplateData {
+        lang: "ru",
+        title: "Алексей Беляков - Резюме продакт-менеджера",
+        name: "Алексей Беляков",
+        prefix: "../../../",
+        position_block: resume_position,
+        date_str: &date_str,
+        avatar_src: "../../../avatar.jpg",
+        html_body: &html_resume_ru,
+        pdf_typst_en: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en_typst.pdf",
+        pdf_typst_ru: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru_typst.pdf",
+        roles_js: &roles_js,
+        link_to_en: None,
+    })?;
+    fs::write(resume_ru_dir.join("index.html"), resume_ru_html)?;
     let sitemap_content = sitemap_urls.join("\n") + "\n";
     fs::write(docs_dir.join("sitemap.txt"), sitemap_content)?;
     info!("Wrote sitemap to dist/sitemap.txt");

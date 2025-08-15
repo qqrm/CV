@@ -40,17 +40,21 @@ jobs:
       - name: Verify PDFs
         run: |
           for lang in en ru; do
-            if file typst/$lang/Belyakov_${lang}.pdf | grep -q 'PDF document'; then
-              echo "$lang PDF verified"
-            else
-              echo "typst/$lang/Belyakov_${lang}.pdf is not recognized as a PDF" >&2
-              exit 1
-            fi
+            for file in Belyakov_${lang}.pdf Belyakov_pm_${lang}.pdf; do
+              if file typst/$lang/$file | grep -q 'PDF document'; then
+                echo "$file verified"
+              else
+                echo "typst/$lang/$file is not recognized as a PDF" >&2
+                exit 1
+              fi
+            done
           done
       - name: Prepare release PDFs
         run: |
           cp typst/en/Belyakov_en.pdf typst/en/Belyakov_en_typst.pdf
           cp typst/ru/Belyakov_ru.pdf typst/ru/Belyakov_ru_typst.pdf
+          cp typst/en/Belyakov_pm_en.pdf typst/en/Belyakov_pm_en_typst.pdf
+          cp typst/ru/Belyakov_pm_ru.pdf typst/ru/Belyakov_pm_ru_typst.pdf
           for role in tl em hod tech; do
             cp typst/en/Belyakov_en_${role}.pdf typst/en/Belyakov_en_${role}_typst.pdf
             cp typst/ru/Belyakov_ru_${role}.pdf typst/ru/Belyakov_ru_${role}_typst.pdf
@@ -63,6 +67,8 @@ jobs:
             sitegen/target/release/generate
             typst/en/Belyakov_en_typst.pdf
             typst/ru/Belyakov_ru_typst.pdf
+            typst/en/Belyakov_pm_en_typst.pdf
+            typst/ru/Belyakov_pm_ru_typst.pdf
             typst/en/Belyakov_en_tl_typst.pdf
             typst/en/Belyakov_en_em_typst.pdf
             typst/en/Belyakov_en_hod_typst.pdf
@@ -97,7 +103,10 @@ jobs:
       - name: Generate site
         run: ./sitegen_bin
       - name: Verify role pages
-        run: test -s dist/tl/ru/index.html
+        run: |
+          test -s dist/tl/ru/index.html
+          test -s dist/resume/pm/index.html
+          test -s dist/resume/pm/ru/index.html
       - name: Prepare Pages directory
         run: mv dist docs
       - name: Copy README_RU
@@ -128,6 +137,8 @@ jobs:
             sitegen_bin
             typst/en/Belyakov_en_typst.pdf
             typst/ru/Belyakov_ru_typst.pdf
+            typst/en/Belyakov_pm_en_typst.pdf
+            typst/ru/Belyakov_pm_ru_typst.pdf
             typst/en/Belyakov_en_tl_typst.pdf
             typst/en/Belyakov_en_em_typst.pdf
             typst/en/Belyakov_en_hod_typst.pdf
