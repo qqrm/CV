@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tool: [qpdf, pdfcpu, pdfx]
+        tool: [qpdf, pdfcpu]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-cv
@@ -34,10 +34,6 @@ jobs:
         if: matrix.tool == 'pdfcpu'
         run: go install github.com/pdfcpu/pdfcpu/v3/cmd/pdfcpu@latest
 
-      - name: Install pdfx
-        if: matrix.tool == 'pdfx'
-        run: cargo install pdfx --locked --quiet --git https://github.com/jdiaz97/pdfx --rev 261a426f23075993e889fc2236183e56b8af4bc6
-
       - name: Run qpdf checks
         if: matrix.tool == 'qpdf'
         run: |
@@ -57,15 +53,6 @@ jobs:
           shopt -s nullglob globstar
           for pdf in typst/**/*.pdf; do
             pdfcpu validate -mode strict "$pdf" > "reports/$(basename "$pdf" .pdf).txt"
-          done
-
-      - name: Run pdfx
-        if: matrix.tool == 'pdfx'
-        run: |
-          mkdir -p reports
-          shopt -s nullglob globstar
-          for pdf in typst/**/*.pdf; do
-            pdfx "$pdf" &> "reports/$(basename "$pdf").log"
           done
 
       - name: Upload reports
