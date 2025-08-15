@@ -3,11 +3,10 @@
 *[Скачать PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru_typst.pdf)* \\
 *[Download PDF (EN)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en_typst.pdf)*
 
-- **Телеграм:** [@ник](https://t.me/nik)
-- **Email:** [mail@example.com](mailto:mail@example.com)
-- **Телефон:** +7 (...)
-- **Город:** Город
-- **Формат работы:** remote
+- **Телефон:** +7 (911) 261-70-72
+- **Телеграм:** [leqqrm.t.me](https://leqqrm.t.me)
+- **Email:** [qqrm@vivaldi.net](mailto:qqrm@vivaldi.net)
+- **GitHub:** [github.com/qqrm](https://github.com/qqrm)
 
 ## Профиль
 Продакт с сильной инженерной базой. Уточняю требования, превращаю идеи в план релизов, держу сроки и результат. Работаю прозрачно, спокойно отношусь к неопределенности. Активно экспериментирую с ИИ агентами и автоматизацией процессов.

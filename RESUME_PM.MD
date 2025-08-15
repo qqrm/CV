@@ -3,11 +3,10 @@
 *[Download PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en_typst.pdf)* \\
 *[Download Russian PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru_typst.pdf)*
 
-- **Telegram:** [@nick](https://t.me/nick)
-- **Email:** [mail@example.com](mailto:mail@example.com)
-- **Phone:** +7 (...)
-- **City:** City
-- **Work format:** remote
+- **Phone:** +7 (911) 261-70-72
+- **Telegram:** [leqqrm.t.me](https://leqqrm.t.me)
+- **Email:** [qqrm@vivaldi.net](mailto:qqrm@vivaldi.net)
+- **GitHub:** [github.com/qqrm](https://github.com/qqrm)
 
 ## Profile
 Product manager with a strong engineering background. Refines requirements, turns ideas into release plans, and keeps deadlines and results. Works transparently and is comfortable with uncertainty. Actively experiments with AI agents and process automation.
