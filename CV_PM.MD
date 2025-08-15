@@ -1,7 +1,7 @@
 # {NAME}
-*[Link to Russian version](./RESUME_PM_RU.MD)* \\
-*[Download PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en_typst.pdf)* \\
-*[Download Russian PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru_typst.pdf)*
+*[Link to Russian version](./CV_PM_RU.MD)* \\
+*[Download PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_full_en_typst.pdf)* \\
+*[Download Russian PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_full_ru_typst.pdf)*
 
 - **Telegram:** [@nick](https://t.me/nick)
 - **Email:** [mail@example.com](mailto:mail@example.com)
@@ -19,6 +19,48 @@ Product manager with a strong engineering background. Refines requirements, turn
 * Keeps stakeholders and team in sync, writes clear specifications
 * Controls release quality and user impact
 * Makes decisions based on facts and feedback without jargon or fog
+
+## Work Experience
+
+### Rust Team Lead @ Inline Group | March 2024 – Present (1 year)
+**Responsibilities**
+- Directed a 12-person backend team in a SAP replacement program
+- Planned releases and aligned requirements with analysts and DevOps
+- Established Agile rituals and code review standards
+
+**Achievements**
+- Boosted sprint predictability by ~25%
+- Cut review cycle time by ~40%
+- Reduced bug backlog by ~30%
+
+### Lead Rust Developer @ YADRO | March 2023 – March 2024 (1 year)
+**Responsibilities**
+- Coordinated architecture improvements for deduplication-based backups
+- Guided RocksDB research and mentored developers migrating from C++
+- Led code reviews and quality initiatives across modules
+
+**Achievements**
+- Shortened onboarding time by ~30%
+- Resolved critical bugs and optimized compression and deduplication modules
+
+### Rust Team Lead @ Solcery | March 2022 – March 2023 (1 year)
+**Responsibilities**
+- Managed a 4-developer team building a blockchain database on Solana
+- Translated user stories into requirements and sprint plans
+- Oversaw delivery timelines and stakeholder communication
+
+**Achievements**
+- Reduced code review time by 40%
+- Implemented versioning and migration practices for DAO solutions
+
+### Senior Rust Developer @ Kaspersky Lab | May 2021 – March 2022 (11 months)
+**Responsibilities**
+- Maintained a blockchain-based voting service and expanded test coverage
+- Refined CI/CD pipelines during migration to the Microsoft ecosystem
+
+**Achievements**
+- Lowered post-deployment issues by ~25%
+- Simplified future feature additions through targeted refactoring
 
 ## Relevant Experience
 * Led a backend team, planned releases, set up development and review processes

@@ -1,7 +1,7 @@
 # {NAME}
-*[Ссылка на английскую версию](./RESUME_PM.MD)* \\
-*[Скачать PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru_typst.pdf)* \\
-*[Download PDF (EN)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en_typst.pdf)*
+*[Ссылка на английскую версию](./CV_PM.MD)* \\
+*[Скачать PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_full_ru_typst.pdf)* \\
+*[Download PDF (EN)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_full_en_typst.pdf)*
 
 - **Телеграм:** [@ник](https://t.me/nik)
 - **Email:** [mail@example.com](mailto:mail@example.com)
