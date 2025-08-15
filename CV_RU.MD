@@ -1,7 +1,7 @@
 # Алексей Леонидович Беляков
 *[Ссылка на английскую версию](./CV.MD)* \\
-*[Скачать PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru.pdf)* \\
-*[Download PDF (EN)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en.pdf)*
+*[Скачать PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_ru.pdf)* \\
+*[Download PDF (EN)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_en.pdf)*
 
 - **Телефон**: +7 (911) 261-70-72
 - **Telegram**: [@leqqrm](https://t.me/leqqrm)
