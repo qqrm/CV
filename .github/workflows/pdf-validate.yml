@@ -32,7 +32,7 @@ jobs:
 
       - name: Install pdfcpu
         if: matrix.tool == 'pdfcpu'
-        run: go install github.com/pdfcpu/pdfcpu/v3/cmd/pdfcpu@latest
+        run: go install github.com/pdfcpu/pdfcpu/cmd/pdfcpu@latest
 
       - name: Run qpdf checks
         if: matrix.tool == 'qpdf'
