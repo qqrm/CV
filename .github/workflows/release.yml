@@ -41,18 +41,18 @@ jobs:
         run: |
           for lang in en ru; do
             for file in Belyakov_${lang}.pdf Belyakov_pm_${lang}.pdf; do
-              if file typst/$lang/$file | grep -q 'PDF document'; then
-                echo "$file verified"
+              if head -c 4 "typst/$lang/$file" | grep -q '%PDF'; then
+                echo "$file verified";
               else
-                echo "typst/$lang/$file is not recognized as a PDF" >&2
-                exit 1
-              fi
-            done
-          done
+                echo "typst/$lang/$file is not recognized as a PDF" >&2;
+                exit 1;
+              fi;
+            done;
+          done;
       - name: Prepare release PDFs
         run: |
-          cp typst/en/Belyakov_pm_en.pdf typst/en/Belyakov_pm_full_en.pdf
-          cp typst/ru/Belyakov_pm_ru.pdf typst/ru/Belyakov_pm_full_ru.pdf
+          cp typst/en/Belyakov_pm_en.pdf typst/en/Belyakov_pm_full_en.pdf;
+          cp typst/ru/Belyakov_pm_ru.pdf typst/ru/Belyakov_pm_full_ru.pdf;
       - name: Upload artifacts
         uses: actions/upload-artifact@v4.6.2
         with:
@@ -92,20 +92,20 @@ jobs:
         run: chmod +x sitegen_bin
       - name: Clean previous site output
         run: |
-          rm -rf docs
-          rm -rf dist
+          rm -rf docs;
+          rm -rf dist;
       - name: Generate site
         run: ./sitegen_bin
       - name: Verify role pages
         run: |
-          test -s dist/tl/ru/index.html
-          test -s dist/resume/pm/index.html
-          test -s dist/resume/pm/ru/index.html
+          test -s dist/tl/ru/index.html;
+          test -s dist/resume/pm/index.html;
+          test -s dist/resume/pm/ru/index.html;
       - name: Prepare Pages directory
         run: mv dist docs
       - name: Copy README_RU
         run: |
-          cp README_RU.MD docs/
+          cp README_RU.MD docs/;
       - name: Setup Pages
         uses: actions/configure-pages@v5.0.0
       - name: Upload artifact
@@ -119,10 +119,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          ids=$(gh api repos/${{ github.repository }}/releases --jq '.[].id')
+          ids=$(gh api repos/${{ github.repository }}/releases --jq '.[].id');
           echo "$ids" | tail -n +2 | while read id; do
-            gh api repos/${{ github.repository }}/releases/$id -X DELETE
-          done
+            gh api repos/${{ github.repository }}/releases/$id -X DELETE;
+          done;
       - name: Create Release
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         with:
