@@ -4,7 +4,7 @@
 *[Link to russian PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf)*
 
 - **Phone:** +7 (911) 261-70-72
-- **Telegram:** [leqqrm.t.me](https://leqqrm.t.me)
+- **Telegram:** [@leqqrm](https://t.me/leqqrm)
 - **Email:** [qqrm@vivaldi.net](mailto:qqrm@vivaldi.net)
 - **GitHub:** [github.com/qqrm](https://github.com/qqrm)
 - **Telegram blog:** [t.me/le_gouch](https://t.me/le_gouch)
