@@ -27,7 +27,7 @@
     #let slug = if role == "" {
         if lang == "ru" { "ru/" } else { "" }
       } else {
-        let s = slugs.at(role, role.to-lower()) + "/"
+        let s = slugs.at(role, default: role) + "/"
         if lang == "ru" { s + "ru/" } else { s }
       }
     #let cv_url = base + slug
