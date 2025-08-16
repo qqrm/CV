@@ -6,6 +6,12 @@ Critically evaluate each user request. If a request appears unrelated to this re
 
 Do not edit README.md or README\_RU.md unless the task explicitly requires it.
 
+Run the repository setup script before starting any task:
+
+```bash
+bash scripts/repo-setup.sh
+```
+
 Before committing, run tests:
 
 ```bash
