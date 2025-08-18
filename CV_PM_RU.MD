@@ -1,7 +1,7 @@
 # {NAME}
 *[Ссылка на английскую версию](./CV_PM.MD)* \\
-*[Скачать PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_ru.pdf)* \\
-*[Download PDF (EN)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_en.pdf)*
+*[Скачать PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru.pdf)* \\
+*[Download PDF (EN)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en.pdf)*
 
 - **Телеграм:** [@leqqrm](https://t.me/leqqrm)
 - **Email:** [mail@example.com](mailto:mail@example.com)
@@ -54,4 +54,4 @@
 
 ## Еще
 [Полное CV](https://qqrm.github.io/CV/)
-[Полное CV PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_ru.pdf)
+[Полное CV PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru.pdf)

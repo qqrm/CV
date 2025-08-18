@@ -71,7 +71,7 @@ fn generates_expected_dist() {
             assert!(en_path.exists(), "missing resume/pm/index.html");
             let en_page = fs::read_to_string(&en_path).expect("read pm resume index");
             assert!(
-                en_page.contains("Belyakov_resume_pm_en.pdf"),
+            en_page.contains("Belyakov_pm_en.pdf"),
                 "missing English pm PDF link"
             );
 
@@ -79,7 +79,7 @@ fn generates_expected_dist() {
             assert!(ru_path.exists(), "missing resume/pm/ru/index.html");
             let ru_page = fs::read_to_string(&ru_path).expect("read pm resume ru index");
             assert!(
-                ru_page.contains("Belyakov_resume_pm_ru.pdf"),
+                ru_page.contains("Belyakov_pm_ru.pdf"),
                 "missing Russian pm PDF link"
             );
             continue;
@@ -90,7 +90,7 @@ fn generates_expected_dist() {
         assert!(en_path.exists(), "missing {}/index.html", slug);
         let en_page = fs::read_to_string(&en_path).expect("read role index");
         assert!(
-            en_page.contains(&format!("Belyakov_cv_en_{}.pdf", slug)),
+            en_page.contains(&format!("Belyakov_{}_en.pdf", slug)),
             "missing English {} PDF link",
             slug
         );
@@ -99,7 +99,7 @@ fn generates_expected_dist() {
         assert!(ru_path.exists(), "missing {}/ru/index.html", slug);
         let ru_page = fs::read_to_string(&ru_path).expect("read role ru index");
         assert!(
-            ru_page.contains(&format!("Belyakov_cv_ru_{}.pdf", slug)),
+            ru_page.contains(&format!("Belyakov_{}_ru.pdf", slug)),
             "missing Russian {} PDF link",
             slug
         );

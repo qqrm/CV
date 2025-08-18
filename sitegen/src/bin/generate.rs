@@ -72,8 +72,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         format!("<p><strong id='position'>{DEFAULT_ROLE}</strong></p>")
     };
     // Prepare HTML bodies
-    let pdf_typst_en = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_en.pdf";
-    let pdf_typst_ru = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_ru.pdf";
+    let pdf_typst_en = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_en.pdf";
+    let pdf_typst_ru = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru.pdf";
 
     let markdown_input = fs::read_to_string("CV.MD")?;
     let parser = CmarkParser::new_ext(&markdown_input, Options::all());
@@ -176,11 +176,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         sitemap_urls.push(format!("{base_url}{role}/"));
         sitemap_urls.push(format!("{base_url}{role}/ru/"));
         let pdf_typst_en_role = format!(
-            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_en_{}.pdf",
+            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_{}_en.pdf",
             role
         );
         let pdf_typst_ru_role = format!(
-            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_ru_{}.pdf",
+            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_{}_ru.pdf",
             role
         );
 
@@ -257,8 +257,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../../avatar.jpg",
         html_body: &html_resume_en,
-        pdf_typst_en: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_en.pdf",
-        pdf_typst_ru: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_ru.pdf",
+        pdf_typst_en: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en.pdf",
+        pdf_typst_ru: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru.pdf",
         roles_js: &roles_js,
         link_to_en: None,
     })?;
@@ -273,8 +273,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../../../avatar.jpg",
         html_body: &html_resume_ru,
-        pdf_typst_en: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_en.pdf",
-        pdf_typst_ru: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_ru.pdf",
+        pdf_typst_en: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en.pdf",
+        pdf_typst_ru: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru.pdf",
         roles_js: &roles_js,
         link_to_en: None,
     })?;

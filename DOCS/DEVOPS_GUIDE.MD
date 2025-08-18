@@ -36,8 +36,8 @@ cargo install typst-cli
 Once installed, the resumes can be built with:
 
 ```bash
-typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_cv_en.pdf
-typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_cv_ru.pdf
+typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
+typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
 ```
 
 ### Local pipeline runs

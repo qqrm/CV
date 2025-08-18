@@ -1,7 +1,7 @@
 # {NAME}
 *[Link to Russian version](./CV_PM_RU.MD)* \\
-*[Download PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_en.pdf)* \\
-*[Download Russian PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_ru.pdf)*
+*[Download PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_en.pdf)* \\
+*[Download Russian PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_pm_ru.pdf)*
 
 - **Telegram:** [@leqqrm](https://t.me/leqqrm)
 - **Email:** [mail@example.com](mailto:mail@example.com)
@@ -96,4 +96,4 @@ Product manager with a strong engineering background. Refines requirements, turn
 
 ## More
 [Full CV](https://qqrm.github.io/CV/)
-[Full CV PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_en.pdf)
+[Full CV PDF](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en.pdf)
