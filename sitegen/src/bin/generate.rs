@@ -72,14 +72,24 @@ fn main() -> Result<(), Box<dyn Error>> {
         format!("<p><strong id='position'>{DEFAULT_ROLE}</strong></p>")
     };
     // Prepare HTML bodies
-    let pdf_typst_en = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_en.pdf";
-    let pdf_typst_ru = "https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_ru.pdf";
+    let pdf_typst_en = "Belyakov_en.pdf";
+    let pdf_typst_ru = "Belyakov_ru.pdf";
+    let pdf_typst_en_ru = "../Belyakov_en.pdf";
+    let pdf_typst_ru_ru = "../Belyakov_ru.pdf";
 
     let markdown_input = fs::read_to_string("CV.MD")?;
     let parser = CmarkParser::new_ext(&markdown_input, Options::all());
     let mut html_body_en = String::new();
     push_html(&mut html_body_en, parser);
     html_body_en = html_body_en.replace("./CV_RU.MD", "ru/");
+    html_body_en = html_body_en.replace(
+        "https://qqrm.github.io/CV/Belyakov_en.pdf",
+        pdf_typst_en,
+    );
+    html_body_en = html_body_en.replace(
+        "https://qqrm.github.io/CV/Belyakov_ru.pdf",
+        pdf_typst_ru,
+    );
     html_body_en = html_body_en.replace(
         "March 2024 – Present  (1 year)",
         &format!("March 2024 – Present  ({})", duration_en),
@@ -93,6 +103,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut html_body_ru = String::new();
     push_html(&mut html_body_ru, parser_ru);
     html_body_ru = html_body_ru.replace("./CV.MD", "../");
+    html_body_ru = html_body_ru.replace(
+        "https://qqrm.github.io/CV/Belyakov_ru.pdf",
+        pdf_typst_ru_ru,
+    );
+    html_body_ru = html_body_ru.replace(
+        "https://qqrm.github.io/CV/Belyakov_en.pdf",
+        pdf_typst_en_ru,
+    );
     html_body_ru = html_body_ru.replace(
         "март 2024 – настоящее время (около 1 года)",
         &format!("март 2024 – настоящее время ({})", duration_ru),
@@ -145,8 +163,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../avatar.jpg",
         html_body: &html_body_ru,
-        pdf_typst_en,
-        pdf_typst_ru,
+        pdf_typst_en: pdf_typst_en_ru,
+        pdf_typst_ru: pdf_typst_ru_ru,
         roles_js: &roles_js,
         link_to_en: None,
     })?;
@@ -160,6 +178,18 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     if Path::new("DOCS/favicon.svg").exists() {
         fs::copy("DOCS/favicon.svg", docs_dir.join("favicon.svg"))?;
+    }
+    if Path::new("typst/en/Belyakov_en.pdf").exists() {
+        fs::copy("typst/en/Belyakov_en.pdf", docs_dir.join("Belyakov_en.pdf"))?;
+    }
+    if Path::new("typst/ru/Belyakov_ru.pdf").exists() {
+        fs::copy("typst/ru/Belyakov_ru.pdf", docs_dir.join("Belyakov_ru.pdf"))?;
+    }
+    if Path::new("typst/en/Belyakov_pm_en.pdf").exists() {
+        fs::copy("typst/en/Belyakov_pm_en.pdf", docs_dir.join("Belyakov_pm_en.pdf"))?;
+    }
+    if Path::new("typst/ru/Belyakov_pm_ru.pdf").exists() {
+        fs::copy("typst/ru/Belyakov_pm_ru.pdf", docs_dir.join("Belyakov_pm_ru.pdf"))?;
     }
     fs::write(docs_dir.join("index.html"), &html_template)?;
     info!("Wrote English HTML to dist/index.html");
@@ -175,14 +205,25 @@ fn main() -> Result<(), Box<dyn Error>> {
     for role in roles.keys() {
         sitemap_urls.push(format!("{base_url}{role}/"));
         sitemap_urls.push(format!("{base_url}{role}/ru/"));
-        let pdf_typst_en_role = format!(
-            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_en_{}.pdf",
-            role
-        );
-        let pdf_typst_ru_role = format!(
-            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_cv_ru_{}.pdf",
-            role
-        );
+
+        let src_en = Path::new("typst/en").join(format!("Belyakov_{}_en.pdf", role));
+        let src_ru = Path::new("typst/ru").join(format!("Belyakov_{}_ru.pdf", role));
+        let dst_en = docs_dir.join(format!("Belyakov_{}_en.pdf", role));
+        let dst_ru = docs_dir.join(format!("Belyakov_{}_ru.pdf", role));
+        if src_en.exists() {
+            fs::copy(&src_en, &dst_en)?;
+        } else {
+            fs::copy(docs_dir.join("Belyakov_en.pdf"), &dst_en)?;
+        }
+        if src_ru.exists() {
+            fs::copy(&src_ru, &dst_ru)?;
+        } else {
+            fs::copy(docs_dir.join("Belyakov_ru.pdf"), &dst_ru)?;
+        }
+        let pdf_typst_en_role = format!("../Belyakov_{}_en.pdf", role);
+        let pdf_typst_ru_role = format!("../Belyakov_{}_ru.pdf", role);
+        let pdf_typst_en_role_ru = format!("../../Belyakov_{}_en.pdf", role);
+        let pdf_typst_ru_role_ru = format!("../../Belyakov_{}_ru.pdf", role);
 
         let en_role_dir = docs_dir.join(role);
         if !en_role_dir.exists() {
@@ -193,6 +234,15 @@ fn main() -> Result<(), Box<dyn Error>> {
         } else {
             &position_block
         };
+        let html_body_en_role = html_body_en
+            .replace(
+                "Belyakov_en.pdf",
+                &format!("../Belyakov_{}_en.pdf", role),
+            )
+            .replace(
+                "Belyakov_ru.pdf",
+                &format!("../Belyakov_{}_ru.pdf", role),
+            );
         let en_role_html = render_page(&TemplateData {
             lang: "en",
             title: "Alexey Belyakov - CV",
@@ -201,7 +251,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             position_block: position_block_role,
             date_str: &date_str,
             avatar_src: "../avatar.jpg",
-            html_body: &html_body_en,
+            html_body: &html_body_en_role,
             pdf_typst_en: &pdf_typst_en_role,
             pdf_typst_ru: &pdf_typst_ru_role,
             roles_js: &roles_js,
@@ -218,6 +268,15 @@ fn main() -> Result<(), Box<dyn Error>> {
         } else {
             &position_block
         };
+        let html_body_ru_role = html_body_ru
+            .replace(
+                "../Belyakov_ru.pdf",
+                &format!("../../Belyakov_{}_ru.pdf", role),
+            )
+            .replace(
+                "../Belyakov_en.pdf",
+                &format!("../../Belyakov_{}_en.pdf", role),
+            );
         let ru_role_html = render_page(&TemplateData {
             lang: "ru",
             title: "Алексей Беляков - Резюме",
@@ -226,9 +285,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             position_block: position_block_role,
             date_str: &date_str,
             avatar_src: "../../avatar.jpg",
-            html_body: &html_body_ru,
-            pdf_typst_en: &pdf_typst_en_role,
-            pdf_typst_ru: &pdf_typst_ru_role,
+            html_body: &html_body_ru_role,
+            pdf_typst_en: &pdf_typst_en_role_ru,
+            pdf_typst_ru: &pdf_typst_ru_role_ru,
             roles_js: &roles_js,
             link_to_en: None,
         })?;
@@ -247,6 +306,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     if !resume_ru_dir.exists() {
         fs::create_dir_all(&resume_ru_dir)?;
     }
+    if Path::new("typst/en/Belyakov_pm_en.pdf").exists() {
+        fs::copy("typst/en/Belyakov_pm_en.pdf", resume_dir.join("Belyakov_pm_en.pdf"))?;
+    }
+    if Path::new("typst/ru/Belyakov_pm_ru.pdf").exists() {
+        fs::copy("typst/ru/Belyakov_pm_ru.pdf", resume_dir.join("Belyakov_pm_ru.pdf"))?;
+    }
     let resume_position = "<p><strong>Product Manager</strong></p>";
     let resume_en_html = render_page(&TemplateData {
         lang: "en",
@@ -257,8 +322,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../../avatar.jpg",
         html_body: &html_resume_en,
-        pdf_typst_en: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_en.pdf",
-        pdf_typst_ru: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_ru.pdf",
+        pdf_typst_en: "Belyakov_pm_en.pdf",
+        pdf_typst_ru: "Belyakov_pm_ru.pdf",
         roles_js: &roles_js,
         link_to_en: None,
     })?;
@@ -273,8 +338,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../../../avatar.jpg",
         html_body: &html_resume_ru,
-        pdf_typst_en: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_en.pdf",
-        pdf_typst_ru: "https://github.com/qqrm/CV/releases/latest/download/Belyakov_resume_pm_ru.pdf",
+        pdf_typst_en: "../Belyakov_pm_en.pdf",
+        pdf_typst_ru: "../Belyakov_pm_ru.pdf",
         roles_js: &roles_js,
         link_to_en: None,
     })?;
