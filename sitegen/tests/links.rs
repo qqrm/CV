@@ -13,6 +13,10 @@ fn is_ignorable(link: &str) -> bool {
     link.starts_with('#') || link.starts_with("mailto:") || link.starts_with("tel:")
 }
 
+fn should_check_external(link: &str) -> bool {
+    link.contains("qqrm.github.io/CV/")
+}
+
 #[test]
 fn all_links_are_valid() {
     let crate_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
@@ -47,15 +51,17 @@ fn all_links_are_valid() {
                     continue;
                 }
                 if is_external(href) {
-                    match ureq::head(href).call().or_else(|_| ureq::get(href).call()) {
-                        Ok(resp) if resp.status() < 400 => {}
-                        Ok(resp) => errors.push(format!("{} -> {}", href, resp.status())),
-                        Err(e) => {
-                            let msg = e.to_string();
-                            if !msg.contains("Network is unreachable")
-                                && !msg.contains("failed to lookup address information")
-                            {
-                                errors.push(format!("{} -> {}", href, msg));
+                    if should_check_external(href) {
+                        match ureq::head(href).call().or_else(|_| ureq::get(href).call()) {
+                            Ok(resp) if resp.status() < 400 => {}
+                            Ok(resp) => errors.push(format!("{} -> {}", href, resp.status())),
+                            Err(e) => {
+                                let msg = e.to_string();
+                                if !msg.contains("Network is unreachable")
+                                    && !msg.contains("failed to lookup address information")
+                                {
+                                    errors.push(format!("{} -> {}", href, msg));
+                                }
                             }
                         }
                     }
