@@ -17,6 +17,9 @@ handlebars = "5"
 tempfile = "3"
 serial_test = "3"
 regex = "1"
+scraper = "0.18"
+walkdir = "2"
+ureq = { version = "2", features = ["tls"] }
 
 [[bin]]
 name = "validate"
