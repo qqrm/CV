@@ -19,8 +19,7 @@ struct TemplateData<'a> {
     date_str: &'a str,
     avatar_src: &'a str,
     html_body: &'a str,
-    pdf_typst_en: &'a str,
-    pdf_typst_ru: &'a str,
+    footer_links: &'a str,
     roles_js: &'a str,
     link_to_en: Option<&'a str>,
 }
@@ -29,6 +28,13 @@ fn render_page(data: &TemplateData) -> Result<String, handlebars::RenderError> {
     let hb = Handlebars::new();
     let tmpl = include_str!("../../templates/page.hbs");
     hb.render_template(tmpl, data)
+}
+
+fn extract_first_paragraph(html: &str) -> String {
+    html
+        .find("</p>")
+        .map(|idx| html[..idx + 4].to_string())
+        .unwrap_or_default()
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -138,6 +144,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_resume_ru = html_resume_ru[end + 5..].trim_start().to_string();
     }
 
+    let footer_links_en = extract_first_paragraph(&html_body_en);
+    let footer_links_ru = extract_first_paragraph(&html_body_ru);
+    let footer_links_resume_en = extract_first_paragraph(&html_resume_en);
+    let footer_links_resume_ru = extract_first_paragraph(&html_resume_ru);
+
     // Render base pages
     let html_template = render_page(&TemplateData {
         lang: "en",
@@ -148,8 +159,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "avatar.jpg",
         html_body: &html_body_en,
-        pdf_typst_en,
-        pdf_typst_ru,
+        footer_links: &footer_links_en,
         roles_js: &roles_js,
         link_to_en: None,
     })?;
@@ -163,8 +173,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../avatar.jpg",
         html_body: &html_body_ru,
-        pdf_typst_en: pdf_typst_en_ru,
-        pdf_typst_ru: pdf_typst_ru_ru,
+        footer_links: &footer_links_ru,
         roles_js: &roles_js,
         link_to_en: None,
     })?;
@@ -235,14 +244,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             &position_block
         };
         let html_body_en_role = html_body_en
-            .replace(
-                "Belyakov_en.pdf",
-                &format!("../Belyakov_{}_en.pdf", role),
-            )
-            .replace(
-                "Belyakov_ru.pdf",
-                &format!("../Belyakov_{}_ru.pdf", role),
-            );
+            .replace("Belyakov_en.pdf", &pdf_typst_en_role)
+            .replace("Belyakov_ru.pdf", &pdf_typst_ru_role);
+        let footer_links_en_role = extract_first_paragraph(&html_body_en_role);
         let en_role_html = render_page(&TemplateData {
             lang: "en",
             title: "Alexey Belyakov - CV",
@@ -252,8 +256,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             date_str: &date_str,
             avatar_src: "../avatar.jpg",
             html_body: &html_body_en_role,
-            pdf_typst_en: &pdf_typst_en_role,
-            pdf_typst_ru: &pdf_typst_ru_role,
+            footer_links: &footer_links_en_role,
             roles_js: &roles_js,
             link_to_en: None,
         })?;
@@ -269,14 +272,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             &position_block
         };
         let html_body_ru_role = html_body_ru
-            .replace(
-                "../Belyakov_ru.pdf",
-                &format!("../../Belyakov_{}_ru.pdf", role),
-            )
-            .replace(
-                "../Belyakov_en.pdf",
-                &format!("../../Belyakov_{}_en.pdf", role),
-            );
+            .replace("../Belyakov_ru.pdf", &pdf_typst_ru_role_ru)
+            .replace("../Belyakov_en.pdf", &pdf_typst_en_role_ru);
+        let footer_links_ru_role = extract_first_paragraph(&html_body_ru_role);
         let ru_role_html = render_page(&TemplateData {
             lang: "ru",
             title: "Алексей Беляков - Резюме",
@@ -286,8 +284,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             date_str: &date_str,
             avatar_src: "../../avatar.jpg",
             html_body: &html_body_ru_role,
-            pdf_typst_en: &pdf_typst_en_role_ru,
-            pdf_typst_ru: &pdf_typst_ru_role_ru,
+            footer_links: &footer_links_ru_role,
             roles_js: &roles_js,
             link_to_en: None,
         })?;
@@ -316,8 +313,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../../avatar.jpg",
         html_body: &html_resume_en,
-        pdf_typst_en: "../../Belyakov_pm_en.pdf",
-        pdf_typst_ru: "../../Belyakov_pm_ru.pdf",
+        footer_links: &footer_links_resume_en,
         roles_js: &roles_js,
         link_to_en: None,
     })?;
@@ -332,8 +328,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../../../avatar.jpg",
         html_body: &html_resume_ru,
-        pdf_typst_en: "../../../Belyakov_pm_en.pdf",
-        pdf_typst_ru: "../../../Belyakov_pm_ru.pdf",
+        footer_links: &footer_links_resume_ru,
         roles_js: &roles_js,
         link_to_en: None,
     })?;
