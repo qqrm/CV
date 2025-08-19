@@ -306,12 +306,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     if !resume_ru_dir.exists() {
         fs::create_dir_all(&resume_ru_dir)?;
     }
-    if Path::new("typst/en/Belyakov_pm_en.pdf").exists() {
-        fs::copy("typst/en/Belyakov_pm_en.pdf", resume_dir.join("Belyakov_pm_en.pdf"))?;
-    }
-    if Path::new("typst/ru/Belyakov_pm_ru.pdf").exists() {
-        fs::copy("typst/ru/Belyakov_pm_ru.pdf", resume_dir.join("Belyakov_pm_ru.pdf"))?;
-    }
     let resume_position = "<p><strong>Product Manager</strong></p>";
     let resume_en_html = render_page(&TemplateData {
         lang: "en",
@@ -322,8 +316,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../../avatar.jpg",
         html_body: &html_resume_en,
-        pdf_typst_en: "Belyakov_pm_en.pdf",
-        pdf_typst_ru: "Belyakov_pm_ru.pdf",
+        pdf_typst_en: "../../Belyakov_pm_en.pdf",
+        pdf_typst_ru: "../../Belyakov_pm_ru.pdf",
         roles_js: &roles_js,
         link_to_en: None,
     })?;
@@ -338,8 +332,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../../../avatar.jpg",
         html_body: &html_resume_ru,
-        pdf_typst_en: "../Belyakov_pm_en.pdf",
-        pdf_typst_ru: "../Belyakov_pm_ru.pdf",
+        pdf_typst_en: "../../../Belyakov_pm_en.pdf",
+        pdf_typst_ru: "../../../Belyakov_pm_ru.pdf",
         roles_js: &roles_js,
         link_to_en: None,
     })?;
