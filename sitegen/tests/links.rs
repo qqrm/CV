@@ -14,7 +14,8 @@ fn is_ignorable(link: &str) -> bool {
 }
 
 fn should_check_external(link: &str) -> bool {
-    link.contains("qqrm.github.io/CV/")
+    link.starts_with("https://github.com/qqrm/CV/releases/")
+        || link.starts_with("https://qqrm.github.io/CV/")
 }
 
 #[test]
