@@ -20,7 +20,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 ## Work Experience
 
-### Rust Team Lead @ Inline Group | [www.inlinegroup.ru](https://www.inlinegroup.ru)
+### Rust Team Lead @ Inline Group | [inlinegroup.ru](https://inlinegroup.ru)
 *March 2024 – Present  (1 year)*
 
 - Led a 12-person backend team (part of a 40+ overall project staff) in an import substitution initiative to migrate business processes from SAP to a custom Rust-based microservices ecosystem.
@@ -90,7 +90,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: Rust, Exonum, Protocol Buffers, Serde, Git.
 
-### Rust Developer @ Kryptonite | [www.kryptonite.ru](https://www.kryptonite.ru)
+### Rust Developer @ Kryptonite | [kryptonite.ru](https://kryptonite.ru)
 *May 2020 — May 2021 (1 year 1 month)*
 
 - Migrated a legacy Scala-based voice call processing system to Rust, improving performance and reducing memory usage.
@@ -150,7 +150,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: Myri10GE API, libpcap, PF_RING, C++11, Boost, Python.
 
-### Middle C++/JS Developer @ LiveTex | [www.livetex.ru](https://www.livetex.ru)
+### Middle C++/JS Developer @ LiveTex | [livetex.ru](https://livetex.ru)
 *July 2014 — March 2015 (7 months)*
 
 - Created wrapper modules for PostgreSQL and ZeroMQ for Node.js.
