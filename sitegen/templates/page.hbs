@@ -42,9 +42,10 @@
 </button>
 <script>
     const positions = {{{roles_js}}};
-    const seg = window.location.pathname.split('/').filter(Boolean).pop();
+    const segments = window.location.pathname.split('/').filter(Boolean);
+    const slug = segments.reverse().find(s => positions[s]);
     const position = document.getElementById('position');
-    if (position && positions[seg]) { position.textContent = positions[seg]; }
+    if (position && slug) { position.textContent = positions[slug]; }
 </script>
 <script>
 (function(){
