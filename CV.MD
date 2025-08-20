@@ -21,7 +21,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 ## Work Experience
 
 ### Rust Team Lead @ Inline Group | [inlinegroup.ru](https://inlinegroup.ru)
-*March 2024 – Present  (1 year)*
+*March 2023 – Present*
 
 - Led a 12-person backend team (part of a 40+ overall project staff) in an import substitution initiative to migrate business processes from SAP to a custom Rust-based microservices ecosystem.
 - Architected and maintained microservices using Actix Web, RabbitMQ, PostgreSQL, and other technologies, ensuring high throughput and reliability.
@@ -40,6 +40,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Clippy, cargo-audit, SonarQube
 
+<!--
 ### Lead Rust Developer @ YADRO | [www.yadro.com](https://www.yadro.com)
 *March 2023 — March 2024 (1 year)*
 
@@ -75,9 +76,10 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Established best practices for versioning and migrations, enabling seamless DAO-based solutions for card game frameworks.
 
 **Technologies**: Rust, Solana Test Validator, Git, GitHub.
+-->
 
 ### Senior Rust Developer @ Kaspersky Lab | [www.kaspersky.ru](https://www.kaspersky.ru)
-*May 2021 — March 2022 (11 months)*
+*March 2020 — March 2023 (3 years)*
 
 - Maintained and enhanced a blockchain-based voting service built on Exonum, adding weight-based voting functionalities.
 - Expanded integration and unit test coverage to ~75%, strengthening overall code quality.
@@ -90,23 +92,8 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: Rust, Exonum, Protocol Buffers, Serde, Git.
 
-### Rust Developer @ Kryptonite | [kryptonite.ru](https://kryptonite.ru)
-*May 2020 — May 2021 (1 year 1 month)*
-
-- Migrated a legacy Scala-based voice call processing system to Rust, improving performance and reducing memory usage.
-- Implemented voice recording normalization and embeddings-based analysis for high-accuracy indexing.
-- Developed synchronization modules for multi-track dialogues, increasing data integrity.
-- Created comprehensive unit test suites to validate new features and maintain stability.
-
-#### Key Achievements
-
-- Achieved ~20% performance boost compared to the Scala version, enabling faster call analysis.
-- Reduced memory footprint by ~25% through optimized concurrency patterns in Rust.
-
-**Technologies**: Rust, PostgreSQL, nalgebra, Serde, Protocol Buffers, Tokio, Git.
-
 ### Senior C++/Go Developer @ B2Broker | [www.b2broker.com](https://www.b2broker.com)
-*November 2018 — March 2020 (1 year 6 months)*
+*November 2018 — March 2020 (1 year 4 months)*
 
 - Developed financial software using MT4/MT5 APIs, including trade copiers in C++ and Go.
 - Built a Multi Account Manager for flexible fund delegation and reward calculation, boosting operational efficiency by ~15%.
@@ -127,6 +114,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 **Technologies**: MSVC, C++, Boost, kompas-api, python, git, svn, CMake.
 
+<!--
 ### Middle С++ Developer @ Con Certeza
 *March 2015 — April 2016 (1 year 2 months)*
 
@@ -165,4 +153,5 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Built a web application for MT4 server management.
 
 **Technologies**: C++, Boost, C#, JS.
+-->
 
