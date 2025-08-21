@@ -6,18 +6,16 @@ pub fn format_duration_en(total_months: i32) -> String {
     let months = total_months % 12;
     let mut parts = Vec::new();
     if years > 0 {
-        if years == 1 {
-            parts.push("1 year".to_string());
-        } else {
-            parts.push(format!("{} years", years));
-        }
+        parts.push(match years {
+            1 => "1 year".to_string(),
+            _ => format!("{years} years"),
+        });
     }
     if months > 0 {
-        if months == 1 {
-            parts.push("1 month".to_string());
-        } else {
-            parts.push(format!("{} months", months));
-        }
+        parts.push(match months {
+            1 => "1 month".to_string(),
+            _ => format!("{months} months"),
+        });
     }
     if parts.is_empty() {
         "0 months".to_string()
