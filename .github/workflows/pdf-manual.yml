@@ -57,7 +57,7 @@ jobs:
           typepdf typst/ru/Belyakov_pm_ru.typ typst/ru/Belyakov_pm_ru_typepdf.pdf
       - if: ${{ inputs.builder == 'typst' }}
         name: Upload PDFs
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v4
         with:
           name: cv-pdfs-typst-${{ env.DATE }}
           path: |
@@ -67,7 +67,7 @@ jobs:
             typst/ru/Belyakov_pm_full_ru.pdf
       - if: ${{ inputs.builder == 'typepdf' }}
         name: Upload PDFs
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v4
         with:
           name: cv-pdfs-typepdf-${{ env.DATE }}
           path: |
