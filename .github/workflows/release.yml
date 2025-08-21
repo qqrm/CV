@@ -29,11 +29,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
       - name: Install Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
       - name: Build
         run: cargo build --release --manifest-path sitegen/Cargo.toml --quiet
       - uses: ./.github/actions/setup-cv
@@ -54,7 +50,7 @@ jobs:
           cp typst/en/Belyakov_pm_en.pdf typst/en/Belyakov_pm_full_en.pdf;
           cp typst/ru/Belyakov_pm_ru.pdf typst/ru/Belyakov_pm_full_ru.pdf;
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v4
         with:
           name: sitegen-assets
           path: |
@@ -83,7 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download built assets
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v4
         with:
           name: sitegen-assets
       - name: Move sitegen binary
@@ -107,14 +103,14 @@ jobs:
         run: |
           cp README_RU.MD docs/;
       - name: Setup Pages
-        uses: actions/configure-pages@v5.0.0
+        uses: actions/configure-pages@v5
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3.0.1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './docs'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4.0.5
+        uses: actions/deploy-pages@v4
       - name: Delete previous releases
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -124,7 +120,7 @@ jobs:
             gh api repos/${{ github.repository }}/releases/$id -X DELETE;
           done;
       - name: Create Release
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: sitegen-${{ github.run_number }}
           files: |
