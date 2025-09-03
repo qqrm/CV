@@ -18,6 +18,11 @@ Work Schedule: Remote work, full-time
 ## Objective
 A highly skilled Rust Team Lead with nearly 10 years of software development and system architecture experience. Committed to driving innovation in robust, high-performance systems and empowering teams to deliver impactful solutions. Seeking to leverage deep technical expertise, leadership skills, and microservices best practices to build high-performing development teams, streamline processes, and achieve business objectives in cutting-edge projects.
 
+## Leadership Highlights
+- Coordinated cross-functional teams, aligning backend, QA, and DevOps efforts to meet shared milestones.
+- Established regular performance review cycles, mentoring developers with actionable feedback and growth plans.
+- Communicated progress and risks to stakeholders, translating technical status into clear business insights.
+
 ## Work Experience
 
 ### Rust Team Lead @ Inline Group | [inlinegroup.ru](https://inlinegroup.ru)
