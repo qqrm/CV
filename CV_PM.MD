@@ -32,6 +32,8 @@ Product manager with a strong engineering background. Refines requirements, turn
 - Boosted sprint predictability by ~25%
 - Cut review cycle time by ~40%
 - Reduced bug backlog by ~30%
+- Expanded the backend team from 5 to 12 developers and reduced onboarding time by ~30%
+- Reduced turnover by 20% and mentored 3 developers to senior roles
 
 ### Lead Rust Developer @ YADRO | March 2023 – March 2024 (1 year)
 **Responsibilities**
