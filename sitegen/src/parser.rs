@@ -107,7 +107,7 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
             let year_str = year_str.trim();
             if year_str.starts_with("Present") || year_str.starts_with("Настоящее время")
             {
-                let parts: Vec<&str> = month_str.trim().split_whitespace().collect();
+                let parts: Vec<&str> = month_str.split_whitespace().collect();
                 if parts.len() == 2 {
                     let (month_text, year_text) = (parts[0], parts[1]);
                     let year: i32 = year_text.parse().map_err(|_| InlineStartError::Parse)?;

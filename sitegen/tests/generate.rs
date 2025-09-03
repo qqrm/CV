@@ -71,7 +71,7 @@ fn generates_expected_dist() {
             assert!(en_path.exists(), "missing resume/pm/index.html");
             let en_page = fs::read_to_string(&en_path).expect("read pm resume index");
             assert!(
-            en_page.contains("Belyakov_pm_en.pdf"),
+                en_page.contains("Belyakov_pm_en.pdf"),
                 "missing English pm PDF link"
             );
 

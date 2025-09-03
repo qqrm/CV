@@ -34,7 +34,7 @@ pub fn format_duration_ru(total_months: i32) -> String {
     if years > 0 {
         let year_word = match years {
             1 => "год",
-            2 | 3 | 4 => "года",
+            2..=4 => "года",
             _ => "лет",
         };
         parts.push(format!("{} {}", years, year_word));
@@ -42,7 +42,7 @@ pub fn format_duration_ru(total_months: i32) -> String {
     if months > 0 {
         let month_word = match months {
             1 => "месяц",
-            2 | 3 | 4 => "месяца",
+            2..=4 => "месяца",
             _ => "месяцев",
         };
         parts.push(format!("{} {}", months, month_word));
