@@ -31,8 +31,7 @@ fn render_page(data: &TemplateData) -> Result<String, handlebars::RenderError> {
 }
 
 fn extract_first_paragraph(html: &str) -> String {
-    html
-        .find("</p>")
+    html.find("</p>")
         .map(|idx| html[..idx + 4].to_string())
         .unwrap_or_default()
 }
@@ -72,10 +71,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let duration_en = format_duration_en(total_months);
     let duration_ru = format_duration_ru(total_months);
     let date_str = today.format("%Y-%m-%d").to_string();
-    let position_block = if DEFAULT_ROLE.is_empty() {
-        String::new()
-    } else {
-        format!("<p><strong id='position'>{DEFAULT_ROLE}</strong></p>")
+    let position_block = match DEFAULT_ROLE {
+        "" => String::new(),
+        role => format!("<p><strong id='position'>{role}</strong></p>"),
     };
     // Prepare HTML bodies
     let pdf_typst_en = "Belyakov_en.pdf";
@@ -88,14 +86,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut html_body_en = String::new();
     push_html(&mut html_body_en, parser);
     html_body_en = html_body_en.replace("./CV_RU.MD", "ru/");
-    html_body_en = html_body_en.replace(
-        "https://qqrm.github.io/CV/Belyakov_en.pdf",
-        pdf_typst_en,
-    );
-    html_body_en = html_body_en.replace(
-        "https://qqrm.github.io/CV/Belyakov_ru.pdf",
-        pdf_typst_ru,
-    );
+    html_body_en = html_body_en.replace("https://qqrm.github.io/CV/Belyakov_en.pdf", pdf_typst_en);
+    html_body_en = html_body_en.replace("https://qqrm.github.io/CV/Belyakov_ru.pdf", pdf_typst_ru);
     html_body_en = html_body_en.replace(
         "March 2024 – Present  (1 year)",
         &format!("March 2024 – Present  ({})", duration_en),
@@ -109,14 +101,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut html_body_ru = String::new();
     push_html(&mut html_body_ru, parser_ru);
     html_body_ru = html_body_ru.replace("./CV.MD", "../");
-    html_body_ru = html_body_ru.replace(
-        "https://qqrm.github.io/CV/Belyakov_ru.pdf",
-        pdf_typst_ru_ru,
-    );
-    html_body_ru = html_body_ru.replace(
-        "https://qqrm.github.io/CV/Belyakov_en.pdf",
-        pdf_typst_en_ru,
-    );
+    html_body_ru =
+        html_body_ru.replace("https://qqrm.github.io/CV/Belyakov_ru.pdf", pdf_typst_ru_ru);
+    html_body_ru =
+        html_body_ru.replace("https://qqrm.github.io/CV/Belyakov_en.pdf", pdf_typst_en_ru);
     html_body_ru = html_body_ru.replace(
         "март 2024 – настоящее время (около 1 года)",
         &format!("март 2024 – настоящее время ({})", duration_ru),
@@ -188,17 +176,29 @@ fn main() -> Result<(), Box<dyn Error>> {
     if Path::new("DOCS/favicon.svg").exists() {
         fs::copy("DOCS/favicon.svg", docs_dir.join("favicon.svg"))?;
     }
+    let base_en = docs_dir.join("Belyakov_en.pdf");
     if Path::new("typst/en/Belyakov_en.pdf").exists() {
-        fs::copy("typst/en/Belyakov_en.pdf", docs_dir.join("Belyakov_en.pdf"))?;
+        fs::copy("typst/en/Belyakov_en.pdf", &base_en)?;
+    } else {
+        fs::File::create(&base_en)?;
     }
+    let base_ru = docs_dir.join("Belyakov_ru.pdf");
     if Path::new("typst/ru/Belyakov_ru.pdf").exists() {
-        fs::copy("typst/ru/Belyakov_ru.pdf", docs_dir.join("Belyakov_ru.pdf"))?;
+        fs::copy("typst/ru/Belyakov_ru.pdf", &base_ru)?;
+    } else {
+        fs::File::create(&base_ru)?;
     }
     if Path::new("typst/en/Belyakov_pm_en.pdf").exists() {
-        fs::copy("typst/en/Belyakov_pm_en.pdf", docs_dir.join("Belyakov_pm_en.pdf"))?;
+        fs::copy(
+            "typst/en/Belyakov_pm_en.pdf",
+            docs_dir.join("Belyakov_pm_en.pdf"),
+        )?;
     }
     if Path::new("typst/ru/Belyakov_pm_ru.pdf").exists() {
-        fs::copy("typst/ru/Belyakov_pm_ru.pdf", docs_dir.join("Belyakov_pm_ru.pdf"))?;
+        fs::copy(
+            "typst/ru/Belyakov_pm_ru.pdf",
+            docs_dir.join("Belyakov_pm_ru.pdf"),
+        )?;
     }
     fs::write(docs_dir.join("index.html"), &html_template)?;
     info!("Wrote English HTML to dist/index.html");
@@ -238,10 +238,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         if !en_role_dir.exists() {
             fs::create_dir_all(&en_role_dir)?;
         }
-        let position_block_role = if DEFAULT_ROLE.is_empty() {
-            "<p><strong id='position'></strong></p>"
-        } else {
-            &position_block
+        let position_block_role = match DEFAULT_ROLE {
+            "" => "<p><strong id='position'></strong></p>",
+            _ => &position_block,
         };
         let html_body_en_role = html_body_en
             .replace("Belyakov_en.pdf", &pdf_typst_en_role)
@@ -266,10 +265,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         if !ru_role_dir.exists() {
             fs::create_dir_all(&ru_role_dir)?;
         }
-        let position_block_role = if DEFAULT_ROLE.is_empty() {
-            "<p><strong id='position'></strong></p>"
-        } else {
-            &position_block
+        let position_block_role = match DEFAULT_ROLE {
+            "" => "<p><strong id='position'></strong></p>",
+            _ => &position_block,
         };
         let html_body_ru_role = html_body_ru
             .replace("../Belyakov_ru.pdf", &pdf_typst_ru_role_ru)
