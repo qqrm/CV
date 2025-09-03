@@ -32,7 +32,10 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Architected and maintained microservices using Actix Web, RabbitMQ, PostgreSQL, and other technologies, ensuring high throughput and reliability.
 - Introduced and enforced Agile practices (Scrum, sprints, daily standups, retrospectives), increasing development velocity by ~20% and reducing rework.
 - Defined infrastructure requirements (CI/CD pipelines, test environments) and coordinated with DevOps to streamline deployments in a corporate on-premise environment.
-- Spearheaded the hiring and onboarding process: expanded the backend team from 5 to 12 developers, reducing average onboarding time by ~30%.
+- Expanded the backend team from 5 to 12 developers within six months.
+- Cut onboarding time by ~30% via structured documentation and pair programming.
+- Reduced turnover by 20% through personalized growth plans, keeping 90% of hires after one year.
+- Mentored 3 developers to senior roles through targeted training and code reviews.
 - Implemented a custom Cargo registry to meet stringent security requirements, integrating static code analysis (Clippy, cargo-audit, SonarQube, etc.) into the pipeline.
 - Oversaw architectural decisions, code reviews, and performance optimizations; decreased bug backlog by ~30% after instituting more rigorous QA and review practices.
 - Collaborated with business analysts and key stakeholders to transform high-level SAP-based requirements into microservice-oriented solutions, cutting turnaround time for new features by ~25%.
