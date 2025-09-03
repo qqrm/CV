@@ -33,10 +33,11 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Introduced and enforced Agile practices (Scrum, sprints, daily standups, retrospectives), increasing development velocity by ~20% and reducing rework.
 - Aligned infrastructure requirements with DevOps to streamline on-premise deployments and keep roadmap deliverables on schedule.
 - Partnered with Product to balance feature scope with migration budget, sequencing service rollouts to meet quarterly goals.
+- Rolled out OKR tracking through Jira dashboards, keeping ~90% of quarterly objectives on target.
 - Expanded the backend team from 5 to 12 developers within six months.
 - Cut onboarding time by ~30% via structured documentation and pair programming.
 - Reduced turnover by 20% through personalized growth plans, keeping 90% of hires after one year.
-- Mentored 3 developers to senior roles through targeted training and code reviews.
+- Mentored 3 developers to senior roles through a rubric-based career framework and targeted code reviews.
 - Established an internal package distribution system meeting security policies and budget limits, integrating static analysis into the pipeline.
 - Oversaw architectural decisions, code reviews, and performance optimizations; decreased bug backlog by ~30% after instituting more rigorous QA and review practices.
 - Collaborated with business analysts and key stakeholders to transform high-level SAP-based requirements into microservice-oriented solutions, cutting turnaround time for new features by ~25%.
@@ -44,7 +45,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 #### Key Achievements
 
 - Improved sprint productivity by ~15% through implementing async and personal sprint planning.
-- Improved sprint predictability by ~25% through more accurate estimation and better backlog refinement.
+- Increased sprint predictability by ~25% through structured retros and better backlog refinement.
 - Established transparent reporting and roadmap tracking for stakeholders, enhancing cross-team communication and aligning business priorities with technical execution.
 
 **Technologies**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Clippy, cargo-audit, SonarQube
@@ -93,6 +94,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Maintained and enhanced a blockchain-based voting service, delivering weight-based voting capabilities requested by Product.
 - Expanded integration and unit test coverage to ~75%, strengthening overall code quality.
 - Partnered with infrastructure teams to migrate deployment pipelines to corporate standards, shortening release cycles.
+- Facilitated structured retrospectives and defect review sessions, increasing sprint predictability by ~20%.
 
 #### Key Achievements
 
@@ -108,6 +110,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Coordinated with business stakeholders to shape a Multi Account Manager for flexible fund delegation and reward calculation, boosting operational efficiency by ~15% within budget targets.
 - Designed services for real-time data normalization and delivery, enabling timely updates for client-facing widgets and supporting roadmap commitments.
 - Introduced data collection for analytics, providing brokers and product teams with insights for strategic decisions.
+- Implemented OKR tracking in Jira, improving cross-team delivery predictability by ~15%.
 
 **Technologies**: MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
 
@@ -118,6 +121,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Introduced an automated testing framework that reduced manual QA overhead by ~30% and freed budget for roadmap features.
 - Led codebase modernization to C++17, enabling future enhancements and cross-team compatibility.
 - Handled People Management: recruiting, interviewing, and offboarding developers (one case).
+- Established a competency-based career framework with quarterly reviews, enabling 2 internal promotions and raising retention by ~10%.
 - Partnered with product management to prioritize tasks and provide architectural oversight.
 - Modernized version control, communication, and documentation practices to support agile collaboration across departments.
 
