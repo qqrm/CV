@@ -29,14 +29,15 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 *March 2023 – Present*
 
 - Led a 12-person backend team (part of a 40+ overall project staff) in an import substitution initiative to migrate business processes from SAP to a custom Rust-based microservices ecosystem.
-- Architected and maintained microservices using Actix Web, RabbitMQ, PostgreSQL, and other technologies, ensuring high throughput and reliability.
+- Architected and maintained a microservices ecosystem aligned with the migration roadmap, sustaining high throughput and reliability within budget.
 - Introduced and enforced Agile practices (Scrum, sprints, daily standups, retrospectives), increasing development velocity by ~20% and reducing rework.
-- Defined infrastructure requirements (CI/CD pipelines, test environments) and coordinated with DevOps to streamline deployments in a corporate on-premise environment.
+- Aligned infrastructure requirements with DevOps to streamline on-premise deployments and keep roadmap deliverables on schedule.
+- Partnered with Product to balance feature scope with migration budget, sequencing service rollouts to meet quarterly goals.
 - Expanded the backend team from 5 to 12 developers within six months.
 - Cut onboarding time by ~30% via structured documentation and pair programming.
 - Reduced turnover by 20% through personalized growth plans, keeping 90% of hires after one year.
 - Mentored 3 developers to senior roles through targeted training and code reviews.
-- Implemented a custom Cargo registry to meet stringent security requirements, integrating static code analysis (Clippy, cargo-audit, SonarQube, etc.) into the pipeline.
+- Established an internal package distribution system meeting security policies and budget limits, integrating static analysis into the pipeline.
 - Oversaw architectural decisions, code reviews, and performance optimizations; decreased bug backlog by ~30% after instituting more rigorous QA and review practices.
 - Collaborated with business analysts and key stakeholders to transform high-level SAP-based requirements into microservice-oriented solutions, cutting turnaround time for new features by ~25%.
 
@@ -89,9 +90,9 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 ### Senior Rust Developer @ Kaspersky Lab | [www.kaspersky.ru](https://www.kaspersky.ru)
 *March 2020 — March 2023 (3 years)*
 
-- Maintained and enhanced a blockchain-based voting service built on Exonum, adding weight-based voting functionalities.
+- Maintained and enhanced a blockchain-based voting service, delivering weight-based voting capabilities requested by Product.
 - Expanded integration and unit test coverage to ~75%, strengthening overall code quality.
-- Facilitated the migration to the Microsoft ecosystem, refining CI/CD pipelines for more efficient deployments.
+- Partnered with infrastructure teams to migrate deployment pipelines to corporate standards, shortening release cycles.
 
 #### Key Achievements
 
@@ -103,22 +104,22 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 ### Senior C++/Go Developer @ B2Broker | [www.b2broker.com](https://www.b2broker.com)
 *November 2018 — March 2020 (1 year 4 months)*
 
-- Developed financial software using MT4/MT5 APIs, including trade copiers in C++ and Go.
-- Built a Multi Account Manager for flexible fund delegation and reward calculation, boosting operational efficiency by ~15%.
-- Designed microservices in C++ and Go for data normalization and delivery from MT4/MT5 to widgets, ensuring real-time data updates.
-- Implemented data collectors for statistical analysis, providing better insights for brokers.
+- Delivered trade-copying capabilities that aligned with the brokerage roadmap and supported cross-platform trading tools.
+- Coordinated with business stakeholders to shape a Multi Account Manager for flexible fund delegation and reward calculation, boosting operational efficiency by ~15% within budget targets.
+- Designed services for real-time data normalization and delivery, enabling timely updates for client-facing widgets and supporting roadmap commitments.
+- Introduced data collection for analytics, providing brokers and product teams with insights for strategic decisions.
 
 **Technologies**: MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
 
 ### Middle → Senior C++ Developer → Teamlead @ ASCON | [www.ascon.ru](https://www.ascon.ru)
 *May 2016 — November 2018 (2 years 7 months)*
 
-- Developed libraries for architectural design (KOMPAS), adding a “Change View Plane” feature to enhance 3D modeling capabilities.
-- Implemented an automated testing framework (C++/Python), reducing manual QA overhead by ~30%.
-- Participated in a major codebase refactoring, transitioning to C++17.
+- Developed libraries for architectural design, delivering a “Change View Plane” feature aligned with the product roadmap and enhancing 3D modeling capabilities.
+- Introduced an automated testing framework that reduced manual QA overhead by ~30% and freed budget for roadmap features.
+- Led codebase modernization to C++17, enabling future enhancements and cross-team compatibility.
 - Handled People Management: recruiting, interviewing, and offboarding developers (one case).
-- Led the team: prioritized tasks and provided architectural oversight.
-- Migrated the team to a modern tool stack: moved from SVN to Git, replaced Skype with Slack, introduced documentation guidelines, and established Scrum practices.
+- Partnered with product management to prioritize tasks and provide architectural oversight.
+- Modernized version control, communication, and documentation practices to support agile collaboration across departments.
 
 **Technologies**: MSVC, C++, Boost, kompas-api, python, git, svn, CMake.
 
