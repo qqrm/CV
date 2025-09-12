@@ -20,15 +20,15 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 
 ## Core Competencies
 - Strategic planning and roadmap ownership
-- Stakeholder engagement and cross-functional collaboration
-- Budget planning, resource allocation, and risk mitigation
+- Stakeholder engagement, executive communication, and cross-functional collaboration
+- Budget and P&L oversight, resource allocation, and risk mitigation
 - KPI/OKR tracking and data-driven decision making
 - Agile delivery, process optimization, and change management
 - Talent development, performance reviews, and hiring
 
 ## Leadership Highlights
 - Coordinated cross-functional teams, aligning backend, QA, and DevOps efforts to meet shared milestones.
-- Oversaw roadmap planning, resource allocation, and risk mitigation to keep delivery aligned with budget and KPIs.
+- Oversaw roadmap planning and resource allocation, keeping delivery within 5% of budget and ~90% KPI adherence.
 - Established regular performance review cycles, mentoring developers with actionable feedback and growth plans.
 - Communicated progress and risks to stakeholders, translating technical status into clear business insights.
 
