@@ -19,3 +19,6 @@ docs/**/*.pdf
 # Build outputs
 /dist/
 docs/ru/index.html
+# Local configuration
+AGENTS.md
+mcp.json
