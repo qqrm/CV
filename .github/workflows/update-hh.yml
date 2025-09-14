@@ -1,0 +1,43 @@
+name: Update HH Resume
+
+on:
+  push:
+    paths:
+      - CV_RU.MD
+
+jobs:
+  update-hh:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install markdown jq
+
+      - name: Convert CV to JSON
+        run: python scripts/convert_cv.py CV_RU.MD > resume.json
+
+      - name: Refresh access token
+        run: |
+          curl -X POST https://hh.ru/oauth/token \
+            -d grant_type=refresh_token \
+            -d client_id=${{ secrets.CLIENT_ID }} \
+            -d client_secret=${{ secrets.CLIENT_SECRET }} \
+            -d refresh_token=${{ secrets.REFRESH_TOKEN }} \
+            -o token.json
+          ACCESS_TOKEN=$(jq -r '.access_token' token.json)
+          echo "ACCESS_TOKEN=$ACCESS_TOKEN" >> $GITHUB_ENV
+
+      - name: Upload resume to HH
+        env:
+          RESUME_ID: ${{ secrets.RESUME_ID }}
+        run: |
+          curl -X PUT https://api.hh.ru/resumes/$RESUME_ID \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data @resume.json
