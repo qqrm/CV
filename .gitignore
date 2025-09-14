@@ -9,6 +9,7 @@
 /target/
 sitegen/target/
 TOOLS/site_check/target/
+scripts/convert_cv/target/
 site_check.log
 /index.html
 docs/index.html
