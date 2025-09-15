@@ -1,12 +1,14 @@
-name: Update HH Resume
+name: hh-update
 
 on:
   push:
     paths:
       - CV_RU.MD
+  schedule:
+    - cron: '0 9 * * *'
 
 jobs:
-  update-hh:
+  update:
     runs-on: ubuntu-latest
     environment: prod
     steps:
