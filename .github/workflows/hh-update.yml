@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - CV_RU.MD
+      - CV_PM_RU.MD
   schedule:
     - cron: '0 9 * * *'
 
@@ -11,11 +12,18 @@ jobs:
   update:
     runs-on: ubuntu-latest
     environment: prod
+    strategy:
+      matrix:
+        resume:
+          - file: CV_RU.MD
+            id_secret: RESUME_ID_RU
+          - file: CV_PM_RU.MD
+            id_secret: RESUME_ID_PM_RU
     steps:
       - uses: actions/checkout@v3
 
       - name: Convert CV to JSON
-        run: cargo run --manifest-path scripts/convert_cv/Cargo.toml -- CV_RU.MD > resume.json
+        run: cargo run --manifest-path scripts/convert_cv/Cargo.toml -- ${{ matrix.resume.file }} > resume.json
 
       - name: Refresh access token
         run: |
@@ -30,7 +38,7 @@ jobs:
 
       - name: Upload resume to HH
         env:
-          RESUME_ID: ${{ secrets.RESUME_ID }}
+          RESUME_ID: ${{ secrets[matrix.resume.id_secret] }}
         run: |
           curl -X PUT https://api.hh.ru/resumes/$RESUME_ID \
             -H "Authorization: Bearer $ACCESS_TOKEN" \

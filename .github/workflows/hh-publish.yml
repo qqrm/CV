@@ -12,6 +12,8 @@ jobs:
         resume:
           - file: CV_RU.MD
             id_secret: RESUME_ID_RU
+          - file: CV_PM_RU.MD
+            id_secret: RESUME_ID_PM_RU
           - file: CV.MD
             id_secret: RESUME_ID_EN
     steps:
