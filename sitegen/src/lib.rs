@@ -4,12 +4,7 @@
 pub mod parser;
 pub mod renderer;
 pub use parser::{
-    InlineStartError,
-    RolesFile,
-    RolesError,
-    month_from_en,
-    month_from_ru,
-    read_inline_start,
+    InlineStartError, RolesError, RolesFile, month_from_en, month_from_ru, read_inline_start,
     read_roles,
 };
 pub use renderer::{format_duration_en, format_duration_ru};

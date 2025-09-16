@@ -23,21 +23,60 @@
       "Product Manager": "pm",
       "Tech Lead": "tech",
     )
+    #let resume_paths = (
+      "tl": (
+        en: "../RESUME_TL.MD",
+        ru: "../RESUME_TL_RU.MD",
+      ),
+      "em": (
+        en: "../RESUME_EM.MD",
+        ru: "../RESUME_EM_RU.MD",
+      ),
+      "hod": (
+        en: "../RESUME_HOD.MD",
+        ru: "../RESUME_HOD_RU.MD",
+      ),
+      "pm": (
+        en: "../RESUME_PM.MD",
+        ru: "../RESUME_PM_RU.MD",
+      ),
+      "tech": (
+        en: "../RESUME_TECH.MD",
+        ru: "../RESUME_TECH_RU.MD",
+      ),
+    )
     #let base = "https://qqrm.github.io/CV/"
+    #let slug_key = if role == "" { "" } else { slugs.at(role, default: role) }
+    #let resume_entry = if slug_key == "" { none } else { resume_paths.at(slug_key, default: none) }
+    #let using_resume = md_path == none and resume_entry != none
+    #let base_slug = if using_resume { "resume/" } else { "" }
     #let slug = if role == "" {
-        if lang == "ru" { "ru/" } else { "" }
+        if lang == "ru" { base_slug + "ru/" } else { base_slug }
       } else {
-        let s = slugs.at(role, default: role) + "/"
-        if lang == "ru" { s + "ru/" } else { s }
+        let s = slug_key + "/"
+        if lang == "ru" { base_slug + s + "ru/" } else { base_slug + s }
       }
     #let cv_url = base + slug
 
     #let cv_path = if md_path == none {
-        if lang == "ru" { "../CV_RU.MD" } else { "../CV.MD" }
-      } else { md_path }
+        if using_resume {
+          if lang == "ru" { resume_entry.at("ru") } else { resume_entry.at("en") }
+        } else if lang == "ru" {
+          "../CV_RU.MD"
+        } else {
+          "../CV.MD"
+        }
+      } else {
+        md_path
+      }
     #let raw_md = read(cv_path)
     #let replaced_md = raw_md.replace("{NAME}", name)
     #let lines = replaced_md.split("\n").slice(5)
-    #let replaced_md = ("- **CV:** [" + cv_url + "](" + cv_url + ")\n" + lines.join("\n"))
+    #let link_label = if using_resume {
+        if lang == "ru" { "Резюме" } else { "Resume" }
+      } else {
+        "CV"
+      }
+    #let replaced_md = ("- **" + link_label + ":** [" + cv_url + "](" + cv_url + ")\n" + lines.join("\n"))
     #cmarker.render(replaced_md)
 ]
