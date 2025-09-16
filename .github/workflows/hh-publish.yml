@@ -68,13 +68,78 @@ jobs:
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
         run: |
           set -euo pipefail
-          response=$(curl -sS -X POST https://hh.ru/oauth/token \
-            -d grant_type=refresh_token \
-            -d client_id="${CLIENT_ID}" \
-            -d client_secret="${CLIENT_SECRET}" \
-            -d refresh_token="${REFRESH_TOKEN}")
-          token=$(echo "$response" | jq -r '.access_token')
-          if [[ -z "$token" || "$token" == "null" ]]; then
+          token=$(python3 - <<'PY'
+import json
+import os
+import sys
+from urllib import error, parse, request
+
+
+def fail(message, detail=None):
+    text = message if detail in (None, "") else f"{message}: {detail}"
+    print(text, file=sys.stderr)
+    sys.exit(1)
+
+
+try:
+    client_id = os.environ["CLIENT_ID"]
+    client_secret = os.environ["CLIENT_SECRET"]
+    refresh_token = os.environ["REFRESH_TOKEN"]
+except KeyError as missing:
+    fail("Missing environment variable", missing.args[0])
+
+payload = parse.urlencode(
+    {
+        "grant_type": "refresh_token",
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "refresh_token": refresh_token,
+    }
+).encode("utf-8")
+
+request_obj = request.Request(
+    "https://hh.ru/oauth/token",
+    data=payload,
+    method="POST",
+    headers={"Content-Type": "application/x-www-form-urlencoded"},
+)
+
+try:
+    with request.urlopen(request_obj, timeout=30) as response:
+        body = response.read()
+except error.HTTPError as exc:
+    raw = exc.read().decode("utf-8", "replace")
+    detail = raw
+    try:
+        payload_obj = json.loads(raw)
+    except json.JSONDecodeError:
+        pass
+    else:
+        detail = payload_obj.get("error_description") or payload_obj.get("error") or raw
+    fail(f"HeadHunter OAuth HTTP error {exc.code}", detail)
+except error.URLError as exc:
+    fail("HeadHunter OAuth network error", str(exc.reason))
+except Exception as exc:  # noqa: BLE001
+    fail("HeadHunter OAuth request failed", str(exc))
+
+try:
+    data = json.loads(body)
+except json.JSONDecodeError as exc:
+    fail("Unable to parse OAuth response", str(exc))
+
+token = data.get("access_token")
+if isinstance(token, str):
+    token = token.strip()
+if not token:
+    detail = data.get("error_description") or data.get("error") or ""
+    if detail:
+        fail("HeadHunter OAuth error", detail)
+    fail("Unable to extract access token")
+
+print(token)
+PY
+          )
+          if [[ -z "$token" ]]; then
             echo "Unable to extract access token" >&2
             exit 1
           fi
