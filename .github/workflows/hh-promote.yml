@@ -1,4 +1,4 @@
-name: hh-update
+name: hh-promote
 
 on:
   schedule:
