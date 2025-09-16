@@ -33,7 +33,7 @@ This repository implements an automated, multilingual, AI-friendly CV generator 
     ...
   /.github/
     workflows/
-      ci.yml
+      build-test.yml
       release.yml
       pdf-manual.yml
 ```
