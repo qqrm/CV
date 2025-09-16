@@ -65,26 +65,6 @@ fn generates_expected_dist() {
         .expect("roles table");
 
     for slug in roles.keys() {
-        if slug == "pm" {
-            let role_dir = dist.join("resume").join("pm");
-            let en_path = role_dir.join("index.html");
-            assert!(en_path.exists(), "missing resume/pm/index.html");
-            let en_page = fs::read_to_string(&en_path).expect("read pm resume index");
-            assert!(
-                en_page.contains("Belyakov_pm_en.pdf"),
-                "missing English pm PDF link"
-            );
-
-            let ru_path = role_dir.join("ru").join("index.html");
-            assert!(ru_path.exists(), "missing resume/pm/ru/index.html");
-            let ru_page = fs::read_to_string(&ru_path).expect("read pm resume ru index");
-            assert!(
-                ru_page.contains("Belyakov_pm_ru.pdf"),
-                "missing Russian pm PDF link"
-            );
-            continue;
-        }
-
         let role_dir = dist.join(slug);
         let en_path = role_dir.join("index.html");
         assert!(en_path.exists(), "missing {}/index.html", slug);
@@ -101,6 +81,29 @@ fn generates_expected_dist() {
         assert!(
             ru_page.contains(&format!("Belyakov_{}_ru.pdf", slug)),
             "missing Russian {} PDF link",
+            slug
+        );
+    }
+
+    for slug in roles.keys() {
+        let resume_dir = dist.join("resume").join(slug);
+        let en_path = resume_dir.join("index.html");
+        assert!(en_path.exists(), "missing resume/{}/index.html", slug);
+        let en_page =
+            fs::read_to_string(&en_path).unwrap_or_else(|_| panic!("read resume {slug} index"));
+        assert!(
+            en_page.contains(&format!("Belyakov_{}_en.pdf", slug)),
+            "missing English resume PDF for {}",
+            slug
+        );
+
+        let ru_path = resume_dir.join("ru").join("index.html");
+        assert!(ru_path.exists(), "missing resume/{}/ru/index.html", slug);
+        let ru_page =
+            fs::read_to_string(&ru_path).unwrap_or_else(|_| panic!("read resume {slug} ru index"));
+        assert!(
+            ru_page.contains(&format!("Belyakov_{}_ru.pdf", slug)),
+            "missing Russian resume PDF for {}",
             slug
         );
     }

@@ -8,6 +8,7 @@
 ## 2. Authoritative Content Sources
 - `CV.MD`, `CV_RU.MD` — primary CV narratives in English and Russian.
 - `CV_PM.MD`, `CV_PM_RU.MD` — dedicated product manager resume content for both languages.
+- `RESUME_TL.MD`, `RESUME_EM.MD`, `RESUME_HOD.MD`, `RESUME_PM.MD`, `RESUME_TECH.MD` plus their `_RU` counterparts — role-focused highlights consumed by Typst and site generation.
 - `roles.toml` — maps role slugs to human-readable titles used for role-specific pages and PDFs. Every role listed here has a dedicated Markdown resume variant and Typst template to generate tailored deliverables.
 - `/content/avatar.jpg` plus `/DOCS/style.css` and `/DOCS/favicon.svg` — shared visual assets for PDFs and the static site.
 
@@ -56,6 +57,6 @@
 ## 8. Outputs and Deployment Targets
 - `dist/index.html` and `dist/ru/index.html` — landing pages for English and Russian audiences.
 - `dist/<role>/index.html` and `dist/<role>/ru/index.html` — role-specific entry points with localized PDFs.
-- `dist/resume/pm/` — dedicated product manager resume landing pages in both languages.
+- `dist/resume/<role>/` and `dist/resume/<role>/ru/` — localized resume landing pages for every role slug (`tl`, `em`, `hod`, `pm`, `tech`).
 - `dist/*.pdf` — canonical PDF resumes copied from Typst builds, including role variations.
 - `dist/sitemap.txt` — flat list of published URLs for search engines.
