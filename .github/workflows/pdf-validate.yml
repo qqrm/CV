@@ -16,7 +16,7 @@ jobs:
         tool: [qpdf, pdfcpu]
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-cv
+      - uses: ./.github/actions/build-pdfs
 
       - name: Install qpdf
         if: matrix.tool == 'qpdf'
