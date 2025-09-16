@@ -1,49 +1,79 @@
 name: hh-update
 
 on:
-  push:
-    paths:
-      - CV_RU.MD
-      - CV.MD
-      - CV_PM_RU.MD
   schedule:
     - cron: '10 */4 * * *'
+  workflow_dispatch:
 
 jobs:
-  update:
+  promote:
     runs-on: ubuntu-latest
     environment: prod
-    strategy:
-      matrix:
-        resume:
-          - file: CV_RU.MD
-            id_secret: RESUME_ID_RU
-          - file: CV_PM_RU.MD
-            id_secret: RESUME_ID_PM_RU
-          - file: CV.MD
-            id_secret: RESUME_ID_EN
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Convert CV to JSON
-        run: cargo run --manifest-path scripts/convert_cv/Cargo.toml -- ${{ matrix.resume.file }} > resume.json
-
       - name: Refresh access token
-        run: |
-          curl -X POST https://hh.ru/oauth/token \
-            -d grant_type=refresh_token \
-            -d client_id=${{ secrets.CLIENT_ID }} \
-            -d client_secret=${{ secrets.CLIENT_SECRET }} \
-            -d refresh_token=${{ secrets.REFRESH_TOKEN }} \
-            -o token.json
-          ACCESS_TOKEN=$(jq -r '.access_token' token.json)
-          echo "ACCESS_TOKEN=$ACCESS_TOKEN" >> $GITHUB_ENV
-
-      - name: Upload resume to HH
+        id: token
+        shell: bash
         env:
-          RESUME_ID: ${{ secrets[matrix.resume.id_secret] }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
         run: |
-          curl -X PUT https://api.hh.ru/resumes/$RESUME_ID \
-            -H "Authorization: Bearer $ACCESS_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data @resume.json
+          set -euo pipefail
+          response=$(curl -sS -X POST https://hh.ru/oauth/token \
+            -d grant_type=refresh_token \
+            -d client_id="${CLIENT_ID}" \
+            -d client_secret="${CLIENT_SECRET}" \
+            -d refresh_token="${REFRESH_TOKEN}")
+          token=$(echo "$response" | jq -r '.access_token')
+          if [[ -z "$token" || "$token" == "null" ]]; then
+            echo "Unable to extract access token" >&2
+            exit 1
+          fi
+          echo "::add-mask::$token"
+          echo "access_token=$token" >> "$GITHUB_OUTPUT"
+
+      - name: Promote resumes in HeadHunter search
+        shell: bash
+        env:
+          ACCESS_TOKEN: ${{ steps.token.outputs.access_token }}
+          RESUME_ID_RU: ${{ secrets.RESUME_ID_RU }}
+          RESUME_ID_PM_RU: ${{ secrets.RESUME_ID_PM_RU }}
+          RESUME_ID_EN: ${{ secrets.RESUME_ID_EN }}
+        run: |
+          set -uo pipefail
+          summary_file="${GITHUB_STEP_SUMMARY:-}"
+          if [[ -n "$summary_file" ]]; then
+            echo "### Resume promotion results" >> "$summary_file"
+          fi
+          entries=(
+            "$RESUME_ID_RU:Russian resume"
+            "$RESUME_ID_PM_RU:Russian PM resume"
+            "$RESUME_ID_EN:English resume"
+          )
+          status=0
+          for entry in "${entries[@]}"; do
+            IFS=":" read -r resume_id label <<<"$entry"
+            if [[ -z "$resume_id" ]]; then
+              echo "Skipping ${label}: resume id is not configured" >&2
+              if [[ -n "$summary_file" ]]; then
+                echo "- ⚠️ ${label} (missing RESUME_ID)" >> "$summary_file"
+              fi
+              continue
+            fi
+            echo "Promoting ${label} (${resume_id})"
+            if curl -sS -X POST "https://api.hh.ru/resumes/${resume_id}/publish" \
+                -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+                -H "Content-Length: 0" \
+                --fail > /dev/null; then
+              if [[ -n "$summary_file" ]]; then
+                echo "- ✅ ${label}" >> "$summary_file"
+              fi
+            else
+              echo "Failed to promote ${label}" >&2
+              status=1
+              if [[ -n "$summary_file" ]]; then
+                echo "- ❌ ${label}" >> "$summary_file"
+              fi
+            fi
+          done
+          exit $status
