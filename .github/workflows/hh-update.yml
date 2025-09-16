@@ -51,9 +51,9 @@ jobs:
             echo "### Resume promotion results" >> "$summary_file"
           fi
           entries=(
-            "$RESUME_ID_RU:Russian resume"
-            "$RESUME_ID_PM_RU:Russian PM resume"
-            "$RESUME_ID_EN:English resume"
+            "${RESUME_ID_RU:-}:Russian resume"
+            "${RESUME_ID_PM_RU:-}:Russian PM resume"
+            "${RESUME_ID_EN:-}:English resume"
           )
           status=0
           for entry in "${entries[@]}"; do
