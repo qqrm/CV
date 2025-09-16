@@ -25,6 +25,15 @@ request is not `qqrm`, the pipeline stops immediately and no jobs run.
 - The `.github/workflows/auto_merge.yml` workflow merges pull requests as soon as all checks succeed.
 - Do not remove or disable this workflow. Auto-merge helps keep the main branch healthy.
 
+## Workflow and action naming scheme
+Consistent naming keeps automation discoverable and predictable.
+
+- **Workflow files**: use kebab-case filenames that start with a verb describing the outcome. Examples: `build-and-test.yml`, `deploy-preview.yml`.
+- **Workflow names**: set the `name` field to the same verb-first phrase in Title Case (for example, `Build and Test`).
+- **Jobs and steps**: prefer verb-focused kebab-case identifiers such as `run-tests` or `publish-artifacts` to mirror the workflow intent.
+- **Reusable workflows and composite actions**: store them in directories whose names match the workflow/action name in kebab-case, and start their `name` fields with the same verb-first phrase.
+- **Published actions**: when exposing actions publicly, keep the repository name kebab-cased and verb-oriented (for example, `prepare-release-action`).
+
 
 ## Local PDF builds
 To compile PDFs locally, install the Typst CLI:
