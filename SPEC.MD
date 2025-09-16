@@ -2,13 +2,13 @@
 
 ## 1. Purpose and Scope
 - Maintain the source of truth for Alexey Belyakov's curriculum vitae in English and Russian.
-- Generate publishable artifacts: Typst-based PDF resumes, role-specific variants, and a static multilingual website.
+- Generate publishable artifacts: Typst-based PDF resumes, role-specific variants, and a static multilingual website. The flagship CV culminates in an Engineering Manager position that highlights cross-team leadership responsibilities.
 - Provide reusable tooling (Rust + Typst) to validate content, build pages, and keep outputs synchronized with the Markdown data.
 
 ## 2. Authoritative Content Sources
 - `CV.MD`, `CV_RU.MD` — primary CV narratives in English and Russian.
 - `CV_PM.MD`, `CV_PM_RU.MD` — dedicated product manager resume content for both languages.
-- `roles.toml` — maps role slugs to human-readable titles used for role-specific pages and PDFs.
+- `roles.toml` — maps role slugs to human-readable titles used for role-specific pages and PDFs. Every role listed here has a dedicated Markdown resume variant and Typst template to generate tailored deliverables.
 - `/content/avatar.jpg` plus `/DOCS/style.css` and `/DOCS/favicon.svg` — shared visual assets for PDFs and the static site.
 
 ## 3. Templates and Layouts
