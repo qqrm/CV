@@ -1,4 +1,4 @@
-name: 'Setup Typst and build PDFs'
+name: 'Build Typst PDFs'
 description: 'Install dependencies and build Typst PDFs.'
 runs:
   using: 'composite'
