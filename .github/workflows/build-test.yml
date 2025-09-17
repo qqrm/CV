@@ -1,4 +1,4 @@
-name: build-test
+name: CI: Build & Test
 
 permissions:
   contents: read

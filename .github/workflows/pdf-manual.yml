@@ -1,4 +1,4 @@
-name: pdf-manual
+name: PDF: Manual Build
 
 permissions:
   contents: read
