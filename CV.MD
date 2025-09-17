@@ -40,7 +40,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Managed the analytics organization through its lead, aligning insight delivery with product and engineering priorities.
 - Directed the QA team via the QA lead, tightening regression coverage and release gates across microservices.
 - Coordinated the DevOps roadmap with the DevOps lead, synchronizing infrastructure readiness with service launches.
-- Oversaw backend delivery through the backend lead, balancing staffing, technical debt, and feature throughput.
+- Oversaw backend delivery directly, balancing staffing, technical debt, and feature throughput.
 - Led a 25-person cross-functional team in an import substitution initiative to migrate business processes from SAP to a custom Rust-based microservices ecosystem.
 - Architected and maintained a microservices ecosystem aligned with the migration roadmap, sustaining high throughput and reliability within budget.
 - Introduced and enforced Agile practices (Scrum, sprints, daily standups, retrospectives), increasing development velocity by ~20% and reducing rework.
