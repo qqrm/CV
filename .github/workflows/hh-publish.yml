@@ -1,4 +1,4 @@
-name: hh-publish
+name: HeadHunter: Publish
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: hh-promote
+name: HeadHunter: Promote
 
 on:
   schedule:
