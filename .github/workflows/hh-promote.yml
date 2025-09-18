@@ -22,6 +22,7 @@ jobs:
     outputs:
       ready: ${{ steps.secrets.outputs.ready }}
       missing: ${{ steps.secrets.outputs.missing }}
+      missing_count: ${{ steps.secrets.outputs.missing_count }}
     steps:
       - name: Check HeadHunter secrets
         id: secrets
@@ -72,7 +73,8 @@ jobs:
             fi
           done
 
-          if (( ${#missing[@]} > 0 )); then
+          missing_count=${#missing[@]}
+          if (( missing_count > 0 )); then
             missing_list="$(IFS=', '; echo "${missing[*]}")"
             printf '::warning::HeadHunter promote skipped; missing configuration: %s\n' \
               "$missing_list"
@@ -82,11 +84,13 @@ jobs:
             fi
             echo "ready=false" >> "$GITHUB_OUTPUT"
             echo "missing=$missing_list" >> "$GITHUB_OUTPUT"
+            echo "missing_count=$missing_count" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
           echo "ready=true" >> "$GITHUB_OUTPUT"
           echo "missing=" >> "$GITHUB_OUTPUT"
+          echo "missing_count=0" >> "$GITHUB_OUTPUT"
 
   promote:
     needs: preflight
