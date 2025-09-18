@@ -5,6 +5,16 @@ on:
     - cron: '10 */4 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: hh-promote-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
   promote:
     runs-on: ubuntu-latest
