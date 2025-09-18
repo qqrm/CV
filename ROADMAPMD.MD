@@ -6,13 +6,7 @@
 
 ## Позиции, для которых требуется адаптированное CV
 
-- CTO для небольших стартапов (до 20–30 человек)
-- Engineering Manager
-- Team Lead
-- Tech Lead
-- Product Owner
-- DevOps
-- Позиции на стыке AI и менеджмента
+- Engineering Manager (DevOps-ориентированный профиль)
 
 ## Задачи
 

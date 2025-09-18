@@ -7,13 +7,13 @@
 
 ## 2. Authoritative Content Sources
 - `profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD` — primary CV narratives in English and Russian.
-- `profiles/cv/en/CV_PM.MD`, `profiles/cv/ru/CV_PM_RU.MD` — dedicated product manager resume content for both languages.
-- `profiles/resume/en/RESUME_TL.MD`, `profiles/resume/en/RESUME_EM.MD`, `profiles/resume/en/RESUME_HOD.MD`, `profiles/resume/en/RESUME_PM.MD`, `profiles/resume/en/RESUME_TECH.MD` plus their `_RU` counterparts under `profiles/resume/ru/` — role-focused highlights consumed by Typst and site generation.
-- `roles.toml` — maps role slugs to human-readable titles used for role-specific pages and PDFs. Every role listed here has a dedicated Markdown resume variant and Typst template to generate tailored deliverables.
+- `profiles/cv/en/CV_EM.MD`, `profiles/cv/ru/CV_EM_RU.MD` — Engineering Manager spotlight content for both languages.
+- `profiles/resume/en/RESUME_EM.MD`, `profiles/resume/ru/RESUME_EM_RU.MD` — condensed Engineering Manager resume highlights consumed by Typst and site generation.
+- `roles.toml` — maps the Engineering Manager slug to a human-readable title that powers the role-specific site and resume exports.
 - `/content/avatar.jpg` plus `/DOCS/style.css` and `/DOCS/favicon.svg` — shared visual assets for PDFs and the static site.
 
 ## 3. Templates and Layouts
-- Typst packages under `typst/en` and `typst/ru` define the PDF layout (`Belyakov_en.typ`, `Belyakov_pm_en.typ`, etc.).
+- Typst packages under `typst/en` and `typst/ru` define the PDF layout (`Belyakov_en.typ`, `Belyakov_em_en.typ`, etc.).
 - `templates/resume.typ` exposes a reusable Typst function that renders a localized resume by pulling data from the Markdown files.
 - `sitegen/templates/page.hbs` is the Handlebars template that powers every HTML page, providing dark/light theming, localized text, and dynamic role titles.
 
@@ -32,7 +32,7 @@
 2. Compile Typst sources to PDFs:
    - `typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf`
    - `typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf`
-   - Repeat for role-specific templates as required (e.g., `Belyakov_pm_en.typ`).
+   - Compile the Engineering Manager template as needed (e.g., `Belyakov_em_en.typ`).
 3. Validate repository inputs: `cargo run --manifest-path sitegen/Cargo.toml --bin validate`.
 4. Generate the website bundle: `cargo run --manifest-path sitegen/Cargo.toml --bin generate` (outputs HTML, PDFs, and `sitemap.txt` under `dist/`).
 5. Publish artifacts manually or through CI by uploading `dist/` to GitHub Pages and attaching PDFs to releases.
@@ -40,7 +40,7 @@
 ## 6. Testing and Quality Gates
 - Execute `cargo test --manifest-path sitegen/Cargo.toml` before commits to cover parser/renderer logic.
 - Run `cargo test` inside `scripts/convert_cv` when modifying that helper crate.
-- Ensure Typst compilation succeeds for both languages and role variants to keep downloadable PDFs in sync.
+- Ensure Typst compilation succeeds for both languages and the Engineering Manager variant to keep downloadable PDFs in sync.
 
 ## 7. Repository Layout Summary
 ```
@@ -53,16 +53,16 @@
 ├── typst/                # Typst sources for EN/RU PDFs
 └── profiles/             # Localized CV and resume Markdown sources
     ├── cv/
-    │   ├── en/           # English narratives (CV.MD, CV_PM.MD, ...)
-    │   └── ru/           # Russian narratives (CV_RU.MD, CV_PM_RU.MD, ...)
+    │   ├── en/           # English narratives (CV.MD, CV_EM.MD)
+    │   └── ru/           # Russian narratives (CV_RU.MD, CV_EM_RU.MD)
     └── resume/
-        ├── en/          # English resume variants (RESUME_TL.MD, ...)
-        └── ru/          # Russian resume variants (RESUME_TL_RU.MD, ...)
+        ├── en/          # Engineering Manager resume highlights (RESUME_EM.MD)
+        └── ru/          # Russian resume highlights (RESUME_EM_RU.MD)
 ```
 
 ## 8. Outputs and Deployment Targets
 - `dist/index.html` and `dist/ru/index.html` — landing pages for English and Russian audiences.
-- `dist/<role>/index.html` and `dist/<role>/ru/index.html` — role-specific entry points with localized PDFs.
-- `dist/resume/<role>/` and `dist/resume/<role>/ru/` — localized resume landing pages for every role slug (`tl`, `em`, `hod`, `pm`, `tech`).
-- `dist/*.pdf` — canonical PDF resumes copied from Typst builds, including role variations.
+- `dist/em/index.html` and `dist/em/ru/index.html` — Engineering Manager landing pages with localized PDFs.
+- `dist/resume/em/` and `dist/resume/em/ru/` — localized resume landing pages for the Engineering Manager profile.
+- `dist/*.pdf` — canonical PDF resumes copied from Typst builds, including the Engineering Manager variation.
 - `dist/sitemap.txt` — flat list of published URLs for search engines.

@@ -91,11 +91,7 @@ fn extract_first_paragraph(html: &str) -> String {
 
 fn role_title_ru(slug: &str) -> String {
     match slug {
-        "tl" => "тимлида",
         "em" => "инженерного менеджера",
-        "hod" => "руководителя разработки",
-        "pm" => "продакт-менеджера",
-        "tech" => "технического лидера",
         _ => slug,
     }
     .to_string()
@@ -201,33 +197,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let footer_links_ru = extract_first_paragraph(&html_body_ru);
 
     // Prepare role-specific resume bodies
-    let resume_specs = [
-        (
-            "tl",
-            "profiles/resume/en/RESUME_TL.MD",
-            "profiles/resume/ru/RESUME_TL_RU.MD",
-        ),
-        (
-            "em",
-            "profiles/resume/en/RESUME_EM.MD",
-            "profiles/resume/ru/RESUME_EM_RU.MD",
-        ),
-        (
-            "hod",
-            "profiles/resume/en/RESUME_HOD.MD",
-            "profiles/resume/ru/RESUME_HOD_RU.MD",
-        ),
-        (
-            "pm",
-            "profiles/resume/en/RESUME_PM.MD",
-            "profiles/resume/ru/RESUME_PM_RU.MD",
-        ),
-        (
-            "tech",
-            "profiles/resume/en/RESUME_TECH.MD",
-            "profiles/resume/ru/RESUME_TECH_RU.MD",
-        ),
-    ];
+    let resume_specs = [(
+        "em",
+        "profiles/resume/en/RESUME_EM.MD",
+        "profiles/resume/ru/RESUME_EM_RU.MD",
+    )];
     let mut resume_contents: Vec<(String, ResumeContent)> = Vec::new();
     for (slug, en_md, ru_md) in resume_specs {
         let slug_upper = slug.to_ascii_uppercase();
@@ -314,18 +288,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         fs::copy("typst/ru/Belyakov_ru.pdf", &base_ru)?;
     } else {
         fs::File::create(&base_ru)?;
-    }
-    if Path::new("typst/en/Belyakov_pm_en.pdf").exists() {
-        fs::copy(
-            "typst/en/Belyakov_pm_en.pdf",
-            docs_dir.join("Belyakov_pm_en.pdf"),
-        )?;
-    }
-    if Path::new("typst/ru/Belyakov_pm_ru.pdf").exists() {
-        fs::copy(
-            "typst/ru/Belyakov_pm_ru.pdf",
-            docs_dir.join("Belyakov_pm_ru.pdf"),
-        )?;
     }
     fs::write(docs_dir.join("index.html"), &html_template)?;
     info!("Wrote English HTML to dist/index.html");

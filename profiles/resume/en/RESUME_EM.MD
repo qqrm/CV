@@ -13,11 +13,13 @@
 - Stakeholder engagement, executive communication, and cross-functional alignment.
 - Budget and P&L oversight, resource allocation, and risk mitigation.
 - KPI/OKR tracking with transparent reporting and data-driven decisions.
+- DevOps strategy, release governance, and automation-first delivery practices.
 
 ## Delivery Leadership
 - Coordinated backend, QA, and DevOps streams to keep shared milestones on track.
 - Oversaw roadmap planning and capacity balancing while maintaining ~90% KPI adherence.
 - Introduced Agile cadences, retrospectives, and code review policies that increased development velocity by ~20%.
+- Chaired a release board aligning QA sign-offs, SAST gates, and rollout readiness to avoid schedule slips.
 
 ## Operating Rhythm
 - Established performance reviews, mentoring frameworks, and growth plans for every engineer.
@@ -28,3 +30,4 @@
 - Delivery stayed within 5% of budget while expanding the team from 5 to 12 developers in six months.
 - Sprint predictability improved by ~25% through structured backlog refinement and retrospectives.
 - Bug backlog shrank by ~30% after strengthening QA and review processes and tightening governance.
+- Release predictability increased thanks to automated quality gates, feature toggles, and shared runbooks.

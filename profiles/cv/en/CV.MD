@@ -16,7 +16,7 @@ Languages:
 Work Schedule: Remote work, full-time
 
 ## Objective
-A highly skilled Rust Team Lead with nearly 10 years of software development and system architecture experience. Committed to driving innovation in robust, high-performance systems and empowering teams to deliver impactful solutions. Seeking to leverage deep technical expertise, leadership skills, and microservices best practices to build high-performing development teams, streamline processes, and achieve business objectives in cutting-edge projects.
+Hands-on Engineering Manager and DevOps champion with nearly 10 years of leading backend, QA, and platform teams. Passionate about orchestrating release strategy, automating quality gates, and modernizing microservice ecosystems. Seeking to scale cross-functional organizations by combining strategic planning, delivery governance, and data-driven DevOps practices to ship reliable, high-impact products.
 
 ## Core Competencies
 - Strategic planning and roadmap ownership
@@ -25,12 +25,14 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - KPI/OKR tracking and data-driven decision making
 - Agile delivery, process optimization, and change management
 - Talent development, performance reviews, and hiring
+- DevOps strategy, release governance, and SRE collaboration
 
 ## Leadership Highlights
 - Coordinated cross-functional teams, aligning backend, QA, and DevOps efforts to meet shared milestones.
 - Oversaw roadmap planning and resource allocation, keeping delivery within 5% of budget and ~90% KPI adherence.
 - Established regular performance review cycles, mentoring developers with actionable feedback and growth plans.
 - Communicated progress and risks to stakeholders, translating technical status into clear business insights.
+- Directed release orchestration through CI/CD standards, SAST policies, and deployment readiness reviews to keep launches predictable.
 
 ## Work Experience
 
@@ -45,6 +47,7 @@ A highly skilled Rust Team Lead with nearly 10 years of software development and
 - Architected and maintained a microservices ecosystem aligned with the migration roadmap, sustaining high throughput and reliability within budget.
 - Introduced and enforced Agile practices (Scrum, sprints, daily standups, retrospectives), increasing development velocity by ~20% and reducing rework.
 - Aligned infrastructure requirements with DevOps to streamline on-premise deployments and keep roadmap deliverables on schedule.
+- Chaired a release board that paired QA sign-off with DevOps readiness checks, coordinating cutovers without overruns.
 - Partnered with Product to balance feature scope with migration budget, sequencing service rollouts to meet quarterly goals.
 - Rolled out OKR tracking through Jira dashboards, keeping ~90% of quarterly objectives on target.
 - Expanded the backend team from 5 to 12 developers within six months.
