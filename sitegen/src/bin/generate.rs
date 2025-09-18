@@ -33,11 +33,14 @@ struct ResumeContent {
 }
 
 fn inject_duration(html: &mut String, fragment: &str, duration: &str) -> bool {
+    let expected = format!("{fragment} ({duration})");
+    if html.contains(&expected) {
+        return true;
+    }
     let escaped = regex::escape(fragment);
     let re = Regex::new(&format!(r"{}(?:\s*\([^)]*\))?", escaped)).expect("invalid duration regex");
     if re.is_match(html) {
-        let replacement = format!("{fragment} ({duration})");
-        *html = re.replace(html, replacement.as_str()).into_owned();
+        *html = re.replace(html, expected.as_str()).into_owned();
         true
     } else {
         false
