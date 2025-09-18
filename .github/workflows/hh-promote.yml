@@ -76,7 +76,7 @@ jobs:
           RESUME_ID_EN_PRIMARY: ${{ secrets.RESUME_ID_EN }}
           RESUME_ID_EN_FALLBACK: ${{ secrets.HH_RESUME_ID_EN }}
         run: |
-          set -uo pipefail
+          set -euo pipefail
 
           resolve_id() {
             if [[ -n "$1" ]]; then
@@ -84,6 +84,25 @@ jobs:
             else
               printf '%s\n' "$2"
             fi
+          }
+
+          fetch_timestamp() {
+            local resume_id="$1"
+            local label="$2"
+            local response
+            if ! response=$(curl -sS "https://api.hh.ru/resumes/${resume_id}" \
+                -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+                --fail); then
+              echo "Failed to fetch metadata for ${label} (${resume_id})" >&2
+              return 1
+            fi
+            local timestamp
+            timestamp=$(echo "$response" | jq -r '.updated_at // .updated // .publication_time // .publication_date // .publish_date // empty')
+            if [[ -z "$timestamp" || "$timestamp" == "null" ]]; then
+              echo "Resume ${label} (${resume_id}) metadata does not expose a publication timestamp" >&2
+              return 1
+            fi
+            printf '%s\n' "$timestamp"
           }
 
           resume_id_ru=$(resolve_id "${RESUME_ID_RU_PRIMARY:-}" "${RESUME_ID_RU_FALLBACK:-}")
@@ -109,13 +128,59 @@ jobs:
               fi
               continue
             fi
+
             echo "Promoting ${label} (${resume_id})"
+            previous_timestamp=$(fetch_timestamp "$resume_id" "$label") || {
+              status=1
+              if [[ -n "$summary_file" ]]; then
+                echo "- ❌ ${label} (failed to read current timestamp)" >> "$summary_file"
+              fi
+              continue
+            }
+
+            if ! previous_epoch=$(date -u -d "$previous_timestamp" +%s 2>/dev/null); then
+              echo "Unable to parse timestamp '${previous_timestamp}' for ${label}" >&2
+              status=1
+              if [[ -n "$summary_file" ]]; then
+                echo "- ❌ ${label} (unparsable timestamp ${previous_timestamp})" >> "$summary_file"
+              fi
+              continue
+            fi
+
             if curl -sS -X POST "https://api.hh.ru/resumes/${resume_id}/publish" \
                 -H "Authorization: Bearer ${ACCESS_TOKEN}" \
                 -H "Content-Length: 0" \
                 --fail > /dev/null; then
-              if [[ -n "$summary_file" ]]; then
-                echo "- ✅ ${label}" >> "$summary_file"
+              # Wait briefly to ensure the HeadHunter API persists the new timestamp
+              sleep 2
+
+              current_timestamp=$(fetch_timestamp "$resume_id" "$label") || {
+                status=1
+                if [[ -n "$summary_file" ]]; then
+                  echo "- ❌ ${label} (failed to confirm timestamp update)" >> "$summary_file"
+                fi
+                continue
+              }
+
+              if ! current_epoch=$(date -u -d "$current_timestamp" +%s 2>/dev/null); then
+                echo "Unable to parse updated timestamp '${current_timestamp}' for ${label}" >&2
+                status=1
+                if [[ -n "$summary_file" ]]; then
+                  echo "- ❌ ${label} (unparsable timestamp ${current_timestamp})" >> "$summary_file"
+                fi
+                continue
+              fi
+
+              if (( current_epoch > previous_epoch )); then
+                if [[ -n "$summary_file" ]]; then
+                  echo "- ✅ ${label} (${previous_timestamp} → ${current_timestamp})" >> "$summary_file"
+                fi
+              else
+                echo "Timestamp for ${label} did not increase" >&2
+                status=1
+                if [[ -n "$summary_file" ]]; then
+                  echo "- ❌ ${label} (timestamp unchanged: ${previous_timestamp} → ${current_timestamp})" >> "$summary_file"
+                fi
               fi
             else
               echo "Failed to promote ${label}" >&2
