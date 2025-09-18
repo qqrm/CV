@@ -136,10 +136,7 @@ pub struct RolesFile {
 }
 
 fn default_roles() -> BTreeMap<String, String> {
-    BTreeMap::from([
-        ("tl".to_string(), "Team Lead".to_string()),
-        ("tech".to_string(), "Tech Lead".to_string()),
-    ])
+    BTreeMap::from([("em".to_string(), "Engineering Manager".to_string())])
 }
 
 #[derive(Debug)]

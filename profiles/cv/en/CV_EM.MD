@@ -9,7 +9,7 @@
 - **Location:** Remote, full-time availability
 
 ## Executive Profile
-Hands-on engineering leader who scales cross-functional teams, delivers complex migration programs, and keeps executives informed with clear metrics. Comfortable driving architectural alignment, people development, and budget discipline while maintaining a transparent delivery cadence.
+Hands-on engineering leader and DevOps advocate who scales cross-functional teams, delivers complex migration programs, and keeps executives informed with clear metrics. Comfortable driving architectural alignment, people development, release governance, and budget discipline while maintaining a transparent delivery cadence.
 
 ## Core Strengths
 - Roadmap ownership across multiple teams and workstreams.
@@ -17,6 +17,7 @@ Hands-on engineering leader who scales cross-functional teams, delivers complex 
 - Budgeting, staffing, and vendor coordination for hybrid on-prem/cloud setups.
 - Team development through structured mentoring, hiring, and performance reviews.
 - Governance and delivery frameworks that balance velocity with risk control.
+- DevOps strategy, release orchestration, and SRE collaboration.
 
 ## Work Experience
 
@@ -26,12 +27,14 @@ Hands-on engineering leader who scales cross-functional teams, delivers complex 
 - Coordinate backend, QA, analytics, and DevOps leads to keep multi-team milestones on schedule.
 - Balance roadmap scope against migration budgets and quarterly goals, surfacing risks early.
 - Established async and personal sprint planning that raised sprint productivity by ~15% and predictability by ~25%.
+- Chaired a release board aligning QA sign-offs, SAST policies, and deployment readiness reviews for predictable launches.
 
 **People & Governance**
 - Expanded the backend team from 5 to 12 developers while reducing onboarding time by ~30%.
 - Retained 90% of hires after the first year by pairing growth plans with consistent feedback loops.
 - Mentored three engineers to senior roles using a competency matrix and targeted coaching.
 - Integrated static analysis (Clippy, cargo-audit, SonarQube) and internal package distribution to satisfy compliance requirements.
+- Evangelised DevOps practices across teams, pairing incident reviews with automation backlogs and driving CI/CD adoption.
 
 ### Rust Team Lead @ Solcery | March 2022 – March 2023
 - Managed a 4-person Rust team building a DAO-ready blockchain database on Solana.

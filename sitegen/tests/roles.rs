@@ -10,9 +10,8 @@ fn read_roles_returns_default_when_missing() {
     env::set_current_dir(dir.path()).unwrap();
     let roles = read_roles().expect("default roles");
     env::set_current_dir(original).unwrap();
-    assert_eq!(roles.get("tl"), Some(&"Team Lead".to_string()));
-    assert_eq!(roles.get("tech"), Some(&"Tech Lead".to_string()));
-    assert_eq!(roles.len(), 2);
+    assert_eq!(roles.get("em"), Some(&"Engineering Manager".to_string()));
+    assert_eq!(roles.len(), 1);
 }
 
 #[test]
@@ -24,9 +23,9 @@ fn read_roles_merges_with_defaults() {
     fs::write("roles.toml", "[roles]\nfoo='Bar'").unwrap();
     let roles = read_roles().expect("merged roles");
     env::set_current_dir(original).unwrap();
-    assert_eq!(roles.get("tl"), Some(&"Team Lead".to_string()));
+    assert_eq!(roles.get("em"), Some(&"Engineering Manager".to_string()));
     assert_eq!(roles.get("foo"), Some(&"Bar".to_string()));
-    assert_eq!(roles.len(), 3);
+    assert_eq!(roles.len(), 2);
 }
 
 #[test]
@@ -48,12 +47,12 @@ fn read_roles_returns_error_for_empty_title() {
     let dir = tempfile::tempdir().expect("temp dir");
     let original = env::current_dir().unwrap();
     env::set_current_dir(dir.path()).unwrap();
-    fs::write("roles.toml", "[roles]\ntl = ''").unwrap();
+    fs::write("roles.toml", "[roles]\nem = ''").unwrap();
     let err = read_roles().expect_err("expected empty title error");
     env::set_current_dir(original).unwrap();
     match &err {
-        RolesError::EmptyTitle { slug } => assert_eq!(slug, "tl"),
+        RolesError::EmptyTitle { slug } => assert_eq!(slug, "em"),
         _ => panic!("unexpected error"),
     }
-    assert_eq!(err.to_string(), "role 'tl' has empty title");
+    assert_eq!(err.to_string(), "role 'em' has empty title");
 }

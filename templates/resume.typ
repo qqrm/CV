@@ -17,32 +17,12 @@
   ]
 
     #let slugs = (
-      "Team Lead": "tl",
       "Engineering Manager": "em",
-      "Head of Development": "hod",
-      "Product Manager": "pm",
-      "Tech Lead": "tech",
     )
     #let resume_paths = (
-      "tl": (
-        en: "../profiles/resume/en/RESUME_TL.MD",
-        ru: "../profiles/resume/ru/RESUME_TL_RU.MD",
-      ),
       "em": (
         en: "../profiles/resume/en/RESUME_EM.MD",
         ru: "../profiles/resume/ru/RESUME_EM_RU.MD",
-      ),
-      "hod": (
-        en: "../profiles/resume/en/RESUME_HOD.MD",
-        ru: "../profiles/resume/ru/RESUME_HOD_RU.MD",
-      ),
-      "pm": (
-        en: "../profiles/resume/en/RESUME_PM.MD",
-        ru: "../profiles/resume/ru/RESUME_PM_RU.MD",
-      ),
-      "tech": (
-        en: "../profiles/resume/en/RESUME_TECH.MD",
-        ru: "../profiles/resume/ru/RESUME_TECH_RU.MD",
       ),
     )
     #let base = "https://qqrm.github.io/CV/"
