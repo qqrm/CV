@@ -74,7 +74,8 @@ mod tests {
 
     #[test]
     fn reads_markdown_from_repository_root() {
-        let markdown = read_markdown("CV.MD").expect("read markdown from repository root");
+        let markdown =
+            read_markdown("profiles/cv/en/CV.MD").expect("read markdown from repository root");
         assert!(markdown.contains("Alexey"));
     }
 }

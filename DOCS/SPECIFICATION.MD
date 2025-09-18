@@ -6,7 +6,7 @@
 
 This repository implements an automated, multilingual, AI-friendly CV generator and publisher, featuring:
 
-- Centralized markdown sources for career information (`CV.MD`, `CV_RU.MD`).
+- Centralized markdown sources for career information (`profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD`).
 - A TOML file listing target roles with short codes and full titles (`roles.toml`).
 - A Typst template for generating PDF CVs (`/template/base.typ`).
 - A Rust application for parsing, validating, and generating all artifacts.
@@ -18,8 +18,13 @@ This repository implements an automated, multilingual, AI-friendly CV generator 
 
 ```
 /
-  CV.MD
-  CV_RU.MD
+  profiles/
+    cv/
+      en/CV.MD
+      ru/CV_RU.MD
+    resume/
+      en/RESUME_TL.MD
+      ru/RESUME_TL_RU.MD
   roles.toml
   /template/
     base.typ

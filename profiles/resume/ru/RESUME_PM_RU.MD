@@ -1,5 +1,5 @@
 # {NAME}
-*[Ссылка на английскую версию](./RESUME_PM.MD)* \\
+*[Ссылка на английскую версию](../en/RESUME_PM.MD)* \\
 *[Скачать PDF](https://qqrm.github.io/CV/Belyakov_pm_ru.pdf)* \\
 *[Скачать PDF (EN)](https://qqrm.github.io/CV/Belyakov_pm_en.pdf)*
 

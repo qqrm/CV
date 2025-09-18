@@ -6,9 +6,9 @@
 - Provide reusable tooling (Rust + Typst) to validate content, build pages, and keep outputs synchronized with the Markdown data.
 
 ## 2. Authoritative Content Sources
-- `CV.MD`, `CV_RU.MD` — primary CV narratives in English and Russian.
-- `CV_PM.MD`, `CV_PM_RU.MD` — dedicated product manager resume content for both languages.
-- `RESUME_TL.MD`, `RESUME_EM.MD`, `RESUME_HOD.MD`, `RESUME_PM.MD`, `RESUME_TECH.MD` plus their `_RU` counterparts — role-focused highlights consumed by Typst and site generation.
+- `profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD` — primary CV narratives in English and Russian.
+- `profiles/cv/en/CV_PM.MD`, `profiles/cv/ru/CV_PM_RU.MD` — dedicated product manager resume content for both languages.
+- `profiles/resume/en/RESUME_TL.MD`, `profiles/resume/en/RESUME_EM.MD`, `profiles/resume/en/RESUME_HOD.MD`, `profiles/resume/en/RESUME_PM.MD`, `profiles/resume/en/RESUME_TECH.MD` plus their `_RU` counterparts under `profiles/resume/ru/` — role-focused highlights consumed by Typst and site generation.
 - `roles.toml` — maps role slugs to human-readable titles used for role-specific pages and PDFs. Every role listed here has a dedicated Markdown resume variant and Typst template to generate tailored deliverables.
 - `/content/avatar.jpg` plus `/DOCS/style.css` and `/DOCS/favicon.svg` — shared visual assets for PDFs and the static site.
 
@@ -20,7 +20,7 @@
 ## 4. Rust Tooling
 - `sitegen` crate (`sitegen/Cargo.toml`) centralizes parsing and rendering logic.
   - Library modules:
-    - `parser.rs` parses month names, extracts inline employment start dates from `CV.MD`, and loads `roles.toml` with validation.
+    - `parser.rs` parses month names, extracts inline employment start dates from `profiles/cv/en/CV.MD`, and loads `roles.toml` with validation.
     - `renderer.rs` formats experience durations for English and Russian output.
   - Binaries:
     - `validate` ensures Markdown files and `roles.toml` exist and are syntactically correct.
@@ -51,7 +51,13 @@
 ├── sitegen/              # Main Rust crate with generate/validate binaries and templates
 ├── TASKS/, BACKLOG/      # Planning and roadmap documents
 ├── typst/                # Typst sources for EN/RU PDFs
-└── *.MD                  # Markdown CV sources and guidance documents
+└── profiles/             # Localized CV and resume Markdown sources
+    ├── cv/
+    │   ├── en/           # English narratives (CV.MD, CV_PM.MD, ...)
+    │   └── ru/           # Russian narratives (CV_RU.MD, CV_PM_RU.MD, ...)
+    └── resume/
+        ├── en/          # English resume variants (RESUME_TL.MD, ...)
+        └── ru/          # Russian resume variants (RESUME_TL_RU.MD, ...)
 ```
 
 ## 8. Outputs and Deployment Targets

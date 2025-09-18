@@ -1,5 +1,5 @@
 # {NAME}
-*[Ссылка на английскую версию](./RESUME_HOD.MD)* \\
+*[Ссылка на английскую версию](../en/RESUME_HOD.MD)* \\
 *[Скачать PDF](https://qqrm.github.io/CV/Belyakov_hod_ru.pdf)* \\
 *[Скачать PDF (EN)](https://qqrm.github.io/CV/Belyakov_hod_en.pdf)*
 

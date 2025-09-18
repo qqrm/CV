@@ -1,5 +1,5 @@
 # Алексей Леонидович Беляков
-*[Ссылка на английскую версию](./CV.MD)* \\
+*[Ссылка на английскую версию](../en/CV.MD)* \\
 *[Скачать PDF](https://qqrm.github.io/CV/Belyakov_ru.pdf)* \\
 *[Download PDF (EN)](https://qqrm.github.io/CV/Belyakov_en.pdf)*
 

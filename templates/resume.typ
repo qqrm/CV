@@ -25,24 +25,24 @@
     )
     #let resume_paths = (
       "tl": (
-        en: "../RESUME_TL.MD",
-        ru: "../RESUME_TL_RU.MD",
+        en: "../profiles/resume/en/RESUME_TL.MD",
+        ru: "../profiles/resume/ru/RESUME_TL_RU.MD",
       ),
       "em": (
-        en: "../RESUME_EM.MD",
-        ru: "../RESUME_EM_RU.MD",
+        en: "../profiles/resume/en/RESUME_EM.MD",
+        ru: "../profiles/resume/ru/RESUME_EM_RU.MD",
       ),
       "hod": (
-        en: "../RESUME_HOD.MD",
-        ru: "../RESUME_HOD_RU.MD",
+        en: "../profiles/resume/en/RESUME_HOD.MD",
+        ru: "../profiles/resume/ru/RESUME_HOD_RU.MD",
       ),
       "pm": (
-        en: "../RESUME_PM.MD",
-        ru: "../RESUME_PM_RU.MD",
+        en: "../profiles/resume/en/RESUME_PM.MD",
+        ru: "../profiles/resume/ru/RESUME_PM_RU.MD",
       ),
       "tech": (
-        en: "../RESUME_TECH.MD",
-        ru: "../RESUME_TECH_RU.MD",
+        en: "../profiles/resume/en/RESUME_TECH.MD",
+        ru: "../profiles/resume/ru/RESUME_TECH_RU.MD",
       ),
     )
     #let base = "https://qqrm.github.io/CV/"
@@ -62,9 +62,9 @@
         if using_resume {
           if lang == "ru" { resume_entry.at("ru") } else { resume_entry.at("en") }
         } else if lang == "ru" {
-          "../CV_RU.MD"
+          "../profiles/cv/ru/CV_RU.MD"
         } else {
-          "../CV.MD"
+          "../profiles/cv/en/CV.MD"
         }
       } else {
         md_path
