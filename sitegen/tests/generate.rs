@@ -97,9 +97,14 @@ fn generates_expected_dist() {
         regex::escape(&english_fragment)
     ))
     .unwrap();
-    let en_caps = english_duration_re
-        .captures(&index_actual)
+    let mut en_matches = english_duration_re.captures_iter(&index_actual);
+    let en_caps = en_matches
+        .next()
         .expect("English duration fragment not found");
+    assert!(
+        en_matches.next().is_none(),
+        "English inline duration fragment matched more than once"
+    );
     let actual_duration_en = en_caps.get(1).map(|m| m.as_str()).unwrap();
     assert_eq!(actual_duration_en, expected_duration_en);
 
@@ -116,7 +121,12 @@ fn generates_expected_dist() {
     let mut ru_duration: Option<String> = None;
     for fragment in ru_fragments {
         let re = Regex::new(&format!("{}\\s*\\(([^)]*)\\)", regex::escape(&fragment))).unwrap();
-        if let Some(caps) = re.captures(&index_ru_actual) {
+        let mut matches = re.captures_iter(&index_ru_actual);
+        if let Some(caps) = matches.next() {
+            assert!(
+                matches.next().is_none(),
+                "Russian inline duration fragment '{fragment}' matched more than once"
+            );
             ru_duration = Some(caps.get(1).unwrap().as_str().to_string());
             break;
         }
