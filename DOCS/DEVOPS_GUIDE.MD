@@ -11,6 +11,12 @@ This document describes how we work with CI/CD and infrastructure in our project
 - Keep all secrets in CI/CD environment variables, not in the repository.
 - Before merging into the main branch, make sure all checks have passed.
 
+### GitHub CLI workflow
+- The GitHub CLI (`gh`) is pre-installed and authenticated; use it to interact with the hosted repository.
+- Confirm the canonical remote with `git remote -v`—`origin` must point to `https://github.com/qqrm/CV.git`.
+- Push feature branches with `git push --set-upstream origin <branch>` and open pull requests via `gh pr create`.
+- Monitor CI from the terminal using `gh run watch` to follow pipeline progress without leaving the shell.
+
 ### Security check
 All automated workflows start with a security step. If the author of a pull
 request is not `qqrm`, the pipeline stops immediately and no jobs run.

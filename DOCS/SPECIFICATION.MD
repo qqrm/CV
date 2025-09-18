@@ -92,6 +92,19 @@ This repository implements an automated, multilingual, AI-friendly CV generator 
   - Upload `index.html` and all static assets/json for frontend.
   - Site must be live at `https://<user>.github.io/cv/` and pass a basic availability check.
 
+### 6.3 Resume Freshness Pipeline
+
+- Purpose: keep resumes ranked highly in search by refreshing only the publication timestamp.
+- Trigger: launched by a scheduler maintained by operations and can be run manually whenever ranking degrades.
+- Steps:
+  1. Fetch the current resume metadata without mutating the resume body.
+  2. Call the resume update function to bump the publication date to "now".
+  3. Re-read the resume metadata to confirm the timestamp increase and log both the previous and new values.
+- Guardrails:
+  - The pipeline must not alter resume content, attachments, or visibility settings.
+  - If the update call fails, retry and alert the support channel after repeated failures.
+  - Only mark the run successful when the new publication date is strictly greater than the previous value.
+
 ---
 
 ## 7. Example GitHub Actions Workflow
