@@ -1,24 +1,59 @@
+use std::env;
 use std::fs;
 use std::path::Path;
 use std::process::Command;
 
+use chrono::{Datelike, NaiveDate, Utc};
 use regex::Regex;
+use sitegen::{format_duration_en, format_duration_ru, read_inline_start};
 use toml::Value;
 
 fn normalize_en(content: &str) -> String {
     let date_re = Regex::new(r"<p>\d{4}-\d{2}-\d{2}</p>").unwrap();
-    let dur_re = Regex::new(r"([A-Za-z]+ \d{4} – Present)  \([^)]*\)").unwrap();
+    let dur_re = Regex::new(r"([A-Za-z]+ \d{4} – Present)\s+\([^)]*\)").unwrap();
     let tmp = date_re.replace(content, "<p>DATE</p>");
-    let tmp = dur_re.replace(&tmp, "$1  (DURATION)");
+    let tmp = dur_re.replace(&tmp, "$1 (DURATION)");
     tmp.to_string()
 }
 
 fn normalize_ru(content: &str) -> String {
     let date_re = Regex::new(r"<p>\d{4}-\d{2}-\d{2}</p>").unwrap();
-    let dur_re = Regex::new(r"(\p{L}+ \d{4} – настоящее время) \([^)]*\)").unwrap();
+    let dur_re =
+        Regex::new(r"(\p{L}+ \d{4} – (?:настоящее время|Настоящее время|Present))\s*\([^)]*\)")
+            .unwrap();
     let tmp = date_re.replace(content, "<p>DATE</p>");
     let tmp = dur_re.replace(&tmp, "$1 (DURATION)");
     tmp.to_string()
+}
+
+fn russian_month_name(month: u32) -> Option<&'static str> {
+    const RU_MONTHS: [&str; 12] = [
+        "январь",
+        "февраль",
+        "март",
+        "апрель",
+        "май",
+        "июнь",
+        "июль",
+        "август",
+        "сентябрь",
+        "октябрь",
+        "ноябрь",
+        "декабрь",
+    ];
+    if (1..=12).contains(&month) {
+        Some(RU_MONTHS[(month - 1) as usize])
+    } else {
+        None
+    }
+}
+
+fn capitalize_first(text: &str) -> String {
+    let mut chars = text.chars();
+    match chars.next() {
+        Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
+        None => String::new(),
+    }
 }
 
 #[test]
@@ -43,6 +78,51 @@ fn generates_expected_dist() {
     let index_actual = fs::read_to_string(dist.join("index.html")).expect("read index.html");
     let index_ru_actual =
         fs::read_to_string(dist.join("ru").join("index.html")).expect("read ru/index.html");
+
+    let original_dir = env::current_dir().expect("current dir");
+    env::set_current_dir(project_root).expect("set project root");
+    let (start_year, start_month) = read_inline_start().expect("read inline start");
+    env::set_current_dir(original_dir).expect("restore current dir");
+    let start_date =
+        NaiveDate::from_ymd_opt(start_year, start_month, 1).expect("valid inline start date");
+    let today = Utc::now().date_naive();
+    let total_months = (today.year() - start_date.year()) * 12
+        + (today.month() as i32 - start_date.month() as i32);
+    let expected_duration_en = format_duration_en(total_months);
+    let expected_duration_ru = format_duration_ru(total_months);
+
+    let english_fragment = format!("{} – Present", start_date.format("%B %Y"));
+    let english_duration_re = Regex::new(&format!(
+        "{}\\s*\\(([^)]*)\\)",
+        regex::escape(&english_fragment)
+    ))
+    .unwrap();
+    let en_caps = english_duration_re
+        .captures(&index_actual)
+        .expect("English duration fragment not found");
+    let actual_duration_en = en_caps.get(1).map(|m| m.as_str()).unwrap();
+    assert_eq!(actual_duration_en, expected_duration_en);
+
+    let mut ru_fragments = vec![english_fragment.clone()];
+    if let Some(month_name) = russian_month_name(start_month) {
+        let month_title = capitalize_first(month_name);
+        ru_fragments.extend([
+            format!("{month_name} {start_year} – настоящее время"),
+            format!("{month_name} {start_year} – Настоящее время"),
+            format!("{month_title} {start_year} – настоящее время"),
+            format!("{month_title} {start_year} – Настоящее время"),
+        ]);
+    }
+    let mut ru_duration: Option<String> = None;
+    for fragment in ru_fragments {
+        let re = Regex::new(&format!("{}\\s*\\(([^)]*)\\)", regex::escape(&fragment))).unwrap();
+        if let Some(caps) = re.captures(&index_ru_actual) {
+            ru_duration = Some(caps.get(1).unwrap().as_str().to_string());
+            break;
+        }
+    }
+    let actual_duration_ru = ru_duration.expect("Russian duration fragment not found");
+    assert_eq!(actual_duration_ru, expected_duration_ru);
 
     let index_normalized = normalize_en(&index_actual);
     let index_ru_normalized = normalize_ru(&index_ru_actual);

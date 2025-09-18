@@ -2,6 +2,7 @@ use chrono::{Datelike, NaiveDate, Utc};
 use handlebars::Handlebars;
 use log::{info, warn};
 use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
+use regex::Regex;
 use serde::Serialize;
 use sitegen::parser::{read_inline_start, read_roles};
 use sitegen::renderer::{format_duration_en, format_duration_ru};
@@ -29,6 +30,48 @@ struct ResumeContent {
     html_ru: String,
     footer_en: String,
     footer_ru: String,
+}
+
+fn inject_duration(html: &mut String, fragment: &str, duration: &str) -> bool {
+    let escaped = regex::escape(fragment);
+    let re = Regex::new(&format!(r"{}(?:\s*\([^)]*\))?", escaped)).expect("invalid duration regex");
+    if re.is_match(html) {
+        let replacement = format!("{fragment} ({duration})");
+        *html = re.replace(html, replacement.as_str()).into_owned();
+        true
+    } else {
+        false
+    }
+}
+
+fn russian_month_name(month: u32) -> Option<&'static str> {
+    const RU_MONTHS: [&str; 12] = [
+        "январь",
+        "февраль",
+        "март",
+        "апрель",
+        "май",
+        "июнь",
+        "июль",
+        "август",
+        "сентябрь",
+        "октябрь",
+        "ноябрь",
+        "декабрь",
+    ];
+    if (1..=12).contains(&month) {
+        Some(RU_MONTHS[(month - 1) as usize])
+    } else {
+        None
+    }
+}
+
+fn capitalize_first(text: &str) -> String {
+    let mut chars = text.chars();
+    match chars.next() {
+        Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
+        None => String::new(),
+    }
 }
 
 fn render_page(data: &TemplateData) -> Result<String, handlebars::RenderError> {
@@ -107,10 +150,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     html_body_en = html_body_en.replace("../ru/CV_RU.MD", "ru/");
     html_body_en = html_body_en.replace("https://qqrm.github.io/CV/Belyakov_en.pdf", pdf_typst_en);
     html_body_en = html_body_en.replace("https://qqrm.github.io/CV/Belyakov_ru.pdf", pdf_typst_ru);
-    html_body_en = html_body_en.replace(
-        "March 2024 – Present  (1 year)",
-        &format!("March 2024 – Present  ({})", duration_en),
-    );
+    let english_fragment = format!("{} – Present", start_date.format("%B %Y"));
+    if !inject_duration(&mut html_body_en, &english_fragment, &duration_en) {
+        warn!("English inline duration fragment '{english_fragment}' not found in generated HTML");
+    }
     if let Some(end) = html_body_en.find("</h1>") {
         html_body_en = html_body_en[end + 5..].trim_start().to_string();
     }
@@ -124,10 +167,29 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_body_ru.replace("https://qqrm.github.io/CV/Belyakov_ru.pdf", pdf_typst_ru_ru);
     html_body_ru =
         html_body_ru.replace("https://qqrm.github.io/CV/Belyakov_en.pdf", pdf_typst_en_ru);
-    html_body_ru = html_body_ru.replace(
-        "март 2024 – настоящее время (около 1 года)",
-        &format!("март 2024 – настоящее время ({})", duration_ru),
-    );
+    let mut ru_fragments = Vec::new();
+    ru_fragments.push(english_fragment.clone());
+    if let Some(month_name) = russian_month_name(inline_start.1) {
+        let month_lower = month_name;
+        let month_title = capitalize_first(month_lower);
+        let year = inline_start.0;
+        ru_fragments.extend([
+            format!("{month_lower} {year} – настоящее время"),
+            format!("{month_lower} {year} – Настоящее время"),
+            format!("{month_title} {year} – настоящее время"),
+            format!("{month_title} {year} – Настоящее время"),
+        ]);
+    }
+    let mut injected_ru = false;
+    for fragment in ru_fragments {
+        if inject_duration(&mut html_body_ru, &fragment, &duration_ru) {
+            injected_ru = true;
+            break;
+        }
+    }
+    if !injected_ru {
+        warn!("Russian inline duration fragment not found in generated HTML");
+    }
     if let Some(end) = html_body_ru.find("</h1>") {
         html_body_ru = html_body_ru[end + 5..].trim_start().to_string();
     }
