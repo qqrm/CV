@@ -1,4 +1,4 @@
-use pulldown_cmark::{html, Parser};
+use pulldown_cmark::{html, Options, Parser};
 use serde::Serialize;
 use std::io;
 use std::path::{Path, PathBuf};
@@ -10,7 +10,7 @@ struct Resume {
 }
 
 fn convert(markdown: &str) -> Resume {
-    let parser = Parser::new(markdown);
+    let parser = Parser::new_ext(markdown, Options::all());
     let mut html_output = String::new();
     html::push_html(&mut html_output, parser);
     Resume { body: html_output }
@@ -70,6 +70,15 @@ mod tests {
     fn renders_heading() {
         let res = convert("# Title");
         assert_eq!(res.body.trim(), "<h1>Title</h1>");
+    }
+
+    #[test]
+    fn renders_table_with_extended_features() {
+        let markdown = "| Header | Value |\n| --- | --- |\n| A | B |";
+        let res = convert(markdown);
+        let expected =
+            "<table><thead><tr><th>Header</th><th>Value</th></tr></thead><tbody>\n<tr><td>A</td><td>B</td></tr>\n</tbody></table>";
+        assert_eq!(res.body.trim(), expected);
     }
 
     #[test]
