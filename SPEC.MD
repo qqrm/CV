@@ -28,7 +28,7 @@
 - `scripts/convert_cv` is a standalone Rust helper that converts a Markdown CV into JSON with embedded HTML, enabling integrations with external systems.
 
 ## 5. Build and Generation Workflow
-1. Run `./repo_setup.sh` once to install prerequisites, followed by `./local_setup.sh` to provision fonts for Typst.
+1. Run `./repo-setup.sh` once to install prerequisites, configure the canonical Git remote, and provision fonts for Typst.
 2. Compile Typst sources to PDFs:
    - `typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf`
    - `typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf`

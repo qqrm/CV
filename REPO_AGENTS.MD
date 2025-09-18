@@ -8,13 +8,10 @@ Do not edit README.md or README\_RU.md unless the task explicitly requires it.
 Run the repository setup script before starting any task:
 
 ```bash
-./repo_setup.sh
+./repo-setup.sh
 ```
-Before running tests or building PDFs, initialize the environment by installing required fonts:
-
-```bash
-./local_setup.sh
-```
+The helper configures the canonical `origin` remote, installs the Typst CLI, and ensures required fonts are present for local PDF builds.
+The GitHub CLI (`gh`) is already authenticated in this environment. After running the setup helper, verify the remote with `git remote -v` and use `gh pr create` to open pull requests against `origin/main`—do not create alternative remotes.
 Before committing, run tests:
 
 ```bash
