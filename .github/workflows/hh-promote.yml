@@ -1,4 +1,4 @@
-name: HeadHunter: Promote
+name: "HeadHunter: Promote"
 
 on:
   schedule:
