@@ -21,26 +21,12 @@ runs:
         if ! command -v typst >/dev/null 2>&1; then
           cargo install typst-cli --locked --quiet
         fi
-    - name: Build Typst English PDF
-      shell: bash
-      run: typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
-    - name: Build Typst Russian PDF
-      shell: bash
-      run: typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
-    - name: Build Product Manager English PDF
-      shell: bash
-      run: typst compile --root . typst/en/Belyakov_pm_en.typ typst/en/Belyakov_pm_en.pdf
-    - name: Build Product Manager Russian PDF
-      shell: bash
-      run: typst compile --root . typst/ru/Belyakov_pm_ru.typ typst/ru/Belyakov_pm_ru.pdf
-    - name: Build role-based Typst PDFs
+    - name: Compile Typst PDFs
       shell: bash
       run: |
-        for role in tl em hod tech; do
-          name=$(grep "^$role =" roles.toml | cut -d '"' -f2)
-          sed "s/Rust Team Lead/$name/" typst/en/Belyakov_en.typ > typst/en/temp.typ
-          typst compile --root . typst/en/temp.typ "typst/en/Belyakov_en_${role}.pdf"
-          sed "s/Rust Team Lead/$name/" typst/ru/Belyakov_ru.typ > typst/ru/temp.typ
-          typst compile --root . typst/ru/temp.typ "typst/ru/Belyakov_ru_${role}.pdf"
+        set -euo pipefail
+        shopt -s nullglob
+        for src in typst/en/*.typ typst/ru/*.typ; do
+          dest="${src%.typ}.pdf"
+          typst compile --root . "$src" "$dest"
         done
-        rm typst/en/temp.typ typst/ru/temp.typ

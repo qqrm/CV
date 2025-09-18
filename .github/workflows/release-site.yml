@@ -35,38 +35,22 @@ jobs:
       - uses: ./.github/actions/build-pdfs
       - name: Verify PDFs
         run: |
-          for lang in en ru; do
-            for file in Belyakov_${lang}.pdf Belyakov_pm_${lang}.pdf; do
-              if head -c 4 "typst/$lang/$file" | grep -q '%PDF'; then
-                echo "$file verified";
-              else
-                echo "typst/$lang/$file is not recognized as a PDF" >&2;
-                exit 1;
-              fi;
-            done;
-          done;
-      - name: Prepare release PDFs
-        run: |
-          cp typst/en/Belyakov_pm_en.pdf typst/en/Belyakov_pm_full_en.pdf;
-          cp typst/ru/Belyakov_pm_ru.pdf typst/ru/Belyakov_pm_full_ru.pdf;
+          set -euo pipefail
+          while IFS= read -r file; do
+            if head -c 4 "$file" | grep -q '%PDF'; then
+              echo "$(basename "$file") verified";
+            else
+              echo "$file is not recognized as a PDF" >&2;
+              exit 1;
+            fi;
+          done < <(find typst -type f -name '*.pdf')
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: sitegen-assets
           path: |
             sitegen/target/release/generate
-            typst/en/Belyakov_en.pdf
-            typst/ru/Belyakov_ru.pdf
-            typst/en/Belyakov_pm_full_en.pdf
-            typst/ru/Belyakov_pm_full_ru.pdf
-            typst/en/Belyakov_en_tl.pdf
-            typst/en/Belyakov_en_em.pdf
-            typst/en/Belyakov_en_hod.pdf
-            typst/en/Belyakov_en_tech.pdf
-            typst/ru/Belyakov_ru_tl.pdf
-            typst/ru/Belyakov_ru_em.pdf
-            typst/ru/Belyakov_ru_hod.pdf
-            typst/ru/Belyakov_ru_tech.pdf
+            typst/**/*.pdf
 
   site:
     needs: build_sitegen
@@ -94,9 +78,10 @@ jobs:
         run: ./sitegen_bin
       - name: Verify role pages
         run: |
-          test -s dist/tl/ru/index.html;
-          test -s dist/resume/pm/index.html;
-          test -s dist/resume/pm/ru/index.html;
+          test -s dist/em/index.html;
+          test -s dist/em/ru/index.html;
+          test -s dist/resume/em/index.html;
+          test -s dist/resume/em/ru/index.html;
       - name: Prepare Pages directory
         run: mv dist docs
       - name: Copy README_RU
@@ -125,15 +110,4 @@ jobs:
           tag_name: sitegen-${{ github.run_number }}
           files: |
             sitegen_bin
-            typst/en/Belyakov_en.pdf
-            typst/ru/Belyakov_ru.pdf
-            typst/en/Belyakov_pm_full_en.pdf
-            typst/ru/Belyakov_pm_full_ru.pdf
-            typst/en/Belyakov_en_tl.pdf
-            typst/en/Belyakov_en_em.pdf
-            typst/en/Belyakov_en_hod.pdf
-            typst/en/Belyakov_en_tech.pdf
-            typst/ru/Belyakov_ru_tl.pdf
-            typst/ru/Belyakov_ru_em.pdf
-            typst/ru/Belyakov_ru_hod.pdf
-            typst/ru/Belyakov_ru_tech.pdf
+            typst/**/*.pdf
