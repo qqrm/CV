@@ -76,9 +76,8 @@ mod tests {
     fn renders_table_with_extended_features() {
         let markdown = "| Header | Value |\n| --- | --- |\n| A | B |";
         let res = convert(markdown);
-        let expected =
-            "<table><thead><tr><th>Header</th><th>Value</th></tr></thead><tbody>\n<tr><td>A</td><td>B</td></tr>\n</tbody></table>";
-        assert_eq!(res.body.trim(), expected);
+        let expected = "<table><thead><tr><th>Header</th><th>Value</th></tr></thead><tbody>\n<tr><td>A</td><td>B</td></tr>\n</tbody></table>\n";
+        assert_eq!(res.body, expected);
     }
 
     #[test]
