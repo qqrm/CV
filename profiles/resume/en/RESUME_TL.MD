@@ -1,5 +1,5 @@
 # {NAME}
-*[Link to Russian version](./RESUME_TL_RU.MD)* \\
+*[Link to Russian version](../ru/RESUME_TL_RU.MD)* \\
 *[Download PDF](https://qqrm.github.io/CV/Belyakov_tl_en.pdf)* \\
 *[Download Russian PDF](https://qqrm.github.io/CV/Belyakov_tl_ru.pdf)*
 

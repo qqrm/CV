@@ -100,11 +100,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let pdf_typst_en_ru = "../Belyakov_en.pdf";
     let pdf_typst_ru_ru = "../Belyakov_ru.pdf";
 
-    let markdown_input = fs::read_to_string("CV.MD")?;
+    let markdown_input = fs::read_to_string("profiles/cv/en/CV.MD")?;
     let parser = CmarkParser::new_ext(&markdown_input, Options::all());
     let mut html_body_en = String::new();
     push_html(&mut html_body_en, parser);
-    html_body_en = html_body_en.replace("./CV_RU.MD", "ru/");
+    html_body_en = html_body_en.replace("../ru/CV_RU.MD", "ru/");
     html_body_en = html_body_en.replace("https://qqrm.github.io/CV/Belyakov_en.pdf", pdf_typst_en);
     html_body_en = html_body_en.replace("https://qqrm.github.io/CV/Belyakov_ru.pdf", pdf_typst_ru);
     html_body_en = html_body_en.replace(
@@ -115,11 +115,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_body_en = html_body_en[end + 5..].trim_start().to_string();
     }
 
-    let markdown_ru = fs::read_to_string("CV_RU.MD")?;
+    let markdown_ru = fs::read_to_string("profiles/cv/ru/CV_RU.MD")?;
     let parser_ru = CmarkParser::new_ext(&markdown_ru, Options::all());
     let mut html_body_ru = String::new();
     push_html(&mut html_body_ru, parser_ru);
-    html_body_ru = html_body_ru.replace("./CV.MD", "../");
+    html_body_ru = html_body_ru.replace("../en/CV.MD", "../");
     html_body_ru =
         html_body_ru.replace("https://qqrm.github.io/CV/Belyakov_ru.pdf", pdf_typst_ru_ru);
     html_body_ru =
@@ -137,11 +137,31 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Prepare role-specific resume bodies
     let resume_specs = [
-        ("tl", "RESUME_TL.MD", "RESUME_TL_RU.MD"),
-        ("em", "RESUME_EM.MD", "RESUME_EM_RU.MD"),
-        ("hod", "RESUME_HOD.MD", "RESUME_HOD_RU.MD"),
-        ("pm", "RESUME_PM.MD", "RESUME_PM_RU.MD"),
-        ("tech", "RESUME_TECH.MD", "RESUME_TECH_RU.MD"),
+        (
+            "tl",
+            "profiles/resume/en/RESUME_TL.MD",
+            "profiles/resume/ru/RESUME_TL_RU.MD",
+        ),
+        (
+            "em",
+            "profiles/resume/en/RESUME_EM.MD",
+            "profiles/resume/ru/RESUME_EM_RU.MD",
+        ),
+        (
+            "hod",
+            "profiles/resume/en/RESUME_HOD.MD",
+            "profiles/resume/ru/RESUME_HOD_RU.MD",
+        ),
+        (
+            "pm",
+            "profiles/resume/en/RESUME_PM.MD",
+            "profiles/resume/ru/RESUME_PM_RU.MD",
+        ),
+        (
+            "tech",
+            "profiles/resume/en/RESUME_TECH.MD",
+            "profiles/resume/ru/RESUME_TECH_RU.MD",
+        ),
     ];
     let mut resume_contents: Vec<(String, ResumeContent)> = Vec::new();
     for (slug, en_md, ru_md) in resume_specs {
@@ -150,7 +170,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         let parser_resume_en = CmarkParser::new_ext(&markdown_resume_en, Options::all());
         let mut html_resume_en = String::new();
         push_html(&mut html_resume_en, parser_resume_en);
-        let link_to_ru = format!("./RESUME_{}_RU.MD", slug_upper);
+        let link_to_ru = format!("../ru/RESUME_{}_RU.MD", slug_upper);
         html_resume_en = html_resume_en.replace(&link_to_ru, "ru/");
         if let Some(end) = html_resume_en.find("</h1>") {
             html_resume_en = html_resume_en[end + 5..].trim_start().to_string();
@@ -160,7 +180,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         let parser_resume_ru = CmarkParser::new_ext(&markdown_resume_ru, Options::all());
         let mut html_resume_ru = String::new();
         push_html(&mut html_resume_ru, parser_resume_ru);
-        let link_to_en = format!("./RESUME_{}.MD", slug_upper);
+        let link_to_en = format!("../en/RESUME_{}.MD", slug_upper);
         html_resume_ru = html_resume_ru.replace(&link_to_en, "../");
         if let Some(end) = html_resume_ru.find("</h1>") {
             html_resume_ru = html_resume_ru[end + 5..].trim_start().to_string();

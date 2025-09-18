@@ -1,5 +1,5 @@
 # {NAME}
-*[Ссылка на английскую версию](./CV_EM.MD)* \\
+*[Ссылка на английскую версию](../en/CV_EM.MD)* \\
 *[Скачать PDF](https://qqrm.github.io/CV/Belyakov_em_ru.pdf)* \\
 *[Скачать PDF (EN)](https://qqrm.github.io/CV/Belyakov_em_en.pdf)*
 

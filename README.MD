@@ -3,8 +3,8 @@
 This repository contains the source files for my CV. The Markdown versions are
 automatically converted into PDFs and a static website.
 
-- [English CV](./CV.MD)
-- [Russian CV](./CV_RU.MD)
+- [English CV](./profiles/cv/en/CV.MD)
+- [Russian CV](./profiles/cv/ru/CV_RU.MD)
 - [PDF (en)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf)
 - [PDF (ru)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf)
 - [Web version (en)](https://qqrm.github.io/CV/)

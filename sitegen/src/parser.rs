@@ -6,6 +6,8 @@ use std::fmt;
 use std::fs;
 use std::io;
 
+const CV_EN_PATH: &str = "profiles/cv/en/CV.MD";
+
 #[derive(Debug)]
 pub enum InlineStartError {
     Io(io::Error),
@@ -15,7 +17,7 @@ pub enum InlineStartError {
 impl fmt::Display for InlineStartError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            InlineStartError::Io(_) => write!(f, "failed to read CV.MD"),
+            InlineStartError::Io(_) => write!(f, "failed to read {CV_EN_PATH}"),
             InlineStartError::Parse => write!(f, "could not parse inline start"),
         }
     }
@@ -84,15 +86,16 @@ pub fn month_from_ru(name: &str) -> Option<u32> {
 
 /// Read the starting month and year of the most recent CV entry.
 ///
-/// The function expects a `CV.MD` file in the current directory and
+/// The function expects the English CV Markdown at
+/// `profiles/cv/en/CV.MD` and
 /// looks for a list item starting with the month and year followed by
 /// an en dash or em dash and the word "Present" (English) or
 /// "Настоящее время" (Russian).
 ///
 /// Returns a pair `(year, month)` on success.
 pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
-    debug!("Scanning CV.MD for inline start");
-    let content = std::fs::read_to_string("CV.MD")?;
+    debug!("Scanning {CV_EN_PATH} for inline start");
+    let content = std::fs::read_to_string(CV_EN_PATH)?;
     for line in content.lines() {
         if let Some((month_str, year_str)) = line
             .trim()
@@ -121,7 +124,7 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
             }
         }
     }
-    warn!("Failed to parse inline start from CV.MD");
+    warn!("Failed to parse inline start from {CV_EN_PATH}");
     Err(InlineStartError::Parse)
 }
 

@@ -1,5 +1,5 @@
 # Alexey Leonidovich Belyakov
-*[Link to russian version](./CV_RU.MD)* \\
+*[Link to russian version](../ru/CV_RU.MD)* \\
 *[Link to PDF](https://qqrm.github.io/CV/Belyakov_en.pdf)* \\
 *[Link to russian PDF](https://qqrm.github.io/CV/Belyakov_ru.pdf)*
 
