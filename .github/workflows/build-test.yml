@@ -32,9 +32,10 @@ jobs:
         run: |
           test -s dist/index.html
           test -s dist/ru/index.html
-          test -s dist/tl/ru/index.html
-          test -s dist/resume/pm/index.html
-          test -s dist/resume/pm/ru/index.html
+          test -s dist/em/index.html
+          test -s dist/em/ru/index.html
+          test -s dist/resume/em/index.html
+          test -s dist/resume/em/ru/index.html
       - name: Upload Typst PDFs
         uses: actions/upload-artifact@v4
         with:
