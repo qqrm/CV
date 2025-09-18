@@ -1,4 +1,4 @@
-name: PDF: Validate
+name: pdf-validate
 
 on:
   workflow_dispatch:

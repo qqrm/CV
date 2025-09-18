@@ -1,4 +1,4 @@
-name: Website: Release
+name: release-site
 
 permissions:
   contents: read
