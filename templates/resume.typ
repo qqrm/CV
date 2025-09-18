@@ -18,6 +18,8 @@
 
     #let slugs = (
       "Engineering Manager": "em",
+      "Руководитель разработки": "em",
+      "Инженерный менеджер": "em",
     )
     #let resume_paths = (
       "em": (

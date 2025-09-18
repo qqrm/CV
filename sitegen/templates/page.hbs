@@ -41,10 +41,20 @@
 </button>
 <script>
     const positions = {{{roles_js}}};
+    const positionsRu = {{{roles_js_ru}}};
     const segments = window.location.pathname.split('/').filter(Boolean);
     const slug = segments.reverse().find(s => positions[s]);
     const position = document.getElementById('position');
-    if (position && slug) { position.textContent = positions[slug]; }
+    if (position && slug) {
+        const lang = document.documentElement.lang || '';
+        let value = positions[slug];
+        if (lang.startsWith('ru') && positionsRu[slug]) {
+            value = positionsRu[slug];
+        }
+        if (value) {
+            position.textContent = value;
+        }
+    }
 </script>
 <script>
 (function(){
