@@ -22,6 +22,7 @@ struct TemplateData<'a> {
     html_body: &'a str,
     footer_links: &'a str,
     roles_js: &'a str,
+    roles_js_ru: &'a str,
     link_to_en: Option<&'a str>,
 }
 
@@ -89,9 +90,17 @@ fn extract_first_paragraph(html: &str) -> String {
         .unwrap_or_default()
 }
 
-fn role_title_ru(slug: &str) -> String {
+fn role_title_ru_genitive(slug: &str) -> String {
     match slug {
-        "em" => "инженерного менеджера",
+        "em" => "руководителя разработки",
+        _ => slug,
+    }
+    .to_string()
+}
+
+fn role_title_ru_nominative(slug: &str) -> String {
+    match slug {
+        "em" => "Руководитель разработки",
         _ => slug,
     }
     .to_string()
@@ -120,8 +129,18 @@ fn main() -> Result<(), Box<dyn Error>> {
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
     info!("Copied avatar to dist directory");
 
-    let roles_js = {
+    let roles_js_en = {
         let pairs: Vec<String> = roles.iter().map(|(k, v)| format!("{k}: '{v}'")).collect();
+        format!("{{ {} }}", pairs.join(", "))
+    };
+    let roles_js_ru = {
+        let pairs: Vec<String> = roles
+            .keys()
+            .map(|k| {
+                let value = role_title_ru_nominative(k);
+                format!("{k}: '{value}'")
+            })
+            .collect();
         format!("{{ {} }}", pairs.join(", "))
     };
     let start_date =
@@ -249,7 +268,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         avatar_src: "avatar.jpg",
         html_body: &html_body_en,
         footer_links: &footer_links_en,
-        roles_js: &roles_js,
+        roles_js: &roles_js_en,
+        roles_js_ru: &roles_js_ru,
         link_to_en: None,
     })?;
 
@@ -263,7 +283,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         avatar_src: "../avatar.jpg",
         html_body: &html_body_ru,
         footer_links: &footer_links_ru,
-        roles_js: &roles_js,
+        roles_js: &roles_js_en,
+        roles_js_ru: &roles_js_ru,
         link_to_en: None,
     })?;
 
@@ -345,7 +366,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             avatar_src: "../avatar.jpg",
             html_body: &html_body_en_role,
             footer_links: &footer_links_en_role,
-            roles_js: &roles_js,
+            roles_js: &roles_js_en,
+            roles_js_ru: &roles_js_ru,
             link_to_en: None,
         })?;
         fs::write(en_role_dir.join("index.html"), en_role_html)?;
@@ -372,7 +394,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             avatar_src: "../../avatar.jpg",
             html_body: &html_body_ru_role,
             footer_links: &footer_links_ru_role,
-            roles_js: &roles_js,
+            roles_js: &roles_js_en,
+            roles_js_ru: &roles_js_ru,
             link_to_en: None,
         })?;
         fs::write(ru_role_dir.join("index.html"), ru_role_html)?;
@@ -406,12 +429,13 @@ fn main() -> Result<(), Box<dyn Error>> {
             avatar_src: "../../avatar.jpg",
             html_body: &content.html_en,
             footer_links: &content.footer_en,
-            roles_js: &roles_js,
+            roles_js: &roles_js_en,
+            roles_js_ru: &roles_js_ru,
             link_to_en: None,
         })?;
         fs::write(resume_dir.join("index.html"), resume_en_html)?;
 
-        let role_title_ru = role_title_ru(slug);
+        let role_title_ru = role_title_ru_genitive(slug);
         let resume_position_ru = format!("<p><strong>{role_title_ru}</strong></p>");
         let resume_title_ru = format!("Алексей Беляков - Резюме {role_title_ru}");
         let resume_ru_html = render_page(&TemplateData {
@@ -424,7 +448,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             avatar_src: "../../../avatar.jpg",
             html_body: &content.html_ru,
             footer_links: &content.footer_ru,
-            roles_js: &roles_js,
+            roles_js: &roles_js_en,
+            roles_js_ru: &roles_js_ru,
             link_to_en: None,
         })?;
         fs::write(resume_ru_dir.join("index.html"), resume_ru_html)?;
