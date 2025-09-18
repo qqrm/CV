@@ -16,7 +16,81 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    environment: prod
+    outputs:
+      ready: ${{ steps.secrets.outputs.ready }}
+      missing: ${{ steps.secrets.outputs.missing }}
+    steps:
+      - name: Check HeadHunter secrets
+        id: secrets
+        shell: bash
+        env:
+          CLIENT_ID_PRIMARY: ${{ secrets.CLIENT_ID }}
+          CLIENT_ID_FALLBACK: ${{ secrets.HH_CLIENT_ID }}
+          CLIENT_SECRET_PRIMARY: ${{ secrets.CLIENT_SECRET }}
+          CLIENT_SECRET_FALLBACK: ${{ secrets.HH_CLIENT_SECRET }}
+          REFRESH_TOKEN_PRIMARY: ${{ secrets.REFRESH_TOKEN }}
+          REFRESH_TOKEN_FALLBACK: ${{ secrets.HH_REFRESH_TOKEN }}
+          RESUME_ID_RU_PRIMARY: ${{ secrets.RESUME_ID_RU }}
+          RESUME_ID_RU_FALLBACK: ${{ secrets.HH_RESUME_ID_RU }}
+          RESUME_ID_PM_RU_PRIMARY: ${{ secrets.RESUME_ID_PM_RU }}
+          RESUME_ID_PM_RU_FALLBACK: ${{ secrets.HH_RESUME_ID_PM_RU }}
+          RESUME_ID_EN_PRIMARY: ${{ secrets.RESUME_ID_EN }}
+          RESUME_ID_EN_FALLBACK: ${{ secrets.HH_RESUME_ID_EN }}
+        run: |
+          set -euo pipefail
+
+          summary_file="${GITHUB_STEP_SUMMARY:-}"
+          if [[ -n "$summary_file" ]]; then
+            echo "### HeadHunter promote prerequisites" >> "$summary_file"
+          fi
+
+          entries=(
+            "CLIENT_ID_PRIMARY|CLIENT_ID_FALLBACK|OAuth client ID (CLIENT_ID or HH_CLIENT_ID)"
+            "CLIENT_SECRET_PRIMARY|CLIENT_SECRET_FALLBACK|OAuth client secret (CLIENT_SECRET or HH_CLIENT_SECRET)"
+            "REFRESH_TOKEN_PRIMARY|REFRESH_TOKEN_FALLBACK|OAuth refresh token (REFRESH_TOKEN or HH_REFRESH_TOKEN)"
+            "RESUME_ID_RU_PRIMARY|RESUME_ID_RU_FALLBACK|Russian resume id (RESUME_ID_RU or HH_RESUME_ID_RU)"
+            "RESUME_ID_PM_RU_PRIMARY|RESUME_ID_PM_RU_FALLBACK|Russian PM resume id (RESUME_ID_PM_RU or HH_RESUME_ID_PM_RU)"
+            "RESUME_ID_EN_PRIMARY|RESUME_ID_EN_FALLBACK|English resume id (RESUME_ID_EN or HH_RESUME_ID_EN)"
+          )
+
+          missing=()
+          for entry in "${entries[@]}"; do
+            IFS='|' read -r primary_var fallback_var label <<<"$entry"
+            primary="${!primary_var:-}"
+            fallback="${!fallback_var:-}"
+            if [[ -z "$primary" && -z "$fallback" ]]; then
+              missing+=("$label")
+              status="❌"
+            else
+              status="✅"
+            fi
+            if [[ -n "$summary_file" ]]; then
+              echo "- ${status} ${label}" >> "$summary_file"
+            fi
+          done
+
+          if (( ${#missing[@]} > 0 )); then
+            missing_list="$(IFS=', '; echo "${missing[*]}")"
+            printf '::warning::HeadHunter promote skipped; missing configuration: %s\n' \
+              "$missing_list"
+            if [[ -n "$summary_file" ]]; then
+              echo >> "$summary_file"
+              echo "> Configure the missing values in Settings → Environments → prod before re-running the workflow." >> "$summary_file"
+            fi
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "missing=$missing_list" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+          echo "missing=" >> "$GITHUB_OUTPUT"
+
   promote:
+    needs: preflight
+    if: needs.preflight.outputs.ready == 'true'
     runs-on: ubuntu-latest
     environment: prod
     steps:
