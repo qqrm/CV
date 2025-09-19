@@ -169,7 +169,7 @@ fn main() -> std::process::ExitCode {
     let mut pdf_status = Vec::new();
     let mut queue: VecDeque<Url> = VecDeque::new();
     queue.push_back(base.clone());
-    queue.push_back(Url::parse("https://qqrm.github.io/CV/resume/pm/").expect("resume url"));
+    queue.push_back(Url::parse("https://qqrm.github.io/CV/resume/em/").expect("resume url"));
 
     while let Some(current) = queue.pop_front() {
         if visited.contains(&current) {
