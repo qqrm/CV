@@ -34,7 +34,7 @@ Hands-on engineering leader and DevOps advocate who scales cross-functional team
 - Retained 90% of hires after the first year by pairing growth plans with consistent feedback loops.
 - Mentored three engineers to senior roles using a competency matrix and targeted coaching.
 - Integrated static analysis (Clippy, cargo-audit, SonarQube) and internal package distribution to satisfy compliance requirements.
-- Evangelised DevOps practices across teams, pairing incident reviews with automation backlogs and driving CI/CD adoption.
+- Evangelized DevOps practices across teams, pairing incident reviews with automation backlogs and driving CI/CD adoption.
 
 ### Rust Team Lead @ Solcery | March 2022 – March 2023
 - Managed a 4-person Rust team building a DAO-ready blockchain database on Solana.
