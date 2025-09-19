@@ -15,6 +15,17 @@
 - KPI/OKR tracking with transparent reporting and data-driven decisions.
 - DevOps strategy, release governance, and automation-first delivery practices.
 
+## Signature Achievements
+- Built the end-to-end engineering platform: unified CI/CD, mandatory quality gates, staging environments, and centralized observability.
+- Assembled and embedded the DevOps team with clear roles and accountability inside the delivery stream.
+- Owned the full people-management cycle: hiring, interviews, onboarding, regular one-to-ones, performance reviews, growth plans, and offboarding.
+- Stabilized development processes—planning, Scrum ceremonies, code reviews, release calendar, and quality control.
+- Made quality automation non-negotiable: static analysis, SAST, linters, and gated CI/CD test stages.
+- Deployed observability and incident response tooling, including centralized logging, alerting, an on-call rotation, and runbooks.
+- Participated in architecture sessions to stress-test designs for scalability and resilience.
+- Estimated effort and budgets for post-launch enhancements to plan follow-up releases.
+- Kept releases on schedule by managing risks, removing blockers, and synchronizing cross-functional teams.
+
 ## Delivery Leadership
 - Coordinated backend, QA, and DevOps streams to keep shared milestones on track.
 - Oversaw roadmap planning and capacity balancing while maintaining ~90% KPI adherence.
