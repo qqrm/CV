@@ -39,30 +39,17 @@ Hands-on Engineering Manager and DevOps champion with nearly 10 years of leading
 ### Engineering Manager @ Inline Group | [inlinegroup.ru](https://inlinegroup.ru)
 *March 2023 – Present*
 
-- Managed the analytics organization through its lead, aligning insight delivery with product and engineering priorities.
-- Directed the QA team via the QA lead, tightening regression coverage and release gates across microservices.
-- Coordinated the DevOps roadmap with the DevOps lead, synchronizing infrastructure readiness with service launches.
-- Oversaw backend delivery directly, balancing staffing, technical debt, and feature throughput.
-- Led a 25-person cross-functional team in an import substitution initiative to migrate business processes from SAP to a custom Rust-based microservices ecosystem.
-- Architected and maintained a microservices ecosystem aligned with the migration roadmap, sustaining high throughput and reliability within budget.
-- Introduced and enforced Agile practices (Scrum, sprints, daily standups, retrospectives), increasing development velocity by ~20% and reducing rework.
-- Aligned infrastructure requirements with DevOps to streamline on-premise deployments and keep roadmap deliverables on schedule.
-- Chaired a release board that paired QA sign-off with DevOps readiness checks, coordinating cutovers without overruns.
-- Partnered with Product to balance feature scope with migration budget, sequencing service rollouts to meet quarterly goals.
-- Rolled out OKR tracking through Jira dashboards, keeping ~90% of quarterly objectives on target.
-- Expanded the backend team from 5 to 12 developers within six months.
-- Cut onboarding time by ~30% via structured documentation and pair programming.
-- Reduced turnover by 20% through personalized growth plans, keeping 90% of hires after one year.
-- Mentored 3 developers to senior roles through a rubric-based career framework and targeted code reviews.
-- Established an internal package distribution system meeting security policies and budget limits, integrating static analysis into the pipeline.
-- Oversaw architectural decisions, code reviews, and performance optimizations; decreased bug backlog by ~30% after instituting more rigorous QA and review practices.
-- Collaborated with business analysts and key stakeholders to transform high-level SAP-based requirements into microservice-oriented solutions, cutting turnaround time for new features by ~25%.
+- Led a 25-person cross-functional migration from SAP to a Rust microservices ecosystem, owning architecture and roadmap execution.
+- Directed Analytics, QA, and DevOps through their leads while managing backend delivery to balance staffing, technical debt, and throughput.
+- Established Agile cadences, OKRs, and Jira dashboards that kept ~90% of quarterly objectives on track and lifted development velocity by ~20%.
+- Chaired release governance that aligned QA sign-off, DevOps readiness, and infrastructure requirements for predictable on-premise launches.
+- Scaled the engineering organization: grew the backend team from 5 to 12 engineers, cut onboarding time by ~30%, mentored 3 developers to senior roles, and retained 90% of hires.
+- Delivered a security-compliant internal package registry with integrated static analysis, tightening quality gates and shrinking the bug backlog by ~30%.
 
 #### Key Achievements
 
-- Improved sprint productivity by ~15% through implementing async and personal sprint planning.
-- Increased sprint predictability by ~25% through structured retros and better backlog refinement.
-- Established transparent reporting and roadmap tracking for stakeholders, enhancing cross-team communication and aligning business priorities with technical execution.
+- Increased sprint productivity by ~15% and predictability by ~25% through async planning, structured retrospectives, and disciplined backlog refinement.
+- Built transparent stakeholder reporting that kept the migration roadmap aligned with business priorities and delivery commitments.
 
 **Technologies**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Clippy, cargo-audit, SonarQube
 
