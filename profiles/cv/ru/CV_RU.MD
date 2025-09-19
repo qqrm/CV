@@ -20,7 +20,7 @@
 
 ## Опыт работы
 
-### Руководитель разработки @ Inline Group
+### Руководитель разработки @ Inline Group | [inlinegroup.ru](https://inlinegroup.ru)
 **March 2023 – Present**
 - Управлял командой аналитики через её лида, согласовывая приоритеты отчётности с продуктовой и инженерной повесткой.
 - Курировал QA-команду через её лида, усиливая регрессионное покрытие и контроль релизных критериев для микросервисов.
@@ -49,7 +49,7 @@
 ---
 
 <!--
-### Lead Rust Developer @ YADRO
+### Lead Rust Developer @ YADRO | [www.yadro.com](https://www.yadro.com)
 **март 2023 – март 2024 (1 год)**
 - Улучшал архитектуру аппаратно-программного комплекса для решения резервного копирования на базе дедупликации.
 - Изучал способы оптимизации RocksDB и повышения производительности NVMe-дисков.
@@ -86,7 +86,7 @@
 **Технологии**: Rust, Solana Test Validator, Git, GitHub
 -->
 
-### Senior Rust Developer @ Kaspersky Lab
+### Senior Rust Developer @ Kaspersky Lab | [www.kaspersky.ru](https://www.kaspersky.ru)
 **March 2020 – March 2023 (3 years)**
 - Поддерживал и развивал блокчейн-сервис голосования на базе Exonum, добавляя функциональность голосования с учётом «веса» участников.  
 - Расширил покрытие интеграционными и модульными тестами примерно до ~75%, укрепив общее качество кода.  
@@ -117,7 +117,7 @@
 ---
 -->
 
-### Senior C++/Go Developer @ B2Broker
+### Senior C++/Go Developer @ B2Broker | [www.b2broker.com](https://www.b2broker.com)
 **November 2018 – March 2020 (1 year 4 months)**
 - Разрабатывал финансовое ПО с использованием MT4/MT5 API, в том числе трейд-копиры на C++ и Go.  
 - Создал «Multi Account Manager» для гибкого распределения средств и расчёта вознаграждений, повышая операционную эффективность примерно на ~15%.  
@@ -128,7 +128,7 @@
 
 ---
 
-### Middle → Senior C++ Developer → Teamlead @ ASCON
+### Middle → Senior C++ Developer → Teamlead @ ASCON | [www.ascon.ru](https://www.ascon.ru)
 **May 2016 – November 2018 (2 years 7 months)**
 
 - Участвовал в разработке библиотек для архитектурного проектирования (KOMPAS), внедрив функцию «Change View Plane» для улучшения 3D-моделирования.
@@ -154,7 +154,7 @@
 
 ---
 
-### Middle C++/JS Developer @ LiveTex
+### Middle C++/JS Developer @ LiveTex | [livetex.ru](https://livetex.ru)
 **июль 2014 – март 2015 (7 месяцев)**
 - Создал обёртки для PostgreSQL и ZeroMQ под Node.js, сократив задержки выполнения запросов примерно на ~10%.
 
@@ -162,7 +162,7 @@
 
 ---
 
-### Junior C++ Developer @ Tools for Brokers
+### Junior C++ Developer @ Tools for Brokers | [t4b.com](https://www.t4b.com)
 **ноябрь 2013 – июль 2014 (9 месяцев)**
 - Выполнял разработку для платформ MetaTrader 4 и 5.
 - Улучшал и отлаживал плагин для взаимных фондов (UMAM).
