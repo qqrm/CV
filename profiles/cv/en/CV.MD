@@ -51,7 +51,7 @@ Hands-on Engineering Manager and DevOps champion with nearly 10 years of leading
 - Increased sprint productivity by ~15% and predictability by ~25% through async planning, structured retrospectives, and disciplined backlog refinement.
 - Built transparent stakeholder reporting that kept the migration roadmap aligned with business priorities and delivery commitments.
 
-**Technologies**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Clippy, cargo-audit, SonarQube
+**Technologies**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, Docker Compose, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube
 
 <!--
 ### Lead Rust Developer @ YADRO | [www.yadro.com](https://www.yadro.com)

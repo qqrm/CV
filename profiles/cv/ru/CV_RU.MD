@@ -34,7 +34,7 @@
 - Повысил продуктивность спринтов примерно на 15% и предсказуемость примерно на 25% благодаря асинхронному планированию и структурным ретроспективам.
 - Настроил прозрачную отчётность для стейкхолдеров, синхронизируя миграционный роадмап с бизнес-приоритетами и обязательствами по поставке.
 
-**Технологии**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Clippy, cargo-audit, SonarQube
+**Технологии**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, Docker Compose, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube
 
 ---
 
