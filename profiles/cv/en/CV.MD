@@ -1,7 +1,7 @@
 # Alexey Leonidovich Belyakov
-*[Link to russian version](../ru/CV_RU.MD)* \\
+*[Link to Russian version](../ru/CV_RU.MD)* \\
 *[Link to PDF](https://qqrm.github.io/CV/Belyakov_en.pdf)* \\
-*[Link to russian PDF](https://qqrm.github.io/CV/Belyakov_ru.pdf)*
+*[Link to Russian PDF](https://qqrm.github.io/CV/Belyakov_ru.pdf)*
 
 - **Phone:** +7 (911) 261-70-72
 - **Telegram:** [@leqqrm](https://t.me/leqqrm)
@@ -71,12 +71,12 @@ Hands-on Engineering Manager and DevOps champion with nearly 10 years of leading
 *March 2023 — March 2024 (1 year)*
 
 - Enhanced the architecture of a hardware-software complex for deduplication-based backup solutions.
-- Conducted research on optimizing RoksDB and enhancing NVMe disk performance.
+- Conducted research on optimizing RocksDB and enhancing NVMe disk performance.
 - Implemented data structures for efficient storage of hashes and hash-hashes.
 - Resolved bugs and improved compression and deduplication modules.
 - Conducted code reviews and delivered internal lectures on Rust to transition ex-C++ developers to idiomatic Rust, decreasing onboarding time by 30%.
 
-**Technologies**: Rust, Tokio, Protocol Buffers, Serde, RoksDB, Git.
+**Technologies**: Rust, Tokio, Protocol Buffers, Serde, RocksDB, Git.
 
 ### Senior Rust/Python Developer (Part-Time) @ Ultima-bi
 *Nov 2022 - Mar 2023 (5 months)*
