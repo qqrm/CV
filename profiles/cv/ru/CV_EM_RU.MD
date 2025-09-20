@@ -1,7 +1,9 @@
 # {NAME}
 *[Ссылка на английскую версию](../en/CV_EM.MD)* \\
-*[Скачать PDF](https://qqrm.github.io/CV/Belyakov_em_ru.pdf)* \\
-*[Скачать PDF (EN)](https://qqrm.github.io/CV/Belyakov_em_en.pdf)*
+*[Скачать PDF (светлая тема)](https://qqrm.github.io/CV/Belyakov_em_ru_light.pdf)* \\
+*[Скачать PDF (тёмная тема)](https://qqrm.github.io/CV/Belyakov_em_ru_dark.pdf)* \\
+*[Download PDF (EN, light)](https://qqrm.github.io/CV/Belyakov_em_en_light.pdf)* \\
+*[Download PDF (EN, dark)](https://qqrm.github.io/CV/Belyakov_em_en_dark.pdf)*
 
 - **Телефон:** +7 (911) 261-70-72
 - **Telegram:** [@leqqrm](https://t.me/leqqrm)
@@ -71,4 +73,4 @@
 
 ## Дополнительно
 - [Полное CV](https://qqrm.github.io/CV/)
-- [Полное CV PDF](https://qqrm.github.io/CV/Belyakov_ru.pdf)
+- Полные PDF-версии CV: [светлая](https://qqrm.github.io/CV/Belyakov_ru_light.pdf) · [тёмная](https://qqrm.github.io/CV/Belyakov_ru_dark.pdf)

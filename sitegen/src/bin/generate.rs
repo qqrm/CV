@@ -10,6 +10,9 @@ use std::error::Error;
 use std::fs;
 use std::path::Path;
 
+const PDF_BASE_URL: &str = "https://qqrm.github.io/CV/";
+const THEME_VARIANTS: &[&str] = &["light", "dark"];
+
 #[derive(Serialize)]
 struct TemplateData<'a> {
     lang: &'a str,
@@ -31,6 +34,15 @@ struct ResumeContent {
     html_ru: String,
     footer_en: String,
     footer_ru: String,
+}
+
+fn copy_or_create_pdf(src: &Path, dst: &Path) -> Result<(), Box<dyn Error>> {
+    if src.exists() {
+        fs::copy(src, dst)?;
+    } else {
+        fs::File::create(dst)?;
+    }
+    Ok(())
 }
 
 fn inject_duration(html: &mut String, fragment: &str, duration: &str) -> bool {
@@ -119,7 +131,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
     let roles = read_roles().expect("failed to read roles");
-    let base_url = "https://qqrm.github.io/CV/";
+    let base_url = PDF_BASE_URL;
     let mut sitemap_urls = vec![base_url.to_string(), format!("{base_url}ru/")];
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {
@@ -156,18 +168,19 @@ fn main() -> Result<(), Box<dyn Error>> {
         role => format!("<p><strong id='position'>{role}</strong></p>"),
     };
     // Prepare HTML bodies
-    let pdf_typst_en = "Belyakov_en.pdf";
-    let pdf_typst_ru = "Belyakov_ru.pdf";
-    let pdf_typst_en_ru = "../Belyakov_en.pdf";
-    let pdf_typst_ru_ru = "../Belyakov_ru.pdf";
-
     let markdown_input = fs::read_to_string("profiles/cv/en/CV.MD")?;
     let parser = CmarkParser::new_ext(&markdown_input, Options::all());
     let mut html_body_en = String::new();
     push_html(&mut html_body_en, parser);
     html_body_en = html_body_en.replace("../ru/CV_RU.MD", "ru/");
-    html_body_en = html_body_en.replace("https://qqrm.github.io/CV/Belyakov_en.pdf", pdf_typst_en);
-    html_body_en = html_body_en.replace("https://qqrm.github.io/CV/Belyakov_ru.pdf", pdf_typst_ru);
+    for theme in THEME_VARIANTS {
+        let en_pdf = format!("{PDF_BASE_URL}Belyakov_en_{theme}.pdf");
+        let ru_pdf = format!("{PDF_BASE_URL}Belyakov_ru_{theme}.pdf");
+        let en_local = format!("Belyakov_en_{theme}.pdf");
+        let ru_local = format!("Belyakov_ru_{theme}.pdf");
+        html_body_en = html_body_en.replace(&en_pdf, &en_local);
+        html_body_en = html_body_en.replace(&ru_pdf, &ru_local);
+    }
     let english_fragment = format!("{} – Present", start_date.format("%B %Y"));
     if !inject_duration(&mut html_body_en, &english_fragment, &duration_en) {
         warn!("English inline duration fragment '{english_fragment}' not found in generated HTML");
@@ -181,10 +194,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut html_body_ru = String::new();
     push_html(&mut html_body_ru, parser_ru);
     html_body_ru = html_body_ru.replace("../en/CV.MD", "../");
-    html_body_ru =
-        html_body_ru.replace("https://qqrm.github.io/CV/Belyakov_ru.pdf", pdf_typst_ru_ru);
-    html_body_ru =
-        html_body_ru.replace("https://qqrm.github.io/CV/Belyakov_en.pdf", pdf_typst_en_ru);
+    for theme in THEME_VARIANTS {
+        let ru_pdf = format!("{PDF_BASE_URL}Belyakov_ru_{theme}.pdf");
+        let en_pdf = format!("{PDF_BASE_URL}Belyakov_en_{theme}.pdf");
+        let ru_local = format!("../Belyakov_ru_{theme}.pdf");
+        let en_local = format!("../Belyakov_en_{theme}.pdf");
+        html_body_ru = html_body_ru.replace(&ru_pdf, &ru_local);
+        html_body_ru = html_body_ru.replace(&en_pdf, &en_local);
+    }
     let mut ru_fragments = Vec::new();
     ru_fragments.push(english_fragment.clone());
     if let Some(month_name) = russian_month_name(inline_start.1) {
@@ -230,6 +247,14 @@ fn main() -> Result<(), Box<dyn Error>> {
         push_html(&mut html_resume_en, parser_resume_en);
         let link_to_ru = format!("../ru/RESUME_{}_RU.MD", slug_upper);
         html_resume_en = html_resume_en.replace(&link_to_ru, "ru/");
+        for theme in THEME_VARIANTS {
+            let en_pdf = format!("{PDF_BASE_URL}Belyakov_{}_en_{}.pdf", slug, theme);
+            let ru_pdf = format!("{PDF_BASE_URL}Belyakov_{}_ru_{}.pdf", slug, theme);
+            let en_local = format!("../../Belyakov_{}_en_{}.pdf", slug, theme);
+            let ru_local = format!("../../Belyakov_{}_ru_{}.pdf", slug, theme);
+            html_resume_en = html_resume_en.replace(&en_pdf, &en_local);
+            html_resume_en = html_resume_en.replace(&ru_pdf, &ru_local);
+        }
         if let Some(end) = html_resume_en.find("</h1>") {
             html_resume_en = html_resume_en[end + 5..].trim_start().to_string();
         }
@@ -240,6 +265,14 @@ fn main() -> Result<(), Box<dyn Error>> {
         push_html(&mut html_resume_ru, parser_resume_ru);
         let link_to_en = format!("../en/RESUME_{}.MD", slug_upper);
         html_resume_ru = html_resume_ru.replace(&link_to_en, "../");
+        for theme in THEME_VARIANTS {
+            let ru_pdf = format!("{PDF_BASE_URL}Belyakov_{}_ru_{}.pdf", slug, theme);
+            let en_pdf = format!("{PDF_BASE_URL}Belyakov_{}_en_{}.pdf", slug, theme);
+            let ru_local = format!("../../../Belyakov_{}_ru_{}.pdf", slug, theme);
+            let en_local = format!("../../../Belyakov_{}_en_{}.pdf", slug, theme);
+            html_resume_ru = html_resume_ru.replace(&ru_pdf, &ru_local);
+            html_resume_ru = html_resume_ru.replace(&en_pdf, &en_local);
+        }
         if let Some(end) = html_resume_ru.find("</h1>") {
             html_resume_ru = html_resume_ru[end + 5..].trim_start().to_string();
         }
@@ -298,17 +331,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     if Path::new("DOCS/favicon.svg").exists() {
         fs::copy("DOCS/favicon.svg", docs_dir.join("favicon.svg"))?;
     }
-    let base_en = docs_dir.join("Belyakov_en.pdf");
-    if Path::new("typst/en/Belyakov_en.pdf").exists() {
-        fs::copy("typst/en/Belyakov_en.pdf", &base_en)?;
-    } else {
-        fs::File::create(&base_en)?;
-    }
-    let base_ru = docs_dir.join("Belyakov_ru.pdf");
-    if Path::new("typst/ru/Belyakov_ru.pdf").exists() {
-        fs::copy("typst/ru/Belyakov_ru.pdf", &base_ru)?;
-    } else {
-        fs::File::create(&base_ru)?;
+    for theme in THEME_VARIANTS {
+        let en_name = format!("Belyakov_en_{}.pdf", theme);
+        let ru_name = format!("Belyakov_ru_{}.pdf", theme);
+        let en_src = Path::new("typst/en").join(&en_name);
+        let ru_src = Path::new("typst/ru").join(&ru_name);
+        let en_dst = docs_dir.join(&en_name);
+        let ru_dst = docs_dir.join(&ru_name);
+        copy_or_create_pdf(&en_src, &en_dst)?;
+        copy_or_create_pdf(&ru_src, &ru_dst)?;
     }
     fs::write(docs_dir.join("index.html"), &html_template)?;
     info!("Wrote English HTML to dist/index.html");
@@ -325,24 +356,26 @@ fn main() -> Result<(), Box<dyn Error>> {
         sitemap_urls.push(format!("{base_url}{role}/"));
         sitemap_urls.push(format!("{base_url}{role}/ru/"));
 
-        let src_en = Path::new("typst/en").join(format!("Belyakov_{}_en.pdf", role));
-        let src_ru = Path::new("typst/ru").join(format!("Belyakov_{}_ru.pdf", role));
-        let dst_en = docs_dir.join(format!("Belyakov_{}_en.pdf", role));
-        let dst_ru = docs_dir.join(format!("Belyakov_{}_ru.pdf", role));
-        if src_en.exists() {
-            fs::copy(&src_en, &dst_en)?;
-        } else {
-            fs::copy(docs_dir.join("Belyakov_en.pdf"), &dst_en)?;
+        for theme in THEME_VARIANTS {
+            let filename_en = format!("Belyakov_{}_en_{}.pdf", role, theme);
+            let filename_ru = format!("Belyakov_{}_ru_{}.pdf", role, theme);
+            let src_en = Path::new("typst/en").join(&filename_en);
+            let src_ru = Path::new("typst/ru").join(&filename_ru);
+            let dst_en = docs_dir.join(&filename_en);
+            let dst_ru = docs_dir.join(&filename_ru);
+            if src_en.exists() {
+                fs::copy(&src_en, &dst_en)?;
+            } else {
+                let fallback = docs_dir.join(format!("Belyakov_en_{}.pdf", theme));
+                fs::copy(&fallback, &dst_en)?;
+            }
+            if src_ru.exists() {
+                fs::copy(&src_ru, &dst_ru)?;
+            } else {
+                let fallback = docs_dir.join(format!("Belyakov_ru_{}.pdf", theme));
+                fs::copy(&fallback, &dst_ru)?;
+            }
         }
-        if src_ru.exists() {
-            fs::copy(&src_ru, &dst_ru)?;
-        } else {
-            fs::copy(docs_dir.join("Belyakov_ru.pdf"), &dst_ru)?;
-        }
-        let pdf_typst_en_role = format!("../Belyakov_{}_en.pdf", role);
-        let pdf_typst_ru_role = format!("../Belyakov_{}_ru.pdf", role);
-        let pdf_typst_en_role_ru = format!("../../Belyakov_{}_en.pdf", role);
-        let pdf_typst_ru_role_ru = format!("../../Belyakov_{}_ru.pdf", role);
 
         let en_role_dir = docs_dir.join(role);
         if !en_role_dir.exists() {
@@ -352,9 +385,15 @@ fn main() -> Result<(), Box<dyn Error>> {
             "" => "<p><strong id='position'></strong></p>",
             _ => &position_block,
         };
-        let html_body_en_role = html_body_en
-            .replace("Belyakov_en.pdf", &pdf_typst_en_role)
-            .replace("Belyakov_ru.pdf", &pdf_typst_ru_role);
+        let mut html_body_en_role = html_body_en.clone();
+        for theme in THEME_VARIANTS {
+            let base_en = format!("Belyakov_en_{}.pdf", theme);
+            let base_ru = format!("Belyakov_ru_{}.pdf", theme);
+            let role_en = format!("../Belyakov_{}_en_{}.pdf", role, theme);
+            let role_ru = format!("../Belyakov_{}_ru_{}.pdf", role, theme);
+            html_body_en_role = html_body_en_role.replace(&base_en, &role_en);
+            html_body_en_role = html_body_en_role.replace(&base_ru, &role_ru);
+        }
         let footer_links_en_role = extract_first_paragraph(&html_body_en_role);
         let en_role_html = render_page(&TemplateData {
             lang: "en",
@@ -380,9 +419,15 @@ fn main() -> Result<(), Box<dyn Error>> {
             "" => "<p><strong id='position'></strong></p>",
             _ => &position_block,
         };
-        let html_body_ru_role = html_body_ru
-            .replace("../Belyakov_ru.pdf", &pdf_typst_ru_role_ru)
-            .replace("../Belyakov_en.pdf", &pdf_typst_en_role_ru);
+        let mut html_body_ru_role = html_body_ru.clone();
+        for theme in THEME_VARIANTS {
+            let base_ru = format!("../Belyakov_ru_{}.pdf", theme);
+            let base_en = format!("../Belyakov_en_{}.pdf", theme);
+            let role_ru = format!("../../Belyakov_{}_ru_{}.pdf", role, theme);
+            let role_en = format!("../../Belyakov_{}_en_{}.pdf", role, theme);
+            html_body_ru_role = html_body_ru_role.replace(&base_ru, &role_ru);
+            html_body_ru_role = html_body_ru_role.replace(&base_en, &role_en);
+        }
         let footer_links_ru_role = extract_first_paragraph(&html_body_ru_role);
         let ru_role_html = render_page(&TemplateData {
             lang: "ru",

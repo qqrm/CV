@@ -29,10 +29,15 @@
 
 ## 5. Build and Generation Workflow
 1. Run `./repo-setup.sh` once to install prerequisites, configure the canonical Git remote, and provision fonts for Typst.
-2. Compile Typst sources to PDFs:
-   - `typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf`
-   - `typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf`
-   - Compile the Engineering Manager template as needed (e.g., `Belyakov_em_en.typ`).
+2. Compile Typst sources to PDFs (light and dark variants for each locale and role):
+   - `typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en_light.pdf`
+   - `typst compile --root . typst/en/Belyakov_en_dark.typ typst/en/Belyakov_en_dark.pdf`
+   - `typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru_light.pdf`
+   - `typst compile --root . typst/ru/Belyakov_ru_dark.typ typst/ru/Belyakov_ru_dark.pdf`
+   - `typst compile --root . typst/en/Belyakov_em_en.typ typst/en/Belyakov_em_en_light.pdf`
+   - `typst compile --root . typst/en/Belyakov_em_en_dark.typ typst/en/Belyakov_em_en_dark.pdf`
+   - `typst compile --root . typst/ru/Belyakov_em_ru.typ typst/ru/Belyakov_em_ru_light.pdf`
+   - `typst compile --root . typst/ru/Belyakov_em_ru_dark.typ typst/ru/Belyakov_em_ru_dark.pdf`
 3. Validate repository inputs: `cargo run --manifest-path sitegen/Cargo.toml --bin validate`.
 4. Generate the website bundle: `cargo run --manifest-path sitegen/Cargo.toml --bin generate` (outputs HTML, PDFs, and `sitemap.txt` under `dist/`).
 5. Publish artifacts manually or through CI by uploading `dist/` to GitHub Pages and attaching PDFs to releases.
@@ -40,7 +45,7 @@
 ## 6. Testing and Quality Gates
 - Execute `cargo test --manifest-path sitegen/Cargo.toml` before commits to cover parser/renderer logic.
 - Run `cargo test` inside `scripts/convert_cv` when modifying that helper crate.
-- Ensure Typst compilation succeeds for both languages and the Engineering Manager variant to keep downloadable PDFs in sync.
+- Ensure Typst compilation succeeds for both languages and the Engineering Manager variant across light and dark themes to keep downloadable PDFs in sync.
 
 ## 7. Repository Layout Summary
 ```

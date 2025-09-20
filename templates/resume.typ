@@ -1,8 +1,26 @@
 // Resume template rendered through the `resume` function.
 #import "@preview/cmarker:0.1.6"
 
-#let resume(lang: "en", role: "", name: none, md_path: none) = [
-  #set text(font: "Latin Modern Roman")
+#let resume(lang: "en", role: "", name: none, md_path: none, theme: "light") = [
+  #let themes = (
+    light: (
+      background: rgb("#ffffff"),
+      text: rgb("#1f2933"),
+      muted: rgb("#94a3b8"),
+      link: rgb("#2563eb"),
+    ),
+    dark: (
+      background: rgb("#0f172a"),
+      text: rgb("#e2e8f0"),
+      muted: rgb("#475569"),
+      link: rgb("#93c5fd"),
+    ),
+  )
+  #let palette = themes.at(theme, default: themes.light)
+
+  #set page(fill: palette.background)
+  #set text(font: "Latin Modern Roman", fill: palette.text)
+  #show link: set text(fill: palette.link)
   #let default_name = if lang == "ru" { "Алексей Леонидович Беляков" } else { "Alexey Leonidovich Belyakov" }
   #let name = if name == none { default_name } else { name }
 
@@ -11,7 +29,7 @@
   #align(center)[#datetime.today().display()]
 
   #align(center)[
-    #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true)[
+    #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true, stroke: 0.75pt + palette.muted)[
       #image("../content/avatar.jpg", width: 5cm, height: 5cm)
     ]
   ]
