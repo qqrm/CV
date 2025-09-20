@@ -27,13 +27,6 @@ Hands-on Engineering Manager and DevOps champion with nearly 10 years of leading
 - Talent development, performance reviews, and hiring
 - DevOps strategy, release governance, and SRE collaboration
 
-## Leadership Highlights
-- Coordinated cross-functional teams, aligning backend, QA, and DevOps efforts to meet shared milestones.
-- Oversaw roadmap planning and resource allocation, keeping delivery within 5% of budget and ~90% KPI adherence.
-- Established regular performance review cycles, mentoring developers with actionable feedback and growth plans.
-- Communicated progress and risks to stakeholders, translating technical status into clear business insights.
-- Directed release orchestration through CI/CD standards, SAST policies, and deployment readiness reviews to keep launches predictable.
-
 ## Work Experience
 
 ### Engineering Manager @ Inline Group | [inlinegroup.ru](https://inlinegroup.ru)
