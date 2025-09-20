@@ -108,6 +108,29 @@ print(quote(sys.argv[1], safe=''))
 PY
 }
 
+validate_redirect_uri() {
+  python3 - "$1" <<'PY'
+import sys
+from urllib.parse import urlparse
+
+uri = sys.argv[1].strip()
+
+if not uri:
+    print("Error: Redirect URI is required to request a new refresh token.", file=sys.stderr)
+    sys.exit(1)
+
+parsed = urlparse(uri)
+
+if not parsed.scheme:
+    print("Error: Redirect URI must include a scheme, for example https://example.com/callback.", file=sys.stderr)
+    sys.exit(1)
+
+if parsed.scheme in {"http", "https"} and not parsed.netloc:
+    print("Error: HTTP(S) redirect URIs must include a host, for example https://example.com/callback.", file=sys.stderr)
+    sys.exit(1)
+PY
+}
+
 echo "Collecting HeadHunter OAuth application details..."
 client_id="$(read_with_default "HeadHunter OAuth client ID")"
 if [[ -z "$client_id" ]]; then
@@ -130,11 +153,13 @@ if [[ "$have_refresh" =~ ^[Yy] ]]; then
     exit 1
   fi
 else
-  redirect_uri="$(read_with_default "HeadHunter redirect URI")"
-  if [[ -z "$redirect_uri" ]]; then
-    echo "Error: Redirect URI is required to request a new refresh token." >&2
-    exit 1
-  fi
+  redirect_uri=""
+  while true; do
+    redirect_uri="$(read_with_default "HeadHunter redirect URI (must match the value registered in your application)" "$redirect_uri")"
+    if validate_redirect_uri "$redirect_uri"; then
+      break
+    fi
+  done
   scope="$(read_with_default "Requested OAuth scope" "resume")"
   state_token=$(openssl rand -hex 16)
   encoded_redirect="$(encode_url "$redirect_uri")"
