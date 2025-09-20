@@ -21,8 +21,14 @@ cargo test --manifest-path sitegen/Cargo.toml
 Verify local PDF builds with Typst:
 
 ```bash
-typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en.pdf
-typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru.pdf
+typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en_light.pdf
+typst compile --root . typst/en/Belyakov_en_dark.typ typst/en/Belyakov_en_dark.pdf
+typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru_light.pdf
+typst compile --root . typst/ru/Belyakov_ru_dark.typ typst/ru/Belyakov_ru_dark.pdf
+typst compile --root . typst/en/Belyakov_em_en.typ typst/en/Belyakov_em_en_light.pdf
+typst compile --root . typst/en/Belyakov_em_en_dark.typ typst/en/Belyakov_em_en_dark.pdf
+typst compile --root . typst/ru/Belyakov_em_ru.typ typst/ru/Belyakov_em_ru_light.pdf
+typst compile --root . typst/ru/Belyakov_em_ru_dark.typ typst/ru/Belyakov_em_ru_dark.pdf
 ```
 
 Before starting any task, connect to the avatars.mcp server at https\://qqrm.github.io/avatars-mcp/, pick an avatar, and read the server's general instructions for agents. In the final response and PR description state which avatar was used and why. If the server is unreachable, note this in the PR.

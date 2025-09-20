@@ -1,7 +1,9 @@
 # {NAME}
 *[Ссылка на английскую версию](../en/RESUME_EM.MD)* \\
-*[Скачать PDF](https://qqrm.github.io/CV/Belyakov_em_ru.pdf)* \\
-*[Скачать PDF (EN)](https://qqrm.github.io/CV/Belyakov_em_en.pdf)*
+*[Скачать PDF (светлая тема)](https://qqrm.github.io/CV/Belyakov_em_ru_light.pdf)* \\
+*[Скачать PDF (тёмная тема)](https://qqrm.github.io/CV/Belyakov_em_ru_dark.pdf)* \\
+*[Download PDF (EN, light)](https://qqrm.github.io/CV/Belyakov_em_en_light.pdf)* \\
+*[Download PDF (EN, dark)](https://qqrm.github.io/CV/Belyakov_em_en_dark.pdf)*
 
 - **Телефон:** +7 (911) 261-70-72
 - **Telegram:** [@leqqrm](https://t.me/leqqrm)

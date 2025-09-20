@@ -8,6 +8,8 @@ use regex::Regex;
 use sitegen::{format_duration_en, format_duration_ru, read_inline_start};
 use toml::Value;
 
+const PDF_THEMES: &[&str] = &["light", "dark"];
+
 fn normalize_en(content: &str) -> String {
     let date_re = Regex::new(r"<p>\d{4}-\d{2}-\d{2}</p>").unwrap();
     let dur_re = Regex::new(r"([A-Za-z]+ \d{4} – Present)\s+\([^)]*\)").unwrap();
@@ -78,6 +80,19 @@ fn generates_expected_dist() {
     let index_actual = fs::read_to_string(dist.join("index.html")).expect("read index.html");
     let index_ru_actual =
         fs::read_to_string(dist.join("ru").join("index.html")).expect("read ru/index.html");
+
+    for theme in PDF_THEMES {
+        assert!(
+            dist.join(format!("Belyakov_en_{}.pdf", theme)).exists(),
+            "missing dist/Belyakov_en_{}.pdf",
+            theme
+        );
+        assert!(
+            dist.join(format!("Belyakov_ru_{}.pdf", theme)).exists(),
+            "missing dist/Belyakov_ru_{}.pdf",
+            theme
+        );
+    }
 
     let original_dir = env::current_dir().expect("current dir");
     env::set_current_dir(project_root).expect("set project root");
@@ -155,24 +170,46 @@ fn generates_expected_dist() {
         .expect("roles table");
 
     for slug in roles.keys() {
+        for theme in PDF_THEMES {
+            assert!(
+                dist.join(format!("Belyakov_{}_en_{}.pdf", slug, theme))
+                    .exists(),
+                "missing dist/Belyakov_{}_en_{}.pdf",
+                slug,
+                theme
+            );
+            assert!(
+                dist.join(format!("Belyakov_{}_ru_{}.pdf", slug, theme))
+                    .exists(),
+                "missing dist/Belyakov_{}_ru_{}.pdf",
+                slug,
+                theme
+            );
+        }
         let role_dir = dist.join(slug);
         let en_path = role_dir.join("index.html");
         assert!(en_path.exists(), "missing {}/index.html", slug);
         let en_page = fs::read_to_string(&en_path).expect("read role index");
-        assert!(
-            en_page.contains(&format!("Belyakov_{}_en.pdf", slug)),
-            "missing English {} PDF link",
-            slug
-        );
+        for theme in PDF_THEMES {
+            assert!(
+                en_page.contains(&format!("Belyakov_{}_en_{}.pdf", slug, theme)),
+                "missing English {} PDF link for {} theme",
+                slug,
+                theme
+            );
+        }
 
         let ru_path = role_dir.join("ru").join("index.html");
         assert!(ru_path.exists(), "missing {}/ru/index.html", slug);
         let ru_page = fs::read_to_string(&ru_path).expect("read role ru index");
-        assert!(
-            ru_page.contains(&format!("Belyakov_{}_ru.pdf", slug)),
-            "missing Russian {} PDF link",
-            slug
-        );
+        for theme in PDF_THEMES {
+            assert!(
+                ru_page.contains(&format!("Belyakov_{}_ru_{}.pdf", slug, theme)),
+                "missing Russian {} PDF link for {} theme",
+                slug,
+                theme
+            );
+        }
     }
 
     for slug in roles.keys() {
@@ -181,21 +218,27 @@ fn generates_expected_dist() {
         assert!(en_path.exists(), "missing resume/{}/index.html", slug);
         let en_page =
             fs::read_to_string(&en_path).unwrap_or_else(|_| panic!("read resume {slug} index"));
-        assert!(
-            en_page.contains(&format!("Belyakov_{}_en.pdf", slug)),
-            "missing English resume PDF for {}",
-            slug
-        );
+        for theme in PDF_THEMES {
+            assert!(
+                en_page.contains(&format!("Belyakov_{}_en_{}.pdf", slug, theme)),
+                "missing English resume PDF for {} theme {}",
+                slug,
+                theme
+            );
+        }
 
         let ru_path = resume_dir.join("ru").join("index.html");
         assert!(ru_path.exists(), "missing resume/{}/ru/index.html", slug);
         let ru_page =
             fs::read_to_string(&ru_path).unwrap_or_else(|_| panic!("read resume {slug} ru index"));
-        assert!(
-            ru_page.contains(&format!("Belyakov_{}_ru.pdf", slug)),
-            "missing Russian resume PDF for {}",
-            slug
-        );
+        for theme in PDF_THEMES {
+            assert!(
+                ru_page.contains(&format!("Belyakov_{}_ru_{}.pdf", slug, theme)),
+                "missing Russian resume PDF for {} theme {}",
+                slug,
+                theme
+            );
+        }
     }
 
     fs::remove_dir_all(&dist).expect("failed to remove dist");

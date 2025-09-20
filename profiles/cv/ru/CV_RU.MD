@@ -1,7 +1,9 @@
 # Алексей Леонидович Беляков
 *[Ссылка на английскую версию](../en/CV.MD)* \\
-*[Скачать PDF](https://qqrm.github.io/CV/Belyakov_ru.pdf)* \\
-*[Download PDF (EN)](https://qqrm.github.io/CV/Belyakov_en.pdf)*
+*[Скачать PDF (светлая тема)](https://qqrm.github.io/CV/Belyakov_ru_light.pdf)* \\
+*[Скачать PDF (тёмная тема)](https://qqrm.github.io/CV/Belyakov_ru_dark.pdf)* \\
+*[Download PDF (EN, light)](https://qqrm.github.io/CV/Belyakov_en_light.pdf)* \\
+*[Download PDF (EN, dark)](https://qqrm.github.io/CV/Belyakov_en_dark.pdf)*
 
 - **Телефон**: +7 (911) 261-70-72
 - **Telegram**: [@leqqrm](https://t.me/leqqrm)

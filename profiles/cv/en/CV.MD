@@ -1,7 +1,9 @@
 # Alexey Leonidovich Belyakov
 *[Link to Russian version](../ru/CV_RU.MD)* \\
-*[Link to PDF](https://qqrm.github.io/CV/Belyakov_en.pdf)* \\
-*[Link to Russian PDF](https://qqrm.github.io/CV/Belyakov_ru.pdf)*
+*[Light PDF](https://qqrm.github.io/CV/Belyakov_en_light.pdf)* \\
+*[Dark PDF](https://qqrm.github.io/CV/Belyakov_en_dark.pdf)* \\
+*[Light Russian PDF](https://qqrm.github.io/CV/Belyakov_ru_light.pdf)* \\
+*[Dark Russian PDF](https://qqrm.github.io/CV/Belyakov_ru_dark.pdf)*
 
 - **Phone:** +7 (911) 261-70-72
 - **Telegram:** [@leqqrm](https://t.me/leqqrm)
