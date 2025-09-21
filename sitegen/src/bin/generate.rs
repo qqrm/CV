@@ -7,7 +7,7 @@ use regex::Regex;
 use serde::Serialize;
 use sitegen::parser::{read_inline_start, read_roles};
 use sitegen::renderer::{format_duration_en, format_duration_ru};
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::error::Error;
 use std::fs;
 use std::path::Path;
@@ -259,19 +259,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
     info!("Copied avatar to dist directory");
 
-    let roles_js_en = {
-        let pairs: Vec<String> = roles.iter().map(|(k, v)| format!("{k}: '{v}'")).collect();
-        format!("{{ {} }}", pairs.join(", "))
-    };
+    let roles_js_en =
+        serde_json::to_string(&roles).expect("failed to serialize English roles to JSON");
     let roles_js_ru = {
-        let pairs: Vec<String> = roles
+        let ru_roles: BTreeMap<String, String> = roles
             .keys()
-            .map(|k| {
-                let value = role_title_ru_nominative(k);
-                format!("{k}: '{value}'")
-            })
+            .map(|slug| (slug.clone(), role_title_ru_nominative(slug)))
             .collect();
-        format!("{{ {} }}", pairs.join(", "))
+        serde_json::to_string(&ru_roles).expect("failed to serialize Russian roles to JSON")
     };
     let start_date =
         NaiveDate::from_ymd_opt(inline_start.0, inline_start.1, 1).expect("Invalid start date");
