@@ -105,43 +105,65 @@ fn annotate_resume_links(html: &mut String) {
                 let light_href = format!("{prefix}_light.pdf");
                 let dark_href = format!("{prefix}_dark.pdf");
                 let labels = labels_by_prefix.get(prefix);
-                let (light_label, dark_label) = if let Some(entry) = labels {
-                    let light = entry
-                        .light
-                        .as_deref()
-                        .or(entry.dark.as_deref())
-                        .unwrap_or("Light PDF");
-                    let dark = entry
-                        .dark
-                        .as_deref()
-                        .or(entry.light.as_deref())
-                        .unwrap_or("Dark PDF");
-                    (light.to_string(), dark.to_string())
-                } else {
-                    (String::from("Light PDF"), String::from("Dark PDF"))
-                };
+
+                let (light_label, dark_label, has_light, has_dark) = labels
+                    .map(|entry| {
+                        let has_light = entry.light.is_some();
+                        let has_dark = entry.dark.is_some();
+                        let light = entry
+                            .light
+                            .as_deref()
+                            .or(entry.dark.as_deref())
+                            .unwrap_or("Light PDF");
+                        let dark = entry
+                            .dark
+                            .as_deref()
+                            .or(entry.light.as_deref())
+                            .unwrap_or("Dark PDF");
+                        (light.to_string(), dark.to_string(), has_light, has_dark)
+                    })
+                    .unwrap_or_else(|| {
+                        (
+                            String::from("Light PDF"),
+                            String::from("Dark PDF"),
+                            variant == "light",
+                            variant == "dark",
+                        )
+                    });
+
                 let tooltip_variant = if variant == "dark" { "light" } else { "dark" };
                 let tooltip_label = if variant == "dark" {
                     &light_label
                 } else {
                     &dark_label
                 };
-                let tooltip_text = format!(
-                    "Switch to {tooltip_variant} theme to access {tooltip_label}",
-                    tooltip_variant = tooltip_variant,
-                    tooltip_label = tooltip_label
-                );
+                let tooltip_text = if has_light && has_dark {
+                    Some(format!(
+                        "Switch to {tooltip_variant} theme to access {tooltip_label}",
+                        tooltip_variant = tooltip_variant,
+                        tooltip_label = tooltip_label
+                    ))
+                } else {
+                    None
+                };
                 let href = if variant == "dark" {
                     &dark_href
                 } else {
                     &light_href
                 };
 
+                let tooltip_attr = tooltip_text.map(|tooltip| {
+                    format!(
+                        " data-tooltip=\"{}\"",
+                        encode_double_quoted_attribute(&tooltip)
+                    )
+                });
+
                 format!(
                     concat!(
                         "href=\"{href}\" data-light-href=\"{light}\" data-dark-href=\"{dark}\" ",
                         "data-variant=\"{variant}\" data-light-label=\"{light_label}\" ",
-                        "data-dark-label=\"{dark_label}\" data-tooltip=\"{tooltip}\""
+                        "data-dark-label=\"{dark_label}\"{tooltip}"
                     ),
                     href = href,
                     light = light_href,
@@ -149,7 +171,7 @@ fn annotate_resume_links(html: &mut String) {
                     variant = variant,
                     light_label = encode_double_quoted_attribute(&light_label),
                     dark_label = encode_double_quoted_attribute(&dark_label),
-                    tooltip = encode_double_quoted_attribute(&tooltip_text)
+                    tooltip = tooltip_attr.unwrap_or_default()
                 )
             })
             .into_owned();
