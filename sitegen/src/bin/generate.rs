@@ -90,6 +90,30 @@ fn capitalize_first(text: &str) -> String {
     }
 }
 
+fn add_resume_theme_attributes(html: &mut String, variants: &[(String, String)]) {
+    for (light, dark) in variants {
+        let pattern = format!(
+            r#"<a(?P<prefix>[^>]*)\bhref=\"(?P<href>{}|{})\"(?P<suffix>[^>]*)>"#,
+            regex::escape(light),
+            regex::escape(dark)
+        );
+        let re = Regex::new(&pattern).expect("invalid resume link pattern");
+        *html = re
+            .replace_all(html, |caps: &regex::Captures| {
+                let prefix = caps.name("prefix").map_or("", |m| m.as_str());
+                let suffix = caps.name("suffix").map_or("", |m| m.as_str());
+                format!(
+                    "<a{prefix}href=\"{light}\" data-light-href=\"{light}\" data-dark-href=\"{dark}\"{suffix}>",
+                    prefix = prefix,
+                    light = light,
+                    dark = dark,
+                    suffix = suffix
+                )
+            })
+            .into_owned();
+    }
+}
+
 fn render_page(data: &TemplateData) -> Result<String, handlebars::RenderError> {
     let hb = Handlebars::new();
     let tmpl = include_str!("../../templates/page.hbs");
@@ -181,6 +205,19 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_body_en = html_body_en.replace(&en_pdf, &en_local);
         html_body_en = html_body_en.replace(&ru_pdf, &ru_local);
     }
+    add_resume_theme_attributes(
+        &mut html_body_en,
+        &[
+            (
+                "Belyakov_en_light.pdf".to_string(),
+                "Belyakov_en_dark.pdf".to_string(),
+            ),
+            (
+                "Belyakov_ru_light.pdf".to_string(),
+                "Belyakov_ru_dark.pdf".to_string(),
+            ),
+        ],
+    );
     let english_fragment = format!("{} – Present", start_date.format("%B %Y"));
     if !inject_duration(&mut html_body_en, &english_fragment, &duration_en) {
         warn!("English inline duration fragment '{english_fragment}' not found in generated HTML");
@@ -202,6 +239,19 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_body_ru = html_body_ru.replace(&ru_pdf, &ru_local);
         html_body_ru = html_body_ru.replace(&en_pdf, &en_local);
     }
+    add_resume_theme_attributes(
+        &mut html_body_ru,
+        &[
+            (
+                "../Belyakov_ru_light.pdf".to_string(),
+                "../Belyakov_ru_dark.pdf".to_string(),
+            ),
+            (
+                "../Belyakov_en_light.pdf".to_string(),
+                "../Belyakov_en_dark.pdf".to_string(),
+            ),
+        ],
+    );
     let mut ru_fragments = Vec::new();
     ru_fragments.push(english_fragment.clone());
     if let Some(month_name) = russian_month_name(inline_start.1) {
@@ -255,6 +305,19 @@ fn main() -> Result<(), Box<dyn Error>> {
             html_resume_en = html_resume_en.replace(&en_pdf, &en_local);
             html_resume_en = html_resume_en.replace(&ru_pdf, &ru_local);
         }
+        add_resume_theme_attributes(
+            &mut html_resume_en,
+            &[
+                (
+                    format!("../../Belyakov_{}_en_light.pdf", slug),
+                    format!("../../Belyakov_{}_en_dark.pdf", slug),
+                ),
+                (
+                    format!("../../Belyakov_{}_ru_light.pdf", slug),
+                    format!("../../Belyakov_{}_ru_dark.pdf", slug),
+                ),
+            ],
+        );
         if let Some(end) = html_resume_en.find("</h1>") {
             html_resume_en = html_resume_en[end + 5..].trim_start().to_string();
         }
@@ -273,6 +336,19 @@ fn main() -> Result<(), Box<dyn Error>> {
             html_resume_ru = html_resume_ru.replace(&ru_pdf, &ru_local);
             html_resume_ru = html_resume_ru.replace(&en_pdf, &en_local);
         }
+        add_resume_theme_attributes(
+            &mut html_resume_ru,
+            &[
+                (
+                    format!("../../../Belyakov_{}_ru_light.pdf", slug),
+                    format!("../../../Belyakov_{}_ru_dark.pdf", slug),
+                ),
+                (
+                    format!("../../../Belyakov_{}_en_light.pdf", slug),
+                    format!("../../../Belyakov_{}_en_dark.pdf", slug),
+                ),
+            ],
+        );
         if let Some(end) = html_resume_ru.find("</h1>") {
             html_resume_ru = html_resume_ru[end + 5..].trim_start().to_string();
         }
@@ -394,6 +470,19 @@ fn main() -> Result<(), Box<dyn Error>> {
             html_body_en_role = html_body_en_role.replace(&base_en, &role_en);
             html_body_en_role = html_body_en_role.replace(&base_ru, &role_ru);
         }
+        add_resume_theme_attributes(
+            &mut html_body_en_role,
+            &[
+                (
+                    format!("../Belyakov_{}_en_light.pdf", role),
+                    format!("../Belyakov_{}_en_dark.pdf", role),
+                ),
+                (
+                    format!("../Belyakov_{}_ru_light.pdf", role),
+                    format!("../Belyakov_{}_ru_dark.pdf", role),
+                ),
+            ],
+        );
         let footer_links_en_role = extract_first_paragraph(&html_body_en_role);
         let en_role_html = render_page(&TemplateData {
             lang: "en",
@@ -428,6 +517,19 @@ fn main() -> Result<(), Box<dyn Error>> {
             html_body_ru_role = html_body_ru_role.replace(&base_ru, &role_ru);
             html_body_ru_role = html_body_ru_role.replace(&base_en, &role_en);
         }
+        add_resume_theme_attributes(
+            &mut html_body_ru_role,
+            &[
+                (
+                    format!("../../Belyakov_{}_ru_light.pdf", role),
+                    format!("../../Belyakov_{}_ru_dark.pdf", role),
+                ),
+                (
+                    format!("../../Belyakov_{}_en_light.pdf", role),
+                    format!("../../Belyakov_{}_en_dark.pdf", role),
+                ),
+            ],
+        );
         let footer_links_ru_role = extract_first_paragraph(&html_body_ru_role);
         let ru_role_html = render_page(&TemplateData {
             lang: "ru",

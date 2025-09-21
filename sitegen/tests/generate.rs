@@ -58,6 +58,29 @@ fn capitalize_first(text: &str) -> String {
     }
 }
 
+fn assert_theme_link(content: &str, light: &str, dark: &str) {
+    let pattern = format!(
+        r#"<a[^>]*\bhref=\"{}\"[^>]*data-light-href=\"{}\"[^>]*data-dark-href=\"{}\"[^>]*>"#,
+        regex::escape(light),
+        regex::escape(light),
+        regex::escape(dark)
+    );
+    let re = Regex::new(&pattern).expect("invalid resume link pattern");
+    assert!(
+        re.is_match(content),
+        "missing themed resume link for light '{}' and dark '{}'",
+        light,
+        dark
+    );
+    let dark_pattern = format!(r#"<a[^>]*\s+href=\"{}\""#, regex::escape(dark));
+    let dark_re = Regex::new(&dark_pattern).expect("invalid dark href pattern");
+    assert!(
+        !dark_re.is_match(content),
+        "found dark href '{}' instead of themed link",
+        dark
+    );
+}
+
 #[test]
 fn generates_expected_dist() {
     let crate_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
@@ -93,6 +116,27 @@ fn generates_expected_dist() {
             theme
         );
     }
+
+    assert_theme_link(
+        &index_actual,
+        "Belyakov_en_light.pdf",
+        "Belyakov_en_dark.pdf",
+    );
+    assert_theme_link(
+        &index_actual,
+        "Belyakov_ru_light.pdf",
+        "Belyakov_ru_dark.pdf",
+    );
+    assert_theme_link(
+        &index_ru_actual,
+        "../Belyakov_ru_light.pdf",
+        "../Belyakov_ru_dark.pdf",
+    );
+    assert_theme_link(
+        &index_ru_actual,
+        "../Belyakov_en_light.pdf",
+        "../Belyakov_en_dark.pdf",
+    );
 
     let original_dir = env::current_dir().expect("current dir");
     env::set_current_dir(project_root).expect("set project root");
@@ -190,26 +234,30 @@ fn generates_expected_dist() {
         let en_path = role_dir.join("index.html");
         assert!(en_path.exists(), "missing {}/index.html", slug);
         let en_page = fs::read_to_string(&en_path).expect("read role index");
-        for theme in PDF_THEMES {
-            assert!(
-                en_page.contains(&format!("Belyakov_{}_en_{}.pdf", slug, theme)),
-                "missing English {} PDF link for {} theme",
-                slug,
-                theme
-            );
-        }
+        assert_theme_link(
+            &en_page,
+            &format!("../Belyakov_{}_en_light.pdf", slug),
+            &format!("../Belyakov_{}_en_dark.pdf", slug),
+        );
+        assert_theme_link(
+            &en_page,
+            &format!("../Belyakov_{}_ru_light.pdf", slug),
+            &format!("../Belyakov_{}_ru_dark.pdf", slug),
+        );
 
         let ru_path = role_dir.join("ru").join("index.html");
         assert!(ru_path.exists(), "missing {}/ru/index.html", slug);
         let ru_page = fs::read_to_string(&ru_path).expect("read role ru index");
-        for theme in PDF_THEMES {
-            assert!(
-                ru_page.contains(&format!("Belyakov_{}_ru_{}.pdf", slug, theme)),
-                "missing Russian {} PDF link for {} theme",
-                slug,
-                theme
-            );
-        }
+        assert_theme_link(
+            &ru_page,
+            &format!("../../Belyakov_{}_ru_light.pdf", slug),
+            &format!("../../Belyakov_{}_ru_dark.pdf", slug),
+        );
+        assert_theme_link(
+            &ru_page,
+            &format!("../../Belyakov_{}_en_light.pdf", slug),
+            &format!("../../Belyakov_{}_en_dark.pdf", slug),
+        );
     }
 
     for slug in roles.keys() {
@@ -218,27 +266,31 @@ fn generates_expected_dist() {
         assert!(en_path.exists(), "missing resume/{}/index.html", slug);
         let en_page =
             fs::read_to_string(&en_path).unwrap_or_else(|_| panic!("read resume {slug} index"));
-        for theme in PDF_THEMES {
-            assert!(
-                en_page.contains(&format!("Belyakov_{}_en_{}.pdf", slug, theme)),
-                "missing English resume PDF for {} theme {}",
-                slug,
-                theme
-            );
-        }
+        assert_theme_link(
+            &en_page,
+            &format!("../../Belyakov_{}_en_light.pdf", slug),
+            &format!("../../Belyakov_{}_en_dark.pdf", slug),
+        );
+        assert_theme_link(
+            &en_page,
+            &format!("../../Belyakov_{}_ru_light.pdf", slug),
+            &format!("../../Belyakov_{}_ru_dark.pdf", slug),
+        );
 
         let ru_path = resume_dir.join("ru").join("index.html");
         assert!(ru_path.exists(), "missing resume/{}/ru/index.html", slug);
         let ru_page =
             fs::read_to_string(&ru_path).unwrap_or_else(|_| panic!("read resume {slug} ru index"));
-        for theme in PDF_THEMES {
-            assert!(
-                ru_page.contains(&format!("Belyakov_{}_ru_{}.pdf", slug, theme)),
-                "missing Russian resume PDF for {} theme {}",
-                slug,
-                theme
-            );
-        }
+        assert_theme_link(
+            &ru_page,
+            &format!("../../../Belyakov_{}_ru_light.pdf", slug),
+            &format!("../../../Belyakov_{}_ru_dark.pdf", slug),
+        );
+        assert_theme_link(
+            &ru_page,
+            &format!("../../../Belyakov_{}_en_light.pdf", slug),
+            &format!("../../../Belyakov_{}_en_dark.pdf", slug),
+        );
     }
 
     fs::remove_dir_all(&dist).expect("failed to remove dist");

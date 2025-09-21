@@ -60,8 +60,20 @@
 (function(){
   var root = document.documentElement;
   var key = 'theme';
+  function updateResumeLinks(theme){
+    var attr = theme === 'dark' ? 'data-dark-href' : 'data-light-href';
+    var links = document.querySelectorAll('a[data-light-href][data-dark-href]');
+    for (var i = 0; i < links.length; i++) {
+      var link = links[i];
+      var target = link.getAttribute(attr);
+      if (target) {
+        link.setAttribute('href', target);
+      }
+    }
+  }
   function apply(theme){
     root.setAttribute('data-theme', theme);
+    updateResumeLinks(theme);
     var btn = document.getElementById('theme-toggle');
     if (!btn) return;
     var next = theme === 'light' ? 'dark' : 'light';
