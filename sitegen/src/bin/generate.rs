@@ -60,6 +60,25 @@ fn inject_duration(html: &mut String, fragment: &str, duration: &str) -> bool {
     }
 }
 
+fn annotate_resume_links(html: &mut String) {
+    let re =
+        Regex::new(r#"href=\"([^\"]*?)_(light|dark)\.pdf\""#).expect("invalid resume link regex");
+    if re.is_match(html) {
+        *html = re
+            .replace_all(html, |caps: &regex::Captures| {
+                let prefix = caps.get(1).unwrap().as_str();
+                let light_href = format!("{prefix}_light.pdf");
+                let dark_href = format!("{prefix}_dark.pdf");
+                format!(
+                    "href=\"{light}\" data-light-href=\"{light}\" data-dark-href=\"{dark}\"",
+                    light = light_href,
+                    dark = dark_href
+                )
+            })
+            .into_owned();
+    }
+}
+
 fn russian_month_name(month: u32) -> Option<&'static str> {
     const RU_MONTHS: [&str; 12] = [
         "январь",
@@ -188,6 +207,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     if let Some(end) = html_body_en.find("</h1>") {
         html_body_en = html_body_en[end + 5..].trim_start().to_string();
     }
+    annotate_resume_links(&mut html_body_en);
 
     let markdown_ru = fs::read_to_string("profiles/cv/ru/CV_RU.MD")?;
     let parser_ru = CmarkParser::new_ext(&markdown_ru, Options::all());
@@ -228,6 +248,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     if let Some(end) = html_body_ru.find("</h1>") {
         html_body_ru = html_body_ru[end + 5..].trim_start().to_string();
     }
+    annotate_resume_links(&mut html_body_ru);
 
     let footer_links_en = extract_first_paragraph(&html_body_en);
     let footer_links_ru = extract_first_paragraph(&html_body_ru);
@@ -258,6 +279,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         if let Some(end) = html_resume_en.find("</h1>") {
             html_resume_en = html_resume_en[end + 5..].trim_start().to_string();
         }
+        annotate_resume_links(&mut html_resume_en);
 
         let markdown_resume_ru = fs::read_to_string(ru_md)?;
         let parser_resume_ru = CmarkParser::new_ext(&markdown_resume_ru, Options::all());
@@ -276,6 +298,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         if let Some(end) = html_resume_ru.find("</h1>") {
             html_resume_ru = html_resume_ru[end + 5..].trim_start().to_string();
         }
+        annotate_resume_links(&mut html_resume_ru);
 
         let footer_links_resume_en = extract_first_paragraph(&html_resume_en);
         let footer_links_resume_ru = extract_first_paragraph(&html_resume_ru);
@@ -394,6 +417,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             html_body_en_role = html_body_en_role.replace(&base_en, &role_en);
             html_body_en_role = html_body_en_role.replace(&base_ru, &role_ru);
         }
+        annotate_resume_links(&mut html_body_en_role);
         let footer_links_en_role = extract_first_paragraph(&html_body_en_role);
         let en_role_html = render_page(&TemplateData {
             lang: "en",
@@ -428,6 +452,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             html_body_ru_role = html_body_ru_role.replace(&base_ru, &role_ru);
             html_body_ru_role = html_body_ru_role.replace(&base_en, &role_en);
         }
+        annotate_resume_links(&mut html_body_ru_role);
         let footer_links_ru_role = extract_first_paragraph(&html_body_ru_role);
         let ru_role_html = render_page(&TemplateData {
             lang: "ru",

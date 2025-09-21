@@ -31,10 +31,10 @@
 <img class='avatar' src='avatar.jpg' alt='Avatar'>
 
 <p><em><a href="ru/">Link to Russian version</a></em> \
-<em><a href="Belyakov_en_light.pdf">Light PDF</a></em> \
-<em><a href="Belyakov_en_dark.pdf">Dark PDF</a></em> \
-<em><a href="Belyakov_ru_light.pdf">Light Russian PDF</a></em> \
-<em><a href="Belyakov_ru_dark.pdf">Dark Russian PDF</a></em></p>
+<em><a href="Belyakov_en_light.pdf" data-light-href="Belyakov_en_light.pdf" data-dark-href="Belyakov_en_dark.pdf">Light PDF</a></em> \
+<em><a href="Belyakov_en_light.pdf" data-light-href="Belyakov_en_light.pdf" data-dark-href="Belyakov_en_dark.pdf">Dark PDF</a></em> \
+<em><a href="Belyakov_ru_light.pdf" data-light-href="Belyakov_ru_light.pdf" data-dark-href="Belyakov_ru_dark.pdf">Light Russian PDF</a></em> \
+<em><a href="Belyakov_ru_light.pdf" data-light-href="Belyakov_ru_light.pdf" data-dark-href="Belyakov_ru_dark.pdf">Dark Russian PDF</a></em></p>
 <ul>
 <li><strong>Phone:</strong> +7 (911) 261-70-72</li>
 <li><strong>Telegram:</strong> <a href="https://t.me/leqqrm">@leqqrm</a></li>
@@ -194,10 +194,10 @@
 </div>
 <footer>
 <p><em><a href="ru/">Link to Russian version</a></em> \
-<em><a href="Belyakov_en_light.pdf">Light PDF</a></em> \
-<em><a href="Belyakov_en_dark.pdf">Dark PDF</a></em> \
-<em><a href="Belyakov_ru_light.pdf">Light Russian PDF</a></em> \
-<em><a href="Belyakov_ru_dark.pdf">Dark Russian PDF</a></em></p>
+<em><a href="Belyakov_en_light.pdf" data-light-href="Belyakov_en_light.pdf" data-dark-href="Belyakov_en_dark.pdf">Light PDF</a></em> \
+<em><a href="Belyakov_en_light.pdf" data-light-href="Belyakov_en_light.pdf" data-dark-href="Belyakov_en_dark.pdf">Dark PDF</a></em> \
+<em><a href="Belyakov_ru_light.pdf" data-light-href="Belyakov_ru_light.pdf" data-dark-href="Belyakov_ru_dark.pdf">Light Russian PDF</a></em> \
+<em><a href="Belyakov_ru_light.pdf" data-light-href="Belyakov_ru_light.pdf" data-dark-href="Belyakov_ru_dark.pdf">Dark Russian PDF</a></em></p>
 </footer>
 <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
   <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
@@ -224,8 +224,22 @@
 (function(){
   var root = document.documentElement;
   var key = 'theme';
+  function updateResumeLinks(theme){
+    var anchors = document.querySelectorAll('a[data-light-href][data-dark-href]');
+    for (var i = 0; i < anchors.length; i++) {
+      var anchor = anchors[i];
+      var target = theme === 'dark' ? anchor.getAttribute('data-dark-href') : anchor.getAttribute('data-light-href');
+      if (!target) {
+        target = anchor.getAttribute('data-light-href') || anchor.getAttribute('data-dark-href');
+      }
+      if (target) {
+        anchor.setAttribute('href', target);
+      }
+    }
+  }
   function apply(theme){
     root.setAttribute('data-theme', theme);
+    updateResumeLinks(theme);
     var btn = document.getElementById('theme-toggle');
     if (!btn) return;
     var next = theme === 'light' ? 'dark' : 'light';
