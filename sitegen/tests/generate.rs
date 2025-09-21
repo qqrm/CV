@@ -77,13 +77,23 @@ fn assert_pdf_link_attrs(html: &str, light: &str, dark: &str) {
         "expected anchors with light='{light}' and dark='{dark}'"
     );
 
-    let has_light_variant = anchors
+    let light_variant_count = anchors
         .iter()
-        .any(|anchor| anchor.value().attr("data-variant") == Some("light"));
-    let has_dark_variant = anchors
+        .filter(|anchor| anchor.value().attr("data-variant") == Some("light"))
+        .count();
+    let dark_variant_count = anchors
         .iter()
-        .any(|anchor| anchor.value().attr("data-variant") == Some("dark"));
-    let mut visible_candidates = 0usize;
+        .filter(|anchor| anchor.value().attr("data-variant") == Some("dark"))
+        .count();
+
+    assert!(
+        light_variant_count >= 1,
+        "expected at least one light variant for {light}/{dark}"
+    );
+    assert!(
+        dark_variant_count >= 1,
+        "expected at least one dark variant for {light}/{dark}"
+    );
 
     for anchor in &anchors {
         let element = anchor.value();
@@ -102,58 +112,62 @@ fn assert_pdf_link_attrs(html: &str, light: &str, dark: &str) {
             variant == "light" || variant == "dark",
             "unexpected data-variant '{variant}' for {light}/{dark}"
         );
-        assert!(
-            element.attr("data-light-label").is_some(),
-            "missing data-light-label for {light}"
-        );
-        assert!(
-            element.attr("data-dark-label").is_some(),
-            "missing data-dark-label for {dark}"
-        );
+        let light_label = element
+            .attr("data-light-label")
+            .unwrap_or_else(|| panic!("missing data-light-label for {light}"));
+        let dark_label = element
+            .attr("data-dark-label")
+            .unwrap_or_else(|| panic!("missing data-dark-label for {dark}"));
         let tooltip = element
             .attr("data-tooltip")
             .unwrap_or_else(|| panic!("missing data-tooltip for {light}/{dark}"));
-        if variant == "light" {
-            assert!(
-                tooltip.contains("dark"),
-                "light variant tooltip should reference dark theme"
-            );
-        } else if variant == "dark" {
-            assert!(
-                tooltip.contains("light"),
-                "dark variant tooltip should reference light theme"
-            );
+
+        match variant {
+            "light" => {
+                assert!(
+                    tooltip.contains("dark"),
+                    "light variant tooltip should reference dark theme"
+                );
+                assert!(
+                    tooltip.contains(dark_label),
+                    "light variant tooltip should reference {dark_label}"
+                );
+            }
+            "dark" => {
+                assert!(
+                    tooltip.contains("light"),
+                    "dark variant tooltip should reference light theme"
+                );
+                assert!(
+                    tooltip.contains(light_label),
+                    "dark variant tooltip should reference {light_label}"
+                );
+            }
+            _ => {}
         }
 
         let href = element.attr("href").unwrap_or("");
         match variant {
             "light" => {
                 assert_eq!(href, light, "light variant should link to {light}");
-                visible_candidates += 1;
+                let text: String = anchor.text().collect::<String>();
+                assert_eq!(
+                    text.trim(),
+                    light_label,
+                    "light variant text should match {light_label}"
+                );
             }
             "dark" => {
                 assert_eq!(href, dark, "dark variant should link to {dark}");
-                if !has_light_variant {
-                    visible_candidates += 1;
-                }
+                let text: String = anchor.text().collect::<String>();
+                assert_eq!(
+                    text.trim(),
+                    dark_label,
+                    "dark variant text should match {dark_label}"
+                );
             }
             _ => {}
         }
-    }
-
-    assert!(
-        visible_candidates > 0,
-        "expected at least one visible candidate for {light}/{dark}"
-    );
-    if has_light_variant && has_dark_variant {
-        assert!(
-            visible_candidates
-                == anchors
-                    .iter()
-                    .filter(|anchor| anchor.value().attr("data-variant") == Some("light"))
-                    .count(),
-            "only light variants should be visible for {light}/{dark}"
-        );
     }
 }
 
