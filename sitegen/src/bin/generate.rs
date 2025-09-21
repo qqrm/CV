@@ -1,17 +1,25 @@
 use chrono::{Datelike, NaiveDate, Utc};
 use handlebars::Handlebars;
+use html_escape::{decode_html_entities, encode_double_quoted_attribute};
 use log::{info, warn};
 use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
 use regex::Regex;
 use serde::Serialize;
 use sitegen::parser::{read_inline_start, read_roles};
 use sitegen::renderer::{format_duration_en, format_duration_ru};
+use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
 use std::path::Path;
 
 const PDF_BASE_URL: &str = "https://qqrm.github.io/CV/";
 const THEME_VARIANTS: &[&str] = &["light", "dark"];
+
+#[derive(Clone, Default)]
+struct VariantLabels {
+    light: Option<String>,
+    dark: Option<String>,
+}
 
 #[derive(Serialize)]
 struct TemplateData<'a> {
@@ -61,18 +69,87 @@ fn inject_duration(html: &mut String, fragment: &str, duration: &str) -> bool {
 }
 
 fn annotate_resume_links(html: &mut String) {
+    let anchor_re =
+        Regex::new(r#"<a[^>]*?href=\"([^\"]*?)_(light|dark)\.pdf\"[^>]*>(?s)(.*?)</a>"#)
+            .expect("invalid resume anchor regex");
+    let mut labels_by_prefix: HashMap<String, VariantLabels> = HashMap::new();
+
+    for caps in anchor_re.captures_iter(html) {
+        let prefix = caps.get(1).unwrap().as_str().to_string();
+        let variant = caps.get(2).unwrap().as_str();
+        let raw_label = caps.get(3).map(|m| m.as_str()).unwrap_or_default();
+        let decoded_label = decode_html_entities(raw_label.trim()).into_owned();
+        let entry = labels_by_prefix.entry(prefix).or_default();
+        match variant {
+            "light" => {
+                if entry.light.is_none() {
+                    entry.light = Some(decoded_label);
+                }
+            }
+            "dark" => {
+                if entry.dark.is_none() {
+                    entry.dark = Some(decoded_label);
+                }
+            }
+            _ => {}
+        }
+    }
+
     let re =
         Regex::new(r#"href=\"([^\"]*?)_(light|dark)\.pdf\""#).expect("invalid resume link regex");
     if re.is_match(html) {
         *html = re
             .replace_all(html, |caps: &regex::Captures| {
                 let prefix = caps.get(1).unwrap().as_str();
+                let variant = caps.get(2).unwrap().as_str();
                 let light_href = format!("{prefix}_light.pdf");
                 let dark_href = format!("{prefix}_dark.pdf");
+                let labels = labels_by_prefix.get(prefix);
+                let (light_label, dark_label) = if let Some(entry) = labels {
+                    let light = entry
+                        .light
+                        .as_deref()
+                        .or(entry.dark.as_deref())
+                        .unwrap_or("Light PDF");
+                    let dark = entry
+                        .dark
+                        .as_deref()
+                        .or(entry.light.as_deref())
+                        .unwrap_or("Dark PDF");
+                    (light.to_string(), dark.to_string())
+                } else {
+                    (String::from("Light PDF"), String::from("Dark PDF"))
+                };
+                let tooltip_variant = if variant == "dark" { "light" } else { "dark" };
+                let tooltip_label = if variant == "dark" {
+                    &light_label
+                } else {
+                    &dark_label
+                };
+                let tooltip_text = format!(
+                    "Switch to {tooltip_variant} theme to access {tooltip_label}",
+                    tooltip_variant = tooltip_variant,
+                    tooltip_label = tooltip_label
+                );
+                let href = if variant == "dark" {
+                    &dark_href
+                } else {
+                    &light_href
+                };
+
                 format!(
-                    "href=\"{light}\" data-light-href=\"{light}\" data-dark-href=\"{dark}\"",
+                    concat!(
+                        "href=\"{href}\" data-light-href=\"{light}\" data-dark-href=\"{dark}\" ",
+                        "data-variant=\"{variant}\" data-light-label=\"{light_label}\" ",
+                        "data-dark-label=\"{dark_label}\" data-tooltip=\"{tooltip}\""
+                    ),
+                    href = href,
                     light = light_href,
-                    dark = dark_href
+                    dark = dark_href,
+                    variant = variant,
+                    light_label = encode_double_quoted_attribute(&light_label),
+                    dark_label = encode_double_quoted_attribute(&dark_label),
+                    tooltip = encode_double_quoted_attribute(&tooltip_text)
                 )
             })
             .into_owned();

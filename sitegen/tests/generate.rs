@@ -5,6 +5,7 @@ use std::process::Command;
 
 use chrono::{Datelike, NaiveDate, Utc};
 use regex::Regex;
+use scraper::{Html, Selector};
 use sitegen::{format_duration_en, format_duration_ru, read_inline_start};
 use toml::Value;
 
@@ -59,21 +60,101 @@ fn capitalize_first(text: &str) -> String {
 }
 
 fn assert_pdf_link_attrs(html: &str, light: &str, dark: &str) {
-    let href_light = format!(" href=\"{light}\"");
-    assert!(html.contains(&href_light), "missing href for {light}");
+    let document = Html::parse_document(html);
+    let selector = Selector::parse("a[data-light-href][data-dark-href][data-variant]")
+        .expect("valid selector");
+    let anchors: Vec<_> = document
+        .select(&selector)
+        .filter(|node| {
+            let value = node.value();
+            value.attr("data-light-href") == Some(light)
+                && value.attr("data-dark-href") == Some(dark)
+        })
+        .collect();
+
     assert!(
-        html.contains(&format!("data-light-href=\"{light}\"")),
-        "missing data-light-href for {light}"
+        !anchors.is_empty(),
+        "expected anchors with light='{light}' and dark='{dark}'"
     );
+
+    let has_light_variant = anchors
+        .iter()
+        .any(|anchor| anchor.value().attr("data-variant") == Some("light"));
+    let has_dark_variant = anchors
+        .iter()
+        .any(|anchor| anchor.value().attr("data-variant") == Some("dark"));
+    let mut visible_candidates = 0usize;
+
+    for anchor in &anchors {
+        let element = anchor.value();
+        assert_eq!(
+            element.attr("data-light-href"),
+            Some(light),
+            "missing data-light-href for {light}"
+        );
+        assert_eq!(
+            element.attr("data-dark-href"),
+            Some(dark),
+            "missing data-dark-href for {dark}"
+        );
+        let variant = element.attr("data-variant").unwrap_or("");
+        assert!(
+            variant == "light" || variant == "dark",
+            "unexpected data-variant '{variant}' for {light}/{dark}"
+        );
+        assert!(
+            element.attr("data-light-label").is_some(),
+            "missing data-light-label for {light}"
+        );
+        assert!(
+            element.attr("data-dark-label").is_some(),
+            "missing data-dark-label for {dark}"
+        );
+        let tooltip = element
+            .attr("data-tooltip")
+            .unwrap_or_else(|| panic!("missing data-tooltip for {light}/{dark}"));
+        if variant == "light" {
+            assert!(
+                tooltip.contains("dark"),
+                "light variant tooltip should reference dark theme"
+            );
+        } else if variant == "dark" {
+            assert!(
+                tooltip.contains("light"),
+                "dark variant tooltip should reference light theme"
+            );
+        }
+
+        let href = element.attr("href").unwrap_or("");
+        match variant {
+            "light" => {
+                assert_eq!(href, light, "light variant should link to {light}");
+                visible_candidates += 1;
+            }
+            "dark" => {
+                assert_eq!(href, dark, "dark variant should link to {dark}");
+                if !has_light_variant {
+                    visible_candidates += 1;
+                }
+            }
+            _ => {}
+        }
+    }
+
     assert!(
-        html.contains(&format!("data-dark-href=\"{dark}\"")),
-        "missing data-dark-href for {dark}"
+        visible_candidates > 0,
+        "expected at least one visible candidate for {light}/{dark}"
     );
-    let href_dark = format!(" href=\"{dark}\"");
-    assert!(
-        !html.contains(&href_dark),
-        "href should not point to dark variant {dark}"
-    );
+    if has_light_variant && has_dark_variant {
+        assert!(
+            visible_candidates
+                == anchors
+                    .iter()
+                    .filter(|anchor| anchor.value().attr("data-variant") == Some("light"))
+                    .count(),
+            "only light variants should be visible for {light}/{dark}"
+        );
+    }
 }
 
 #[test]
