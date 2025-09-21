@@ -6,14 +6,14 @@
     light: (
       background: rgb("#ffffff"),
       text: rgb("#1f2933"),
-      muted: rgb("#94a3b8"),
-      link: rgb("#2563eb"),
+      muted: rgb("#7b8794"),
+      link: rgb("#0645ad"),
     ),
     dark: (
-      background: rgb("#0f172a"),
-      text: rgb("#e2e8f0"),
-      muted: rgb("#475569"),
-      link: rgb("#93c5fd"),
+      background: rgb("#121212"),
+      text: rgb("#e0e0e0"),
+      muted: rgb("#7b8794"),
+      link: rgb("#9cdcfe"),
     ),
   )
   #let palette = themes.at(theme, default: themes.light)
