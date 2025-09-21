@@ -31,10 +31,10 @@
 <img class='avatar' src='../avatar.jpg' alt='Avatar'>
 
 <p><em><a href="../">Ссылка на английскую версию</a></em> \
-<em><a href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf">Скачать PDF (светлая тема)</a></em> \
-<em><a href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf">Скачать PDF (тёмная тема)</a></em> \
-<em><a href="../Belyakov_en_light.pdf" data-light-href="../Belyakov_en_light.pdf" data-dark-href="../Belyakov_en_dark.pdf">Download PDF (EN, light)</a></em> \
-<em><a href="../Belyakov_en_light.pdf" data-light-href="../Belyakov_en_light.pdf" data-dark-href="../Belyakov_en_dark.pdf">Download PDF (EN, dark)</a></em></p>
+<em><a href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf" data-variant="light" data-light-label="Скачать PDF (светлая тема)" data-dark-label="Скачать PDF (тёмная тема)" data-tooltip="Switch to dark theme to access Скачать PDF (тёмная тема)">Скачать PDF (светлая тема)</a></em> \
+<em><a href="../Belyakov_ru_dark.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf" data-variant="dark" data-light-label="Скачать PDF (светлая тема)" data-dark-label="Скачать PDF (тёмная тема)" data-tooltip="Switch to light theme to access Скачать PDF (светлая тема)">Скачать PDF (тёмная тема)</a></em> \
+<em><a href="../Belyakov_en_light.pdf" data-light-href="../Belyakov_en_light.pdf" data-dark-href="../Belyakov_en_dark.pdf" data-variant="light" data-light-label="Download PDF (EN, light)" data-dark-label="Download PDF (EN, dark)" data-tooltip="Switch to dark theme to access Download PDF (EN, dark)">Download PDF (EN, light)</a></em> \
+<em><a href="../Belyakov_en_dark.pdf" data-light-href="../Belyakov_en_light.pdf" data-dark-href="../Belyakov_en_dark.pdf" data-variant="dark" data-light-label="Download PDF (EN, light)" data-dark-label="Download PDF (EN, dark)" data-tooltip="Switch to light theme to access Download PDF (EN, light)">Download PDF (EN, dark)</a></em></p>
 <ul>
 <li><strong>Телефон</strong>: +7 (911) 261-70-72</li>
 <li><strong>Telegram</strong>: <a href="https://t.me/leqqrm">@leqqrm</a></li>
@@ -189,10 +189,10 @@
 </div>
 <footer>
 <p><em><a href="../">Ссылка на английскую версию</a></em> \
-<em><a href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf">Скачать PDF (светлая тема)</a></em> \
-<em><a href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf">Скачать PDF (тёмная тема)</a></em> \
-<em><a href="../Belyakov_en_light.pdf" data-light-href="../Belyakov_en_light.pdf" data-dark-href="../Belyakov_en_dark.pdf">Download PDF (EN, light)</a></em> \
-<em><a href="../Belyakov_en_light.pdf" data-light-href="../Belyakov_en_light.pdf" data-dark-href="../Belyakov_en_dark.pdf">Download PDF (EN, dark)</a></em></p>
+<em><a href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf" data-variant="light" data-light-label="Скачать PDF (светлая тема)" data-dark-label="Скачать PDF (тёмная тема)" data-tooltip="Switch to dark theme to access Скачать PDF (тёмная тема)">Скачать PDF (светлая тема)</a></em> \
+<em><a href="../Belyakov_ru_dark.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf" data-variant="dark" data-light-label="Скачать PDF (светлая тема)" data-dark-label="Скачать PDF (тёмная тема)" data-tooltip="Switch to light theme to access Скачать PDF (светлая тема)">Скачать PDF (тёмная тема)</a></em> \
+<em><a href="../Belyakov_en_light.pdf" data-light-href="../Belyakov_en_light.pdf" data-dark-href="../Belyakov_en_dark.pdf" data-variant="light" data-light-label="Download PDF (EN, light)" data-dark-label="Download PDF (EN, dark)" data-tooltip="Switch to dark theme to access Download PDF (EN, dark)">Download PDF (EN, light)</a></em> \
+<em><a href="../Belyakov_en_dark.pdf" data-light-href="../Belyakov_en_light.pdf" data-dark-href="../Belyakov_en_dark.pdf" data-variant="dark" data-light-label="Download PDF (EN, light)" data-dark-label="Download PDF (EN, dark)" data-tooltip="Switch to light theme to access Download PDF (EN, light)">Download PDF (EN, dark)</a></em></p>
 </footer>
 <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
   <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
@@ -220,15 +220,62 @@
   var root = document.documentElement;
   var key = 'theme';
   function updateResumeLinks(theme){
-    var anchors = document.querySelectorAll('a[data-light-href][data-dark-href]');
+    var anchors = document.querySelectorAll('a[data-light-href][data-dark-href][data-variant]');
+    var groups = {};
     for (var i = 0; i < anchors.length; i++) {
       var anchor = anchors[i];
-      var target = theme === 'dark' ? anchor.getAttribute('data-dark-href') : anchor.getAttribute('data-light-href');
-      if (!target) {
-        target = anchor.getAttribute('data-light-href') || anchor.getAttribute('data-dark-href');
+      var key = (anchor.getAttribute('data-light-href') || '') + '|' + (anchor.getAttribute('data-dark-href') || '');
+      if (!groups[key]) {
+        groups[key] = [];
       }
-      if (target) {
-        anchor.setAttribute('href', target);
+      groups[key].push(anchor);
+    }
+    for (var key in groups) {
+      if (!Object.prototype.hasOwnProperty.call(groups, key)) continue;
+      var list = groups[key];
+      var hasLight = false;
+      var hasDark = false;
+      for (var j = 0; j < list.length; j++) {
+        var variantValue = list[j].getAttribute('data-variant');
+        if (variantValue === 'light') {
+          hasLight = true;
+        } else if (variantValue === 'dark') {
+          hasDark = true;
+        }
+      }
+      var shouldToggle = hasLight && hasDark;
+      for (var j = 0; j < list.length; j++) {
+        var anchor = list[j];
+        var variant = anchor.getAttribute('data-variant');
+        var target = theme === 'dark' ? anchor.getAttribute('data-dark-href') : anchor.getAttribute('data-light-href');
+        if (!target) {
+          target = anchor.getAttribute('data-light-href') || anchor.getAttribute('data-dark-href');
+        }
+        if (target) {
+          anchor.setAttribute('href', target);
+        }
+        var label = theme === 'dark' ? anchor.getAttribute('data-dark-label') : anchor.getAttribute('data-light-label');
+        if (label) {
+          anchor.textContent = label;
+        }
+        var tooltip = anchor.getAttribute('data-tooltip');
+        if (tooltip) {
+          anchor.setAttribute('title', tooltip);
+          anchor.setAttribute('aria-label', tooltip);
+        } else {
+          anchor.removeAttribute('title');
+          anchor.removeAttribute('aria-label');
+        }
+        var parent = anchor.parentElement;
+        var displayTarget = anchor;
+        if (parent && parent.tagName && parent.tagName.toLowerCase() === 'em') {
+          displayTarget = parent;
+        }
+        if (shouldToggle && variant && variant !== theme) {
+          displayTarget.style.display = 'none';
+        } else {
+          displayTarget.style.display = '';
+        }
       }
     }
   }
