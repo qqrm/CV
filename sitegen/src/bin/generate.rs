@@ -10,7 +10,8 @@ use sitegen::renderer::{format_duration_en, format_duration_ru};
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
+use std::process::Command;
 
 const PDF_BASE_URL: &str = "https://qqrm.github.io/CV/";
 const THEME_VARIANTS: &[&str] = &["light", "dark"];
@@ -44,12 +45,48 @@ struct ResumeContent {
     footer_ru: String,
 }
 
-fn copy_or_create_pdf(src: &Path, dst: &Path) -> Result<(), Box<dyn Error>> {
-    if src.exists() {
-        fs::copy(src, dst)?;
+fn typst_source_for(pdf: &Path) -> Result<PathBuf, Box<dyn Error>> {
+    let file_name = pdf
+        .file_name()
+        .and_then(|name| name.to_str())
+        .ok_or_else(|| format!("Invalid PDF file name: {}", pdf.display()))?;
+
+    if let Some(prefix) = file_name.strip_suffix("_light.pdf") {
+        Ok(pdf.with_file_name(format!("{prefix}.typ")))
+    } else if let Some(prefix) = file_name.strip_suffix(".pdf") {
+        Ok(pdf.with_file_name(format!("{prefix}.typ")))
     } else {
-        fs::File::create(dst)?;
+        Err(format!("Unsupported PDF name: {file_name}").into())
     }
+}
+
+fn compile_pdf(pdf: &Path) -> Result<(), Box<dyn Error>> {
+    let typ_path = typst_source_for(pdf)?;
+    if !typ_path.exists() {
+        return Err(format!("Typst source not found: {}", typ_path.display()).into());
+    }
+
+    let status = Command::new("typst")
+        .args(["compile", "--root", "."])
+        .arg(&typ_path)
+        .arg(pdf)
+        .status()?;
+
+    if status.success() {
+        Ok(())
+    } else {
+        Err(format!(
+            "Failed to compile {} from {}",
+            pdf.display(),
+            typ_path.display()
+        )
+        .into())
+    }
+}
+
+fn compile_and_copy_pdf(src: &Path, dst: &Path) -> Result<(), Box<dyn Error>> {
+    compile_pdf(src)?;
+    fs::copy(src, dst)?;
     Ok(())
 }
 
@@ -460,8 +497,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         let ru_src = Path::new("typst/ru").join(&ru_name);
         let en_dst = docs_dir.join(&en_name);
         let ru_dst = docs_dir.join(&ru_name);
-        copy_or_create_pdf(&en_src, &en_dst)?;
-        copy_or_create_pdf(&ru_src, &ru_dst)?;
+        compile_and_copy_pdf(&en_src, &en_dst)?;
+        compile_and_copy_pdf(&ru_src, &ru_dst)?;
     }
     fs::write(docs_dir.join("index.html"), &html_template)?;
     info!("Wrote English HTML to dist/index.html");
@@ -485,11 +522,17 @@ fn main() -> Result<(), Box<dyn Error>> {
             let src_ru = Path::new("typst/ru").join(&filename_ru);
             let dst_en = docs_dir.join(&filename_en);
             let dst_ru = docs_dir.join(&filename_ru);
+            if let Err(error) = compile_pdf(&src_en) {
+                warn!("Failed to compile {}: {error}", src_en.display());
+            }
             if src_en.exists() {
                 fs::copy(&src_en, &dst_en)?;
             } else {
                 let fallback = docs_dir.join(format!("Belyakov_en_{}.pdf", theme));
                 fs::copy(&fallback, &dst_en)?;
+            }
+            if let Err(error) = compile_pdf(&src_ru) {
+                warn!("Failed to compile {}: {error}", src_ru.display());
             }
             if src_ru.exists() {
                 fs::copy(&src_ru, &dst_ru)?;
