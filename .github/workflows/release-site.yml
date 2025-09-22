@@ -33,6 +33,10 @@ jobs:
       - name: Build
         run: cargo build --release --manifest-path sitegen/Cargo.toml --quiet
       - uses: ./.github/actions/build-pdfs
+      - name: Package Typst binary
+        run: |
+          mkdir -p sitegen/target/release
+          cp ~/.cargo/bin/typst sitegen/target/release/typst
       - name: Verify PDFs
         run: |
           set -euo pipefail
@@ -50,6 +54,7 @@ jobs:
           name: sitegen-assets
           path: |
             sitegen/target/release/generate
+            sitegen/target/release/typst
             typst/**/*.pdf
 
   site:
@@ -66,6 +71,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sitegen-assets
+      - name: Install Typst binary
+        run: |
+          mkdir -p typst-bin
+          mv sitegen/target/release/typst typst-bin/typst
+          chmod +x typst-bin/typst
+          echo "$PWD/typst-bin" >> $GITHUB_PATH
       - name: Move sitegen binary
         run: mv sitegen/target/release/generate ./sitegen_bin
       - name: Make binary executable
@@ -76,6 +87,17 @@ jobs:
           rm -rf dist;
       - name: Generate site
         run: ./sitegen_bin
+      - name: Verify generated PDFs
+        run: |
+          set -euo pipefail
+          while IFS= read -r file; do
+            if head -c 4 "$file" | grep -q '%PDF'; then
+              echo "$(basename "$file") verified";
+            else
+              echo "$file is not recognized as a PDF" >&2;
+              exit 1;
+            fi;
+          done < <(find dist -type f -name '*.pdf')
       - name: Verify role pages
         run: |
           test -s dist/em/index.html;
