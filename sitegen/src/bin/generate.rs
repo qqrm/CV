@@ -1,25 +1,95 @@
 use chrono::{Datelike, NaiveDate, Utc};
 use handlebars::Handlebars;
-use html_escape::{decode_html_entities, encode_double_quoted_attribute};
+use html_escape::{decode_html_entities, encode_double_quoted_attribute, encode_safe};
 use log::{info, warn};
 use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
 use regex::Regex;
 use serde::Serialize;
 use sitegen::parser::{read_inline_start, read_roles};
 use sitegen::renderer::{format_duration_en, format_duration_ru};
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 use std::error::Error;
 use std::fs;
+use std::ops::Range;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
 const PDF_BASE_URL: &str = "https://qqrm.github.io/CV/";
 const THEME_VARIANTS: &[&str] = &["light", "dark"];
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum PdfVariant {
+    Light,
+    Dark,
+}
+
+impl PdfVariant {
+    fn from_str(value: &str) -> Option<Self> {
+        match value {
+            "light" => Some(Self::Light),
+            "dark" => Some(Self::Dark),
+            _ => None,
+        }
+    }
+}
+
+#[derive(Clone)]
+struct AnchorMatch {
+    prefix: String,
+    variant: PdfVariant,
+    attrs_before_href: String,
+    attrs_after_href: String,
+    wrap_prefix: Option<String>,
+    wrap_suffix: Option<String>,
+    trailing_break: Option<String>,
+    label_text: String,
+    range: Range<usize>,
+}
+
 #[derive(Clone, Default)]
-struct VariantLabels {
-    light: Option<String>,
-    dark: Option<String>,
+struct VariantInfo {
+    light: Option<AnchorMatch>,
+    dark: Option<AnchorMatch>,
+}
+
+impl VariantInfo {
+    fn assign(&mut self, anchor: AnchorMatch) {
+        match anchor.variant {
+            PdfVariant::Light => self.light = Some(anchor),
+            PdfVariant::Dark => self.dark = Some(anchor),
+        }
+    }
+
+    fn has_variant(&self, variant: PdfVariant) -> bool {
+        match variant {
+            PdfVariant::Light => self.light.is_some(),
+            PdfVariant::Dark => self.dark.is_some(),
+        }
+    }
+
+    fn label_for(&self, variant: PdfVariant) -> String {
+        match variant {
+            PdfVariant::Light => self
+                .light
+                .as_ref()
+                .map(|a| a.label_text.clone())
+                .or_else(|| self.dark.as_ref().map(|a| a.label_text.clone()))
+                .unwrap_or_else(|| String::from("Light PDF")),
+            PdfVariant::Dark => self
+                .dark
+                .as_ref()
+                .map(|a| a.label_text.clone())
+                .or_else(|| self.light.as_ref().map(|a| a.label_text.clone()))
+                .unwrap_or_else(|| String::from("Dark PDF")),
+        }
+    }
+
+    fn href_for(&self, prefix: &str, variant: PdfVariant) -> Option<String> {
+        match variant {
+            PdfVariant::Light => self.light.as_ref().map(|_| format!("{prefix}_light.pdf")),
+            PdfVariant::Dark => self.dark.as_ref().map(|_| format!("{prefix}_dark.pdf")),
+        }
+    }
 }
 
 #[derive(Serialize)]
@@ -106,112 +176,179 @@ fn inject_duration(html: &mut String, fragment: &str, duration: &str) -> bool {
 }
 
 fn annotate_resume_links(html: &mut String) {
-    let anchor_re =
-        Regex::new(r#"<a[^>]*?href=\"([^\"]*?)_(light|dark)\.pdf\"[^>]*>(?s)(.*?)</a>"#)
-            .expect("invalid resume anchor regex");
-    let mut labels_by_prefix: HashMap<String, VariantLabels> = HashMap::new();
+    let anchor_re = Regex::new(
+        r#"(?xs)
+            (?P<wrap_prefix><em[^>]*>\s*)?
+            <a
+                (?P<before>[^>]*?)
+                href="(?P<prefix>[^"]*?)_(?P<variant>light|dark)\.pdf"
+                (?P<after>[^>]*)
+            >
+                (?P<label>.*?)
+            </a>
+            (?P<wrap_suffix>\s*</em>)?
+            (?P<trailing>\s*\\)?
+        "#,
+    )
+    .expect("invalid resume anchor regex");
 
-    for caps in anchor_re.captures_iter(html) {
-        let prefix = caps.get(1).unwrap().as_str().to_string();
-        let variant = caps.get(2).unwrap().as_str();
-        let raw_label = caps.get(3).map(|m| m.as_str()).unwrap_or_default();
-        let decoded_label = decode_html_entities(raw_label.trim()).into_owned();
-        let entry = labels_by_prefix.entry(prefix).or_default();
-        match variant {
-            "light" => {
-                if entry.light.is_none() {
-                    entry.light = Some(decoded_label);
-                }
+    let mut matches: Vec<AnchorMatch> = anchor_re
+        .captures_iter(html)
+        .filter_map(|caps| {
+            let m = caps.get(0)?;
+            let prefix = caps.name("prefix")?.as_str().to_string();
+            let variant = PdfVariant::from_str(caps.name("variant")?.as_str())?;
+            let label_raw = caps.name("label").map(|m| m.as_str()).unwrap_or_default();
+            let label_text = decode_html_entities(label_raw.trim()).into_owned();
+
+            Some(AnchorMatch {
+                prefix,
+                variant,
+                attrs_before_href: caps
+                    .name("before")
+                    .map(|m| m.as_str().to_string())
+                    .unwrap_or_default(),
+                attrs_after_href: caps
+                    .name("after")
+                    .map(|m| m.as_str().to_string())
+                    .unwrap_or_default(),
+                wrap_prefix: caps.name("wrap_prefix").map(|m| m.as_str().to_string()),
+                wrap_suffix: caps.name("wrap_suffix").map(|m| m.as_str().to_string()),
+                trailing_break: caps.name("trailing").map(|m| m.as_str().to_string()),
+                label_text,
+                range: m.start()..m.end(),
+            })
+        })
+        .collect();
+
+    if matches.is_empty() {
+        return;
+    }
+
+    matches.sort_by_key(|m| m.range.start);
+
+    let mut replacements: Vec<(Range<usize>, String)> = Vec::new();
+    let mut index = 0;
+
+    while index < matches.len() {
+        let prefix = matches[index].prefix.clone();
+        let mut group: Vec<AnchorMatch> = Vec::new();
+
+        group.push(matches[index].clone());
+        index += 1;
+
+        while index < matches.len() && matches[index].prefix == prefix {
+            group.push(matches[index].clone());
+            index += 1;
+        }
+
+        let mut info = VariantInfo::default();
+        for anchor in group.iter().cloned() {
+            info.assign(anchor);
+        }
+
+        let primary_variant = if info.has_variant(PdfVariant::Light) {
+            PdfVariant::Light
+        } else if info.has_variant(PdfVariant::Dark) {
+            PdfVariant::Dark
+        } else {
+            continue;
+        };
+
+        let primary_anchor = match primary_variant {
+            PdfVariant::Light => info.light.as_ref().cloned(),
+            PdfVariant::Dark => info.dark.as_ref().cloned(),
+        };
+
+        let Some(primary_anchor) = primary_anchor else {
+            continue;
+        };
+
+        let light_label = info.label_for(PdfVariant::Light);
+        let dark_label = info.label_for(PdfVariant::Dark);
+        let light_href = info.href_for(&prefix, PdfVariant::Light);
+        let dark_href = info.href_for(&prefix, PdfVariant::Dark);
+
+        let (initial_href, initial_label) = match primary_variant {
+            PdfVariant::Light => (
+                light_href.clone().or_else(|| dark_href.clone()),
+                light_label.clone(),
+            ),
+            PdfVariant::Dark => (
+                dark_href.clone().or_else(|| light_href.clone()),
+                dark_label.clone(),
+            ),
+        };
+
+        let Some(initial_href) = initial_href else {
+            continue;
+        };
+
+        let mut new_anchor = String::new();
+        if let Some(prefix_markup) = &primary_anchor.wrap_prefix {
+            new_anchor.push_str(prefix_markup);
+        }
+
+        new_anchor.push_str("<a");
+        if !primary_anchor.attrs_before_href.is_empty() {
+            new_anchor.push_str(&primary_anchor.attrs_before_href);
+            if !primary_anchor
+                .attrs_before_href
+                .chars()
+                .last()
+                .map(|c| c.is_whitespace())
+                .unwrap_or(false)
+            {
+                new_anchor.push(' ');
             }
-            "dark" => {
-                if entry.dark.is_none() {
-                    entry.dark = Some(decoded_label);
-                }
+        } else {
+            new_anchor.push(' ');
+        }
+        new_anchor.push_str("href=\"");
+        new_anchor.push_str(&encode_double_quoted_attribute(&initial_href));
+        new_anchor.push('"');
+        new_anchor.push_str(&primary_anchor.attrs_after_href);
+
+        if let Some(light_href) = &light_href {
+            new_anchor.push_str(" data-light-href=\"");
+            new_anchor.push_str(&encode_double_quoted_attribute(light_href));
+            new_anchor.push('"');
+        }
+        if let Some(dark_href) = &dark_href {
+            new_anchor.push_str(" data-dark-href=\"");
+            new_anchor.push_str(&encode_double_quoted_attribute(dark_href));
+            new_anchor.push('"');
+        }
+
+        new_anchor.push_str(" data-light-label=\"");
+        new_anchor.push_str(&encode_double_quoted_attribute(&light_label));
+        new_anchor.push('"');
+        new_anchor.push_str(" data-dark-label=\"");
+        new_anchor.push_str(&encode_double_quoted_attribute(&dark_label));
+        new_anchor.push('"');
+        new_anchor.push('>');
+        new_anchor.push_str(&encode_safe(&initial_label));
+        new_anchor.push_str("</a>");
+
+        if let Some(suffix_markup) = &primary_anchor.wrap_suffix {
+            new_anchor.push_str(suffix_markup);
+        }
+        if let Some(trailing) = &primary_anchor.trailing_break {
+            new_anchor.push_str(trailing);
+        }
+
+        replacements.push((primary_anchor.range.clone(), new_anchor));
+
+        for anchor in group {
+            if anchor.range.start != primary_anchor.range.start {
+                replacements.push((anchor.range, String::new()));
             }
-            _ => {}
         }
     }
 
-    let re =
-        Regex::new(r#"href=\"([^\"]*?)_(light|dark)\.pdf\""#).expect("invalid resume link regex");
-    if re.is_match(html) {
-        *html = re
-            .replace_all(html, |caps: &regex::Captures| {
-                let prefix = caps.get(1).unwrap().as_str();
-                let variant = caps.get(2).unwrap().as_str();
-                let light_href = format!("{prefix}_light.pdf");
-                let dark_href = format!("{prefix}_dark.pdf");
-                let labels = labels_by_prefix.get(prefix);
-
-                let (light_label, dark_label, has_light, has_dark) = labels
-                    .map(|entry| {
-                        let has_light = entry.light.is_some();
-                        let has_dark = entry.dark.is_some();
-                        let light = entry
-                            .light
-                            .as_deref()
-                            .or(entry.dark.as_deref())
-                            .unwrap_or("Light PDF");
-                        let dark = entry
-                            .dark
-                            .as_deref()
-                            .or(entry.light.as_deref())
-                            .unwrap_or("Dark PDF");
-                        (light.to_string(), dark.to_string(), has_light, has_dark)
-                    })
-                    .unwrap_or_else(|| {
-                        (
-                            String::from("Light PDF"),
-                            String::from("Dark PDF"),
-                            variant == "light",
-                            variant == "dark",
-                        )
-                    });
-
-                let tooltip_variant = if variant == "dark" { "light" } else { "dark" };
-                let tooltip_label = if variant == "dark" {
-                    &light_label
-                } else {
-                    &dark_label
-                };
-                let tooltip_text = if has_light && has_dark {
-                    Some(format!(
-                        "Switch to {tooltip_variant} theme to access {tooltip_label}",
-                        tooltip_variant = tooltip_variant,
-                        tooltip_label = tooltip_label
-                    ))
-                } else {
-                    None
-                };
-                let href = if variant == "dark" {
-                    &dark_href
-                } else {
-                    &light_href
-                };
-
-                let tooltip_attr = tooltip_text.map(|tooltip| {
-                    format!(
-                        " data-tooltip=\"{}\"",
-                        encode_double_quoted_attribute(&tooltip)
-                    )
-                });
-
-                format!(
-                    concat!(
-                        "href=\"{href}\" data-light-href=\"{light}\" data-dark-href=\"{dark}\" ",
-                        "data-variant=\"{variant}\" data-light-label=\"{light_label}\" ",
-                        "data-dark-label=\"{dark_label}\"{tooltip}"
-                    ),
-                    href = href,
-                    light = light_href,
-                    dark = dark_href,
-                    variant = variant,
-                    light_label = encode_double_quoted_attribute(&light_label),
-                    dark_label = encode_double_quoted_attribute(&dark_label),
-                    tooltip = tooltip_attr.unwrap_or_default()
-                )
-            })
-            .into_owned();
+    replacements.sort_by(|a, b| b.0.start.cmp(&a.0.start));
+    for (range, replacement) in replacements {
+        html.replace_range(range, &replacement);
     }
 }
 

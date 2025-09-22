@@ -62,8 +62,8 @@ fn capitalize_first(text: &str) -> String {
 
 fn assert_pdf_link_attrs(html: &str, light: &str, dark: &str) {
     let document = Html::parse_document(html);
-    let selector = Selector::parse("a[data-light-href][data-dark-href][data-variant]")
-        .expect("valid selector");
+    let selector =
+        Selector::parse("a[data-light-href], a[data-dark-href]").expect("valid selector");
     let anchors: Vec<_> = document
         .select(&selector)
         .filter(|node| {
@@ -75,29 +75,12 @@ fn assert_pdf_link_attrs(html: &str, light: &str, dark: &str) {
 
     assert!(
         !anchors.is_empty(),
-        "expected anchors with light='{light}' and dark='{dark}'"
+        "expected at least one anchor with light='{light}' and dark='{dark}'"
     );
 
-    let light_variant_count = anchors
-        .iter()
-        .filter(|anchor| anchor.value().attr("data-variant") == Some("light"))
-        .count();
-    let dark_variant_count = anchors
-        .iter()
-        .filter(|anchor| anchor.value().attr("data-variant") == Some("dark"))
-        .count();
-
-    assert!(
-        light_variant_count >= 1,
-        "expected at least one light variant for {light}/{dark}"
-    );
-    assert!(
-        dark_variant_count >= 1,
-        "expected at least one dark variant for {light}/{dark}"
-    );
-
-    for anchor in &anchors {
+    for anchor in anchors {
         let element = anchor.value();
+
         assert_eq!(
             element.attr("data-light-href"),
             Some(light),
@@ -108,67 +91,30 @@ fn assert_pdf_link_attrs(html: &str, light: &str, dark: &str) {
             Some(dark),
             "missing data-dark-href for {dark}"
         );
-        let variant = element.attr("data-variant").unwrap_or("");
-        assert!(
-            variant == "light" || variant == "dark",
-            "unexpected data-variant '{variant}' for {light}/{dark}"
-        );
+
         let light_label = element
             .attr("data-light-label")
             .unwrap_or_else(|| panic!("missing data-light-label for {light}"));
         let dark_label = element
             .attr("data-dark-label")
             .unwrap_or_else(|| panic!("missing data-dark-label for {dark}"));
-        let tooltip = element
-            .attr("data-tooltip")
-            .unwrap_or_else(|| panic!("missing data-tooltip for {light}/{dark}"));
-
-        match variant {
-            "light" => {
-                assert!(
-                    tooltip.contains("dark"),
-                    "light variant tooltip should reference dark theme"
-                );
-                assert!(
-                    tooltip.contains(dark_label),
-                    "light variant tooltip should reference {dark_label}"
-                );
-            }
-            "dark" => {
-                assert!(
-                    tooltip.contains("light"),
-                    "dark variant tooltip should reference light theme"
-                );
-                assert!(
-                    tooltip.contains(light_label),
-                    "dark variant tooltip should reference {light_label}"
-                );
-            }
-            _ => {}
-        }
 
         let href = element.attr("href").unwrap_or("");
-        match variant {
-            "light" => {
-                assert_eq!(href, light, "light variant should link to {light}");
-                let text: String = anchor.text().collect::<String>();
-                assert_eq!(
-                    text.trim(),
-                    light_label,
-                    "light variant text should match {light_label}"
-                );
-            }
-            "dark" => {
-                assert_eq!(href, dark, "dark variant should link to {dark}");
-                let text: String = anchor.text().collect::<String>();
-                assert_eq!(
-                    text.trim(),
-                    dark_label,
-                    "dark variant text should match {dark_label}"
-                );
-            }
-            _ => {}
-        }
+        let text = anchor.text().collect::<String>();
+        let text = text.trim();
+
+        assert_eq!(
+            href, light,
+            "anchor should default to light variant for {light}/{dark}"
+        );
+        assert_eq!(
+            text, light_label,
+            "anchor text should match light label for {light}/{dark}"
+        );
+        assert_ne!(
+            text, dark_label,
+            "unexpected dark label rendered directly for {light}/{dark}"
+        );
     }
 }
 
