@@ -16,7 +16,7 @@ Languages:
 Work Schedule: Remote work, full-time
 
 ## Objective
-Hands-on Engineering Manager and DevOps champion with nearly 10 years of leading backend, QA, and platform teams. Passionate about orchestrating release strategy, automating quality gates, and modernizing microservice ecosystems. Seeking to scale cross-functional organizations by combining strategic planning, delivery governance, and data-driven DevOps practices to ship reliable, high-impact products.
+Hands-on Engineering Manager and DevOps champion with 15 years in IT and over 5 years leading backend, QA, and platform teams. Passionate about orchestrating release strategy, automating quality gates, and modernizing microservice ecosystems. Seeking to scale cross-functional organizations by combining strategic planning, delivery governance, and data-driven DevOps practices to ship reliable, high-impact products.
 
 ## Core Competencies
 - Strategic planning and roadmap ownership
