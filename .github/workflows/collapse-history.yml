@@ -1,0 +1,30 @@
+name: Collapse history to single commit
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collapse:
+    name: Collapse history
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Recreate single snapshot commit
+        shell: bash
+        env:
+          GIT_AUTHOR_NAME: History Collapser
+          GIT_AUTHOR_EMAIL: actions@github.com
+          GIT_COMMITTER_NAME: History Collapser
+          GIT_COMMITTER_EMAIL: actions@github.com
+        run: python scripts/collapse_history.py
