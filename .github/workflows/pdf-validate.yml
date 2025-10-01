@@ -1,0 +1,63 @@
+name: pdf-validate
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tool: [qpdf, pdfcpu]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-pdfs
+
+      - name: Install qpdf
+        if: matrix.tool == 'qpdf'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qpdf
+
+      - name: Setup Go
+        if: matrix.tool == 'pdfcpu'
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Install pdfcpu
+        if: matrix.tool == 'pdfcpu'
+        run: go install github.com/pdfcpu/pdfcpu/cmd/pdfcpu@latest
+
+      - name: Run qpdf checks
+        if: matrix.tool == 'qpdf'
+        run: |
+          mkdir -p reports
+          shopt -s nullglob globstar
+          status=0
+          for pdf in typst/**/*.pdf; do
+            echo "Checking $pdf"
+            qpdf --check "$pdf" > "reports/$(basename "$pdf").log" || status=1
+          done
+          exit $status
+
+      - name: Validate PDFs with pdfcpu
+        if: matrix.tool == 'pdfcpu'
+        run: |
+          mkdir -p reports
+          shopt -s nullglob globstar
+          for pdf in typst/**/*.pdf; do
+            pdfcpu validate -mode strict "$pdf" > "reports/$(basename "$pdf" .pdf).txt"
+          done
+
+      - name: Upload reports
+        if: ${{ hashFiles('reports/*') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.tool }}-reports
+          path: reports
