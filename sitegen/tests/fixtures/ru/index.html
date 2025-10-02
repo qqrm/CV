@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang='ru'>
+<head>
+    <meta charset='UTF-8'>
+    <script>
+        const p = window.location.pathname;
+        if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+            window.location.replace(p + '/' + window.location.search + window.location.hash);
+        }
+    </script>
+    <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+    </script>
+    <title>Алексей Беляков - Резюме</title>
+    <link rel='icon' href='../favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='../style.css'>
+</head>
+<body>
+<header>
+    <h1>Алексей Беляков</h1>
+    
+    <p>DATE</p>
+</header>
+<div class='content'>
+<img class='avatar' src='../avatar.jpg' alt='Avatar'>
+
+<p><em><a href="../">Ссылка на английскую версию</a></em> \
+
+</p>
+<ul>
+<li><strong>Телефон:</strong> +7 (911) 261-70-72</li>
+<li><strong>Telegram:</strong> <a href="https://t.me/leqqrm">@leqqrm</a></li>
+<li><strong>Почта:</strong> <a href="mailto:qqrm@vivaldi.net">qqrm@vivaldi.net</a></li>
+<li><strong>Формат работы:</strong> Удалённо, полный день</li>
+</ul>
+<h2>Профиль руководителя разработки</h2>
+<p>Практикующий инженерный лидер и приверженец DevOps, который масштабирует кросс-функциональные команды, ведёт сложные программы миграции и обеспечивает прозрачность метрик для руководства. Умеет выстраивать архитектурное единство, развивать людей, управлять релизами и держать бюджет под контролем без просадки по скорости поставки.</p>
+<h2>Ключевые сильные стороны</h2>
+<ul>
+<li>Ведение дорожных карт для нескольких команд и направлений.</li>
+<li>Проработка KPI/OKR, прозрачный трекинг и отчётность для стейкхолдеров.</li>
+<li>Планирование бюджета, набор и взаимодействие с подрядчиками в гибридной инфраструктуре.</li>
+<li>Развитие специалистов через менторство, найм и регулярные performance review.</li>
+<li>Системы управления доставкой, которые балансируют скорость и контроль рисков.</li>
+<li>DevOps-стратегия, релизное управление и взаимодействие с SRE.</li>
+</ul>
+<h2>Опыт работы</h2>
+<h3>Руководитель разработки @ Inline Group | март 2023 – настоящее время (DURATION)</h3>
+<p><em>март 2023 – настоящее время</em></p>
+<p><strong>Лидерство и поставка</strong></p>
+<ul>
+<li>Руководил программой из 25 человек по замене SAP на микросервисы на Rust.</li>
+<li>Согласовывал работу лидов бэкенда, QA, аналитики и DevOps, удерживая единый график релизов.</li>
+<li>Балансировал дорожную карту, бюджет миграции и квартальные цели, заранее подсвечивая риски.</li>
+<li>Внедрил асинхронное и персональное планирование спринтов, что повысило продуктивность примерно на 15% и предсказуемость примерно на 25%.</li>
+<li>Возглавил релизный комитет, синхронизировав QA-аппрувы, SAST-политику и готовность инфраструктуры для предсказуемых релизов.</li>
+</ul>
+<p><strong>Люди и управление</strong></p>
+<ul>
+<li>Увеличил бэкенд-команду с 5 до 12 разработчиков, сократив онбординг примерно на 30%.</li>
+<li>Сохранил 90% новых сотрудников после первого года за счёт планов развития и регулярной обратной связи.</li>
+<li>Вырастил трёх инженеров до уровня senior по матрице компетенций и адресному коучингу.</li>
+<li>Включил статический анализ (Clippy, cargo-audit, SonarQube) и внутренний пакетный репозиторий для соответствия требованиям ИБ.</li>
+<li>Популяризировал DevOps-подходы: совмещал разбор инцидентов с автоматизацией задач и масштабровал CI/CD практики на команды.</li>
+</ul>
+<h3>Rust Team Lead @ Solcery | март 2022 – март 2023</h3>
+<ul>
+<li>Управлял командой из 4 Rust-разработчиков, создающих блокчейн-базу данных для DAO на Solana.</li>
+<li>Переводил продуктовые цели в план спринтов, объём релизов и технические спецификации.</li>
+<li>Сократил среднее время код-ревью примерно на 40% за счёт правил, парного программирования и автотестов.</li>
+<li>Внедрил версионирование схем и миграции, что снизило издержки поддержки и ускорило адаптацию новичков.</li>
+</ul>
+<h3>Senior Rust Developer @ Kaspersky Lab | май 2021 – март 2022</h3>
+<ul>
+<li>Работал на стыке продукта, QA и операций, поддерживая блокчейн-платформу голосования.</li>
+<li>Увеличил покрытие тестами примерно до 75%, снизив количество пострелизных инцидентов примерно на 25%.</li>
+<li>Вёл рефакторинг, упрощающий ввод новых фич и передачу знаний между командами.</li>
+</ul>
+<h2>Операционный ритм и управление</h2>
+<ul>
+<li>Еженедельные портфельные ревью с бизнесом: статус KPI, бюджет, риски.</li>
+<li>Квартальное планирование с выравниванием продуктовой, инженерной и операционной повестки.</li>
+<li>Постоянное улучшение — ретроспективы, опросы и эксперименты с измеримым эффектом.</li>
+<li>Отчётность на данных через дашборды Jira, конспекты в Confluence и лаконичные мемо.</li>
+</ul>
+<h2>Результаты</h2>
+<ul>
+<li>Доставка оставалась в пределах 5% от бюджета во время шестимесячного роста команды.</li>
+<li>Баг-бэклог сократился примерно на 30% благодаря усиленным QA-практикам и контролю релизов.</li>
+<li>Удерживал примерно 90% выполнения квартальных KPI даже при изменении объёма и ограничениях инфраструктуры.</li>
+</ul>
+<h2>Инструменты и практики</h2>
+<ul>
+<li>Планирование: Jira Advanced Roadmaps, дорожные карты в Notion, спецификации в Confluence.</li>
+<li>Доставка: Scrum, гибриды Kanban, асинхронные апдейты, жёсткий Definition of Done.</li>
+<li>Качество: GitLab CI/CD, статический анализ, регрессионные автотесты, матрицы рисков.</li>
+<li>Люди: матрицы компетенций, планы развития, структурированные 1:1, обратная связь через skip-level.</li>
+</ul>
+<h2>Что предлагаю</h2>
+<ul>
+<li>Понятная коммуникация для руководства и глубокое понимание технических деталей.</li>
+<li>Умение запускать или усиливать инженерные процессы без просадки по скорости.</li>
+<li>Доказанный опыт масштабирования команд, развития лидов и поддержания мотивации при изменениях.</li>
+</ul>
+<h2>Дополнительно</h2>
+<ul>
+<li><a href="https://qqrm.github.io/CV/">Полное CV</a></li>
+<li>Полные PDF-версии CV: <a href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf" data-light-label="светлая" data-dark-label="тёмная">светлая</a> · </li>
+</ul>
+
+</div>
+<footer>
+<p><em><a href="../">Ссылка на английскую версию</a></em> \
+
+</p>
+</footer>
+<button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
+  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
+</button>
+<script>
+    const positions = {"em":"Engineering Manager"};
+    const positionsRu = {"em":"Руководитель разработки"};
+    const segments = window.location.pathname.split('/').filter(Boolean);
+    const slug = segments.reverse().find(s => positions[s]);
+    const position = document.getElementById('position');
+    if (position && slug) {
+        const lang = document.documentElement.lang || '';
+        let value = positions[slug];
+        if (lang.startsWith('ru') && positionsRu[slug]) {
+            value = positionsRu[slug];
+        }
+        if (value) {
+            position.textContent = value;
+        }
+    }
+</script>
+<script>
+(function(){
+  var root = document.documentElement;
+  var key = 'theme';
+  function updateResumeLinks(theme){
+    var anchors = document.querySelectorAll('a[data-light-href], a[data-dark-href]');
+    for (var i = 0; i < anchors.length; i++) {
+      var anchor = anchors[i];
+      var lightHref = anchor.getAttribute('data-light-href');
+      var darkHref = anchor.getAttribute('data-dark-href');
+      var lightLabel = anchor.getAttribute('data-light-label');
+      var darkLabel = anchor.getAttribute('data-dark-label');
+      var hasLight = !!lightHref;
+      var hasDark = !!darkHref;
+
+      var targetHref = theme === 'dark' && hasDark ? darkHref : lightHref || darkHref;
+      if (!targetHref && hasDark) {
+        targetHref = darkHref;
+      }
+      if (targetHref) {
+        anchor.setAttribute('href', targetHref);
+      }
+
+      var label;
+      if (theme === 'dark' && hasDark) {
+        label = darkLabel || lightLabel;
+      } else if (theme === 'dark') {
+        label = lightLabel || darkLabel;
+      } else {
+        label = lightLabel || darkLabel;
+      }
+      if (label) {
+        anchor.textContent = label;
+      }
+
+      if (hasLight && hasDark) {
+        var nextTheme = theme === 'dark' ? 'light' : 'dark';
+        var tooltipLabel = theme === 'dark' ? (lightLabel || 'Light PDF') : (darkLabel || 'Dark PDF');
+        var tooltip = 'Switch to ' + nextTheme + ' theme to access ' + tooltipLabel;
+        anchor.setAttribute('title', tooltip);
+        anchor.setAttribute('aria-label', tooltip);
+      } else {
+        anchor.removeAttribute('title');
+        anchor.removeAttribute('aria-label');
+      }
+    }
+  }
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    updateResumeLinks(theme);
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var next = theme === 'light' ? 'dark' : 'light';
+    btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+    btn.setAttribute('title', 'Switch to ' + next + ' theme');
+  }
+  var saved = localStorage.getItem(key);
+  var start = saved || root.getAttribute('data-theme') || 'light';
+  apply(start);
+  localStorage.setItem(key, start);
+
+  var btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(key, next);
+      apply(next);
+    });
+  }
+})();
+</script>
+</body>
+</html>

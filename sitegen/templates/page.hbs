@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang='{{lang}}'>
+<head>
+    <meta charset='UTF-8'>
+    <script>
+        const p = window.location.pathname;
+        if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+            window.location.replace(p + '/' + window.location.search + window.location.hash);
+        }
+    </script>
+    <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+    </script>
+    <title>{{title}}</title>
+    <link rel='icon' href='{{prefix}}favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='{{prefix}}style.css'>
+</head>
+<body>
+<header>
+    <h1>{{name}}</h1>
+    {{{position_block}}}
+    <p>{{date_str}}</p>
+</header>
+<div class='content'>
+<img class='avatar' src='{{avatar_src}}' alt='Avatar'>
+{{#if link_to_en}}<p><em><a href='{{link_to_en}}'>Ссылка на английскую версию</a></em></p>{{/if}}
+{{{html_body}}}
+</div>
+<footer>
+{{{footer_links}}}
+</footer>
+<button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
+  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
+</button>
+<script>
+    const positions = {{{roles_js}}};
+    const positionsRu = {{{roles_js_ru}}};
+    const segments = window.location.pathname.split('/').filter(Boolean);
+    const slug = segments.reverse().find(s => positions[s]);
+    const position = document.getElementById('position');
+    if (position && slug) {
+        const lang = document.documentElement.lang || '';
+        let value = positions[slug];
+        if (lang.startsWith('ru') && positionsRu[slug]) {
+            value = positionsRu[slug];
+        }
+        if (value) {
+            position.textContent = value;
+        }
+    }
+</script>
+<script>
+(function(){
+  var root = document.documentElement;
+  var key = 'theme';
+  function updateResumeLinks(theme){
+    var anchors = document.querySelectorAll('a[data-light-href], a[data-dark-href]');
+    for (var i = 0; i < anchors.length; i++) {
+      var anchor = anchors[i];
+      var lightHref = anchor.getAttribute('data-light-href');
+      var darkHref = anchor.getAttribute('data-dark-href');
+      var lightLabel = anchor.getAttribute('data-light-label');
+      var darkLabel = anchor.getAttribute('data-dark-label');
+      var hasLight = !!lightHref;
+      var hasDark = !!darkHref;
+
+      var targetHref = theme === 'dark' && hasDark ? darkHref : lightHref || darkHref;
+      if (!targetHref && hasDark) {
+        targetHref = darkHref;
+      }
+      if (targetHref) {
+        anchor.setAttribute('href', targetHref);
+      }
+
+      var label;
+      if (theme === 'dark' && hasDark) {
+        label = darkLabel || lightLabel;
+      } else if (theme === 'dark') {
+        label = lightLabel || darkLabel;
+      } else {
+        label = lightLabel || darkLabel;
+      }
+      if (label) {
+        anchor.textContent = label;
+      }
+
+      if (hasLight && hasDark) {
+        var nextTheme = theme === 'dark' ? 'light' : 'dark';
+        var tooltipLabel = theme === 'dark' ? (lightLabel || 'Light PDF') : (darkLabel || 'Dark PDF');
+        var tooltip = 'Switch to ' + nextTheme + ' theme to access ' + tooltipLabel;
+        anchor.setAttribute('title', tooltip);
+        anchor.setAttribute('aria-label', tooltip);
+      } else {
+        anchor.removeAttribute('title');
+        anchor.removeAttribute('aria-label');
+      }
+    }
+  }
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    updateResumeLinks(theme);
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var next = theme === 'light' ? 'dark' : 'light';
+    btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+    btn.setAttribute('title', 'Switch to ' + next + ' theme');
+  }
+  var saved = localStorage.getItem(key);
+  var start = saved || root.getAttribute('data-theme') || 'light';
+  apply(start);
+  localStorage.setItem(key, start);
+
+  var btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(key, next);
+      apply(next);
+    });
+  }
+})();
+</script>
+</body>
+</html>
