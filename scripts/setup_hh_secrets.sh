@@ -211,7 +211,6 @@ fi
 
 echo
 res_ru="$(read_with_default "HeadHunter resume ID (Russian)")"
-res_pm_ru="$(read_with_default "HeadHunter resume ID (Russian PM role)")"
 res_en="$(read_with_default "HeadHunter resume ID (English)")"
 
 echo
@@ -223,8 +222,6 @@ store_secret HH_REFRESH_TOKEN "$refresh_token"
 store_secret REFRESH_TOKEN "$refresh_token"
 store_secret HH_RESUME_ID_RU "$res_ru"
 store_secret RESUME_ID_RU "$res_ru"
-store_secret HH_RESUME_ID_PM_RU "$res_pm_ru"
-store_secret RESUME_ID_PM_RU "$res_pm_ru"
 store_secret HH_RESUME_ID_EN "$res_en"
 store_secret RESUME_ID_EN "$res_en"
 

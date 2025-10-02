@@ -268,67 +268,26 @@ fn generates_expected_dist() {
         .expect("roles table");
 
     for slug in roles.keys() {
-        for theme in PDF_THEMES {
-            assert!(
-                dist.join(format!("Belyakov_{}_en_{}.pdf", slug, theme))
-                    .exists(),
-                "missing dist/Belyakov_{}_en_{}.pdf",
-                slug,
-                theme
-            );
-            assert!(
-                dist.join(format!("Belyakov_{}_ru_{}.pdf", slug, theme))
-                    .exists(),
-                "missing dist/Belyakov_{}_ru_{}.pdf",
-                slug,
-                theme
-            );
-        }
         let role_dir = dist.join(slug);
         let en_path = role_dir.join("index.html");
         assert!(en_path.exists(), "missing {}/index.html", slug);
         let en_page = fs::read_to_string(&en_path).expect("read role index");
-        let en_light = format!("../Belyakov_{}_en_light.pdf", slug);
-        let en_dark = format!("../Belyakov_{}_en_dark.pdf", slug);
-        assert_pdf_link_attrs(&en_page, &en_light, &en_dark);
-        let ru_light = format!("../Belyakov_{}_ru_light.pdf", slug);
-        let ru_dark = format!("../Belyakov_{}_ru_dark.pdf", slug);
-        assert_no_pdf_link_attrs(&en_page, &ru_light, &ru_dark);
+        let en_light = "../Belyakov_en_light.pdf";
+        let en_dark = "../Belyakov_en_dark.pdf";
+        assert_pdf_link_attrs(&en_page, en_light, en_dark);
+        let ru_light = "../Belyakov_ru_light.pdf";
+        let ru_dark = "../Belyakov_ru_dark.pdf";
+        assert_no_pdf_link_attrs(&en_page, ru_light, ru_dark);
 
         let ru_path = role_dir.join("ru").join("index.html");
         assert!(ru_path.exists(), "missing {}/ru/index.html", slug);
         let ru_page = fs::read_to_string(&ru_path).expect("read role ru index");
-        let ru_ru_light = format!("../../Belyakov_{}_ru_light.pdf", slug);
-        let ru_ru_dark = format!("../../Belyakov_{}_ru_dark.pdf", slug);
-        assert_pdf_link_attrs(&ru_page, &ru_ru_light, &ru_ru_dark);
-        let ru_en_light = format!("../../Belyakov_{}_en_light.pdf", slug);
-        let ru_en_dark = format!("../../Belyakov_{}_en_dark.pdf", slug);
-        assert_no_pdf_link_attrs(&ru_page, &ru_en_light, &ru_en_dark);
-    }
-
-    for slug in roles.keys() {
-        let resume_dir = dist.join("resume").join(slug);
-        let en_path = resume_dir.join("index.html");
-        assert!(en_path.exists(), "missing resume/{}/index.html", slug);
-        let en_page =
-            fs::read_to_string(&en_path).unwrap_or_else(|_| panic!("read resume {slug} index"));
-        let resume_en_light = format!("../../Belyakov_{}_en_light.pdf", slug);
-        let resume_en_dark = format!("../../Belyakov_{}_en_dark.pdf", slug);
-        assert_pdf_link_attrs(&en_page, &resume_en_light, &resume_en_dark);
-        let resume_ru_light = format!("../../Belyakov_{}_ru_light.pdf", slug);
-        let resume_ru_dark = format!("../../Belyakov_{}_ru_dark.pdf", slug);
-        assert_no_pdf_link_attrs(&en_page, &resume_ru_light, &resume_ru_dark);
-
-        let ru_path = resume_dir.join("ru").join("index.html");
-        assert!(ru_path.exists(), "missing resume/{}/ru/index.html", slug);
-        let ru_page =
-            fs::read_to_string(&ru_path).unwrap_or_else(|_| panic!("read resume {slug} ru index"));
-        let resume_ru_ru_light = format!("../../../Belyakov_{}_ru_light.pdf", slug);
-        let resume_ru_ru_dark = format!("../../../Belyakov_{}_ru_dark.pdf", slug);
-        assert_pdf_link_attrs(&ru_page, &resume_ru_ru_light, &resume_ru_ru_dark);
-        let resume_ru_en_light = format!("../../../Belyakov_{}_en_light.pdf", slug);
-        let resume_ru_en_dark = format!("../../../Belyakov_{}_en_dark.pdf", slug);
-        assert_no_pdf_link_attrs(&ru_page, &resume_ru_en_light, &resume_ru_en_dark);
+        let ru_ru_light = "../../Belyakov_ru_light.pdf";
+        let ru_ru_dark = "../../Belyakov_ru_dark.pdf";
+        assert_pdf_link_attrs(&ru_page, ru_ru_light, ru_ru_dark);
+        let ru_en_light = "../../Belyakov_en_light.pdf";
+        let ru_en_dark = "../../Belyakov_en_dark.pdf";
+        assert_no_pdf_link_attrs(&ru_page, ru_en_light, ru_en_dark);
     }
 
     fs::remove_dir_all(&dist).expect("failed to remove dist");

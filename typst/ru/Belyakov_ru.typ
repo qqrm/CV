@@ -1,2 +1,2 @@
 #import "../../templates/resume.typ": resume
-#resume(lang: "ru")
+#resume(lang: "ru", role: "Engineering Manager")

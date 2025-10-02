@@ -6,161 +6,71 @@
 - **Phone:** +7 (911) 261-70-72
 - **Telegram:** [@leqqrm](https://t.me/leqqrm)
 - **Email:** [qqrm@vivaldi.net](mailto:qqrm@vivaldi.net)
-- **GitHub:** [github.com/qqrm](https://github.com/qqrm)
-- **Telegram blog:** [t.me/le_gouch](https://t.me/le_gouch)
+- **Location:** Remote, full-time availability
 
-Languages:
-- Russian (Native)
-- English (B2 — Advanced)
+## Executive Profile
+Hands-on engineering leader and DevOps advocate who scales cross-functional teams, delivers complex migration programs, and keeps executives informed with clear metrics. Comfortable driving architectural alignment, people development, release governance, and budget discipline while maintaining a transparent delivery cadence.
 
-Work Schedule: Remote work, full-time
-
-## Objective
-Hands-on Engineering Manager and DevOps champion with 15 years in IT and over 5 years leading backend, QA, and platform teams. Passionate about orchestrating release strategy, automating quality gates, and modernizing microservice ecosystems. Seeking to scale cross-functional organizations by combining strategic planning, delivery governance, and data-driven DevOps practices to ship reliable, high-impact products.
-
-## Core Competencies
-- Strategic planning and roadmap ownership
-- Stakeholder engagement, executive communication, and cross-functional collaboration
-- Budget and P&L oversight, resource allocation, and risk mitigation
-- KPI/OKR tracking and data-driven decision making
-- Agile delivery, process optimization, and change management
-- Talent development, performance reviews, and hiring
-- DevOps strategy, release governance, and SRE collaboration
+## Core Strengths
+- Roadmap ownership across multiple teams and workstreams.
+- Transparent KPI/OKR design, tracking, and stakeholder reporting.
+- Budgeting, staffing, and vendor coordination for hybrid on-prem/cloud setups.
+- Team development through structured mentoring, hiring, and performance reviews.
+- Governance and delivery frameworks that balance velocity with risk control.
+- DevOps strategy, release orchestration, and SRE collaboration.
 
 ## Work Experience
 
-### Engineering Manager @ Inline Group | [inlinegroup.ru](https://inlinegroup.ru)
+### Engineering Manager @ Inline Group | March 2023 – Present
 *March 2023 – Present*
 
-- Led a 25-person cross-functional migration from SAP to a Rust microservices ecosystem, owning architecture and roadmap execution.
-- Directed Analytics, QA, and DevOps through their leads while managing backend delivery to balance staffing, technical debt, and throughput.
-- Established Agile cadences, OKRs, and Jira dashboards that kept ~90% of quarterly objectives on track and lifted development velocity by ~20%.
-- Chaired release governance that aligned QA sign-off, DevOps readiness, and infrastructure requirements for predictable on-premise launches.
-- Scaled the engineering organization: grew the backend team from 5 to 12 engineers, cut onboarding time by ~30%, mentored 3 developers to senior roles, and retained 90% of hires.
-- Delivered a security-compliant internal package registry with integrated static analysis, tightening quality gates and shrinking the bug backlog by ~30%.
+**Leadership & Delivery**
+- Lead a 25-person program replacing SAP workflows with a Rust-based microservices stack.
+- Coordinate backend, QA, analytics, and DevOps leads to keep multi-team milestones on schedule.
+- Balance roadmap scope against migration budgets and quarterly goals, surfacing risks early.
+- Established async and personal sprint planning that raised sprint productivity by ~15% and predictability by ~25%.
+- Chaired a release board aligning QA sign-offs, SAST policies, and deployment readiness reviews for predictable launches.
 
-#### Key Achievements
+**People & Governance**
+- Expanded the backend team from 5 to 12 developers while reducing onboarding time by ~30%.
+- Retained 90% of hires after the first year by pairing growth plans with consistent feedback loops.
+- Mentored three engineers to senior roles using a competency matrix and targeted coaching.
+- Integrated static analysis (Clippy, cargo-audit, SonarQube) and internal package distribution to satisfy compliance requirements.
+- Evangelized DevOps practices across teams, pairing incident reviews with automation backlogs and driving CI/CD adoption.
 
-- Increased sprint productivity by ~15% and predictability by ~25% through async planning, structured retrospectives, and disciplined backlog refinement.
-- Built transparent stakeholder reporting that kept the migration roadmap aligned with business priorities and delivery commitments.
+### Rust Team Lead @ Solcery | March 2022 – March 2023
+- Managed a 4-person Rust team building a DAO-ready blockchain database on Solana.
+- Translated product goals into sprint plans, release scopes, and technical specifications.
+- Reduced code review time by ~40% via review policies, pairing, and test automation.
+- Implemented schema versioning and migration practices that cut maintenance overhead and simplified onboarding.
 
-**Technologies**: Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, Docker Compose, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube
+### Senior Rust Developer @ Kaspersky Lab | May 2021 – March 2022
+- Coordinated with product, QA, and operations while maintaining a blockchain-based voting platform.
+- Expanded integration and unit test coverage to ~75%, reducing post-deployment issues by ~25%.
+- Led refactoring efforts that simplified future feature delivery and knowledge transfer across teams.
 
-<!--
-### Lead Rust Developer @ YADRO | [www.yadro.com](https://www.yadro.com)
-*March 2023 — March 2024 (1 year)*
+## Operating Rhythm & Governance
+- Weekly portfolio reviews with business stakeholders, surfacing KPI movements and budget status.
+- Quarterly planning rituals that align product, engineering, and operations on priorities and capacity.
+- Continuous improvement loops—retrospectives, survey feedback, and actionable experiments.
+- Data-informed reporting through Jira dashboards, Confluence scorecards, and lightweight memos.
 
-- Enhanced the architecture of a hardware-software complex for deduplication-based backup solutions.
-- Conducted research on optimizing RocksDB and enhancing NVMe disk performance.
-- Implemented data structures for efficient storage of hashes and hash-hashes.
-- Resolved bugs and improved compression and deduplication modules.
-- Conducted code reviews and delivered internal lectures on Rust to transition ex-C++ developers to idiomatic Rust, decreasing onboarding time by 30%.
+## Results & Impact
+- Delivery stayed within 5% of budget during a 6-month team expansion.
+- Bug backlog shrank by ~30% after reinforcing QA, code reviews, and release gates.
+- Maintained ~90% adherence to quarterly KPIs despite scope churn and infrastructure constraints.
 
-**Technologies**: Rust, Tokio, Protocol Buffers, Serde, RocksDB, Git.
+## Tools & Practices
+- Planning: Jira Advanced Roadmaps, Notion roadmaps, Confluence specs.
+- Delivery: Scrum, Kanban hybrids, async updates, definition-of-done enforcement.
+- Quality: GitLab CI/CD, static analysis, automated regression suites, risk registers.
+- People: Competency matrices, growth plans, structured 1:1s, skip-level feedback.
 
-### Senior Rust/Python Developer (Part-Time) @ Ultima-bi
-*Nov 2022 - Mar 2023 (5 months)*
+## What I Offer
+- Executive-ready communication paired with credible technical depth.
+- Ability to bootstrap or mature engineering processes without slowing delivery.
+- Proven record of scaling teams, mentoring leaders, and maintaining morale through change.
 
-- Developed Python wrappers and a caching system for a data science tool based on Polars, ensuring seamless Rust ↔ Python integration.
-- Leveraged PyO3 to accelerate critical code paths, achieving ~25% faster data processing.
-- Designed automated tests to ensure reliability and maintainability of the hybrid Python-Rust solution.
-
-**Technologies**: Rust, Python3, PyO3, Git
-
-### Rust Team Lead @ Solcery
-*March 2022 — March 2023 (1 year)*
-
-- Led a team of 4 Rust developers to build a blockchain-based database using Solana smart contracts, focusing on DAO and card game frameworks.
-- Architected and implemented low-level data storage structures, versioning, and table migrations, reducing code complexity by ~20%.
-- Formulated requirements from user stories, bridging technical and business aspects for clear deliverables.
-- Coordinated sprints, assigned tasks, tracked timelines, and ensured on-time delivery of features.
-- Conducted code reviews, reducing production bugs by ~30% through early detection of issues.
-
-#### Key Achievements
-
-- Streamlined the Rust development workflow, cutting average code review time by 40%.
-- Established best practices for versioning and migrations, enabling seamless DAO-based solutions for card game frameworks.
-
-**Technologies**: Rust, Solana Test Validator, Git, GitHub.
--->
-
-### Senior Rust Developer @ Kaspersky Lab | [www.kaspersky.ru](https://www.kaspersky.ru)
-*March 2020 — March 2023 (3 years)*
-
-- Maintained and enhanced a blockchain-based voting service, delivering weight-based voting capabilities requested by Product.
-- Expanded integration and unit test coverage to ~75%, strengthening overall code quality.
-- Partnered with infrastructure teams to migrate deployment pipelines to corporate standards, shortening release cycles.
-- Facilitated structured retrospectives and defect review sessions, increasing sprint predictability by ~20%.
-
-#### Key Achievements
-
-- Reduced post-deployment issues by ~25% through improved test coverage and robust CI processes.
-- Refactored the codebase for better maintainability, simplifying future feature additions.
-
-**Technologies**: Rust, Exonum, Protocol Buffers, Serde, Git.
-
-### Senior C++/Go Developer @ B2Broker | [www.b2broker.com](https://www.b2broker.com)
-*November 2018 — March 2020 (1 year 4 months)*
-
-- Delivered trade-copying capabilities that aligned with the brokerage roadmap and supported cross-platform trading tools.
-- Coordinated with business stakeholders to shape a Multi Account Manager for flexible fund delegation and reward calculation, boosting operational efficiency by ~15% within budget targets.
-- Designed services for real-time data normalization and delivery, enabling timely updates for client-facing widgets and supporting roadmap commitments.
-- Introduced data collection for analytics, providing brokers and product teams with insights for strategic decisions.
-- Implemented OKR tracking in Jira, improving cross-team delivery predictability by ~15%.
-
-**Technologies**: MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
-
-### Middle → Senior C++ Developer → Teamlead @ ASCON | [www.ascon.ru](https://www.ascon.ru)
-*May 2016 — November 2018 (2 years 7 months)*
-
-- Developed libraries for architectural design, delivering a “Change View Plane” feature aligned with the product roadmap and enhancing 3D modeling capabilities.
-- Introduced an automated testing framework that reduced manual QA overhead by ~30% and freed budget for roadmap features.
-- Led codebase modernization to C++17, enabling future enhancements and cross-team compatibility.
-- Handled People Management: recruiting, interviewing, and offboarding developers (one case).
-- Established a competency-based career framework with quarterly reviews, enabling 2 internal promotions and raising retention by ~10%.
-- Partnered with product management to prioritize tasks and provide architectural oversight.
-- Modernized version control, communication, and documentation practices to support agile collaboration across departments.
-
-**Technologies**: MSVC, C++, Boost, kompas-api, python, git, svn, CMake.
-
-<!--
-### Middle С++ Developer @ Con Certeza
-*March 2015 — April 2016 (1 year 2 months)*
-
-- Developed a sniffer and parser for signaling traffic (comprising the entire SS7 protocol stack) as part of the SORM system for MTS.
-- Authored parsers for protocols, including:
-    - INAP
-    - RANAP
-    - MAP
-    - TCAP
-    - CAP
-    - MTP3
-    - MTP2
-    - SCCP
-    - SIP
-- Designed and implemented modules to gather information from traffic based on RFC protocols for:
-    - SMS
-    - Subscriber movements
-    - Telephone calls
-- Created integration tests for the implemented functionality using Python.
-
-
-**Technologies**: Myri10GE API, libpcap, PF_RING, C++11, Boost, Python.
-
-### Middle C++/JS Developer @ LiveTex | [livetex.ru](https://livetex.ru)
-*July 2014 — March 2015 (7 months)*
-
-- Created wrapper modules for PostgreSQL and ZeroMQ for Node.js.
-
-**Technologies**: gcc, C++, node.js, JS.
-
-### Junior C++ Developer @ Tools for Brokers | [t4b.com](https://www.t4b.com)
-*November 2013 — July 2014 (9 months)*
-
-- Developed for the MetaTrader 4 and 5 platforms.
-- Enhanced and debugged a plug-in for mutual fund investments (UMAM).
-- Built a web application for MT4 server management.
-
-**Technologies**: C++, Boost, C#, JS.
--->
-
+## Additional Information
+- [Full CV](https://qqrm.github.io/CV/)
+- Full CV PDFs: [light](https://qqrm.github.io/CV/Belyakov_en_light.pdf) · [dark](https://qqrm.github.io/CV/Belyakov_en_dark.pdf)

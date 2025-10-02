@@ -48,17 +48,13 @@ To compile PDFs locally, install the Typst CLI:
 cargo install typst-cli
 ```
 
-Once installed, build both light and dark variants for every locale and role:
+Once installed, build both light and dark variants for each locale:
 
 ```bash
 typst compile --root . typst/en/Belyakov_en.typ typst/en/Belyakov_en_light.pdf
 typst compile --root . typst/en/Belyakov_en_dark.typ typst/en/Belyakov_en_dark.pdf
 typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru_light.pdf
 typst compile --root . typst/ru/Belyakov_ru_dark.typ typst/ru/Belyakov_ru_dark.pdf
-typst compile --root . typst/en/Belyakov_em_en.typ typst/en/Belyakov_em_en_light.pdf
-typst compile --root . typst/en/Belyakov_em_en_dark.typ typst/en/Belyakov_em_en_dark.pdf
-typst compile --root . typst/ru/Belyakov_em_ru.typ typst/ru/Belyakov_em_ru_light.pdf
-typst compile --root . typst/ru/Belyakov_em_ru_dark.typ typst/ru/Belyakov_em_ru_dark.pdf
 ```
 
 ### Local pipeline runs
