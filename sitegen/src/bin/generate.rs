@@ -108,13 +108,6 @@ struct TemplateData<'a> {
     link_to_en: Option<&'a str>,
 }
 
-struct ResumeContent {
-    html_en: String,
-    html_ru: String,
-    footer_en: String,
-    footer_ru: String,
-}
-
 fn typst_source_for(pdf: &Path) -> Result<PathBuf, Box<dyn Error>> {
     let file_name = pdf
         .file_name()
@@ -394,14 +387,6 @@ fn extract_first_paragraph(html: &str) -> String {
         .unwrap_or_default()
 }
 
-fn role_title_ru_genitive(slug: &str) -> String {
-    match slug {
-        "em" => "руководителя разработки",
-        _ => slug,
-    }
-    .to_string()
-}
-
 fn role_title_ru_nominative(slug: &str) -> String {
     match slug {
         "em" => "Руководитель разработки",
@@ -520,66 +505,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let footer_links_en = extract_first_paragraph(&html_body_en);
     let footer_links_ru = extract_first_paragraph(&html_body_ru);
-
-    // Prepare role-specific resume bodies
-    let resume_specs = [(
-        "em",
-        "profiles/resume/en/RESUME_EM.MD",
-        "profiles/resume/ru/RESUME_EM_RU.MD",
-    )];
-    let mut resume_contents: Vec<(String, ResumeContent)> = Vec::new();
-    for (slug, en_md, ru_md) in resume_specs {
-        let slug_upper = slug.to_ascii_uppercase();
-        let markdown_resume_en = fs::read_to_string(en_md)?;
-        let parser_resume_en = CmarkParser::new_ext(&markdown_resume_en, Options::all());
-        let mut html_resume_en = String::new();
-        push_html(&mut html_resume_en, parser_resume_en);
-        let link_to_ru = format!("../ru/RESUME_{}_RU.MD", slug_upper);
-        html_resume_en = html_resume_en.replace(&link_to_ru, "ru/");
-        for theme in THEME_VARIANTS {
-            let en_pdf = format!("{PDF_BASE_URL}Belyakov_{}_en_{}.pdf", slug, theme);
-            let ru_pdf = format!("{PDF_BASE_URL}Belyakov_{}_ru_{}.pdf", slug, theme);
-            let en_local = format!("../../Belyakov_{}_en_{}.pdf", slug, theme);
-            let ru_local = format!("../../Belyakov_{}_ru_{}.pdf", slug, theme);
-            html_resume_en = html_resume_en.replace(&en_pdf, &en_local);
-            html_resume_en = html_resume_en.replace(&ru_pdf, &ru_local);
-        }
-        if let Some(end) = html_resume_en.find("</h1>") {
-            html_resume_en = html_resume_en[end + 5..].trim_start().to_string();
-        }
-        annotate_resume_links(&mut html_resume_en);
-
-        let markdown_resume_ru = fs::read_to_string(ru_md)?;
-        let parser_resume_ru = CmarkParser::new_ext(&markdown_resume_ru, Options::all());
-        let mut html_resume_ru = String::new();
-        push_html(&mut html_resume_ru, parser_resume_ru);
-        let link_to_en = format!("../en/RESUME_{}.MD", slug_upper);
-        html_resume_ru = html_resume_ru.replace(&link_to_en, "../");
-        for theme in THEME_VARIANTS {
-            let ru_pdf = format!("{PDF_BASE_URL}Belyakov_{}_ru_{}.pdf", slug, theme);
-            let en_pdf = format!("{PDF_BASE_URL}Belyakov_{}_en_{}.pdf", slug, theme);
-            let ru_local = format!("../../../Belyakov_{}_ru_{}.pdf", slug, theme);
-            let en_local = format!("../../../Belyakov_{}_en_{}.pdf", slug, theme);
-            html_resume_ru = html_resume_ru.replace(&ru_pdf, &ru_local);
-            html_resume_ru = html_resume_ru.replace(&en_pdf, &en_local);
-        }
-        if let Some(end) = html_resume_ru.find("</h1>") {
-            html_resume_ru = html_resume_ru[end + 5..].trim_start().to_string();
-        }
-        annotate_resume_links(&mut html_resume_ru);
-
-        let footer_links_resume_en = extract_first_paragraph(&html_resume_en);
-        let footer_links_resume_ru = extract_first_paragraph(&html_resume_ru);
-        resume_contents.push((
-            slug.to_string(),
-            ResumeContent {
-                html_en: html_resume_en,
-                html_ru: html_resume_ru,
-                footer_en: footer_links_resume_en,
-                footer_ru: footer_links_resume_ru,
-            },
-        ));
-    }
 
     // Render base pages
     let html_template = render_page(&TemplateData {
@@ -745,59 +670,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         fs::write(ru_role_dir.join("index.html"), ru_role_html)?;
     }
 
-    for (slug, content) in &resume_contents {
-        sitemap_urls.push(format!("{base_url}resume/{slug}/"));
-        sitemap_urls.push(format!("{base_url}resume/{slug}/ru/"));
-
-        let resume_dir = docs_dir.join("resume").join(slug);
-        if !resume_dir.exists() {
-            fs::create_dir_all(&resume_dir)?;
-        }
-        let resume_ru_dir = resume_dir.join("ru");
-        if !resume_ru_dir.exists() {
-            fs::create_dir_all(&resume_ru_dir)?;
-        }
-        let role_name = roles
-            .get(slug.as_str())
-            .map(|s| s.as_str())
-            .unwrap_or(slug.as_str());
-        let resume_position_en = format!("<p><strong>{role_name}</strong></p>");
-        let resume_title_en = format!("Alexey Belyakov - {role_name} Resume");
-        let resume_en_html = render_page(&TemplateData {
-            lang: "en",
-            title: &resume_title_en,
-            name: "Alexey Belyakov",
-            prefix: "../../",
-            position_block: &resume_position_en,
-            date_str: &date_str,
-            avatar_src: "../../avatar.jpg",
-            html_body: &content.html_en,
-            footer_links: &content.footer_en,
-            roles_js: &roles_js_en,
-            roles_js_ru: &roles_js_ru,
-            link_to_en: None,
-        })?;
-        fs::write(resume_dir.join("index.html"), resume_en_html)?;
-
-        let role_title_ru = role_title_ru_genitive(slug);
-        let resume_position_ru = format!("<p><strong>{role_title_ru}</strong></p>");
-        let resume_title_ru = format!("Алексей Беляков - Резюме {role_title_ru}");
-        let resume_ru_html = render_page(&TemplateData {
-            lang: "ru",
-            title: &resume_title_ru,
-            name: "Алексей Беляков",
-            prefix: "../../../",
-            position_block: &resume_position_ru,
-            date_str: &date_str,
-            avatar_src: "../../../avatar.jpg",
-            html_body: &content.html_ru,
-            footer_links: &content.footer_ru,
-            roles_js: &roles_js_en,
-            roles_js_ru: &roles_js_ru,
-            link_to_en: None,
-        })?;
-        fs::write(resume_ru_dir.join("index.html"), resume_ru_html)?;
-    }
     let sitemap_content = sitemap_urls.join("\n") + "\n";
     fs::write(docs_dir.join("sitemap.txt"), sitemap_content)?;
     info!("Wrote sitemap to dist/sitemap.txt");

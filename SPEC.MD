@@ -7,14 +7,12 @@
 
 ## 2. Authoritative Content Sources
 - `profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD` — primary CV narratives in English and Russian.
-- `profiles/cv/en/CV_EM.MD`, `profiles/cv/ru/CV_EM_RU.MD` — Engineering Manager spotlight content for both languages.
-- `profiles/resume/en/RESUME_EM.MD`, `profiles/resume/ru/RESUME_EM_RU.MD` — condensed Engineering Manager resume highlights consumed by Typst and site generation.
-- `roles.toml` — maps the Engineering Manager slug to a human-readable title that powers the role-specific site and resume exports.
+- `roles.toml` — maps role slugs (for example, `em`) to localized human-readable titles that drive role-specific site exports.
 - `/content/avatar.jpg` plus `/DOCS/style.css` and `/DOCS/favicon.svg` — shared visual assets for PDFs and the static site.
 
 ## 3. Templates and Layouts
 - Typst packages under `typst/en` and `typst/ru` define the PDF layout (`Belyakov_en.typ`, `Belyakov_em_en.typ`, etc.).
-- `templates/resume.typ` exposes a reusable Typst function that renders a localized resume by pulling data from the Markdown files.
+- `templates/resume.typ` exposes a reusable Typst function that renders a localized resume by pulling data from the Markdown files, defaulting to the canonical CV for each language while allowing overrides for both the Markdown source and the primary link label.
 - `sitegen/templates/page.hbs` is the Handlebars template that powers every HTML page, providing dark/light theming, localized text, and dynamic role titles.
 
 ## 4. Rust Tooling
@@ -56,18 +54,14 @@
 ├── sitegen/              # Main Rust crate with generate/validate binaries and templates
 ├── TASKS/, BACKLOG/      # Planning and roadmap documents
 ├── typst/                # Typst sources for EN/RU PDFs
-└── profiles/             # Localized CV and resume Markdown sources
-    ├── cv/
-    │   ├── en/           # English narratives (CV.MD, CV_EM.MD)
-    │   └── ru/           # Russian narratives (CV_RU.MD, CV_EM_RU.MD)
-    └── resume/
-        ├── en/          # Engineering Manager resume highlights (RESUME_EM.MD)
-        └── ru/          # Russian resume highlights (RESUME_EM_RU.MD)
+└── profiles/             # Localized CV Markdown sources
+    └── cv/
+        ├── en/          # English narratives (CV.MD)
+        └── ru/          # Russian narratives (CV_RU.MD)
 ```
 
 ## 8. Outputs and Deployment Targets
 - `dist/index.html` and `dist/ru/index.html` — landing pages for English and Russian audiences.
-- `dist/em/index.html` and `dist/em/ru/index.html` — Engineering Manager landing pages with localized PDFs.
-- `dist/resume/em/` and `dist/resume/em/ru/` — localized resume landing pages for the Engineering Manager profile.
+- `dist/em/index.html` and `dist/em/ru/index.html` — Engineering Manager landing pages with localized PDFs sourced from the canonical CV content.
 - `dist/*.pdf` — canonical PDF resumes copied from Typst builds, including the Engineering Manager variation.
 - `dist/sitemap.txt` — flat list of published URLs for search engines.

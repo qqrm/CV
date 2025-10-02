@@ -306,30 +306,10 @@ fn generates_expected_dist() {
         assert_no_pdf_link_attrs(&ru_page, &ru_en_light, &ru_en_dark);
     }
 
-    for slug in roles.keys() {
-        let resume_dir = dist.join("resume").join(slug);
-        let en_path = resume_dir.join("index.html");
-        assert!(en_path.exists(), "missing resume/{}/index.html", slug);
-        let en_page =
-            fs::read_to_string(&en_path).unwrap_or_else(|_| panic!("read resume {slug} index"));
-        let resume_en_light = format!("../../Belyakov_{}_en_light.pdf", slug);
-        let resume_en_dark = format!("../../Belyakov_{}_en_dark.pdf", slug);
-        assert_pdf_link_attrs(&en_page, &resume_en_light, &resume_en_dark);
-        let resume_ru_light = format!("../../Belyakov_{}_ru_light.pdf", slug);
-        let resume_ru_dark = format!("../../Belyakov_{}_ru_dark.pdf", slug);
-        assert_no_pdf_link_attrs(&en_page, &resume_ru_light, &resume_ru_dark);
-
-        let ru_path = resume_dir.join("ru").join("index.html");
-        assert!(ru_path.exists(), "missing resume/{}/ru/index.html", slug);
-        let ru_page =
-            fs::read_to_string(&ru_path).unwrap_or_else(|_| panic!("read resume {slug} ru index"));
-        let resume_ru_ru_light = format!("../../../Belyakov_{}_ru_light.pdf", slug);
-        let resume_ru_ru_dark = format!("../../../Belyakov_{}_ru_dark.pdf", slug);
-        assert_pdf_link_attrs(&ru_page, &resume_ru_ru_light, &resume_ru_ru_dark);
-        let resume_ru_en_light = format!("../../../Belyakov_{}_en_light.pdf", slug);
-        let resume_ru_en_dark = format!("../../../Belyakov_{}_en_dark.pdf", slug);
-        assert_no_pdf_link_attrs(&ru_page, &resume_ru_en_light, &resume_ru_en_dark);
-    }
+    assert!(
+        !dist.join("resume").exists(),
+        "resume directory should not be generated"
+    );
 
     fs::remove_dir_all(&dist).expect("failed to remove dist");
 }
