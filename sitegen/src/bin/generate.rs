@@ -397,7 +397,7 @@ fn role_title_ru_genitive(slug: &str) -> String {
 
 fn role_title_ru_nominative(slug: &str) -> String {
     match slug {
-        "em" => "Руководитель разработки",
+        "em" => "Старший Rust-инженер",
         _ => slug,
     }
     .to_string()
