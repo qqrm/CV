@@ -98,10 +98,20 @@ jobs:
               exit 1;
             fi;
           done < <(find dist -type f -name '*.pdf')
-      - name: Verify site pages
+      - name: Verify site outputs
         run: |
-          test -s dist/index.html;
-          test -s dist/ru/index.html;
+          set -euo pipefail
+          test -s dist/index.html
+          test -s dist/ru/index.html
+          test -s dist/style.css
+          test -s dist/favicon.svg
+          test -s dist/avatar.jpg
+          test -s dist/sitemap.txt
+          pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
+          if [ "$pdf_count" -ne 4 ]; then
+            echo "Expected 4 PDFs in dist but found $pdf_count" >&2
+            exit 1
+          fi
       - name: Prepare Pages directory
         run: mv dist docs
       - name: Copy README_RU
