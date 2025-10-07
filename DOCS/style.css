@@ -9,6 +9,35 @@ header {
     text-align: center;
     margin-bottom: 2em;
 }
+.header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75em;
+    margin-top: 0.75em;
+}
+.header-actions .action {
+    display: inline-block;
+    padding: 0.4em 0.9em;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.header-actions .action:hover,
+.header-actions .action:focus {
+    background-color: currentColor;
+    color: #ffffff;
+}
+.header-actions .action:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+html[data-theme="dark"] .header-actions .action:hover,
+html[data-theme="dark"] .header-actions .action:focus {
+    color: #121212;
+}
 .content h1, .content h2, .content h3 {
     margin-top: 1.2em;
 }
