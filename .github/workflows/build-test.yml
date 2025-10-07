@@ -30,12 +30,20 @@ jobs:
         run: cargo run --manifest-path TOOLS/site_check/Cargo.toml --quiet
       - name: Verify generated artifacts
         run: |
-          test -s dist/index.html
-          test -s dist/ru/index.html
-          test -s dist/em/index.html
-          test -s dist/em/ru/index.html
-          test -s dist/resume/em/index.html
-          test -s dist/resume/em/ru/index.html
+          bash -lc '
+            set -eu
+            for path in \
+              dist/index.html \
+              dist/ru/index.html \
+              dist/Belyakov_en_light.pdf \
+              dist/Belyakov_en_dark.pdf \
+              dist/Belyakov_ru_light.pdf \
+              dist/Belyakov_ru_dark.pdf \
+              dist/sitemap.txt
+            do
+              test -s "$path"
+            done
+          '
       - name: Upload Typst PDFs
         uses: actions/upload-artifact@v4
         with:
