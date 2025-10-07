@@ -1,7 +1,8 @@
 # Alexey Leonidovich Belyakov
-*[Link to Russian version](../ru/CV_RU.MD)* \\
-*[Light PDF](https://qqrm.github.io/CV/Belyakov_en_light.pdf)* \\
-*[Dark PDF](https://qqrm.github.io/CV/Belyakov_en_dark.pdf)* \\
+*[Link to Russian version](../ru/CV_RU.MD)*
+
+*[Download light PDF](https://qqrm.github.io/CV/Belyakov_en_light.pdf)*
+*[Download dark PDF](https://qqrm.github.io/CV/Belyakov_en_dark.pdf)*
 
 - **Phone:** +7 (911) 261-70-72
 - **Telegram:** [@leqqrm](https://t.me/leqqrm)
@@ -9,15 +10,13 @@
 - **Location:** Remote, full-time availability
 
 ## Executive Profile
-Hands-on engineering leader and DevOps advocate who scales cross-functional teams, delivers complex migration programs, and keeps executives informed with clear metrics. Comfortable driving architectural alignment, people development, release governance, and budget discipline while maintaining a transparent delivery cadence.
+Engineering leader who ships platform migrations without derailing teams or budgets. Keeps stakeholders aligned with clear metrics, steady releases, and direct communication grounded in the work being delivered.
 
 ## Core Strengths
-- Roadmap ownership across multiple teams and workstreams.
-- Transparent KPI/OKR design, tracking, and stakeholder reporting.
-- Budgeting, staffing, and vendor coordination for hybrid on-prem/cloud setups.
-- Team development through structured mentoring, hiring, and performance reviews.
-- Governance and delivery frameworks that balance velocity with risk control.
-- DevOps strategy, release orchestration, and SRE collaboration.
+- Deliver multi-team roadmaps while keeping migrations on schedule.
+- Pair metrics dashboards with executive updates that stay honest and actionable.
+- Hire, coach, and retain engineers until they are ready to lead their own teams.
+- Build release and incident routines that let teams move fast without burning out.
 
 ## Work Experience
 
@@ -25,40 +24,32 @@ Hands-on engineering leader and DevOps advocate who scales cross-functional team
 *March 2023 – Present*
 
 **Leadership & Delivery**
-- Lead a 25-person program replacing SAP workflows with a Rust-based microservices stack.
-- Coordinate backend, QA, analytics, and DevOps leads to keep multi-team milestones on schedule.
-- Balance roadmap scope against migration budgets and quarterly goals, surfacing risks early.
-- Established async and personal sprint planning that raised sprint productivity by ~15% and predictability by ~25%.
-- Chaired a release board aligning QA sign-offs, SAST policies, and deployment readiness reviews for predictable launches.
+- Lead a 25-person program replacing SAP workflows with a Rust microservices stack while keeping quarterly goals intact.
+- Coordinate backend, QA, analytics, and DevOps leads so roadmap and budget decisions stay transparent.
+- Introduced async and personal sprint planning that lifted productivity by ~15% and predictability by ~25%.
+- Ran a lightweight release board that aligned QA sign-offs, SAST policies, and deployment readiness checks.
 
 **Tech Stack & Tooling**
-- Languages & frameworks: Rust (Tokio, Actix Web, Axum, tonic), Go, Python, TypeScript, React, Node.js, GraphQL, gRPC, REST, OpenAPI, AsyncAPI.
-- Data & messaging: PostgreSQL, MySQL, ClickHouse, MongoDB, Redis, Tarantool, Apache Kafka, RabbitMQ, NATS, Apache Pulsar, Debezium, ElasticSearch, OpenSearch, MinIO/S3.
-- Cloud & infrastructure: Kubernetes, Docker, containerd, AWS (EKS, ECS, Lambda, CloudWatch), GCP (GKE, Cloud Run, Pub/Sub), Azure (AKS, Functions), HashiCorp Vault, Consul, Nomad, Istio, Linkerd, Envoy, Service Mesh Interface.
-- IaC & automation: Terraform, Pulumi, Helm, Kustomize, Argo CD, FluxCD, Ansible, Packer, Argo Workflows, GitOps pipelines, Crossplane, Renovate, Dependabot.
-- CI/CD & security: GitLab CI, GitHub Actions, Jenkins, TeamCity, Buildkite, SonarQube, Snyk, Trivy, Clair, Harbor, HashiCorp Boundary, Open Policy Agent, Kyverno, Falco, Vault Secrets Engines.
-- Observability & SRE: Prometheus, Grafana, Loki, Tempo, Alertmanager, OpenTelemetry, Jaeger, Zipkin, Kibana, Datadog, New Relic, Splunk, ELK, Sentry, PagerDuty, Opsgenie, Chaos Mesh.
+- Rust (Tokio, Actix Web, Axum, tonic) with supporting Go, Python, and TypeScript services.
+- PostgreSQL, ClickHouse, Redis, Kafka, and NATS for data movement and storage.
+- Kubernetes on AWS, GCP, and Azure with Terraform, Argo CD, and GitOps automation.
+- GitLab CI, GitHub Actions, SonarQube, Snyk, and Prometheus/Grafana for delivery and reliability guardrails.
 
 **People & Governance**
-- Expanded the backend team from 5 to 12 developers while reducing onboarding time by ~30%.
-- Retained 90% of hires after the first year by pairing growth plans with consistent feedback loops.
-- Mentored three engineers to senior roles using a competency matrix and targeted coaching.
-- Integrated static analysis (Clippy, cargo-audit, SonarQube) and internal package distribution to satisfy compliance requirements.
-- Evangelized DevOps practices across teams, pairing incident reviews with automation backlogs and driving CI/CD adoption.
+- Grew the backend team from 5 to 12 engineers while trimming onboarding time by ~30%.
+- Retained 90% of hires after the first year with growth plans and recurring feedback.
+- Mentored three engineers into senior roles and rolled out static analysis and internal package delivery to meet compliance goals.
 
 ### Rust Team Lead @ Solcery | March 2022 – March 2023
-- Managed a 4-person Rust team building a DAO-ready blockchain database on Solana.
-- Translated product goals into sprint plans, release scopes, and technical specifications.
-- Reduced code review time by ~40% via review policies, pairing, and test automation.
-- Implemented schema versioning and migration practices that cut maintenance overhead and simplified onboarding.
-- Introduced distributed tracing, canary deployments, and release health dashboards for smart-contract delivery.
+- Managed a 4-person Rust team building a blockchain-ready database on Solana.
+- Turned product goals into sprint plans, release scopes, and clear specs.
+- Cut code review time by ~40% through review policies, pairing, and test automation.
+- Added schema versioning, migrations, distributed tracing, and canary releases to keep delivery safe.
 
 **Tech Stack & Tooling**
-- Protocols & runtimes: Rust (async/await, Tokio, Actix, Axum), Anchor, Solana SDK, WebAssembly, Web3.js, TypeScript, React, Next.js, Node.js, GraphQL, gRPC, REST.
-- Data & storage: PostgreSQL, FoundationDB, RocksDB, IPFS, Redis, ClickHouse, TimescaleDB, Apache Arrow, Delta Lake, Parquet, Apache Spark for analytics backfills.
-- Blockchain & cryptography: Solana Programs, Metaplex, SPL tokens, BPF toolchain, zero-knowledge circuits (Halo2, zk-SNARKs), Ledger hardware wallets, HSM integration, secure enclaves (Intel SGX).
-- DevOps & automation: Docker, Kubernetes, k3s, Terraform, Helm, GitHub Actions, GitLab CI, CircleCI, Argo CD, Argo Rollouts, GitOps, HashiCorp Vault, Ansible, Consul Template, Nomad, HashiCorp Packer.
-- Observability & QA: Prometheus, Grafana, Loki, Tempo, OpenTelemetry, Jaeger, Kibana, ElasticSearch, Datadog, Chaos Monkey, k6, Gatling, pytest, cargo-nextest, cargo-tarpaulin.
+- Rust (async/await, Tokio, Actix, Axum) with Anchor and Solana SDK on the runtime side.
+- PostgreSQL, FoundationDB, RocksDB, and IPFS for storage, backed by Terraform-managed Kubernetes and GitOps.
+- Prometheus, Grafana, OpenTelemetry, and k6 for tracing, observability, and performance testing.
 
 ### Senior Rust Developer @ Kaspersky Lab | May 2021 – March 2022
 - Coordinated with product, QA, and operations while maintaining a blockchain-based voting platform.
@@ -67,46 +58,27 @@ Hands-on engineering leader and DevOps advocate who scales cross-functional team
 - Hardened cryptographic modules and containerized workloads for secure ballot storage and auditability.
 
 **Tech Stack & Tooling**
-- Backend & services: Rust (Actix Web, Axum, Hyper, tonic), C++, Python, gRPC, GraphQL, REST, WebSockets, Protocol Buffers, FlatBuffers, Apache Thrift.
-- Security & cryptography: PKCS#11, HSM, TLS 1.3, mTLS, OAuth 2.0, OpenID Connect, JWT, hardware-backed key storage, FIPS 140-2 compliance, YubiKey.
-- Data & infrastructure: PostgreSQL, Oracle, MS SQL Server, Redis, Apache Cassandra, Apache Kafka, RabbitMQ, HashiCorp Vault, Consul, Nomad, Docker, Kubernetes, OpenShift, VMware Tanzu, Ceph.
-- Testing & reliability: GitLab CI/CD, TeamCity, Jenkins, Azure DevOps, Bazel, Conan, Artifactory, SonarQube, Fortify, Checkmarx, Veracode, Git Secrets, OWASP ZAP, Burp Suite, Prometheus, Grafana, ELK.
+- Rust (Actix Web, Axum, Hyper, tonic) alongside C++ and Python services exposed through gRPC and GraphQL.
+- Vault-backed PostgreSQL and Kafka deployments running on Kubernetes and OpenShift.
+- GitLab CI/CD, Jenkins, SonarQube, and Fortify reinforcing secure delivery.
 
-## Operating Rhythm & Governance
-- Weekly portfolio reviews with business stakeholders, surfacing KPI movements and budget status.
-- Quarterly planning rituals that align product, engineering, and operations on priorities and capacity.
-- Continuous improvement loops—retrospectives, survey feedback, and actionable experiments.
-- Data-informed reporting through Jira dashboards, Confluence scorecards, and lightweight memos.
-
-## Results & Impact
+## Results & Operating Rhythm
 - Delivery stayed within 5% of budget during a 6-month team expansion.
 - Bug backlog shrank by ~30% after reinforcing QA, code reviews, and release gates.
-- Maintained ~90% adherence to quarterly KPIs despite scope churn and infrastructure constraints.
+- Maintain weekly stakeholder reviews, quarterly planning, and continuous improvement loops that surface risks early.
+- Reporting relies on concise Jira dashboards, Confluence scorecards, and memos that map decisions to measurable impact.
 
-## Tools & Practices
-- Planning: Jira Advanced Roadmaps, Notion roadmaps, Confluence specs, Linear, Shortcut, Productboard, Aha!, ClickUp, Miro, FigJam.
-- Delivery: Scrum, Kanban hybrids, SAFe, LeSS, Shape Up, async updates, definition-of-done enforcement, dual-track discovery, OKR cadences.
-- Quality: GitLab CI/CD, GitHub Actions, CircleCI, Buildkite, Argo Rollouts, feature flags, blue/green deployments, chaos engineering, risk registers, static analysis gates.
-- People: Competency matrices, growth plans, structured 1:1s, skip-level feedback, calibration sessions, succession planning, mentoring guilds.
-- Architecture & DevOps: Domain-driven design, event sourcing, CQRS, hexagonal architecture, microservices, serverless, container orchestration, service mesh, edge computing, zero-trust networking.
-
-## Technical Keywords
-- Rust, Go, Python, TypeScript, JavaScript, C++, Solidity, WebAssembly, Solana, Anchor, Substrate, Cosmos SDK, GraphQL, gRPC, REST, SOAP, WebSockets, MQTT, OPC UA.
-- PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, ClickHouse, Snowflake, BigQuery, Redshift, MongoDB, Couchbase, Cassandra, ScyllaDB, Neo4j, JanusGraph, Dgraph, Elasticsearch.
-- Kafka, RabbitMQ, ActiveMQ, IBM MQ, NATS, Pulsar, AWS Kinesis, Google Pub/Sub, Azure Event Hubs, Debezium, Change Data Capture, Apache Flink, Spark Streaming.
-- Docker, Podman, containerd, Kubernetes, OpenShift, Nomad, HashiCorp Vault, Consul, Istio, Linkerd, Envoy, Cilium, Calico, MetalLB, Knative, OpenFaaS.
-- Terraform, Pulumi, Crossplane, AWS CloudFormation, Azure Bicep, Google Deployment Manager, Ansible, Chef, Puppet, SaltStack, Packer, Vagrant.
-- AWS (EKS, ECS, Lambda, EC2, S3, DynamoDB, RDS, Aurora, API Gateway), GCP (GKE, Cloud Run, Cloud Functions, Spanner, Bigtable), Azure (AKS, Functions, Cosmos DB, Event Grid), DigitalOcean, Hetzner Cloud.
-- GitLab CI, GitHub Actions, Jenkins, TeamCity, Azure DevOps, CircleCI, Buildkite, Travis CI, Codefresh, Argo CD, FluxCD, Spinnaker, Harness, Atlantis.
-- Prometheus, Grafana, Loki, Tempo, Cortex, Thanos, OpenTelemetry, Jaeger, Zipkin, Kibana, Elastic Stack, Datadog, New Relic, Splunk, Sentry, Honeycomb, PagerDuty, Opsgenie, VictorOps.
-- Security & compliance: SonarQube, Snyk, Trivy, Clair, Aqua, Prisma Cloud, HashiCorp Boundary, Vault, Open Policy Agent, Kyverno, Falco, Istio mTLS, SPIFFE/SPIRE, Vault Secrets Engines, CIS Benchmarks, ISO 27001.
-- Collaboration: Jira, Confluence, Notion, Google Workspace, Microsoft 365, Slack, Mattermost, Zoom, Loom, Git, GitHub, GitLab, Bitbucket, Phabricator.
+## Tooling Snapshot
+- Daily languages: Rust, Go, Python, and TypeScript with PostgreSQL, ClickHouse, and Redis at the core.
+- Platform: Kubernetes, Terraform, and Argo CD across AWS, GCP, and Azure with GitOps workflows.
+- Quality gates: GitLab CI, GitHub Actions, SonarQube, Snyk, Prometheus, and Grafana for delivery, security, and observability.
+- Collaboration stack: Jira, Confluence, Notion, Slack, GitHub, and GitLab.
 
 ## What I Offer
-- Executive-ready communication paired with credible technical depth.
-- Ability to bootstrap or mature engineering processes without slowing delivery.
-- Proven record of scaling teams, mentoring leaders, and maintaining morale through change.
+- Straightforward communication backed by hands-on technical depth.
+- Launch or tune engineering processes without slowing the team.
+- Scale teams, mentor new leads, and keep morale steady through change.
 
 ## Additional Information
 - [Full CV](https://qqrm.github.io/CV/)
-- Full CV PDFs: [light](https://qqrm.github.io/CV/Belyakov_en_light.pdf) · [dark](https://qqrm.github.io/CV/Belyakov_en_dark.pdf)
+- Download PDF: [light theme](https://qqrm.github.io/CV/Belyakov_en_light.pdf) · [dark theme](https://qqrm.github.io/CV/Belyakov_en_dark.pdf)
