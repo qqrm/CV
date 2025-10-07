@@ -98,12 +98,10 @@ jobs:
               exit 1;
             fi;
           done < <(find dist -type f -name '*.pdf')
-      - name: Verify role pages
+      - name: Verify site pages
         run: |
-          test -s dist/em/index.html;
-          test -s dist/em/ru/index.html;
-          test -s dist/resume/em/index.html;
-          test -s dist/resume/em/ru/index.html;
+          test -s dist/index.html;
+          test -s dist/ru/index.html;
       - name: Prepare Pages directory
         run: mv dist docs
       - name: Copy README_RU
