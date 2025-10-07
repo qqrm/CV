@@ -24,7 +24,6 @@
 <body>
 <header>
     <h1>{{name}}</h1>
-    {{{position_block}}}
     <p>{{date_str}}</p>
 </header>
 <div class='content'>
@@ -39,23 +38,6 @@
   <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
   <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
 </button>
-<script>
-    const positions = {{{roles_js}}};
-    const positionsRu = {{{roles_js_ru}}};
-    const segments = window.location.pathname.split('/').filter(Boolean);
-    const slug = segments.reverse().find(s => positions[s]);
-    const position = document.getElementById('position');
-    if (position && slug) {
-        const lang = document.documentElement.lang || '';
-        let value = positions[slug];
-        if (lang.startsWith('ru') && positionsRu[slug]) {
-            value = positionsRu[slug];
-        }
-        if (value) {
-            position.textContent = value;
-        }
-    }
-</script>
 <script>
 (function(){
   var root = document.documentElement;

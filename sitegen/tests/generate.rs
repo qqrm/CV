@@ -1,14 +1,12 @@
 use std::env;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
-use std::thread;
 
 use chrono::{Datelike, NaiveDate, Utc};
 use regex::Regex;
 use scraper::{Html, Selector};
 use sitegen::{format_duration_en, format_duration_ru, read_inline_start};
-use toml::Value;
 
 const PDF_THEMES: &[&str] = &["light", "dark"];
 
@@ -259,128 +257,5 @@ fn generates_expected_dist() {
         "../Belyakov_en_dark.pdf",
     );
 
-    // Load role slugs and verify role-specific pages
-    let roles_toml = fs::read_to_string(project_root.join("roles.toml")).expect("read roles.toml");
-    let roles: Value = toml::from_str(&roles_toml).expect("parse roles.toml");
-    let roles = roles
-        .get("roles")
-        .and_then(Value::as_table)
-        .expect("roles table");
-
-    for slug in roles.keys() {
-        let role_dir = dist.join(slug);
-        let en_path = role_dir.join("index.html");
-        assert!(en_path.exists(), "missing {}/index.html", slug);
-        let en_page = fs::read_to_string(&en_path).expect("read role index");
-        let en_light = "../Belyakov_en_light.pdf";
-        let en_dark = "../Belyakov_en_dark.pdf";
-        assert_pdf_link_attrs(&en_page, en_light, en_dark);
-        let ru_light = "../Belyakov_ru_light.pdf";
-        let ru_dark = "../Belyakov_ru_dark.pdf";
-        assert_no_pdf_link_attrs(&en_page, ru_light, ru_dark);
-
-        let ru_path = role_dir.join("ru").join("index.html");
-        assert!(ru_path.exists(), "missing {}/ru/index.html", slug);
-        let ru_page = fs::read_to_string(&ru_path).expect("read role ru index");
-        let ru_ru_light = "../../Belyakov_ru_light.pdf";
-        let ru_ru_dark = "../../Belyakov_ru_dark.pdf";
-        assert_pdf_link_attrs(&ru_page, ru_ru_light, ru_ru_dark);
-        let ru_en_light = "../../Belyakov_en_light.pdf";
-        let ru_en_dark = "../../Belyakov_en_dark.pdf";
-        assert_no_pdf_link_attrs(&ru_page, ru_en_light, ru_en_dark);
-    }
-
     fs::remove_dir_all(&dist).expect("failed to remove dist");
-}
-
-#[test]
-#[serial_test::serial]
-fn generates_roles_script_with_json_encoding() {
-    let crate_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
-    let project_root = crate_dir.parent().expect("project root");
-    let roles_path = project_root.join("roles.toml");
-    let original_roles = fs::read_to_string(&roles_path).expect("read roles.toml for script test");
-
-    struct RolesTomlGuard {
-        path: PathBuf,
-        original: String,
-    }
-
-    impl Drop for RolesTomlGuard {
-        fn drop(&mut self) {
-            if let Err(err) = fs::write(&self.path, &self.original) {
-                if !thread::panicking() {
-                    panic!("failed to restore roles.toml: {err}");
-                }
-            }
-        }
-    }
-
-    let _guard = RolesTomlGuard {
-        path: roles_path.clone(),
-        original: original_roles.clone(),
-    };
-
-    let mut updated_roles = original_roles;
-    if !updated_roles.ends_with('\n') {
-        updated_roles.push('\n');
-    }
-    updated_roles.push_str("lead-role = \"Lead's Role\"\n");
-    fs::write(&roles_path, updated_roles).expect("write roles.toml for script test");
-
-    let status = Command::new("cargo")
-        .args([
-            "run",
-            "--manifest-path",
-            "sitegen/Cargo.toml",
-            "--bin",
-            "generate",
-        ])
-        .current_dir(project_root)
-        .status()
-        .expect("failed to run generate for script test");
-    assert!(status.success(), "generate command failed in script test");
-
-    let dist = project_root.join("dist");
-    let index_path = dist.join("index.html");
-    let index_html = fs::read_to_string(&index_path).expect("read index.html for script test");
-
-    let positions_re =
-        Regex::new(r"const positions = (?P<json>\{[^;]*\});").expect("positions regex");
-    let positions_caps = positions_re
-        .captures(&index_html)
-        .expect("positions script not found");
-    let positions_json = positions_caps
-        .name("json")
-        .map(|m| m.as_str())
-        .expect("positions json group");
-    let parsed_positions: serde_json::Value =
-        serde_json::from_str(positions_json).expect("positions JSON invalid");
-    assert_eq!(
-        parsed_positions
-            .get("lead-role")
-            .and_then(|value| value.as_str()),
-        Some("Lead's Role"),
-        "expected lead-role entry in positions JSON"
-    );
-
-    let positions_ru_re =
-        Regex::new(r"const positionsRu = (?P<json>\{[^;]*\});").expect("positionsRu regex");
-    let positions_ru_caps = positions_ru_re
-        .captures(&index_html)
-        .expect("positionsRu script not found");
-    let positions_ru_json = positions_ru_caps
-        .name("json")
-        .map(|m| m.as_str())
-        .expect("positionsRu json group");
-    let parsed_positions_ru: serde_json::Value =
-        serde_json::from_str(positions_ru_json).expect("positionsRu JSON invalid");
-    assert!(
-        parsed_positions_ru.get("lead-role").is_some(),
-        "expected lead-role entry in positionsRu JSON"
-    );
-
-    if dist.exists() {
-        fs::remove_dir_all(&dist).expect("failed to remove dist");
-    }
 }

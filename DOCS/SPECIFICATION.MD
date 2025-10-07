@@ -7,9 +7,8 @@
 This repository implements an automated, multilingual CV generator and publisher with the following goals:
 
 - Maintain a single Engineering Manager narrative in Markdown (`profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD`).
-- Use `roles.toml` to map role slugs (for example `em`) to localized titles that appear across HTML and PDF artifacts.
 - Render localized Typst PDFs via a shared Typst template (`templates/resume.typ`).
-- Generate a static website backed by the `sitegen` Rust crate, bundling localized landing pages (root and role-specific) plus downloadable PDFs.
+- Generate a static website backed by the `sitegen` Rust crate, bundling localized landing pages for English and Russian plus downloadable PDFs.
 - Keep all build artifacts out of Git; CI/CD regenerates PDFs and HTML on demand.
 
 ---
@@ -22,7 +21,6 @@ This repository implements an automated, multilingual CV generator and publisher
     cv/
       en/CV.MD
       ru/CV_RU.MD
-  roles.toml
   templates/
     resume.typ
   typst/
@@ -48,12 +46,11 @@ This repository implements an automated, multilingual CV generator and publisher
 
 ## 3. Application Logic
 
-- Parse canonical Markdown CVs (EN/RU) and `roles.toml` for localized titles.
-- Render Typst PDFs for each locale (light + dark themes) using the shared `templates/resume.typ` component. The Typst entry points (`typst/*/Belyakov_*.typ`) simply forward the locale and role to the template.
+- Parse canonical Markdown CVs (EN/RU) to drive both HTML and PDF outputs.
+- Render Typst PDFs for each locale (light + dark themes) using the shared `templates/resume.typ` component. The Typst entry points (`typst/*/Belyakov_*.typ`) simply forward the locale to the template.
 - Generate a multilingual static site with `sitegen`:
   - `generate.rs` reads the Markdown sources, converts them to HTML, injects duration metadata, annotates PDF links with light/dark options, and emits localized landing pages under `dist/`.
-  - Role pages (for example `dist/em/index.html`) reuse the canonical CV content and only adjust titles/links according to `roles.toml`.
-  - `validate.rs` ensures that the Markdown and TOML inputs exist and parse cleanly.
+  - `validate.rs` ensures that the Markdown inputs exist and parse cleanly.
 - No separate resume Markdown exists; all artifacts flow from the canonical CV narrative.
 
 ---
@@ -62,13 +59,13 @@ This repository implements an automated, multilingual CV generator and publisher
 
 - Every artifact (HTML, PDF) is produced in English and Russian.
 - Language switching on the website is instant (JS-driven), and all UI/links update accordingly.
-- Role pages inherit localized titles from `roles.toml` (English title stored in TOML, Russian forms generated in `generate.rs`).
+- Landing pages present locale-specific navigation without role switching.
 
 ---
 
 ## 5. Data Handling
 
-- Markdown and TOML are the single source of truth.
+- Markdown is the single source of truth.
 - Typst PDFs (`typst/en/*.pdf`, `typst/ru/*.pdf`) are generated on demand and copied to `dist/` during site generation.
 - HTML pages inside `dist/` are regenerated every time `sitegen generate` runs; they should never be checked into Git.
 
@@ -94,7 +91,7 @@ This repository implements an automated, multilingual CV generator and publisher
 
 - Triggered manually when downstream consumers require updated publication timestamps.
 - Steps:
-  1. Run the validation binary to ensure the Markdown/TOML inputs are unchanged.
+  1. Run the validation binary to ensure the Markdown inputs are unchanged.
   2. Regenerate PDFs and HTML (`generate` binary + Typst compiles).
   3. Publish refreshed artifacts to GitHub Pages/Releases without altering the CV narrative.
 
@@ -192,5 +189,4 @@ jobs:
 ## 9. UX & Links
 
 - **Main pages**: `dist/index.html` and `dist/ru/index.html` display the canonical CV with localized chrome and PDF links.
-- **Role pages**: `dist/em/index.html` and `dist/em/ru/index.html` reuse the same content but surface the Engineering Manager title via `roles.toml`.
 - All PDF links expose light/dark variants with `data-*` attributes populated by `generate.rs`.

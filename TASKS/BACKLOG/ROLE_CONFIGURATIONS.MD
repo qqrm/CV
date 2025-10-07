@@ -1,14 +1,13 @@
-# Task: Add role-based CV configurations
+# Task: (Deprecated) Add role-based CV configurations
 
 ## Description
-Enable generating tailored CV versions for different positions by storing role-specific settings, such as which sections to include and emphasis, in YAML or JSON files.
+This task captured an earlier idea to generate tailored CV versions for different positions. The repository has since dropped role-specific variants, so this backlog item should be closed or repurposed toward locale-only improvements.
 
 ## Steps
-- Design a configuration schema for roles.
-- Implement parsing of role configuration files.
-- Integrate role settings into the CV generation pipeline.
+- Evaluate whether any locale-specific configuration is still necessary.
+- Update documentation to clarify that role variants are no longer supported.
+- Remove or archive legacy role-related assets if any remain.
 
 ## Acceptance Criteria
-- Role configuration files exist for each supported position.
-- CV generation uses role settings to include the correct sections.
+- Documentation and backlog reflect the locale-only scope.
 - `cargo test` and Typst builds pass.

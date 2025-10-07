@@ -1,7 +1,7 @@
 // Resume template rendered through the `resume` function.
 #import "@preview/cmarker:0.1.6"
 
-#let resume(lang: "en", role: "", name: none, md_path: none, theme: "light") = [
+#let resume(lang: "en", name: none, md_path: none, theme: "light") = [
   #let themes = (
     light: (
       background: rgb("#ffffff"),
@@ -25,7 +25,6 @@
   #let name = if name == none { default_name } else { name }
 
   #align(center)[= #name]
-  #if role != "" [#align(center)[*#role*]]
   #align(center)[#datetime.today().display()]
 
   #align(center)[

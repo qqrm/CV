@@ -2,27 +2,26 @@
 
 ## 1. Purpose and Scope
 - Maintain the source of truth for Alexey Belyakov's Engineering Manager curriculum vitae in English and Russian.
-- Generate publishable artifacts from the canonical CV narrative: localized Typst PDFs and a static multilingual website (root pages plus localized role landing pages).
+- Generate publishable artifacts from the canonical CV narrative: localized Typst PDFs and a static multilingual website for English and Russian.
 - Provide reusable tooling (Rust + Typst) that validates content, renders HTML/PDF outputs, and keeps generated artifacts synchronized with the Markdown sources.
 
 ## 2. Authoritative Content Sources
 - `profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD` — canonical CV narratives in English and Russian.
-- `roles.toml` — maps role slugs to localized titles that appear on HTML pages and Typst renders.
 - `/content/avatar.jpg` plus `/DOCS/style.css` and `/DOCS/favicon.svg` — shared visual assets for PDFs and the static site.
 
 ## 3. Templates and Layouts
 - Typst entry points under `typst/en` and `typst/ru` (`Belyakov_en.typ`, `Belyakov_en_dark.typ`, `Belyakov_ru.typ`, `Belyakov_ru_dark.typ`) produce localized PDFs using the shared template.
-- `templates/resume.typ` exposes a reusable Typst function that renders the canonical CV with optional role labeling.
+- `templates/resume.typ` exposes a reusable Typst function that renders the canonical CV without role-specific variants.
 - `sitegen/templates/page.hbs` is the Handlebars template that powers every HTML page, providing localized UI text and theming hooks.
 
 ## 4. Rust Tooling
 - `sitegen` crate (`sitegen/Cargo.toml`) centralizes parsing and rendering logic.
   - Library modules:
-    - `parser.rs` parses month names, extracts inline employment start dates from `profiles/cv/en/CV.MD`, and loads `roles.toml` with validation.
+    - `parser.rs` parses month names and extracts inline employment start dates from `profiles/cv/en/CV.MD`.
     - `renderer.rs` formats experience durations for English and Russian output.
   - Binaries:
-    - `validate` ensures Markdown files and `roles.toml` exist and are syntactically correct.
-    - `generate` converts Markdown into HTML, copies Typst-generated PDFs and assets into `dist/`, creates localized role pages, and emits `sitemap.txt`.
+    - `validate` ensures Markdown sources exist and are readable.
+    - `generate` converts Markdown into HTML, copies Typst-generated PDFs and assets into `dist/`, and emits `sitemap.txt`.
 - `scripts/convert_cv` is a standalone Rust helper that converts the Markdown CV into JSON with embedded HTML for integrations.
 
 ## 5. Build and Generation Workflow
@@ -59,6 +58,5 @@
 
 ## 8. Outputs and Deployment Targets
 - `dist/index.html` and `dist/ru/index.html` — landing pages for English and Russian audiences.
-- `dist/em/index.html` and `dist/em/ru/index.html` — Engineering Manager landing pages backed by the canonical CV content.
 - `dist/Belyakov_en_*.pdf`, `dist/Belyakov_ru_*.pdf` — canonical PDF resumes copied from Typst builds.
 - `dist/sitemap.txt` — flat list of published URLs for search engines.

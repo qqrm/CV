@@ -1,9 +1,6 @@
 use log::{debug, info, warn};
 use phf::phf_map;
-use serde::Deserialize;
-use std::collections::BTreeMap;
 use std::fmt;
-use std::fs;
 use std::io;
 
 const CV_EN_PATH: &str = "profiles/cv/en/CV.MD";
@@ -126,83 +123,6 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
     }
     warn!("Failed to parse inline start from {CV_EN_PATH}");
     Err(InlineStartError::Parse)
-}
-
-#[derive(Deserialize)]
-pub struct RolesFile {
-    /// Mapping from role slug to human readable title.
-    #[serde(default)]
-    pub roles: BTreeMap<String, String>,
-}
-
-fn default_roles() -> BTreeMap<String, String> {
-    BTreeMap::from([("em".to_string(), "Engineering Manager".to_string())])
-}
-
-#[derive(Debug)]
-pub enum RolesError {
-    Io(io::Error),
-    Parse(toml::de::Error),
-    EmptyTitle { slug: String },
-}
-
-impl fmt::Display for RolesError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            RolesError::Io(_) => write!(f, "failed to read roles.toml"),
-            RolesError::Parse(_) => write!(f, "could not parse roles.toml"),
-            RolesError::EmptyTitle { slug } => {
-                write!(f, "role '{slug}' has empty title")
-            }
-        }
-    }
-}
-
-impl std::error::Error for RolesError {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        match self {
-            RolesError::Io(err) => Some(err),
-            RolesError::Parse(err) => Some(err),
-            RolesError::EmptyTitle { .. } => None,
-        }
-    }
-}
-
-impl From<io::Error> for RolesError {
-    fn from(err: io::Error) -> Self {
-        RolesError::Io(err)
-    }
-}
-
-/// Read role definitions from `roles.toml` if present.
-///
-/// Returns a map of role slugs to titles. Missing files fall back to a
-/// default set. Invalid entries produce descriptive errors.
-pub fn read_roles() -> Result<BTreeMap<String, String>, RolesError> {
-    debug!("Loading roles from roles.toml");
-    let defaults = default_roles();
-
-    let content = match fs::read_to_string("roles.toml") {
-        Ok(text) => text,
-        Err(e) if e.kind() == io::ErrorKind::NotFound => {
-            warn!("roles.toml not found, using defaults");
-            return Ok(defaults);
-        }
-        Err(e) => return Err(RolesError::Io(e)),
-    };
-
-    let parsed: RolesFile = toml::from_str(&content).map_err(RolesError::Parse)?;
-
-    for (slug, title) in &parsed.roles {
-        if title.trim().is_empty() {
-            return Err(RolesError::EmptyTitle { slug: slug.clone() });
-        }
-    }
-
-    let mut roles = defaults;
-    roles.extend(parsed.roles);
-    info!("Loaded {} roles", roles.len());
-    Ok(roles)
 }
 
 #[cfg(test)]

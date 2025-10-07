@@ -5,9 +5,8 @@ use log::{info, warn};
 use pulldown_cmark::{Options, Parser as CmarkParser, html::push_html};
 use regex::Regex;
 use serde::Serialize;
-use sitegen::parser::{read_inline_start, read_roles};
+use sitegen::parser::read_inline_start;
 use sitegen::renderer::{format_duration_en, format_duration_ru};
-use std::collections::BTreeMap;
 use std::error::Error;
 use std::fs;
 use std::ops::Range;
@@ -98,13 +97,10 @@ struct TemplateData<'a> {
     title: &'a str,
     name: &'a str,
     prefix: &'a str,
-    position_block: &'a str,
     date_str: &'a str,
     avatar_src: &'a str,
     html_body: &'a str,
     footer_links: &'a str,
-    roles_js: &'a str,
-    roles_js_ru: &'a str,
     link_to_en: Option<&'a str>,
 }
 
@@ -387,27 +383,10 @@ fn extract_first_paragraph(html: &str) -> String {
         .unwrap_or_default()
 }
 
-fn role_title_ru_genitive(slug: &str) -> String {
-    match slug {
-        "em" => "руководителя разработки",
-        _ => slug,
-    }
-    .to_string()
-}
-
-fn role_title_ru_nominative(slug: &str) -> String {
-    match slug {
-        "em" => "Старший Rust-инженер",
-        _ => slug,
-    }
-    .to_string()
-}
-
 fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
     info!("Starting site generation");
     const INLINE_START: (i32, u32) = (2024, 3);
-    const DEFAULT_ROLE: Option<&str> = None;
     let inline_start = match read_inline_start() {
         Ok(v) => v,
         Err(e) => {
@@ -415,9 +394,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             INLINE_START
         }
     };
-    let roles = read_roles().expect("failed to read roles");
     let base_url = PDF_BASE_URL;
-    let mut sitemap_urls = vec![base_url.to_string(), format!("{base_url}ru/")];
+    let sitemap_urls = [base_url.to_string(), format!("{base_url}ru/")];
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {
         fs::create_dir_all(dist_dir)?;
@@ -425,16 +403,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
     info!("Copied avatar to dist directory");
-
-    let roles_js_en =
-        serde_json::to_string(&roles).expect("failed to serialize English roles to JSON");
-    let roles_js_ru = {
-        let ru_roles: BTreeMap<String, String> = roles
-            .keys()
-            .map(|slug| (slug.clone(), role_title_ru_nominative(slug)))
-            .collect();
-        serde_json::to_string(&ru_roles).expect("failed to serialize Russian roles to JSON")
-    };
     let start_date =
         NaiveDate::from_ymd_opt(inline_start.0, inline_start.1, 1).expect("Invalid start date");
     let today = Utc::now().date_naive();
@@ -443,9 +411,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     let duration_en = format_duration_en(total_months);
     let duration_ru = format_duration_ru(total_months);
     let date_str = today.format("%Y-%m-%d").to_string();
-    let position_block = DEFAULT_ROLE
-        .map(|role| format!("<p><strong id='position'>{role}</strong></p>"))
-        .unwrap_or_default();
     // Prepare HTML bodies
     let markdown_input = fs::read_to_string("profiles/cv/en/CV.MD")?;
     let parser = CmarkParser::new_ext(&markdown_input, Options::all());
@@ -519,13 +484,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         title: "Alexey Belyakov - CV",
         name: "Alexey Belyakov",
         prefix: "",
-        position_block: &position_block,
         date_str: &date_str,
         avatar_src: "avatar.jpg",
         html_body: &html_body_en,
         footer_links: &footer_links_en,
-        roles_js: &roles_js_en,
-        roles_js_ru: &roles_js_ru,
         link_to_en: None,
     })?;
 
@@ -534,13 +496,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         title: "Алексей Беляков - Резюме",
         name: "Алексей Беляков",
         prefix: "../",
-        position_block: &position_block,
         date_str: &date_str,
         avatar_src: "../avatar.jpg",
         html_body: &html_body_ru,
         footer_links: &footer_links_ru,
-        roles_js: &roles_js_en,
-        roles_js_ru: &roles_js_ru,
         link_to_en: None,
     })?;
 
@@ -574,80 +533,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     fs::write(ru_root_dir.join("index.html"), &html_template_ru)?;
     info!("Wrote Russian HTML to dist/ru/index.html");
 
-    // Generate role-specific copies for both languages
-    for (role, title) in &roles {
-        sitemap_urls.push(format!("{base_url}{role}/"));
-        sitemap_urls.push(format!("{base_url}{role}/ru/"));
-
-        let en_role_dir = docs_dir.join(role);
-        if !en_role_dir.exists() {
-            fs::create_dir_all(&en_role_dir)?;
-        }
-        let mut html_body_en_role = html_body_en.clone();
-        for theme in THEME_VARIANTS {
-            let base_en = format!("Belyakov_en_{}.pdf", theme);
-            let base_ru = format!("Belyakov_ru_{}.pdf", theme);
-            let rel_en = format!("../Belyakov_en_{}.pdf", theme);
-            let rel_ru = format!("../Belyakov_ru_{}.pdf", theme);
-            html_body_en_role = html_body_en_role.replace(&base_en, &rel_en);
-            html_body_en_role = html_body_en_role.replace(&base_ru, &rel_ru);
-        }
-        annotate_resume_links(&mut html_body_en_role);
-        let footer_links_en_role = extract_first_paragraph(&html_body_en_role);
-        let position_block_role = DEFAULT_ROLE
-            .map(|_| position_block.clone())
-            .unwrap_or_else(|| format!("<p><strong id='position'>{title}</strong></p>"));
-        let en_role_html = render_page(&TemplateData {
-            lang: "en",
-            title: "Alexey Belyakov - CV",
-            name: "Alexey Belyakov",
-            prefix: "../",
-            position_block: &position_block_role,
-            date_str: &date_str,
-            avatar_src: "../avatar.jpg",
-            html_body: &html_body_en_role,
-            footer_links: &footer_links_en_role,
-            roles_js: &roles_js_en,
-            roles_js_ru: &roles_js_ru,
-            link_to_en: None,
-        })?;
-        fs::write(en_role_dir.join("index.html"), en_role_html)?;
-
-        let ru_role_dir = en_role_dir.join("ru");
-        if !ru_role_dir.exists() {
-            fs::create_dir_all(&ru_role_dir)?;
-        }
-        let mut html_body_ru_role = html_body_ru.clone();
-        for theme in THEME_VARIANTS {
-            let base_ru = format!("../Belyakov_ru_{}.pdf", theme);
-            let base_en = format!("../Belyakov_en_{}.pdf", theme);
-            let rel_ru = format!("../../Belyakov_ru_{}.pdf", theme);
-            let rel_en = format!("../../Belyakov_en_{}.pdf", theme);
-            html_body_ru_role = html_body_ru_role.replace(&base_ru, &rel_ru);
-            html_body_ru_role = html_body_ru_role.replace(&base_en, &rel_en);
-        }
-        annotate_resume_links(&mut html_body_ru_role);
-        let footer_links_ru_role = extract_first_paragraph(&html_body_ru_role);
-        let role_title_ru = role_title_ru_genitive(role);
-        let position_block_role = DEFAULT_ROLE
-            .map(|_| position_block.clone())
-            .unwrap_or_else(|| format!("<p><strong id='position'>{}</strong></p>", role_title_ru));
-        let ru_role_html = render_page(&TemplateData {
-            lang: "ru",
-            title: "Алексей Беляков - Резюме",
-            name: "Алексей Беляков",
-            prefix: "../../",
-            position_block: &position_block_role,
-            date_str: &date_str,
-            avatar_src: "../../avatar.jpg",
-            html_body: &html_body_ru_role,
-            footer_links: &footer_links_ru_role,
-            roles_js: &roles_js_en,
-            roles_js_ru: &roles_js_ru,
-            link_to_en: None,
-        })?;
-        fs::write(ru_role_dir.join("index.html"), ru_role_html)?;
-    }
     let sitemap_content = sitemap_urls.join("\n") + "\n";
     fs::write(docs_dir.join("sitemap.txt"), sitemap_content)?;
     info!("Wrote sitemap to dist/sitemap.txt");
