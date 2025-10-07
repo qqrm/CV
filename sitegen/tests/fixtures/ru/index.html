@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang='ru'>
+<head>
+    <meta charset='UTF-8'>
+    <script>
+        const p = window.location.pathname;
+        if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+            window.location.replace(p + '/' + window.location.search + window.location.hash);
+        }
+    </script>
+    <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+    </script>
+    <title>Алексей Беляков - Резюме</title>
+    <link rel='icon' href='../favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='../style.css'>
+</head>
+<body>
+<header>
+    <h1>Алексей Беляков</h1>
+    <p>DATE</p>
+    <nav class="header-actions"><a class="action" href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf" data-light-label="Скачать PDF" data-dark-label="Скачать PDF (тёмная тема)">Скачать PDF</a><a class="action" href="../">Версия EN</a><a class="action" href="https://github.com/qqrm" rel="noopener">GitHub</a><a class="action" href="https://www.linkedin.com/in/qqrm/" rel="noopener">LinkedIn</a></nav>
+</header>
+<div class='content'>
+<img class='avatar' src='../avatar.jpg' alt='Avatar'>
+
+<p><em><a href="../">Ссылка на английскую версию</a></em></p>
+<p>
+</p>
+<ul>
+<li><strong>Телефон:</strong> +7 (911) 261-70-72</li>
+<li><strong>Telegram:</strong> <a href="https://t.me/leqqrm">@leqqrm</a></li>
+<li><strong>Почта:</strong> <a href="mailto:qqrm@vivaldi.net">qqrm@vivaldi.net</a></li>
+<li><strong>Формат работы:</strong> Удалённо, полный день</li>
+</ul>
+<h2>Профиль руководителя разработки</h2>
+<p>Руководитель разработки, который проводит миграции платформ без срывов по срокам и бюджету. Держу стейкхолдеров в курсе через понятные метрики, предсказуемые релизы и прямую коммуникацию на языке продукта и инженеров.</p>
+<h2>Ключевые сильные стороны</h2>
+<ul>
+<li>Веду дорожные карты из нескольких команд, сохраняя темп миграций.</li>
+<li>Даю руководству честные апдейты на основе метрик и рабочих дашбордов.</li>
+<li>Набираю, развиваю и удерживаю инженеров, пока они не готовы вести команды.</li>
+<li>Выстраиваю релизные и инцидентные процессы, которые защищают скорость и людей.</li>
+</ul>
+<h2>Опыт работы</h2>
+<h3>Руководитель разработки @ Inline Group | март 2023 – настоящее время (DURATION)</h3>
+<p><em>март 2023 – настоящее время</em></p>
+<p><strong>Лидерство и поставка</strong></p>
+<ul>
+<li>Руководил программой из 25 человек по замене SAP на Rust-микросервисы без потери квартальных целей.</li>
+<li>Координировал лидов бэкенда, QA, аналитики и DevOps, чтобы решения по дорожной карте и бюджету были прозрачными.</li>
+<li>Внедрил асинхронное и персональное планирование спринтов, подняв продуктивность примерно на 15% и предсказуемость примерно на 25%.</li>
+<li>Вёл компактный релизный совет, выравнивая QA-аппрувы, SAST-политику и готовность инфраструктуры.</li>
+</ul>
+<p><strong>Технологии и инструменты</strong></p>
+<ul>
+<li>Rust (Tokio, Actix Web, Axum, tonic) и поддерживающие сервисы на Go, Python и TypeScript.</li>
+<li>PostgreSQL, ClickHouse, Redis, Kafka и NATS для хранения и обмена данными.</li>
+<li>Kubernetes на AWS, GCP и Azure с автоматизацией через Terraform, Argo CD и GitOps.</li>
+<li>GitLab CI, GitHub Actions, SonarQube, Snyk и Prometheus/Grafana как основа качества и надёжности.</li>
+</ul>
+<p><strong>Люди и управление</strong></p>
+<ul>
+<li>Вырастил бэкенд с 5 до 12 инженеров, сократив онбординг примерно на 30%.</li>
+<li>Удержал 90% наймов после первого года благодаря планам развития и регулярной обратной связи.</li>
+<li>Менторил трёх инженеров до senior-уровня и внедрил статанализ и внутреннюю доставку пакетов под требования ИБ.</li>
+</ul>
+<h3>Rust Team Lead @ Solcery | март 2022 – март 2023</h3>
+<ul>
+<li>Управлял командой из 4 Rust-разработчиков, создающих блокчейн-базу данных под Solana.</li>
+<li>Переводил продуктовые цели в планы спринтов, объём релизов и понятные спецификации.</li>
+<li>Сократил код-ревью примерно на 40% за счёт правил, парного программирования и автотестов.</li>
+<li>Добавил версионирование схем, миграции, распределённый трейсинг и канареечные релизы.</li>
+</ul>
+<p><strong>Технологии и инструменты</strong></p>
+<ul>
+<li>Rust (async/await, Tokio, Actix, Axum) с Anchor и Solana SDK.</li>
+<li>PostgreSQL, FoundationDB, RocksDB и IPFS, развёрнутые на Kubernetes под управлением Terraform и GitOps.</li>
+<li>Prometheus, Grafana, OpenTelemetry и k6 для трассировки, наблюдаемости и нагрузочного тестирования.</li>
+</ul>
+<h3>Senior Rust Developer @ Kaspersky Lab | май 2021 – март 2022</h3>
+<ul>
+<li>Работал на стыке продукта, QA и операций, поддерживая блокчейн-платформу голосования.</li>
+<li>Увеличил покрытие тестами примерно до 75%, снизив пострелизные инциденты примерно на 25%.</li>
+<li>Вёл рефакторинг, упрощающий ввод новых фич и обмен знаниями между командами.</li>
+<li>Усилил криптомодули и контейнеризацию для безопасного хранения бюллетеней и аудита.</li>
+</ul>
+<p><strong>Технологии и инструменты</strong></p>
+<ul>
+<li>Rust (Actix Web, Axum, Hyper, tonic) вместе с сервисами на C++ и Python через gRPC и GraphQL.</li>
+<li>PostgreSQL и Kafka с секретами в Vault, развёрнутые на Kubernetes и OpenShift.</li>
+<li>GitLab CI/CD, Jenkins, SonarQube и Fortify для безопасной доставки.</li>
+</ul>
+<h2>Результаты и ритм работы</h2>
+<ul>
+<li>Держал доставку в пределах 5% от бюджета во время шестимесячного роста команды.</li>
+<li>Сократил баг-бэклог примерно на 30% за счёт усиленного QA и контроля релизов.</li>
+<li>Поддерживаю еженедельные встречи со стейкхолдерами, квартальное планирование и постоянные улучшения, чтобы риски всплывали заранее.</li>
+<li>Отчётность строю на дашбордах Jira, сводках в Confluence и коротких мемо с измеримыми решениями.</li>
+</ul>
+<h2>Технологический профиль</h2>
+<ul>
+<li>Ежедневные языки: Rust, Go, Python и TypeScript с базами PostgreSQL, ClickHouse и Redis.</li>
+<li>Платформа: Kubernetes, Terraform и Argo CD на AWS, GCP и Azure с GitOps-процессами.</li>
+<li>Контроль качества: GitLab CI, GitHub Actions, SonarQube, Snyk, Prometheus и Grafana.</li>
+<li>Совместная работа: Jira, Confluence, Notion, Slack, GitHub и GitLab.</li>
+</ul>
+<h2>Что предлагаю</h2>
+<ul>
+<li>Простая коммуникация для руководства и глубокое техническое погружение.</li>
+<li>Умею запускать или усиливать процессы без просадки по скорости команды.</li>
+<li>Масштабирую команды, развиваю лидов и держу мотивацию в периоды изменений.</li>
+</ul>
+<h2>Дополнительно</h2>
+<ul>
+<li><a href="https://qqrm.github.io/CV/">Полное CV</a></li>
+<li>Скачать PDF: <a href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf" data-light-label="светлая тема" data-dark-label="тёмная тема">светлая тема</a> · </li>
+</ul>
+
+</div>
+<footer>
+<p><em><a href="../">Ссылка на английскую версию</a></em></p>
+</footer>
+<button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
+  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
+</button>
+<script>
+(function(){
+  var root = document.documentElement;
+  var key = 'theme';
+  function updateResumeLinks(theme){
+    var anchors = document.querySelectorAll('a[data-light-href], a[data-dark-href]');
+    for (var i = 0; i < anchors.length; i++) {
+      var anchor = anchors[i];
+      var lightHref = anchor.getAttribute('data-light-href');
+      var darkHref = anchor.getAttribute('data-dark-href');
+      var lightLabel = anchor.getAttribute('data-light-label');
+      var darkLabel = anchor.getAttribute('data-dark-label');
+      var hasLight = !!lightHref;
+      var hasDark = !!darkHref;
+
+      var targetHref = theme === 'dark' && hasDark ? darkHref : lightHref || darkHref;
+      if (!targetHref && hasDark) {
+        targetHref = darkHref;
+      }
+      if (targetHref) {
+        anchor.setAttribute('href', targetHref);
+      }
+
+      var label;
+      if (theme === 'dark' && hasDark) {
+        label = darkLabel || lightLabel;
+      } else if (theme === 'dark') {
+        label = lightLabel || darkLabel;
+      } else {
+        label = lightLabel || darkLabel;
+      }
+      if (label) {
+        anchor.textContent = label;
+      }
+
+      if (hasLight && hasDark) {
+        var nextTheme = theme === 'dark' ? 'light' : 'dark';
+        var tooltipLabel = theme === 'dark' ? (lightLabel || 'Light PDF') : (darkLabel || 'Dark PDF');
+        var tooltip = 'Switch to ' + nextTheme + ' theme to access ' + tooltipLabel;
+        anchor.setAttribute('title', tooltip);
+        anchor.setAttribute('aria-label', tooltip);
+      } else {
+        anchor.removeAttribute('title');
+        anchor.removeAttribute('aria-label');
+      }
+    }
+  }
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    updateResumeLinks(theme);
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var next = theme === 'light' ? 'dark' : 'light';
+    btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+    btn.setAttribute('title', 'Switch to ' + next + ' theme');
+  }
+  var saved = localStorage.getItem(key);
+  var start = saved || root.getAttribute('data-theme') || 'light';
+  apply(start);
+  localStorage.setItem(key, start);
+
+  var btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(key, next);
+      apply(next);
+    });
+  }
+})();
+</script>
+</body>
+</html>
