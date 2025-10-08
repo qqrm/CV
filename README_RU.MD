@@ -6,8 +6,10 @@
 
 - [CV на английском](./profiles/cv/en/CV.MD)
 - [Русская версия CV](./profiles/cv/ru/CV_RU.MD)
-- [PDF на английском](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf)
-- [PDF на русском](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf)
+- [PDF на английском (светлая тема)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_light.pdf)
+- [PDF на английском (тёмная тема)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_dark.pdf)
+- [PDF на русском (светлая тема)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_light.pdf)
+- [PDF на русском (тёмная тема)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_dark.pdf)
 - [Сайт](https://qqrm.github.io/CV/)
 
 Все инструкции по сборке находятся в каталоге `typst`.

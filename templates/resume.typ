@@ -33,6 +33,14 @@
     ]
   ]
 
+    #let find_first_section(lines, i: 0) = if i >= lines.len() {
+      none
+    } else if lines.at(i).starts-with("## ") {
+      i
+    } else {
+      find_first_section(lines, i: i + 1)
+    }
+
     #let base = "https://qqrm.github.io/CV/"
     #let slug = if lang == "ru" { "ru/" } else { "" }
     #let cv_url = base + slug
@@ -47,7 +55,13 @@
       }
     #let raw_md = read(cv_path)
     #let replaced_md = raw_md.replace("{NAME}", name)
-    #let lines = replaced_md.split("\n").slice(8)
-    #let replaced_md = ("- **CV:** [" + cv_url + "](" + cv_url + ")\n" + lines.join("\n"))
+    #let lines = replaced_md.split("\n")
+    #let summary_start = find_first_section(lines)
+    #let trimmed_lines = if summary_start == none {
+      lines
+    } else {
+      lines.slice(summary_start)
+    }
+    #let replaced_md = ("- **CV:** [" + cv_url + "](" + cv_url + ")\n" + trimmed_lines.join("\n"))
     #cmarker.render(replaced_md)
 ]

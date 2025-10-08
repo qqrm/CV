@@ -5,8 +5,10 @@ automatically converted into PDFs and a static website.
 
 - [English CV](./profiles/cv/en/CV.MD)
 - [Russian CV](./profiles/cv/ru/CV_RU.MD)
-- [PDF (en)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_typst.pdf)
-- [PDF (ru)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_typst.pdf)
+- [PDF (en, light theme)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_light.pdf)
+- [PDF (en, dark theme)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_dark.pdf)
+- [PDF (ru, light theme)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_light.pdf)
+- [PDF (ru, dark theme)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_dark.pdf)
 - [Web version (en)](https://qqrm.github.io/CV/)
 - [Web version (ru)](https://qqrm.github.io/CV/ru/)
 
