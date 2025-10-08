@@ -28,7 +28,7 @@ Program lead for a 25-person initiative replacing SAP workflows with Rust micros
 - Chaired a release board aligning QA sign-offs, SAST policy, and deployment readiness for low-drama launches.
 - Expanded backend headcount from 5 to 12 engineers, pairing mentoring plans with competency matrices.
 
-**Stack:** Rust (Tokio, Axum, tonic), Go, Python, TypeScript, PostgreSQL, ClickHouse, Kafka, Redis, Kubernetes, Terraform, Argo CD, GitHub Actions, SonarQube, Snyk, OpenTelemetry.
+**Stack:** Rust (Tokio, Axum, tonic), Python, TypeScript, PostgreSQL, ClickHouse, Kafka, Redis, Kubernetes, Terraform, Argo CD, GitHub Actions, SonarQube, Snyk, OpenTelemetry.
 
 ### Rust Team Lead • Solcery
 *March 2022 – March 2023*
@@ -50,6 +50,13 @@ Maintained a blockchain-based voting platform across product, QA, and operations
 - Hardened cryptographic modules and container workloads for compliant ballot storage and audits.
 
 **Stack:** Rust (Actix Web, Axum, Hyper, tonic), C++, Python, PostgreSQL, Kafka, Vault, Nomad, Kubernetes, GitLab CI/CD, SonarQube, Fortify, Prometheus, Grafana.
+
+### Earlier Career
+
+- **[Ascon.ru](https://ascon.ru)** — Middle → Senior C++ Developer → Team Lead (May 2016 – Nov 2018, Saint Petersburg). Delivered KOMPAS 3D modeling features, introduced automated testing to cut manual QA effort, and led refactors while guiding the team through toolchain upgrades and hiring.
+- **[Con Certeza](https://concerteza.ru)** — C++ Developer (March 2015 – April 2016, Moscow). Built SS7 sniffers and protocol parsers for SORM deployments and added Python-based integration tests for telecom data workflows.
+- **[LiveTex](https://livetex.ru)** — C++ & JavaScript Developer (July 2014 – March 2015, Saint Petersburg). Shipped Node.js bindings for PostgreSQL and ZeroMQ to extend the customer engagement platform.
+- **[Tools for Brokers](https://www.toolsforbrokers.com)** — Junior C++ Developer (November 2013 – July 2014, Saint Petersburg). Delivered MetaTrader plug-ins and a management web app supporting brokerage automation.
 
 ## Operating Rhythm & Governance
 - Weekly portfolio reviews exposing KPI movement, budget status, and blocker burn-down.

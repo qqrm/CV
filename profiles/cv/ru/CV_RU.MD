@@ -28,7 +28,7 @@
 - Вел релизный совет: QA-аппрувы, политика SAST и готовность деплоймента без кризисов.
 - Увеличил бэкенд с 5 до 12 инженеров, связав планы развития с матрицами компетенций.
 
-**Стек:** Rust (Tokio, Axum, tonic), Go, Python, TypeScript, PostgreSQL, ClickHouse, Kafka, Redis, Kubernetes, Terraform, Argo CD, GitHub Actions, SonarQube, Snyk, OpenTelemetry.
+**Стек:** Rust (Tokio, Axum, tonic), Python, TypeScript, PostgreSQL, ClickHouse, Kafka, Redis, Kubernetes, Terraform, Argo CD, GitHub Actions, SonarQube, Snyk, OpenTelemetry.
 
 ### Руководитель Rust-команды • Solcery
 *март 2022 – март 2023*
@@ -50,6 +50,13 @@
 - Усилил криптомодули и контейнеризацию под требования аудита и безопасного хранения бюллетеней.
 
 **Стек:** Rust (Actix Web, Axum, Hyper, tonic), C++, Python, PostgreSQL, Kafka, Vault, Nomad, Kubernetes, GitLab CI/CD, SonarQube, Fortify, Prometheus, Grafana.
+
+### Ранний опыт
+
+- **[Ascon.ru](https://ascon.ru)** — Middle → Senior C++ Developer → тимлид (май 2016 – ноябрь 2018, Санкт-Петербург). Добавлял функции 3D-моделирования в КОМПАС, внедрил автоматизированные тесты, вёл рефакторинг и проводил команду через обновление инструментов и найм.
+- **[Con Certeza](https://concerteza.ru)** — C++ разработчик (март 2015 – апрель 2016, Москва). Разработал сниффер и парсеры сигнализационного трафика SS7 для СОРМ и написал Python-интеграционные тесты для телекома.
+- **[LiveTex](https://livetex.ru)** — C++ и JavaScript разработчик (июль 2014 – март 2015, Санкт-Петербург). Выпустил Node.js-обёртки для PostgreSQL и ZeroMQ, расширяя платформу клиентских коммуникаций.
+- **[Tools for Brokers](https://www.toolsforbrokers.com)** — Junior C++ разработчик (ноябрь 2013 – июль 2014, Санкт-Петербург). Делал плагины для MetaTrader и веб-приложение для управления брокерской автоматизацией.
 
 ## Рабочий ритм и управление
 - Еженедельные портфельные ревью с KPI, бюджетом и выгоранием рисков.
