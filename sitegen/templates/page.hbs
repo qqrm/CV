@@ -22,6 +22,17 @@
     <link rel='stylesheet' href='{{prefix}}style.css'>
 </head>
 <body>
+<div class='floating-controls'>
+  <button id="language-toggle" class="language-toggle" data-target="{{lang_toggle_target}}" aria-label="{{lang_toggle_label}}" title="{{lang_toggle_label}}">
+    <span class="lang-option current">{{lang_toggle_current}}</span>
+    <span class="lang-separator">/</span>
+    <span class="lang-option">{{lang_toggle_other}}</span>
+  </button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
+  </button>
+</div>
 <header>
     <h1>{{name}}</h1>
     <p>{{date_str}}</p>
@@ -29,16 +40,8 @@
 </header>
 <div class='content'>
 <img class='avatar' src='{{avatar_src}}' alt='Avatar'>
-{{#if link_to_en}}<p><em><a href='{{link_to_en}}'>Ссылка на английскую версию</a></em></p>{{/if}}
 {{{html_body}}}
 </div>
-<footer>
-{{{footer_links}}}
-</footer>
-<button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
-  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
-  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
-</button>
 <script>
 (function(){
   var root = document.documentElement;
@@ -107,6 +110,16 @@
       var next = current === 'dark' ? 'light' : 'dark';
       localStorage.setItem(key, next);
       apply(next);
+    });
+  }
+
+  var langBtn = document.getElementById('language-toggle');
+  if (langBtn) {
+    langBtn.addEventListener('click', function(){
+      var target = langBtn.getAttribute('data-target');
+      if (target) {
+        window.location.href = target;
+      }
     });
   }
 })();

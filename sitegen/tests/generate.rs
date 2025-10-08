@@ -11,19 +11,25 @@ use sitegen::{format_duration_en, format_duration_ru, read_inline_start};
 const PDF_THEMES: &[&str] = &["light", "dark"];
 
 fn normalize_en(content: &str) -> String {
-    let date_re = Regex::new(r"<p>\d{4}-\d{2}-\d{2}</p>").unwrap();
+    let date_re = Regex::new(
+        r#"(?m)^(?P<indent>\s*)<p(?: class=['"]updated-at['"])?>(?:\d{4}-\d{2}-\d{2})</p>"#,
+    )
+    .unwrap();
     let dur_re = Regex::new(r"([A-Za-z]+ \d{4} – Present)\s+\([^)]*\)").unwrap();
-    let tmp = date_re.replace(content, "<p>DATE</p>");
+    let tmp = date_re.replace(content, "${indent}<p>DATE</p>");
     let tmp = dur_re.replace(&tmp, "$1 (DURATION)");
     tmp.to_string()
 }
 
 fn normalize_ru(content: &str) -> String {
-    let date_re = Regex::new(r"<p>\d{4}-\d{2}-\d{2}</p>").unwrap();
+    let date_re = Regex::new(
+        r#"(?m)^(?P<indent>\s*)<p(?: class=['"]updated-at['"])?>(?:\d{4}-\d{2}-\d{2})</p>"#,
+    )
+    .unwrap();
     let dur_re =
         Regex::new(r"(\p{L}+ \d{4} – (?:настоящее время|Настоящее время|Present))\s*\([^)]*\)")
             .unwrap();
-    let tmp = date_re.replace(content, "<p>DATE</p>");
+    let tmp = date_re.replace(content, "${indent}<p>DATE</p>");
     let tmp = dur_re.replace(&tmp, "$1 (DURATION)");
     tmp.to_string()
 }
@@ -256,6 +262,62 @@ fn generates_expected_dist() {
         "../Belyakov_en_light.pdf",
         "../Belyakov_en_dark.pdf",
     );
+
+    let button_selector = Selector::parse("button#language-toggle").expect("valid selector");
+    let en_doc = Html::parse_document(&index_actual);
+    let en_button = en_doc
+        .select(&button_selector)
+        .next()
+        .expect("expected language toggle on English page");
+    let en_value = en_button.value();
+    assert_eq!(en_value.attr("data-target"), Some("ru/"));
+    assert_eq!(
+        en_value.attr("aria-label"),
+        Some("Switch to Russian version"),
+        "unexpected aria-label on English language toggle"
+    );
+    let option_selector = Selector::parse("span.lang-option").expect("valid option selector");
+    let current_selector =
+        Selector::parse("span.lang-option.current").expect("valid current selector");
+
+    let en_options: Vec<String> = en_button
+        .select(&option_selector)
+        .map(|span| span.text().collect::<String>().trim().to_string())
+        .collect();
+    assert_eq!(en_options, vec!["EN".to_string(), "RU".to_string()]);
+
+    let en_current = en_button
+        .select(&current_selector)
+        .next()
+        .expect("expected current language span on English page");
+    let en_current_label = en_current.text().collect::<String>().trim().to_string();
+    assert_eq!(en_current_label, "EN");
+
+    let ru_doc = Html::parse_document(&index_ru_actual);
+    let ru_button = ru_doc
+        .select(&button_selector)
+        .next()
+        .expect("expected language toggle on Russian page");
+    let ru_value = ru_button.value();
+    assert_eq!(ru_value.attr("data-target"), Some("../"));
+    assert_eq!(
+        ru_value.attr("aria-label"),
+        Some("Переключить на английскую версию"),
+        "unexpected aria-label on Russian language toggle"
+    );
+
+    let ru_options: Vec<String> = ru_button
+        .select(&option_selector)
+        .map(|span| span.text().collect::<String>().trim().to_string())
+        .collect();
+    assert_eq!(ru_options, vec!["RU".to_string(), "EN".to_string()]);
+
+    let ru_current = ru_button
+        .select(&current_selector)
+        .next()
+        .expect("expected current language span on Russian page");
+    let ru_current_label = ru_current.text().collect::<String>().trim().to_string();
+    assert_eq!(ru_current_label, "RU");
 
     fs::remove_dir_all(&dist).expect("failed to remove dist");
 }

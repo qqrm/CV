@@ -1,51 +1,64 @@
 # Alexey "QQRM" Belyakov
-Amsterdam, NL • [qqrm@vivaldi.net](mailto:qqrm@vivaldi.net) • [Telegram @leqqrm](https://t.me/leqqrm) • [github.com/qqrm](https://github.com/qqrm) • [linkedin.com/in/qqrm](https://www.linkedin.com/in/qqrm/)
+Saint Petersburg, Russia • +7 (911) 261-70-72 • qqrm@vivaldi.net • Telegram @leqqrm • Remote, full-time availability
 
 ## Executive Summary
-Engineering Manager with 10+ years in backend and platform. Led 10-20 engineers across Rust microservices, observability, and secure supply chain. Drove SAP-to-Rust modernization, raised delivery throughput, and hardened reliability with SLO discipline. Comfortable with budgets, hiring pipelines, and cross-functional delivery at enterprise scale.
+Hands-on engineering leader who scales Rust-centric platforms and keeps migrations predictable for executives and teams. Balances delivery cadence, budget guardrails, and people development while aligning product, SRE, and compliance stakeholders.
 
-## Core Skills
-- People leadership: org design, hiring bar, performance cycles, coaching, delivery governance, roadmap ownership, budget, vendor management, stakeholder comms, program management.
-- Technical leadership: Rust services, async I/O, Postgres, Kafka, Redis, gRPC, Kubernetes, GitHub Actions, IaC, SAST and SBOM, cost control, tracing and SLOs, incident response and MTTR.
+## Core Strengths
+- Roadmap ownership across multi-team programs, risk surfacing, and transparent stakeholder updates.
+- KPI/OKR design with automated dashboards that expose delivery, quality, and budget signals.
+- Governance that blends DevOps practices, secure supply chain controls, and release readiness gates.
+- Hiring loops, mentoring frameworks, and growth plans that retain senior talent and successors.
 
 ## Impact Highlights
-- Modernization program: cut p95 lead time to production by 25-30 percent, doubled release frequency, reduced change-fail rate by 30 percent. Team 12 FTE, multi-vendor setup. Business effect: faster feature revenue capture and lower rework.
-- Reliability: SLOs and incident reviews moved MTTR down by 35 percent and ticket backlog down by 30 percent. Quarterly roadmap hit rate 85-90 percent.
-- Secure supply chain: private crate registry, dependency policy, SBOM in CI, critical vulnerabilities down to zero, audit time per release down by 50 percent.
-- Hiring engine: time-to-hire −20 percent, time-to-productivity −30 percent, retention at 6 months 95 percent. Built senior Rust bench and succession plans.
+- SAP-to-Rust modernization: doubled release frequency, trimmed p95 lead time by ~25%, and cut change-fail rate by ~30%.
+- Reliability uplift: incident postmortems and SLO dashboards reduced MTTR by ~35% and backlog by ~30%.
+- Secure delivery: internal crate registry, dependency policy, and SBOM automation dropped critical vulns to zero and halved audit prep.
+- Hiring engine: time-to-hire −20%, onboarding −30%, and 6-month retention at ~95% while scaling leadership bench.
 
 ## Experience
 
 ### Engineering Manager • Inline Group
 *March 2023 – Present*
 
-Scope: backend modernization from SAP to Rust microservices.
-- Owned delivery for 8-12 services across vendor, catalog, sourcing, approvals. Release cadence ×2, p95 lead time −25 percent, change-fail rate −30 percent.
-- Built CI/CD with quality gates and rollout policy. MTTR −35 percent through better telemetry and runbooks.
-- Scaled team from 5 to 12 engineers. Set hiring loop, performance rubrics, and mentoring.
-- Instituted supply chain security: SAST, dependency bans, SBOM, provenance in CI.
+Program lead for a 25-person initiative replacing SAP workflows with Rust microservices.
+- Balanced migration scope with quarterly OKRs and budget, flagging risk early to product and finance leads.
+- Coordinated backend, QA, data, and DevOps leads to keep milestones and service handovers on schedule.
+- Introduced async status rituals and personal sprint planning that raised throughput ~15% and predictability ~25%.
+- Chaired a release board aligning QA sign-offs, SAST policy, and deployment readiness for low-drama launches.
+- Expanded backend headcount from 5 to 12 engineers, pairing mentoring plans with competency matrices.
 
-Stack: Rust, Tokio, Axum, Postgres, Kafka, Redis, Kubernetes, GitHub Actions, OpenTelemetry.
+**Stack:** Rust (Tokio, Axum, tonic), Go, Python, TypeScript, PostgreSQL, ClickHouse, Kafka, Redis, Kubernetes, Terraform, Argo CD, GitHub Actions, SonarQube, Snyk, OpenTelemetry.
 
-### Tech Lead • <Company>
-*June 2019 – February 2022*
-- Drove service decomposition and observability. Reduced p95 latency by 40 percent on three critical paths.
-- Introduced blue-green and canary strategy. Incident rate −25 percent.
-- Mentored six engineers to senior scope.
+### Rust Team Lead • Solcery
+*March 2022 – March 2023*
 
-Stack: Rust, Go, gRPC, Terraform, Prometheus, Grafana.
+Led a four-person Rust team building a DAO-ready ledger on Solana.
+- Translated product bets into sprint scope, specs, and release cadences shared with investors and community.
+- Cut review turnaround ~40% via review policies, pair programming, and CI automation.
+- Implemented schema versioning, migrations, and observability that lowered maintenance overhead.
+- Rolled out canary deployments, distributed tracing, and release health dashboards for smart-contracts.
 
-### Senior Software Engineer • <Company>
-*January 2016 – May 2019*
-- Designed high-throughput data pipeline. Cost per 1k events −35 percent.
-- Hardened auth and rate limiting across APIs.
+**Stack:** Rust (async/await, Tokio, Actix, Axum), Anchor, Solana SDK, TypeScript, React, PostgreSQL, FoundationDB, IPFS, Kubernetes, Terraform, Argo CD, GitHub Actions, Prometheus, Grafana, OpenTelemetry.
 
-## Open Source and Talks
-- Cargo-warden security tooling, checkers engine, CI templates. 1k+ stars across repos.
-- Conference and internal talks on Rust, SLOs, and CI hardening.
+### Senior Rust Developer • Kaspersky Lab
+*May 2021 – March 2022*
+
+Maintained a blockchain-based voting platform across product, QA, and operations.
+- Raised unit and integration coverage to ~75%, reducing post-release incidents ~25%.
+- Led refactors that simplified future feature delivery and knowledge transfer between squads.
+- Hardened cryptographic modules and container workloads for compliant ballot storage and audits.
+
+**Stack:** Rust (Actix Web, Axum, Hyper, tonic), C++, Python, PostgreSQL, Kafka, Vault, Nomad, Kubernetes, GitLab CI/CD, SonarQube, Fortify, Prometheus, Grafana.
+
+## Operating Rhythm & Governance
+- Weekly portfolio reviews exposing KPI movement, budget status, and blocker burn-down.
+- Quarterly planning aligning product, engineering, and operations capacity.
+- Continuous improvement loops via retrospectives, surveys, and small experiments.
+- Reporting built on Jira dashboards, Confluence scorecards, and concise memos.
 
 ## Education
-- BSc Computer Science • <University>
+- Bauman Moscow State Technical University (IU7) — BSc Computer Science, 2015
 
 ## Keywords for ATS
-Engineering Manager, Software Engineering Manager, Rust, Microservices, SRE, SLO, MTTR, CI/CD, Kubernetes, Program Management, Supply Chain Security, Hiring, Coaching.
+Engineering Manager, Software Engineering Manager, Rust, Microservices, DevOps, SRE, SLO, MTTR, CI/CD, Kubernetes, Program Management, Supply Chain Security, Hiring, Coaching, Migration Leadership.

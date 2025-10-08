@@ -102,9 +102,11 @@ struct TemplateData<'a> {
     date_str: &'a str,
     avatar_src: &'a str,
     html_body: &'a str,
-    footer_links: &'a str,
     header_actions: &'a str,
-    link_to_en: Option<&'a str>,
+    lang_toggle_label: &'a str,
+    lang_toggle_target: &'a str,
+    lang_toggle_current: &'a str,
+    lang_toggle_other: &'a str,
 }
 
 fn typst_source_for(pdf: &Path) -> Result<PathBuf, Box<dyn Error>> {
@@ -472,13 +474,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     annotate_resume_links(&mut html_body_ru);
 
-    let footer_links_en = "<p><em><a href=\"ru/\">View Russian version</a></em></p>";
-    let footer_links_ru = "<p><em><a href=\"../\">Ссылка на английскую версию</a></em></p>";
-
     let header_actions_en = format!(
         "<nav class=\"header-actions\">\
 <a class=\"action\" href=\"Belyakov_en_light.pdf\" data-light-href=\"Belyakov_en_light.pdf\" data-dark-href=\"Belyakov_en_dark.pdf\" data-light-label=\"Download EN PDF\" data-dark-label=\"Download EN PDF (dark)\">Download EN PDF</a>\
-<a class=\"action\" href=\"ru/\">View RU</a>\
 <a class=\"action\" href=\"{GITHUB_URL}\" rel=\"noopener\">GitHub</a>\
 <a class=\"action\" href=\"{LINKEDIN_URL}\" rel=\"noopener\">LinkedIn</a>\
 </nav>"
@@ -487,11 +485,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     let header_actions_ru = format!(
         "<nav class=\"header-actions\">\
 <a class=\"action\" href=\"../Belyakov_ru_light.pdf\" data-light-href=\"../Belyakov_ru_light.pdf\" data-dark-href=\"../Belyakov_ru_dark.pdf\" data-light-label=\"Скачать PDF\" data-dark-label=\"Скачать PDF (тёмная тема)\">Скачать PDF</a>\
-<a class=\"action\" href=\"../\">Версия EN</a>\
 <a class=\"action\" href=\"{GITHUB_URL}\" rel=\"noopener\">GitHub</a>\
 <a class=\"action\" href=\"{LINKEDIN_URL}\" rel=\"noopener\">LinkedIn</a>\
 </nav>"
     );
+
+    let lang_toggle_en = ("Switch to Russian version", "ru/", "EN", "RU");
+    let lang_toggle_ru = ("Переключить на английскую версию", "../", "RU", "EN");
 
     // Render base pages
     let html_template = render_page(&TemplateData {
@@ -502,9 +502,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "avatar.jpg",
         html_body: &html_body_en,
-        footer_links: footer_links_en,
         header_actions: &header_actions_en,
-        link_to_en: None,
+        lang_toggle_label: lang_toggle_en.0,
+        lang_toggle_target: lang_toggle_en.1,
+        lang_toggle_current: lang_toggle_en.2,
+        lang_toggle_other: lang_toggle_en.3,
     })?;
 
     let html_template_ru = render_page(&TemplateData {
@@ -515,9 +517,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         date_str: &date_str,
         avatar_src: "../avatar.jpg",
         html_body: &html_body_ru,
-        footer_links: footer_links_ru,
         header_actions: &header_actions_ru,
-        link_to_en: None,
+        lang_toggle_label: lang_toggle_ru.0,
+        lang_toggle_target: lang_toggle_ru.1,
+        lang_toggle_current: lang_toggle_ru.2,
+        lang_toggle_other: lang_toggle_ru.3,
     })?;
 
     let docs_dir = Path::new("dist");

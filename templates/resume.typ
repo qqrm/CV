@@ -47,7 +47,7 @@
       }
     #let raw_md = read(cv_path)
     #let replaced_md = raw_md.replace("{NAME}", name)
-    #let lines = replaced_md.split("\n").slice(5)
+    #let lines = replaced_md.split("\n").slice(8)
     #let replaced_md = ("- **CV:** [" + cv_url + "](" + cv_url + ")\n" + lines.join("\n"))
     #cmarker.render(replaced_md)
 ]
