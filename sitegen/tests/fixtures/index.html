@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <script>
+        const p = window.location.pathname;
+        if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+            window.location.replace(p + '/' + window.location.search + window.location.hash);
+        }
+    </script>
+    <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+    </script>
+    <title>Alexey Belyakov - CV</title>
+    <link rel='icon' href='favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+<div class='floating-controls'>
+  <button id="language-toggle" class="language-toggle" data-target="ru/" aria-label="Switch to Russian version" title="Switch to Russian version">
+    <span class="lang-option current">EN</span>
+    <span class="lang-separator">/</span>
+    <span class="lang-option">RU</span>
+  </button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
+  </button>
+</div>
+<header>
+    <h1>Alexey Belyakov</h1>
+    <img class='avatar' src='avatar.jpg' alt='Avatar'>
+    <p>DATE</p>
+    <nav class="header-actions"><a class="action" href="Belyakov_en_light.pdf" data-light-href="Belyakov_en_light.pdf" data-dark-href="Belyakov_en_dark.pdf" data-light-label="Download EN PDF" data-dark-label="Download EN PDF (dark)">Download EN PDF</a><a class="action" href="https://github.com/qqrm" rel="noopener">GitHub</a><a class="action" href="https://www.linkedin.com/in/qqrm/" rel="noopener">LinkedIn</a></nav>
+</header>
+<div class='content'>
+<p>Saint Petersburg, Russia • +7 (911) 261-70-72 • qqrm@vivaldi.net • Telegram @leqqrm • Remote, full-time availability</p>
+<h2>Executive Summary</h2>
+<p>Hands-on engineering leader who scales Rust-centric platforms and keeps migrations predictable for executives and teams. Balances delivery cadence, budget guardrails, and people development while aligning product, SRE, and compliance stakeholders.</p>
+<h2>Core Strengths</h2>
+<ul>
+<li>Roadmap ownership across multi-team programs, risk surfacing, and transparent stakeholder updates.</li>
+<li>KPI/OKR design with automated dashboards that expose delivery, quality, and budget signals.</li>
+<li>Governance that blends DevOps practices, secure supply chain controls, and release readiness gates.</li>
+<li>Hiring loops, mentoring frameworks, and growth plans that retain senior talent and successors.</li>
+</ul>
+<h2>Impact Highlights</h2>
+<ul>
+<li>SAP-to-Rust modernization: doubled release frequency, trimmed p95 lead time by ~25%, and cut change-fail rate by ~30%.</li>
+<li>Reliability uplift: incident postmortems and SLO dashboards reduced MTTR by ~35% and backlog by ~30%.</li>
+<li>Secure delivery: internal crate registry, dependency policy, and SBOM automation dropped critical vulns to zero and halved audit prep.</li>
+<li>Hiring engine: time-to-hire −20%, onboarding −30%, and 6-month retention at ~95% while scaling leadership bench.</li>
+</ul>
+<h2>Experience</h2>
+<h3>Engineering Manager • Inline Group</h3>
+<p><em>March 2023 – Present (DURATION)</em></p>
+<p>Program lead for a 25-person initiative replacing SAP workflows with Rust microservices.</p>
+<ul>
+<li>Balanced migration scope with quarterly OKRs and budget, flagging risk early to product and finance leads.</li>
+<li>Coordinated backend, QA, data, and DevOps leads to keep milestones and service handovers on schedule.</li>
+<li>Introduced async status rituals and personal sprint planning that raised throughput ~15% and predictability ~25%.</li>
+<li>Chaired a release board aligning QA sign-offs, SAST policy, and deployment readiness for low-drama launches.</li>
+<li>Expanded backend headcount from 5 to 12 engineers, pairing mentoring plans with competency matrices.</li>
+</ul>
+<p><strong>Stack:</strong> Rust (Tokio, Axum, tonic), Go, Python, TypeScript, PostgreSQL, ClickHouse, Kafka, Redis, Kubernetes, Terraform, Argo CD, GitHub Actions, SonarQube, Snyk, OpenTelemetry.</p>
+<h3>Rust Team Lead • Solcery</h3>
+<p><em>March 2022 – March 2023</em></p>
+<p>Led a four-person Rust team building a DAO-ready ledger on Solana.</p>
+<ul>
+<li>Translated product bets into sprint scope, specs, and release cadences shared with investors and community.</li>
+<li>Cut review turnaround ~40% via review policies, pair programming, and CI automation.</li>
+<li>Implemented schema versioning, migrations, and observability that lowered maintenance overhead.</li>
+<li>Rolled out canary deployments, distributed tracing, and release health dashboards for smart-contracts.</li>
+</ul>
+<p><strong>Stack:</strong> Rust (async/await, Tokio, Actix, Axum), Anchor, Solana SDK, TypeScript, React, PostgreSQL, FoundationDB, IPFS, Kubernetes, Terraform, Argo CD, GitHub Actions, Prometheus, Grafana, OpenTelemetry.</p>
+<h3>Senior Rust Developer • Kaspersky Lab</h3>
+<p><em>May 2021 – March 2022</em></p>
+<p>Maintained a blockchain-based voting platform across product, QA, and operations.</p>
+<ul>
+<li>Raised unit and integration coverage to ~75%, reducing post-release incidents ~25%.</li>
+<li>Led refactors that simplified future feature delivery and knowledge transfer between squads.</li>
+<li>Hardened cryptographic modules and container workloads for compliant ballot storage and audits.</li>
+</ul>
+<p><strong>Stack:</strong> Rust (Actix Web, Axum, Hyper, tonic), C++, Python, PostgreSQL, Kafka, Vault, Nomad, Kubernetes, GitLab CI/CD, SonarQube, Fortify, Prometheus, Grafana.</p>
+<h2>Operating Rhythm &amp; Governance</h2>
+<ul>
+<li>Weekly portfolio reviews exposing KPI movement, budget status, and blocker burn-down.</li>
+<li>Quarterly planning aligning product, engineering, and operations capacity.</li>
+<li>Continuous improvement loops via retrospectives, surveys, and small experiments.</li>
+<li>Reporting built on Jira dashboards, Confluence scorecards, and concise memos.</li>
+</ul>
+<h2>Education</h2>
+<ul>
+<li>Bauman Moscow State Technical University, IU7 Department “Software Engineering and Information Technologies” — Specialist Degree in Computer Science, 2015</li>
+</ul>
+<h2>Keywords for ATS</h2>
+<p>Engineering Manager, Software Engineering Manager, Rust, Microservices, DevOps, SRE, SLO, MTTR, CI/CD, Kubernetes, Program Management, Supply Chain Security, Hiring, Coaching, Migration Leadership.</p>
+
+</div>
+<script>
+(function(){
+  var root = document.documentElement;
+  var key = 'theme';
+  function updateResumeLinks(theme){
+    var anchors = document.querySelectorAll('a[data-light-href], a[data-dark-href]');
+    for (var i = 0; i < anchors.length; i++) {
+      var anchor = anchors[i];
+      var lightHref = anchor.getAttribute('data-light-href');
+      var darkHref = anchor.getAttribute('data-dark-href');
+      var lightLabel = anchor.getAttribute('data-light-label');
+      var darkLabel = anchor.getAttribute('data-dark-label');
+      var hasLight = !!lightHref;
+      var hasDark = !!darkHref;
+
+      var targetHref = theme === 'dark' && hasDark ? darkHref : lightHref || darkHref;
+      if (!targetHref && hasDark) {
+        targetHref = darkHref;
+      }
+      if (targetHref) {
+        anchor.setAttribute('href', targetHref);
+      }
+
+      var label;
+      if (theme === 'dark' && hasDark) {
+        label = darkLabel || lightLabel;
+      } else if (theme === 'dark') {
+        label = lightLabel || darkLabel;
+      } else {
+        label = lightLabel || darkLabel;
+      }
+      if (label) {
+        anchor.textContent = label;
+      }
+
+      if (hasLight && hasDark) {
+        var nextTheme = theme === 'dark' ? 'light' : 'dark';
+        var tooltipLabel = theme === 'dark' ? (lightLabel || 'Light PDF') : (darkLabel || 'Dark PDF');
+        var tooltip = 'Switch to ' + nextTheme + ' theme to access ' + tooltipLabel;
+        anchor.setAttribute('title', tooltip);
+        anchor.setAttribute('aria-label', tooltip);
+      } else {
+        anchor.removeAttribute('title');
+        anchor.removeAttribute('aria-label');
+      }
+    }
+  }
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    updateResumeLinks(theme);
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var next = theme === 'light' ? 'dark' : 'light';
+    btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+    btn.setAttribute('title', 'Switch to ' + next + ' theme');
+  }
+  var saved = localStorage.getItem(key);
+  var start = saved || root.getAttribute('data-theme') || 'light';
+  apply(start);
+  localStorage.setItem(key, start);
+
+  var btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(key, next);
+      apply(next);
+    });
+  }
+
+  var langBtn = document.getElementById('language-toggle');
+  if (langBtn) {
+    langBtn.addEventListener('click', function(){
+      var target = langBtn.getAttribute('data-target');
+      if (target) {
+        window.location.href = target;
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
