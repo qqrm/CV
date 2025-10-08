@@ -480,7 +480,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let header_actions_en = format!(
         "<nav class=\"header-actions\">\
-<a class=\"action\" href=\"Belyakov_en_light.pdf\" data-light-href=\"Belyakov_en_light.pdf\" data-dark-href=\"Belyakov_en_dark.pdf\" data-light-label=\"Download EN PDF\" data-dark-label=\"Download EN PDF (dark)\">Download EN PDF</a>\
+<a class=\"action\" href=\"Belyakov_en_light.pdf\" data-light-href=\"Belyakov_en_light.pdf\" data-dark-href=\"Belyakov_en_dark.pdf\" data-light-label=\"Download\" data-dark-label=\"Download\">Download</a>\
 <a class=\"action\" href=\"{GITHUB_URL}\" rel=\"noopener\">GitHub</a>\
 <a class=\"action\" href=\"{EMAIL_URL}\">Email</a>\
 <a class=\"action\" href=\"{TELEGRAM_URL}\" rel=\"noopener\">Telegram</a>\
@@ -490,7 +490,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let header_actions_ru = format!(
         "<nav class=\"header-actions\">\
-<a class=\"action\" href=\"../Belyakov_ru_light.pdf\" data-light-href=\"../Belyakov_ru_light.pdf\" data-dark-href=\"../Belyakov_ru_dark.pdf\" data-light-label=\"Скачать PDF\" data-dark-label=\"Скачать PDF (тёмная тема)\">Скачать PDF</a>\
+<a class=\"action\" href=\"../Belyakov_ru_light.pdf\" data-light-href=\"../Belyakov_ru_light.pdf\" data-dark-href=\"../Belyakov_ru_dark.pdf\" data-light-label=\"Скачать\" data-dark-label=\"Скачать\">Скачать</a>\
 <a class=\"action\" href=\"{GITHUB_URL}\" rel=\"noopener\">GitHub</a>\
 <a class=\"action\" href=\"{EMAIL_URL}\">Почта</a>\
 <a class=\"action\" href=\"{TELEGRAM_URL}\" rel=\"noopener\">Telegram</a>\

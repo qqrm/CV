@@ -11,5 +11,5 @@
 - Compress roles prior to 2018 into one or two lines. Focus on the most recent five to seven years.
 
 ## Online
-- Surface header buttons on the website: Download EN PDF, View RU, GitHub, LinkedIn.
+- Surface header buttons on the website: Download, View RU, GitHub, LinkedIn.
 - Reuse this About section on LinkedIn and mirror the same impact bullets in each role description.

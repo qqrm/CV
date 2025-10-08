@@ -115,9 +115,9 @@ fn assert_pdf_link_attrs(html: &str, light: &str, dark: &str) {
             text, light_label,
             "anchor text should match light label for {light}/{dark}"
         );
-        assert_ne!(
+        assert_eq!(
             text, dark_label,
-            "unexpected dark label rendered directly for {light}/{dark}"
+            "dark label should match anchor text for {light}/{dark}"
         );
     }
 }

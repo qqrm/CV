@@ -21,7 +21,7 @@
   #set page(fill: palette.background)
   #set text(font: "Latin Modern Roman", fill: palette.text)
   #show link: set text(fill: palette.link)
-  #let default_name = if lang == "ru" { "Алексей Леонидович Беляков" } else { "Alexey Leonidovich Belyakov" }
+  #let default_name = if lang == "ru" { "Алексей Беляков" } else { "Alexey Belyakov" }
   #let name = if name == none { default_name } else { name }
 
   #align(center)[= #name]
