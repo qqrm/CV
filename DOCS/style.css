@@ -20,30 +20,35 @@ header {
 }
 
 .header-actions .action {
+    --action-color: #0645ad;
+    --action-hover-bg: var(--action-color);
+    --action-hover-fg: #ffffff;
     display: inline-block;
     padding: 0.4em 0.9em;
-    border: 1px solid currentColor;
+    border: 1px solid var(--action-color);
     border-radius: 999px;
     text-decoration: none;
     font-size: 0.9em;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    color: var(--action-color);
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .header-actions .action:hover,
 .header-actions .action:focus {
-    background-color: currentColor;
-    color: #ffffff;
+    background-color: var(--action-hover-bg);
+    color: var(--action-hover-fg);
+    border-color: var(--action-hover-bg);
 }
 
 .header-actions .action:focus {
-    outline: 2px solid currentColor;
+    outline: 2px solid var(--action-hover-bg);
     outline-offset: 2px;
 }
 
-html[data-theme="dark"] .header-actions .action:hover,
-html[data-theme="dark"] .header-actions .action:focus {
-    color: #121212;
-    background-color: #ffffff;
+html[data-theme="dark"] .header-actions .action {
+    --action-color: #9cdcfe;
+    --action-hover-bg: #ffffff;
+    --action-hover-fg: #121212;
 }
 
 .content h1,
