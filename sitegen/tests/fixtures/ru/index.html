@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang='ru'>
+<head>
+    <meta charset='UTF-8'>
+    <script>
+        const p = window.location.pathname;
+        if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+            window.location.replace(p + '/' + window.location.search + window.location.hash);
+        }
+    </script>
+    <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+    </script>
+    <title>Алексей Беляков - Резюме</title>
+    <link rel='icon' href='../favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='../style.css'>
+</head>
+<body>
+<div class='floating-controls'>
+  <button id="language-toggle" class="language-toggle" data-target="../" aria-label="Переключить на английскую версию" title="Переключить на английскую версию">
+    <span class="lang-option current">RU</span>
+    <span class="lang-separator">/</span>
+    <span class="lang-option">EN</span>
+  </button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
+  </button>
+</div>
+<header>
+    <h1>Алексей Беляков</h1>
+    <img class='avatar' src='../avatar.jpg' alt='Avatar'>
+    <p>DATE</p>
+    <nav class="header-actions"><a class="action" href="../Belyakov_ru_light.pdf" data-light-href="../Belyakov_ru_light.pdf" data-dark-href="../Belyakov_ru_dark.pdf" data-light-label="Скачать PDF" data-dark-label="Скачать PDF (тёмная тема)">Скачать PDF</a><a class="action" href="https://github.com/qqrm" rel="noopener">GitHub</a><a class="action" href="https://www.linkedin.com/in/qqrm/" rel="noopener">LinkedIn</a></nav>
+</header>
+<div class='content'>
+<p>Санкт-Петербург, Россия • +7 (911) 261-70-72 • qqrm@vivaldi.net • Telegram @leqqrm • Удалённо, на полной занятости</p>
+<h2>Исполнительное резюме</h2>
+<p>Практикующий инженерный руководитель, который переводит платформы на Rust без срывов по срокам и бюджету. Поддерживаю прозрачную доставку, выстраиваю DevOps-практики и развиваю команды так, чтобы продукт, SRE и комплаенс шли в одном ритме.</p>
+<h2>Ключевые сильные стороны</h2>
+<ul>
+<li>Дорожные карты для нескольких команд с управлением рисками и регулярными апдейтами стейкхолдерам.</li>
+<li>KPI/OKR и автоматизированные дашборды, которые показывают здоровье доставки, качества и бюджета.</li>
+<li>Управление релизами: DevOps-практики, безопасность цепочки поставок и контроль готовности к деплойменту.</li>
+<li>Найм, менторство и планы роста, удерживающие senior-инженеров и преемников.</li>
+</ul>
+<h2>Основные результаты</h2>
+<ul>
+<li>Модернизация SAP→Rust: частота релизов ×2, p95 time-to-prod −25%, change-fail rate −30%.</li>
+<li>Надёжность: постмортемы и SLO-дашборды снизили MTTR ~на 35% и бэклог ~на 30%.</li>
+<li>Безопасная доставка: приватный регистр, политика зависимостей и SBOM сократили критические уязвимости до нуля и уменьшили подготовку к аудиту вдвое.</li>
+<li>Найм: time-to-hire −20%, онбординг −30%, удержание через 6 месяцев ~95% при росте лидского пула.</li>
+</ul>
+<h2>Опыт работы</h2>
+<h3>Руководитель разработки • Inline Group</h3>
+<p><em>март 2023 – настоящее время (DURATION)</em></p>
+<p>Руководитель программы из 25 человек по замене SAP на Rust-микросервисы.</p>
+<ul>
+<li>Балансировал объём миграции с квартальными OKR и бюджетом, заранее подсвечивая риски продукту и финансам.</li>
+<li>Координировал лидов бэкенда, QA, данных и DevOps, чтобы вехи и передачи сервисов шли по плану.</li>
+<li>Внедрил асинхронные статусы и персональное планирование спринтов, подняв throughput ~на 15% и предсказуемость ~на 25%.</li>
+<li>Вел релизный совет: QA-аппрувы, политика SAST и готовность деплоймента без кризисов.</li>
+<li>Увеличил бэкенд с 5 до 12 инженеров, связав планы развития с матрицами компетенций.</li>
+</ul>
+<p><strong>Стек:</strong> Rust (Tokio, Axum, tonic), Go, Python, TypeScript, PostgreSQL, ClickHouse, Kafka, Redis, Kubernetes, Terraform, Argo CD, GitHub Actions, SonarQube, Snyk, OpenTelemetry.</p>
+<h3>Руководитель Rust-команды • Solcery</h3>
+<p><em>март 2022 – март 2023</em></p>
+<p>Вёл команду из четырёх Rust-инженеров, создававших DAO-ready реестр на Solana.</p>
+<ul>
+<li>Переводил продуктовые гипотезы в спринты, спецификации и релизные циклы для инвесторов и комьюнити.</li>
+<li>Сократил время ревью ~на 40% за счёт политик, парного программирования и CI-автоматизации.</li>
+<li>Внедрил версионирование схем, миграции и наблюдаемость, снизив поддержку.</li>
+<li>Настроил канареечные релизы, распределённый трейсинг и дашборды здоровья смарт-контрактов.</li>
+</ul>
+<p><strong>Стек:</strong> Rust (async/await, Tokio, Actix, Axum), Anchor, Solana SDK, TypeScript, React, PostgreSQL, FoundationDB, IPFS, Kubernetes, Terraform, Argo CD, GitHub Actions, Prometheus, Grafana, OpenTelemetry.</p>
+<h3>Старший разработчик Rust • Kaspersky Lab</h3>
+<p><em>май 2021 – март 2022</em></p>
+<p>Поддерживал блокчейн-платформу голосования вместе с продуктом, QA и операциями.</p>
+<ul>
+<li>Поднял покрытие до ~75%, сократил пострелизные инциденты примерно на 25%.</li>
+<li>Руководил рефакторингом, упростившим ввод фич и обмен знаниями между командами.</li>
+<li>Усилил криптомодули и контейнеризацию под требования аудита и безопасного хранения бюллетеней.</li>
+</ul>
+<p><strong>Стек:</strong> Rust (Actix Web, Axum, Hyper, tonic), C++, Python, PostgreSQL, Kafka, Vault, Nomad, Kubernetes, GitLab CI/CD, SonarQube, Fortify, Prometheus, Grafana.</p>
+<h2>Рабочий ритм и управление</h2>
+<ul>
+<li>Еженедельные портфельные ревью с KPI, бюджетом и выгоранием рисков.</li>
+<li>Квартальное планирование для продукта, разработки и операций.</li>
+<li>Постоянные улучшения через ретро, опросы и небольшие эксперименты.</li>
+<li>Отчётность через дашборды Jira, сводки в Confluence и короткие записки.</li>
+</ul>
+<h2>Образование</h2>
+<ul>
+<li>МГТУ им. Н. Э. Баумана, кафедра ИУ7 «Программное обеспечение ЭВМ и информационные технологии» — диплом специалиста по информатике, 2015</li>
+</ul>
+<h2>Ключевые слова для ATS</h2>
+<p>Engineering Manager, Руководитель разработки, Rust, Микросервисы, DevOps, SRE, SLO, MTTR, CI/CD, Kubernetes, Program Management, Supply Chain Security, Найм, Наставничество, Миграции.</p>
+
+</div>
+<script>
+(function(){
+  var root = document.documentElement;
+  var key = 'theme';
+  function updateResumeLinks(theme){
+    var anchors = document.querySelectorAll('a[data-light-href], a[data-dark-href]');
+    for (var i = 0; i < anchors.length; i++) {
+      var anchor = anchors[i];
+      var lightHref = anchor.getAttribute('data-light-href');
+      var darkHref = anchor.getAttribute('data-dark-href');
+      var lightLabel = anchor.getAttribute('data-light-label');
+      var darkLabel = anchor.getAttribute('data-dark-label');
+      var hasLight = !!lightHref;
+      var hasDark = !!darkHref;
+
+      var targetHref = theme === 'dark' && hasDark ? darkHref : lightHref || darkHref;
+      if (!targetHref && hasDark) {
+        targetHref = darkHref;
+      }
+      if (targetHref) {
+        anchor.setAttribute('href', targetHref);
+      }
+
+      var label;
+      if (theme === 'dark' && hasDark) {
+        label = darkLabel || lightLabel;
+      } else if (theme === 'dark') {
+        label = lightLabel || darkLabel;
+      } else {
+        label = lightLabel || darkLabel;
+      }
+      if (label) {
+        anchor.textContent = label;
+      }
+
+      if (hasLight && hasDark) {
+        var nextTheme = theme === 'dark' ? 'light' : 'dark';
+        var tooltipLabel = theme === 'dark' ? (lightLabel || 'Light PDF') : (darkLabel || 'Dark PDF');
+        var tooltip = 'Switch to ' + nextTheme + ' theme to access ' + tooltipLabel;
+        anchor.setAttribute('title', tooltip);
+        anchor.setAttribute('aria-label', tooltip);
+      } else {
+        anchor.removeAttribute('title');
+        anchor.removeAttribute('aria-label');
+      }
+    }
+  }
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    updateResumeLinks(theme);
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var next = theme === 'light' ? 'dark' : 'light';
+    btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+    btn.setAttribute('title', 'Switch to ' + next + ' theme');
+  }
+  var saved = localStorage.getItem(key);
+  var start = saved || root.getAttribute('data-theme') || 'light';
+  apply(start);
+  localStorage.setItem(key, start);
+
+  var btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(key, next);
+      apply(next);
+    });
+  }
+
+  var langBtn = document.getElementById('language-toggle');
+  if (langBtn) {
+    langBtn.addEventListener('click', function(){
+      var target = langBtn.getAttribute('data-target');
+      if (target) {
+        window.location.href = target;
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
