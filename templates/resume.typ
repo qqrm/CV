@@ -25,13 +25,13 @@
   #let name = if name == none { default_name } else { name }
 
   #align(center)[= #name]
-  #align(center)[#datetime.today().display()]
-
   #align(center)[
     #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true, stroke: 0.75pt + palette.muted)[
       #image("../content/avatar.jpg", width: 5cm, height: 5cm)
     ]
   ]
+
+  #align(center)[#datetime.today().display()]
 
     #let find_first_section(lines, i: 0) = if i >= lines.len() {
       none
