@@ -70,6 +70,17 @@ a {
     object-fit: cover;
 }
 
+.page-footer {
+    margin-top: 3em;
+    text-align: center;
+    font-size: 0.9em;
+    color: #7b8794;
+}
+
+html[data-theme="dark"] .page-footer {
+    color: #9aa5b1;
+}
+
 html[data-theme="dark"] {
     background-color: #121212;
     color: #e0e0e0;

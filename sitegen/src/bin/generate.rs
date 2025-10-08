@@ -101,7 +101,7 @@ struct TemplateData<'a> {
     title: &'a str,
     name: &'a str,
     prefix: &'a str,
-    date_str: &'a str,
+    footer_text: &'a str,
     avatar_src: &'a str,
     html_body: &'a str,
     header_actions: &'a str,
@@ -412,6 +412,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let duration_en = format_duration_en(total_months);
     let duration_ru = format_duration_ru(total_months);
     let date_str = today.format("%Y-%m-%d").to_string();
+    let footer_text_en = format!("Last updated: {}", date_str);
+    let footer_text_ru = format!("Последнее редактирование: {}", date_str);
     // Prepare HTML bodies
     let markdown_input = fs::read_to_string("profiles/cv/en/CV.MD")?;
     let parser = CmarkParser::new_ext(&markdown_input, Options::all());
@@ -505,7 +507,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         title: "Alexey Belyakov - CV",
         name: "Alexey Belyakov",
         prefix: "",
-        date_str: &date_str,
+        footer_text: &footer_text_en,
         avatar_src: "avatar.jpg",
         html_body: &html_body_en,
         header_actions: &header_actions_en,
@@ -520,7 +522,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         title: "Алексей Беляков - Резюме",
         name: "Алексей Беляков",
         prefix: "../",
-        date_str: &date_str,
+        footer_text: &footer_text_ru,
         avatar_src: "../avatar.jpg",
         html_body: &html_body_ru,
         header_actions: &header_actions_ru,

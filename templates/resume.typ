@@ -31,8 +31,6 @@
     ]
   ]
 
-  #align(center)[#datetime.today().display()]
-
     #let find_first_section(lines, i: 0) = if i >= lines.len() {
       none
     } else if lines.at(i).starts-with("## ") {
@@ -64,4 +62,10 @@
     }
     #let replaced_md = ("- **CV:** [" + cv_url + "](" + cv_url + ")\n" + trimmed_lines.join("\n"))
     #cmarker.render(replaced_md)
+    #v(1.2em)
+    #align(center)[
+      #set text(size: 10pt, fill: palette.muted)
+      #(if lang == "ru" { "Последнее редактирование: " } else { "Last updated: " })
+      #datetime.today().display()
+    ]
 ]

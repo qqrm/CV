@@ -36,12 +36,14 @@
 <header>
     <h1>{{name}}</h1>
     <img class='avatar' src='{{avatar_src}}' alt='Avatar'>
-    <p>{{date_str}}</p>
     {{{header_actions}}}
 </header>
 <div class='content'>
 {{{html_body}}}
 </div>
+<footer class='page-footer'>
+  <p>{{footer_text}}</p>
+</footer>
 <script>
 (function(){
   var root = document.documentElement;

@@ -12,7 +12,7 @@ const PDF_THEMES: &[&str] = &["light", "dark"];
 
 fn normalize_en(content: &str) -> String {
     let date_re = Regex::new(
-        r#"(?m)^(?P<indent>\s*)<p(?: class=['"]updated-at['"])?>(?:\d{4}-\d{2}-\d{2})</p>"#,
+        r#"(?m)^(?P<indent>\s*)<p(?: class=['"]updated-at['"])?>(?:Last updated:\s*)?(?:\d{4}-\d{2}-\d{2})</p>"#,
     )
     .unwrap();
     let dur_re = Regex::new(r"([A-Za-z]+ \d{4} – Present)\s+\([^)]*\)").unwrap();
@@ -23,7 +23,7 @@ fn normalize_en(content: &str) -> String {
 
 fn normalize_ru(content: &str) -> String {
     let date_re = Regex::new(
-        r#"(?m)^(?P<indent>\s*)<p(?: class=['"]updated-at['"])?>(?:\d{4}-\d{2}-\d{2})</p>"#,
+        r#"(?m)^(?P<indent>\s*)<p(?: class=['"]updated-at['"])?>(?:Последнее редактирование:\s*)?(?:\d{4}-\d{2}-\d{2})</p>"#,
     )
     .unwrap();
     let dur_re =
@@ -229,6 +229,15 @@ fn generates_expected_dist() {
     }
     let actual_duration_ru = ru_duration.expect("Russian duration fragment not found");
     assert_eq!(actual_duration_ru, expected_duration_ru);
+
+    assert!(
+        index_actual.contains("Last updated:"),
+        "English page is missing the last updated label"
+    );
+    assert!(
+        index_ru_actual.contains("Последнее редактирование:"),
+        "Russian page is missing the last updated label"
+    );
 
     let index_normalized = normalize_en(&index_actual);
     let index_ru_normalized = normalize_ru(&index_ru_actual);
