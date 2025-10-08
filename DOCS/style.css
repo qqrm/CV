@@ -43,6 +43,7 @@ header {
 html[data-theme="dark"] .header-actions .action:hover,
 html[data-theme="dark"] .header-actions .action:focus {
     color: #121212;
+    background-color: #ffffff;
 }
 
 .content h1,
