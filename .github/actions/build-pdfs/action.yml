@@ -1,0 +1,32 @@
+name: 'Setup Typst and build PDFs'
+description: 'Install dependencies and build Typst PDFs.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Disable cargo progress
+      shell: bash
+      run: echo "CARGO_TERM_PROGRESS_WHEN=never" >> $GITHUB_ENV
+    - name: Cache cargo
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          ~/.cargo/bin
+        key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+        restore-keys: ${{ runner.os }}-cargo-
+    - name: Install Typst
+      shell: bash
+      run: |
+        if ! command -v typst >/dev/null 2>&1; then
+          cargo install typst-cli --locked --quiet
+        fi
+    - name: Compile Typst PDFs
+      shell: bash
+      run: |
+        set -euo pipefail
+        shopt -s nullglob
+        for src in typst/en/*.typ typst/ru/*.typ; do
+          dest="${src%.typ}.pdf"
+          typst compile --root . "$src" "$dest"
+        done
