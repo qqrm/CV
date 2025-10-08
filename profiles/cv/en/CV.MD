@@ -1,5 +1,5 @@
 # Alexey "QQRM" Belyakov
-Saint Petersburg, Russia • +7 (911) 261-70-72 • qqrm@vivaldi.net • Telegram @leqqrm • Remote, full-time availability
+Saint Petersburg, Russia • +7 (911) 261-70-72 • qqrm@vivaldi.net • Remote, full-time availability
 
 ## Executive Summary
 Hands-on engineering leader who scales Rust-centric platforms and keeps migrations predictable for executives and teams. Balances delivery cadence, budget guardrails, and people development while aligning product, SRE, and compliance stakeholders.
@@ -21,42 +21,50 @@ Hands-on engineering leader who scales Rust-centric platforms and keeps migratio
 ### Engineering Manager • Inline Group
 *March 2023 – Present*
 
-Program lead for a 25-person initiative replacing SAP workflows with Rust microservices.
-- Balanced migration scope with quarterly OKRs and budget, flagging risk early to product and finance leads.
-- Coordinated backend, QA, data, and DevOps leads to keep milestones and service handovers on schedule.
-- Introduced async status rituals and personal sprint planning that raised throughput ~15% and predictability ~25%.
-- Chaired a release board aligning QA sign-offs, SAST policy, and deployment readiness for low-drama launches.
-- Expanded backend headcount from 5 to 12 engineers, pairing mentoring plans with competency matrices.
+Directed a 25-person cross-functional migration from SAP workflows to a Rust microservices ecosystem.
+- Owned the architecture roadmap, balancing migration scope with quarterly OKRs and budget guardrails.
+- Coordinated backend, QA, analytics, and DevOps leads so releases and service handovers stayed predictable.
+- Established async status cadences and structured retrospectives that lifted sprint throughput ~15% and predictability ~25%.
+- Chaired release governance aligning QA sign-offs, infrastructure readiness, and security checks for on-prem launches.
+- Scaled the engineering organization from 5 to 12 backend developers, mentoring three engineers into senior roles.
 
-**Stack:** Rust (Tokio, Axum, tonic), Python, TypeScript, PostgreSQL, ClickHouse, Kafka, Redis, Kubernetes, Terraform, Argo CD, GitHub Actions, SonarQube, Snyk, OpenTelemetry.
+**Stack:** Rust (Actix Web, RabbitMQ), PostgreSQL, Docker, Docker Compose, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
 
-### Rust Team Lead • Solcery
-*March 2022 – March 2023*
+### Rust Developer • Kaspersky
+*May 2020 – March 2023*
 
-Led a four-person Rust team building a DAO-ready ledger on Solana.
-- Translated product bets into sprint scope, specs, and release cadences shared with investors and community.
-- Cut review turnaround ~40% via review policies, pair programming, and CI automation.
-- Implemented schema versioning, migrations, and observability that lowered maintenance overhead.
-- Rolled out canary deployments, distributed tracing, and release health dashboards for smart-contracts.
+Maintained and extended a blockchain-based voting service built on Exonum for enterprise deployments.
+- Added weight-based voting and streamlined ballot management while coordinating product, QA, and operations stakeholders.
+- Increased integration and unit test coverage to ~75%, tightening quality gates and cutting post-deployment issues ~25%.
+- Refined CI/CD pipelines during the migration to the Microsoft ecosystem, speeding up release cycles and audit preparation.
 
-**Stack:** Rust (async/await, Tokio, Actix, Axum), Anchor, Solana SDK, TypeScript, React, PostgreSQL, FoundationDB, IPFS, Kubernetes, Terraform, Argo CD, GitHub Actions, Prometheus, Grafana, OpenTelemetry.
+**Stack:** Rust, Exonum, Protocol Buffers, Serde, Git, Microsoft Azure DevOps.
 
-### Senior Rust Developer • Kaspersky Lab
-*May 2021 – March 2022*
+### Senior C++/Go Developer • B2Broker
+*November 2018 – March 2020*
 
-Maintained a blockchain-based voting platform across product, QA, and operations.
-- Raised unit and integration coverage to ~75%, reducing post-release incidents ~25%.
-- Led refactors that simplified future feature delivery and knowledge transfer between squads.
-- Hardened cryptographic modules and container workloads for compliant ballot storage and audits.
+Delivered brokerage automation software using MT4/MT5 APIs and distributed services.
+- Built trade copiers in C++ and Go, plus a Multi Account Manager that improved operational efficiency by ~15%.
+- Designed C++/Go microservices to normalize and stream trading data into client widgets with real-time guarantees.
+- Implemented data collectors feeding statistical analysis to give brokers actionable insight.
 
-**Stack:** Rust (Actix Web, Axum, Hyper, tonic), C++, Python, PostgreSQL, Kafka, Vault, Nomad, Kubernetes, GitLab CI/CD, SonarQube, Fortify, Prometheus, Grafana.
+**Stack:** MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
+
+### C++ Developer → Team Lead • ASCON
+*May 2016 – November 2018*
+
+Developed CAD libraries for KOMPAS, taking on people leadership and tooling modernization.
+- Delivered a “Change View Plane” capability that strengthened 3D modeling workflows for architects and mechanical engineers.
+- Introduced a C++/Python automated testing framework that reduced manual QA overhead by ~30%.
+- Led the refactor to C++17, moved the org from SVN to Git, and established Scrum practices alongside documentation standards.
+
+**Stack:** MSVC, C++, Python 3, Boost, PostgreSQL, Git, Jenkins.
 
 ### Earlier Career
 
-- **[Ascon.ru](https://ascon.ru)** — Middle → Senior C++ Developer → Team Lead (May 2016 – Nov 2018, Saint Petersburg). Delivered KOMPAS 3D modeling features, introduced automated testing to cut manual QA effort, and led refactors while guiding the team through toolchain upgrades and hiring.
 - **[Con Certeza](https://concerteza.ru)** — C++ Developer (March 2015 – April 2016, Moscow). Built SS7 sniffers and protocol parsers for SORM deployments and added Python-based integration tests for telecom data workflows.
 - **[LiveTex](https://livetex.ru)** — C++ & JavaScript Developer (July 2014 – March 2015, Saint Petersburg). Shipped Node.js bindings for PostgreSQL and ZeroMQ to extend the customer engagement platform.
-- **[Tools for Brokers](https://www.toolsforbrokers.com)** — Junior C++ Developer (November 2013 – July 2014, Saint Petersburg). Delivered MetaTrader plug-ins and a management web app supporting brokerage automation.
+- **[Tools for Brokers](https://t4b.com/)** — Junior C++ Developer (November 2013 – July 2014, Saint Petersburg). Delivered MetaTrader plug-ins and a management web app supporting brokerage automation.
 
 ## Operating Rhythm & Governance
 - Weekly portfolio reviews exposing KPI movement, budget status, and blocker burn-down.
