@@ -58,7 +58,7 @@ Maintained a blockchain-based voting platform across product, QA, and operations
 - Reporting built on Jira dashboards, Confluence scorecards, and concise memos.
 
 ## Education
-- Bauman Moscow State Technical University (IU7) — BSc Computer Science, 2015
+- Bauman Moscow State Technical University, IU7 Department “Software Engineering and Information Technologies” — Specialist Degree in Computer Science, 2015
 
 ## Keywords for ATS
 Engineering Manager, Software Engineering Manager, Rust, Microservices, DevOps, SRE, SLO, MTTR, CI/CD, Kubernetes, Program Management, Supply Chain Security, Hiring, Coaching, Migration Leadership.
