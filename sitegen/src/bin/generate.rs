@@ -15,6 +15,7 @@ use std::process::Command;
 
 const PDF_BASE_URL: &str = "https://qqrm.github.io/CV/";
 const GITHUB_URL: &str = "https://github.com/qqrm";
+const TELEGRAM_URL: &str = "https://leqqrm.t.me";
 const LINKEDIN_URL: &str = "https://www.linkedin.com/in/qqrm/";
 const THEME_VARIANTS: &[&str] = &["light", "dark"];
 
@@ -478,6 +479,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         "<nav class=\"header-actions\">\
 <a class=\"action\" href=\"Belyakov_en_light.pdf\" data-light-href=\"Belyakov_en_light.pdf\" data-dark-href=\"Belyakov_en_dark.pdf\" data-light-label=\"Download EN PDF\" data-dark-label=\"Download EN PDF (dark)\">Download EN PDF</a>\
 <a class=\"action\" href=\"{GITHUB_URL}\" rel=\"noopener\">GitHub</a>\
+<a class=\"action\" href=\"{TELEGRAM_URL}\" rel=\"noopener\">Telegram</a>\
 <a class=\"action\" href=\"{LINKEDIN_URL}\" rel=\"noopener\">LinkedIn</a>\
 </nav>"
     );
@@ -486,6 +488,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         "<nav class=\"header-actions\">\
 <a class=\"action\" href=\"../Belyakov_ru_light.pdf\" data-light-href=\"../Belyakov_ru_light.pdf\" data-dark-href=\"../Belyakov_ru_dark.pdf\" data-light-label=\"Скачать PDF\" data-dark-label=\"Скачать PDF (тёмная тема)\">Скачать PDF</a>\
 <a class=\"action\" href=\"{GITHUB_URL}\" rel=\"noopener\">GitHub</a>\
+<a class=\"action\" href=\"{TELEGRAM_URL}\" rel=\"noopener\">Telegram</a>\
 <a class=\"action\" href=\"{LINKEDIN_URL}\" rel=\"noopener\">LinkedIn</a>\
 </nav>"
     );
