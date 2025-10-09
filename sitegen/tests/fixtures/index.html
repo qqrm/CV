@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <script>
+        const p = window.location.pathname;
+        if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+            window.location.replace(p + '/' + window.location.search + window.location.hash);
+        }
+    </script>
+    <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+    </script>
+    <title>Alexey Belyakov - CV</title>
+    <link rel='icon' href='favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+<div class='floating-controls'>
+  <button id="language-toggle" class="language-toggle" data-target="ru/" aria-label="Switch to Russian version" title="Switch to Russian version">
+    <span class="lang-option current">EN</span>
+    <span class="lang-separator">/</span>
+    <span class="lang-option">RU</span>
+  </button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
+  </button>
+</div>
+<header>
+    <h1>Alexey Belyakov</h1>
+    <img class='avatar' src='avatar.jpg' alt='Avatar'>
+    <nav class="header-actions"><a class="action" href="Belyakov_en_light.pdf" data-light-href="Belyakov_en_light.pdf" data-dark-href="Belyakov_en_dark.pdf" data-light-label="Download" data-dark-label="Download">Download</a><a class="action" href="https://github.com/qqrm" rel="noopener">GitHub</a><a class="action" href="mailto:qqrm@vivaldi.net">Email</a><a class="action" href="https://leqqrm.t.me" rel="noopener">Telegram</a><a class="action" href="https://www.linkedin.com/in/qqrm/" rel="noopener">LinkedIn</a></nav>
+</header>
+<div class='content'>
+<h2>Executive Summary</h2>
+<p>Hands-on engineering leader who scales Rust-centric platforms and keeps migrations predictable for executives and teams. Balances delivery cadence, budget guardrails, and people development while aligning product, SRE, and compliance stakeholders.</p>
+<h2>Core Strengths</h2>
+<ul>
+<li>Roadmap ownership across multi-team programs, risk surfacing, and transparent stakeholder updates.</li>
+<li>KPI/OKR design with automated dashboards that expose delivery, quality, and budget signals.</li>
+<li>Governance that blends DevOps practices, secure supply chain controls, and release readiness gates.</li>
+<li>Hiring loops, mentoring frameworks, and growth plans that retain senior talent and successors.</li>
+</ul>
+<h2>Impact Highlights</h2>
+<ul>
+<li>SAP-to-Rust modernization: doubled release frequency, trimmed p95 lead time by ~25%, and cut change-fail rate by ~30%.</li>
+<li>Reliability uplift: incident postmortems and SLO dashboards reduced MTTR by ~35% and backlog by ~30%.</li>
+<li>Secure delivery: internal crate registry, dependency policy, and SBOM automation dropped critical vulns to zero and halved audit prep.</li>
+<li>Hiring engine: time-to-hire −20%, onboarding −30%, and 6-month retention at ~95% while scaling leadership bench.</li>
+</ul>
+<h2>Experience</h2>
+<h3>Engineering Manager • Inline Group</h3>
+<p><em>March 2023 – Present (DURATION)</em></p>
+<p>Directed a 25-person cross-functional migration from SAP workflows to a Rust microservices ecosystem.</p>
+<ul>
+<li>Owned the architecture roadmap, balancing migration scope with quarterly OKRs and budget guardrails.</li>
+<li>Coordinated backend, QA, analytics, and DevOps leads so releases and service handovers stayed predictable.</li>
+<li>Established async status cadences and structured retrospectives that lifted sprint throughput ~15% and predictability ~25%.</li>
+<li>Chaired release governance aligning QA sign-offs, infrastructure readiness, and security checks for on-prem launches.</li>
+<li>Scaled the engineering organization from 5 to 12 backend developers, mentoring three engineers into senior roles.</li>
+</ul>
+<p><strong>Stack:</strong> Rust (Actix Web, RabbitMQ), PostgreSQL, Docker, Docker Compose, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.</p>
+<h3>Rust Developer • Kaspersky</h3>
+<p><em>May 2020 – March 2023</em></p>
+<p>Maintained and extended a blockchain-based voting service built on Exonum for enterprise deployments.</p>
+<ul>
+<li>Added weight-based voting and streamlined ballot management while coordinating product, QA, and operations stakeholders.</li>
+<li>Increased integration and unit test coverage to ~75%, tightening quality gates and cutting post-deployment issues ~25%.</li>
+<li>Refined CI/CD pipelines during the migration to the Microsoft ecosystem, speeding up release cycles and audit preparation.</li>
+</ul>
+<p><strong>Stack:</strong> Rust, Exonum, Protocol Buffers, Serde, Git, Microsoft Azure DevOps.</p>
+<h3>Senior C++/Go Developer • B2Broker</h3>
+<p><em>November 2018 – March 2020</em></p>
+<p>Delivered brokerage automation software using MT4/MT5 APIs and distributed services.</p>
+<ul>
+<li>Built trade copiers in C++ and Go, plus a Multi Account Manager that improved operational efficiency by ~15%.</li>
+<li>Designed C++/Go microservices to normalize and stream trading data into client widgets with real-time guarantees.</li>
+<li>Implemented data collectors feeding statistical analysis to give brokers actionable insight.</li>
+</ul>
+<p><strong>Stack:</strong> MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.</p>
+<h3>C++ Developer → Team Lead • ASCON</h3>
+<p><em>May 2016 – November 2018</em></p>
+<p>Developed CAD libraries for KOMPAS, taking on people leadership and tooling modernization.</p>
+<ul>
+<li>Delivered a “Change View Plane” capability that strengthened 3D modeling workflows for architects and mechanical engineers.</li>
+<li>Introduced a C++/Python automated testing framework that reduced manual QA overhead by ~30%.</li>
+<li>Led the refactor to C++17, moved the org from SVN to Git, and established Scrum practices alongside documentation standards.</li>
+</ul>
+<p><strong>Stack:</strong> MSVC, C++, Python 3, Boost, PostgreSQL, Git, Jenkins.</p>
+<h3>Earlier Career</h3>
+<ul>
+<li><strong><a href="https://concerteza.ru">Con Certeza</a></strong> — C++ Developer (March 2015 – April 2016, Moscow). Built SS7 sniffers and protocol parsers for SORM deployments and added Python-based integration tests for telecom data workflows.</li>
+<li><strong><a href="https://livetex.ru">LiveTex</a></strong> — C++ &amp; JavaScript Developer (July 2014 – March 2015, Saint Petersburg). Shipped Node.js bindings for PostgreSQL and ZeroMQ to extend the customer engagement platform.</li>
+<li><strong><a href="https://t4b.com/">Tools for Brokers</a></strong> — Junior C++ Developer (November 2013 – July 2014, Saint Petersburg). Delivered MetaTrader plug-ins and a management web app supporting brokerage automation.</li>
+</ul>
+<h2>Operating Rhythm &amp; Governance</h2>
+<ul>
+<li>Weekly portfolio reviews exposing KPI movement, budget status, and blocker burn-down.</li>
+<li>Quarterly planning aligning product, engineering, and operations capacity.</li>
+<li>Continuous improvement loops via retrospectives, surveys, and small experiments.</li>
+<li>Reporting built on Jira dashboards, Confluence scorecards, and concise memos.</li>
+</ul>
+<h2>Education</h2>
+<ul>
+<li>Bauman Moscow State Technical University, IU7 Department “Software Engineering and Information Technologies” — Specialist Degree in Computer Science, 2015</li>
+</ul>
+<h2>Keywords for ATS</h2>
+<p>Engineering Manager, Software Engineering Manager, Rust, Microservices, DevOps, SRE, SLO, MTTR, CI/CD, Kubernetes, Program Management, Supply Chain Security, Hiring, Coaching, Migration Leadership.</p>
+
+</div>
+<footer class='page-footer'>
+  <p>DATE</p>
+</footer>
+<script>
+(function(){
+  var root = document.documentElement;
+  var key = 'theme';
+  function updateResumeLinks(theme){
+    var anchors = document.querySelectorAll('a[data-light-href], a[data-dark-href]');
+    for (var i = 0; i < anchors.length; i++) {
+      var anchor = anchors[i];
+      var lightHref = anchor.getAttribute('data-light-href');
+      var darkHref = anchor.getAttribute('data-dark-href');
+      var lightLabel = anchor.getAttribute('data-light-label');
+      var darkLabel = anchor.getAttribute('data-dark-label');
+      var hasLight = !!lightHref;
+      var hasDark = !!darkHref;
+
+      var targetHref = theme === 'dark' && hasDark ? darkHref : lightHref || darkHref;
+      if (!targetHref && hasDark) {
+        targetHref = darkHref;
+      }
+      if (targetHref) {
+        anchor.setAttribute('href', targetHref);
+      }
+
+      var label;
+      if (theme === 'dark' && hasDark) {
+        label = darkLabel || lightLabel;
+      } else if (theme === 'dark') {
+        label = lightLabel || darkLabel;
+      } else {
+        label = lightLabel || darkLabel;
+      }
+      if (label) {
+        anchor.textContent = label;
+      }
+
+      if (hasLight && hasDark) {
+        var nextTheme = theme === 'dark' ? 'light' : 'dark';
+        var tooltipLabel = theme === 'dark' ? (lightLabel || 'Light PDF') : (darkLabel || 'Dark PDF');
+        var tooltip = 'Switch to ' + nextTheme + ' theme to access ' + tooltipLabel;
+        anchor.setAttribute('title', tooltip);
+        anchor.setAttribute('aria-label', tooltip);
+      } else {
+        anchor.removeAttribute('title');
+        anchor.removeAttribute('aria-label');
+      }
+    }
+  }
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    updateResumeLinks(theme);
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var next = theme === 'light' ? 'dark' : 'light';
+    btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+    btn.setAttribute('title', 'Switch to ' + next + ' theme');
+  }
+  var saved = localStorage.getItem(key);
+  var start = saved || root.getAttribute('data-theme') || 'light';
+  apply(start);
+  localStorage.setItem(key, start);
+
+  var btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(key, next);
+      apply(next);
+    });
+  }
+
+  var langBtn = document.getElementById('language-toggle');
+  if (langBtn) {
+    langBtn.addEventListener('click', function(){
+      var target = langBtn.getAttribute('data-target');
+      if (target) {
+        window.location.href = target;
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
