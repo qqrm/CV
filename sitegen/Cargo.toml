@@ -1,0 +1,32 @@
+[package]
+name = "sitegen"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+pulldown-cmark = "0.9"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+serde = { version = "1", features = ["derive"] }
+log = "0.4"
+env_logger = "0.11"
+phf = { version = "0.11", features = ["macros"] }
+handlebars = "5"
+regex = "1"
+html-escape = "0.2"
+
+[dev-dependencies]
+tempfile = "3"
+serial_test = "3"
+regex = "1"
+scraper = "0.18"
+walkdir = "2"
+ureq = { version = "2", features = ["tls"] }
+
+[[bin]]
+name = "validate"
+path = "src/bin/validate.rs"
+
+[[bin]]
+name = "generate"
+path = "src/bin/generate.rs"
+
