@@ -1,5 +1,4 @@
 # Alexey "QQRM" Belyakov
-Saint Petersburg, Russia • +7 (911) 261-70-72 • qqrm@vivaldi.net • Remote, full-time availability
 
 ## Executive Summary
 Hands-on engineering leader who scales Rust-centric platforms and keeps migrations predictable for executives and teams. Balances delivery cadence, budget guardrails, and people development while aligning product, SRE, and compliance stakeholders.
