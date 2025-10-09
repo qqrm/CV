@@ -143,6 +143,7 @@ html[data-theme="dark"] .theme-toggle .icon-sun {
     border: 1px solid currentColor;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.85);
+    color: #121212;
     font-size: 0.8em;
     font-weight: 600;
     text-transform: uppercase;
@@ -171,6 +172,7 @@ html[data-theme="dark"] .theme-toggle .icon-sun {
 
 html[data-theme="dark"] .language-toggle {
     background: rgba(18, 18, 18, 0.85);
+    color: #ffffff;
 }
 
 html[data-theme="dark"] .language-toggle:hover,
