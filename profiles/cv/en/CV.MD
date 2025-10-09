@@ -20,12 +20,14 @@ Hands-on engineering leader who scales Rust-centric platforms and keeps migratio
 ### Engineering Manager • [Inline Group](https://www.inlinegroup.ru/)
 *March 2023 – Present*
 
-Directed a 25-person cross-functional migration from SAP workflows to a Rust microservices ecosystem.
-- Owned the architecture roadmap, balancing migration scope with quarterly OKRs and budget guardrails.
-- Coordinated backend, QA, analytics, and DevOps leads so releases and service handovers stayed predictable.
-- Established async status cadences and structured retrospectives that lifted sprint throughput ~15% and predictability ~25%.
-- Chaired release governance aligning QA sign-offs, infrastructure readiness, and security checks for on-prem launches.
-- Scaled the engineering organization from 5 to 12 backend developers, mentoring three engineers into senior roles.
+Led the engineering platform and backend organization while shifting SAP workflows onto a Rust ecosystem.
+- Headed backend, DevOps, and developer infrastructure streams, rolling out GitOps automation for reliable releases.
+- Built hiring and onboarding funnels for backend engineers, DevOps specialists, and testers so projects never stalled for talent.
+- Established delivery processes and release governance that shipped features to production without manual blockers.
+- Migrated CI/CD and environments onto Russian Linux distributions, adapting practices to customer compliance controls.
+- Estimated and steered budgets and schedules for change requests beyond the base program scope.
+- Embedded DevSecOps checks and automation to eliminate recurring platform blockers with engineered fixes.
+- Mentored Rust developers through workshops, code reviews, and tailored growth plans.
 
 **Stack:** Rust (Actix Web, RabbitMQ), PostgreSQL, Docker, Docker Compose, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
 
