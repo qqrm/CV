@@ -17,7 +17,7 @@ Hands-on engineering leader who scales Rust-centric platforms and keeps migratio
 
 ## Experience
 
-### Engineering Manager • Inline Group
+### Engineering Manager • [Inline Group](https://www.inlinegroup.ru/)
 *March 2023 – Present*
 
 Directed a 25-person cross-functional migration from SAP workflows to a Rust microservices ecosystem.
@@ -29,7 +29,7 @@ Directed a 25-person cross-functional migration from SAP workflows to a Rust mic
 
 **Stack:** Rust (Actix Web, RabbitMQ), PostgreSQL, Docker, Docker Compose, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
 
-### Rust Developer • Kaspersky
+### Rust Developer • [Kaspersky](https://www.kaspersky.com/)
 *May 2020 – March 2023*
 
 Maintained and extended a blockchain-based voting service built on Exonum for enterprise deployments.
@@ -39,7 +39,7 @@ Maintained and extended a blockchain-based voting service built on Exonum for en
 
 **Stack:** Rust, Exonum, Protocol Buffers, Serde, Git, Microsoft Azure DevOps.
 
-### Senior C++/Go Developer • B2Broker
+### Senior C++/Go Developer • [B2Broker](https://b2broker.com/)
 *November 2018 – March 2020*
 
 Delivered brokerage automation software using MT4/MT5 APIs and distributed services.
@@ -49,7 +49,7 @@ Delivered brokerage automation software using MT4/MT5 APIs and distributed servi
 
 **Stack:** MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
 
-### C++ Developer → Team Lead • ASCON
+### C++ Developer → Team Lead • [ASCON](https://ascon.ru)
 *May 2016 – November 2018*
 
 Developed CAD libraries for KOMPAS, taking on people leadership and tooling modernization.

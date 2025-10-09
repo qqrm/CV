@@ -17,7 +17,7 @@
 
 ## Опыт работы
 
-### Руководитель разработки • Inline Group
+### Руководитель разработки • [Inline Group](https://www.inlinegroup.ru/)
 *март 2023 – настоящее время*
 
 Вёл программу из 25 человек по миграции SAP-процессов на экосистему Rust-микросервисов.
@@ -29,7 +29,7 @@
 
 **Стек:** Rust (Actix Web, RabbitMQ), PostgreSQL, Docker, Docker Compose, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
 
-### Разработчик Rust • Kaspersky
+### Разработчик Rust • [Kaspersky](https://www.kaspersky.com/)
 *май 2020 – март 2023*
 
 Поддерживал и развивал блокчейн-сервис голосования на Exonum под корпоративные внедрения.
@@ -39,7 +39,7 @@
 
 **Стек:** Rust, Exonum, Protocol Buffers, Serde, Git, Microsoft Azure DevOps.
 
-### Senior C++/Go разработчик • B2Broker
+### Senior C++/Go разработчик • [B2Broker](https://b2broker.com/)
 *ноябрь 2018 – март 2020*
 
 Разрабатывал решения для брокеров на базе MT4/MT5 API и распределённых сервисов.
@@ -49,7 +49,7 @@
 
 **Стек:** MSVC, CMake, Protocol Buffers, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
 
-### C++ разработчик → тимлид • АСКОН
+### C++ разработчик → тимлид • [АСКОН](https://ascon.ru)
 *май 2016 – ноябрь 2018*
 
 Развивал CAD-библиотеки КОМПАС и отвечал за инженерную культуру команды.
