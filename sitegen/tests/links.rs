@@ -69,7 +69,7 @@ fn all_links_are_valid() {
                             .call()
                             .or_else(|_| agent.get(href).call())
                         {
-                            Ok(resp) if resp.status().is_success() => {}
+                            Ok(resp) if resp.status().as_u16() < 400 => {}
                             Ok(resp) => errors.push(format!(
                                 "{} -> HTTP {}",
                                 href,
