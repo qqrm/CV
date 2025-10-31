@@ -3,6 +3,8 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use scraper::{Html, Selector};
+use ureq::tls::{RootCerts, TlsConfig};
+use ureq::Agent;
 use walkdir::WalkDir;
 
 fn is_external(link: &str) -> bool {
@@ -40,6 +42,15 @@ fn all_links_are_valid() {
     let selector = Selector::parse("a").unwrap();
     let mut errors = Vec::new();
 
+    let agent = Agent::config_builder()
+        .tls_config(
+            TlsConfig::builder()
+                .root_certs(RootCerts::PlatformVerifier)
+                .build(),
+        )
+        .build()
+        .new_agent();
+
     for entry in WalkDir::new(&dist).into_iter().filter_map(Result::ok) {
         if entry.path().extension().and_then(|s| s.to_str()) != Some("html") {
             continue;
@@ -53,9 +64,17 @@ fn all_links_are_valid() {
                 }
                 if is_external(href) {
                     if should_check_external(href) {
-                        match ureq::head(href).call().or_else(|_| ureq::get(href).call()) {
-                            Ok(resp) if resp.status() < 400 => {}
-                            Ok(resp) => errors.push(format!("{} -> {}", href, resp.status())),
+                        match agent
+                            .head(href)
+                            .call()
+                            .or_else(|_| agent.get(href).call())
+                        {
+                            Ok(resp) if resp.status().is_success() => {}
+                            Ok(resp) => errors.push(format!(
+                                "{} -> HTTP {}",
+                                href,
+                                resp.status().as_u16()
+                            )),
                             Err(e) => {
                                 let msg = e.to_string();
                                 if !msg.contains("Network is unreachable")

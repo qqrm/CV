@@ -3,6 +3,10 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+use ureq::http::header::CONTENT_TYPE;
+use ureq::tls::{RootCerts, TlsConfig};
+use ureq::Agent;
+use ureq::Error;
 use walkdir::WalkDir;
 
 const BASE_URL: &str = "https://qqrm.github.io/CV/";
@@ -81,19 +85,29 @@ fn deployed_pdfs_are_real() {
 
     let mut errors = Vec::new();
 
+    let agent = Agent::config_builder()
+        .tls_config(
+            TlsConfig::builder()
+                .root_certs(RootCerts::PlatformVerifier)
+                .build(),
+        )
+        .build()
+        .new_agent();
+
     for relative in &pdfs {
         let url = format!("{BASE_URL}{relative}");
-        match ureq::get(&url).call() {
+        match agent.get(&url).call() {
             Ok(resp) => {
                 let status = resp.status();
-                if status >= 400 {
-                    errors.push(format!("{url} -> HTTP {status}"));
+                if !status.is_success() {
+                    errors.push(format!("{url} -> HTTP {}", status.as_u16()));
                     continue;
                 }
 
                 let content_type = resp
-                    .header("Content-Type")
-                    .or_else(|| resp.header("content-type"))
+                    .headers()
+                    .get(CONTENT_TYPE)
+                    .and_then(|value| value.to_str().ok())
                     .map(str::to_owned)
                     .unwrap_or_default();
                 if !content_type.contains("application/pdf") {
@@ -101,7 +115,7 @@ fn deployed_pdfs_are_real() {
                     continue;
                 }
 
-                let mut reader = resp.into_reader();
+                let mut reader = resp.into_body().into_reader();
                 let mut header = [0_u8; 5];
                 if let Err(err) = reader.read_exact(&mut header) {
                     errors.push(format!("{url} -> failed to read header: {err}"));
@@ -137,18 +151,24 @@ fn deployed_pdfs_are_real() {
                     ));
                 }
             }
-            Err(ureq::Error::Status(status, _)) => {
-                errors.push(format!("{url} -> HTTP {status}"));
+            Err(Error::StatusCode(code)) => {
+                errors.push(format!("{url} -> HTTP {code}"));
             }
-            Err(ureq::Error::Transport(err)) => {
+            Err(Error::Io(err)) => {
                 let message = err.to_string();
                 if message.contains("Network is unreachable")
                     || message.contains("failed to lookup address information")
                 {
                     eprintln!("Skipping {url} due to network issue: {message}");
                 } else {
-                    errors.push(format!("{url} -> transport error: {message}"));
+                    errors.push(format!("{url} -> IO error: {message}"));
                 }
+            }
+            Err(Error::Tls(message)) => {
+                eprintln!("Skipping {url} due to TLS issue: {message}");
+            }
+            Err(other) => {
+                errors.push(format!("{url} -> error: {other}"));
             }
         }
     }

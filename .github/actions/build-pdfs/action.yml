@@ -21,6 +21,15 @@ runs:
         if ! command -v typst >/dev/null 2>&1; then
           cargo install typst-cli --locked --quiet
         fi
+    - name: Install Latin Modern fonts
+      shell: bash
+      run: |
+        set -euo pipefail
+        if command -v fc-list >/dev/null 2>&1 && fc-list | grep -qi "Latin Modern"; then
+          exit 0
+        fi
+        sudo apt-get update
+        sudo apt-get install -y fontconfig fonts-lmodern
     - name: Compile Typst PDFs
       shell: bash
       run: |
