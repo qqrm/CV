@@ -1,7 +1,7 @@
 # Alexey Belyakov
 
 ## Summary
-Engineering leader embedded with teams. I grow Rust platforms and plan migrations so product, SRE, and compliance move in sync while balancing delivery speed, budget, and people growth.
+Engineering leader embedded with teams. I help Rust teams scale services and plan migrations so product, SRE, and compliance move in sync while balancing delivery speed, budget, and people growth.
 
 ## Impact Highlights
 - Doubled release frequency, cut p95 lead time, and lowered change-fail rate.
