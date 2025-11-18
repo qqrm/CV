@@ -1,13 +1,13 @@
 # Alexey Belyakov
 
 ## Summary
-Engineering leader who works directly with teams. I grow Rust platforms and plan migrations so they stay predictable for teammates and stakeholders. I balance delivery speed, budget, and people growth. I help product, SRE, and compliance work as one group.
+Engineering leader embedded with teams. I grow Rust platforms and plan migrations so product, SRE, and compliance move in sync while balancing delivery speed, budget, and people growth.
 
 ## Impact Highlights
-- Doubled release frequency and cut p95 lead time by about 25%. Change-fail rate dropped by roughly 30%.
-- Reduced MTTR by about 35% and incident backlog by about 30%.
+- Doubled release frequency, cut p95 lead time, and lowered change-fail rate.
+- Reduced MTTR and trimmed the incident backlog.
 - Kept supply chain security clean with zero critical vulnerabilities and faster audit prep through SBOM and policy work.
-- Built a steady hiring flow: time-to-hire down 20%, onboarding time down 30%, six-month retention around 95%.
+- Built a steady hiring flow: faster time-to-hire and onboarding, with six-month retention holding steady.
 
 ## Core Skills
 Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • SRE • SLO • MTTR • Observability • Incident response • SBOM • Dependency policy • Secure delivery • Program management • Roadmaps • OKR/KPI • Hiring and coaching
@@ -24,7 +24,7 @@ Led DevOps, backend, and QA teams while we moved SAP workflows into a Rust ecosy
 ### Software Engineer • [Kaspersky](https://www.kaspersky.com/)
 *May 2020 – March 2023*
 
-Supported and extended a blockchain voting service on Exonum. Added weight-based voting and improved ballot flows. Raised unit and integration test coverage to about 75%. Simplified pipelines during a move to Microsoft tooling.
+Supported and extended a blockchain voting service on Exonum. Added weight-based voting and improved ballot flows. Raised unit and integration test coverage and simplified pipelines during a move to Microsoft tooling.
 
 **Stack:** Rust, Exonum, Protobuf, Serde, Git, Azure DevOps.
 
