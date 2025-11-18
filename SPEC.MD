@@ -47,7 +47,6 @@
 ├── DOCS/                 # Architecture notes, CSS, and favicon for the site bundle
 ├── scripts/convert_cv/   # Markdown-to-HTML converter CLI (Rust)
 ├── sitegen/              # Main Rust crate with generate/validate binaries and templates
-├── TASKS/, BACKLOG/      # Planning and roadmap documents
 ├── typst/                # Typst sources for EN/RU PDFs
 └── profiles/             # Localized CV Markdown sources
     ├── cv/
