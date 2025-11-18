@@ -3,12 +3,6 @@
 ## Summary
 Engineering leader embedded with teams. I help Rust teams scale services and plan migrations so product, development, and compliance move in sync with DevOps guardrails while balancing delivery speed, budget, and people growth.
 
-## Impact Highlights
-- Doubled release frequency, cut p95 lead time, and lowered change-fail rate.
-- Reduced MTTR and trimmed the incident backlog.
-- Kept supply chain security clean with zero critical vulnerabilities and faster audit prep through SBOM and policy work.
-- Built a steady hiring flow: faster time-to-hire and onboarding, with retention holding strong beyond two years.
-
 ## Core Skills
 Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • SRE • SLO • MTTR • Observability • Incident response • SBOM • Dependency policy • Secure delivery • Program management • Roadmaps • OKR/KPI • Hiring and coaching
 
