@@ -105,8 +105,8 @@ RUST_LOG=debug cargo run --bin validate
 The default level is `warn`. Increase to `debug` for more details or
 lower to `error` to reduce noise.
 
-## Avatars directory
-Role descriptions in Markdown format are stored in the `avatars/` folder at the repository root. Each file describes a typical project role and can be reused in documentation or onboarding materials.
+## Personas catalog
+Role descriptions for typical project roles live in the personas catalog at https://qqrm.github.io/codex-tools/. Each Markdown file documents expectations for a role and can be reused in documentation or onboarding materials.
 
 ## Documentation guidelines
 All Markdown (`.md`) and Mermaid (`.mmd`) files must use **uppercase** filenames. See `DOCS/GUIDELINES.MD` for details.

@@ -3,10 +3,10 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use ureq::http::header::CONTENT_TYPE;
-use ureq::tls::{RootCerts, TlsConfig};
 use ureq::Agent;
 use ureq::Error;
+use ureq::http::header::CONTENT_TYPE;
+use ureq::tls::{RootCerts, TlsConfig};
 use walkdir::WalkDir;
 
 const BASE_URL: &str = "https://qqrm.github.io/CV/";
@@ -24,14 +24,14 @@ impl DistGuard {
 
 impl Drop for DistGuard {
     fn drop(&mut self) {
-        if self.path.exists() {
-            if let Err(err) = fs::remove_dir_all(&self.path) {
-                eprintln!(
-                    "failed to remove {} during cleanup: {}",
-                    self.path.display(),
-                    err
-                );
-            }
+        if self.path.exists()
+            && let Err(err) = fs::remove_dir_all(&self.path)
+        {
+            eprintln!(
+                "failed to remove {} during cleanup: {}",
+                self.path.display(),
+                err
+            );
         }
     }
 }

@@ -27,6 +27,6 @@ typst compile --root . typst/ru/Belyakov_ru.typ typst/ru/Belyakov_ru_light.pdf
 typst compile --root . typst/ru/Belyakov_ru_dark.typ typst/ru/Belyakov_ru_dark.pdf
 ```
 
-Before starting any task, connect to the avatars.mcp server at https\://qqrm.github.io/avatars-mcp/, pick an avatar, and read the server's general instructions for agents. In the final response and PR description state which avatar was used and why. If the server is unreachable, note this in the PR.
+Before starting any task, load the persona catalog from https\://qqrm.github.io/codex-tools/ and pick a persona whose guidance fits the assignment. Read the persona's Markdown body, and in the final response and PR description state which persona was used and why. If the site is unreachable, note this in the PR.
 
 Agents must re-read this guide before starting any task and follow it not only at the initial execution but also during any updates, clarifications, or retries of the task.

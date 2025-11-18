@@ -3,8 +3,8 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use scraper::{Html, Selector};
-use ureq::tls::{RootCerts, TlsConfig};
 use ureq::Agent;
+use ureq::tls::{RootCerts, TlsConfig};
 use walkdir::WalkDir;
 
 fn is_external(link: &str) -> bool {
@@ -64,17 +64,11 @@ fn all_links_are_valid() {
                 }
                 if is_external(href) {
                     if should_check_external(href) {
-                        match agent
-                            .head(href)
-                            .call()
-                            .or_else(|_| agent.get(href).call())
-                        {
+                        match agent.head(href).call().or_else(|_| agent.get(href).call()) {
                             Ok(resp) if resp.status().is_success() => {}
-                            Ok(resp) => errors.push(format!(
-                                "{} -> HTTP {}",
-                                href,
-                                resp.status().as_u16()
-                            )),
+                            Ok(resp) => {
+                                errors.push(format!("{} -> HTTP {}", href, resp.status().as_u16()))
+                            }
                             Err(e) => {
                                 let msg = e.to_string();
                                 if !msg.contains("Network is unreachable")
