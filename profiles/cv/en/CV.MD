@@ -11,7 +11,7 @@ Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • SRE
 ### Engineering Manager • [Inline Group](https://www.inlinegroup.ru/)
 *March 2023 – Present*
 
-Led DevOps, backend, and QA teams while we moved SAP workflows into a Rust ecosystem. Set up GitOps and automated environments so releases stayed steady. Built hiring and onboarding funnels for backend, DevOps, and QA without slowing delivery. Introduced delivery steps and release gates that removed manual blockers. Moved CI/CD and environments to regulated Linux distributions to meet client rules. Planned budgets and timelines for extra requests while keeping costs within approved limits. Added DevSecOps checks to stop repeating blockers. Helped Rust developers grow through reviews, workshops, and personal plans.
+Led DevOps, backend, and QA teams while we moved SAP workflows into a Rust ecosystem. Set up GitOps and automated environments so releases stayed steady. Built hiring and onboarding funnels for backend, DevOps, and QA. Introduced delivery steps and release gates that removed manual blockers. Moved CI/CD and environments to regulated Linux distributions to meet client rules. Planned budgets and timelines for extra requests while keeping costs within approved limits. Added DevSecOps checks to stop repeating blockers. Helped Rust developers grow through reviews, workshops, and personal plans.
 
 **Stack:** Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
 
