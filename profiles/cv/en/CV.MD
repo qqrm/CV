@@ -1,7 +1,7 @@
 # Alexey Belyakov
 
 ## Summary
-Engineering leader embedded with teams. I help Rust teams scale services and plan migrations so product, development, and compliance move in sync with DevOps guardrails while balancing delivery speed, budget, and people growth.
+Engineering leader inspired by Rust. I build strong teams and shape a delivery culture grounded in leading DevOps practices so product, engineering, and compliance move in sync and produce measurable business impact.
 
 ## Core Skills
 Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • SRE • SLO • MTTR • Observability • Incident response • SBOM • Dependency policy • Secure delivery • Program management • Roadmaps • OKR/KPI • Hiring and coaching
