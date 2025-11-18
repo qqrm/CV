@@ -20,7 +20,7 @@ Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • SRE
 
 Поддерживал и развивал блокчейн-сервис голосования на Exonum. Добавил голосование с весами и упростил пути бюллетеней. Повысил покрытие юнит- и интеграционных тестов и упростил пайплайны во время перехода на инструменты Microsoft.
 
-**Стек:** Rust, Exonum, Protobuf, Serde, Git, Azure DevOps.
+**Стек:** Rust, Exonum, Protobuf, Serde, Git.
 
 ### Software Engineer • [B2Broker](https://b2broker.com/)
 *ноябрь 2018 – март 2020*

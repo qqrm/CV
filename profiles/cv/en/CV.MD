@@ -20,7 +20,7 @@ Led DevOps, backend, and QA teams while we moved SAP workflows into a Rust ecosy
 
 Supported and extended a blockchain voting service on Exonum. Added weight-based voting and improved ballot flows. Raised unit and integration test coverage and simplified pipelines during a move to Microsoft tooling.
 
-**Stack:** Rust, Exonum, Protobuf, Serde, Git, Azure DevOps.
+**Stack:** Rust, Exonum, Protobuf, Serde, Git.
 
 ### Software Engineer • [B2Broker](https://b2broker.com/)
 *November 2018 – March 2020*
