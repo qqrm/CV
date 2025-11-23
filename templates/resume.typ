@@ -29,10 +29,7 @@
   #let palette = themes.at(theme, default: themes.light)
 
   #set page(fill: palette.background)
-  #set text(
-    font: ("Liberation Sans", "DejaVu Sans"),
-    fill: palette.text,
-  )
+  #set text(font: "New Computer Modern", fill: palette.text)
   #show link: set text(fill: palette.link)
   #let default_name = if lang == "ru" { "Алексей Беляков" } else { "Alexey Belyakov" }
   #let name = if name == none { default_name } else { name }
@@ -51,35 +48,28 @@
       linkedin: "LinkedIn",
     )
   }
-  #let contact_actions = (
-    (label: contact_labels.github, url: github_url),
-    (label: contact_labels.email, url: email_url),
-    (label: contact_labels.telegram, url: telegram_url),
-    (label: contact_labels.linkedin, url: linkedin_url),
-  )
-  #let contact_button(action) = link(action.url)[
-    #box(
-      inset: (x: 0.65em, y: 0.4em),
-      stroke: 0.85pt + palette.link,
-      radius: 9999pt,
-    )[
-      #set text(size: 10pt, fill: palette.link)
-      #action.label
-    ]
+  #let contact_separator = [
+    #h(0.35em)
+    #text(fill: palette.muted)[•]
+    #h(0.35em)
   ]
 
   #align(center)[= #name]
-  #v(0.35em)
+  #v(0.25em)
+  #align(center)[
+    #set text(size: 11pt, fill: palette.link)
+    #link(github_url)[contact_labels.github]
+    #contact_separator
+    #link(email_url)[contact_labels.email]
+    #contact_separator
+    #link(telegram_url)[contact_labels.telegram]
+    #contact_separator
+    #link(linkedin_url)[contact_labels.linkedin]
+  ]
+  #v(0.5em)
   #align(center)[
     #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true, stroke: 0.75pt + palette.muted)[
       #image("../content/avatar.jpg", width: 5cm, height: 5cm)
-    ]
-  ]
-  #v(0.45em)
-  #align(center)[
-    #for (index, action) in contact_actions.enumerate() [
-      #contact_button(action)
-      #if index < contact_actions.len() - 1 [#h(0.45em)]
     ]
   ]
 
