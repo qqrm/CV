@@ -67,6 +67,14 @@ jobs:
       actions: write
     steps:
       - uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Install Trunk
+        uses: jetli/trunk-action@v0.5.0
+        with:
+          version: v0.21.14
       - name: Download built assets
         uses: actions/download-artifact@v4
         with:
@@ -87,6 +95,12 @@ jobs:
           rm -rf dist;
       - name: Generate site
         run: ./sitegen_bin
+      - name: Build wasm preview
+        run: trunk build --release --config new/Trunk.toml
+      - name: Copy preview into site output
+        run: |
+          mkdir -p dist/new
+          cp -r new/dist/* dist/new/
       - name: Verify generated PDFs
         run: |
           set -euo pipefail
@@ -110,6 +124,14 @@ jobs:
           pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
           if [ "$pdf_count" -ne 4 ]; then
             echo "Expected 4 PDFs in dist but found $pdf_count" >&2
+            exit 1
+          fi
+          test -s dist/new/index.html
+          wasm_count=$(find dist/new -maxdepth 1 -name '*.wasm' | wc -l)
+          js_count=$(find dist/new -maxdepth 1 -name '*.js' | wc -l)
+          css_count=$(find dist/new -maxdepth 1 -name '*.css' | wc -l)
+          if [ "$wasm_count" -lt 1 ] || [ "$js_count" -lt 1 ] || [ "$css_count" -lt 1 ]; then
+            echo "Missing expected wasm/js/css assets in dist/new" >&2
             exit 1
           fi
       - name: Prepare Pages directory

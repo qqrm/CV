@@ -1,7 +1,6 @@
 [build]
 dist = "dist"
 public_url = "/new/"
-target = "wasm32-unknown-unknown"
 
 [serve]
 open = false
