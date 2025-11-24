@@ -29,6 +29,11 @@ body {
     margin-bottom: 56px;
 }
 
+.hero h1 {
+    font-size: clamp(2.5rem, 3vw, 3rem);
+    margin: 0 0 12px;
+}
+
 .eyebrow {
     color: var(--accent);
     letter-spacing: 0.08em;
@@ -38,17 +43,36 @@ body {
     margin-bottom: 12px;
 }
 
-h1 {
-    font-size: clamp(2.5rem, 3vw, 3rem);
-    margin: 0 0 12px;
-}
-
 .lede {
     max-width: 720px;
     margin: 0 auto;
     color: var(--muted);
     font-size: 1.1rem;
     line-height: 1.7;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.button {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #0b1728;
+    background: var(--accent);
+    text-decoration: none;
+    border: 1px solid rgba(56, 189, 248, 0.6);
+    box-shadow: var(--shadow);
+}
+
+.button.secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid rgba(229, 231, 235, 0.35);
 }
 
 .grid {
@@ -73,4 +97,59 @@ p {
     margin: 0;
     line-height: 1.6;
     color: var(--muted);
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.cv {
+    background: linear-gradient(145deg, rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.7));
+    border: 1px solid rgba(56, 189, 248, 0.24);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 32px;
+    line-height: 1.7;
+    color: var(--text);
+}
+
+.cv h1,
+.cv h2,
+.cv h3 {
+    color: var(--text);
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+.cv h1 {
+    font-size: 2rem;
+}
+
+.cv h2 {
+    font-size: 1.4rem;
+}
+
+.cv h3 {
+    font-size: 1.1rem;
+    color: var(--accent);
+}
+
+.cv p {
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+.cv ul {
+    padding-left: 1.2rem;
+    color: var(--muted);
+}
+
+.cv li + li {
+    margin-top: 8px;
+}
+
+.cv a {
+    color: var(--accent);
+    font-weight: 600;
 }
