@@ -1,0 +1,6 @@
+[build]
+dist = "dist"
+public_url = "/new/"
+
+[serve]
+open = false
