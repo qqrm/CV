@@ -1,0 +1,66 @@
+name: pdf-manual
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
+on:
+  workflow_dispatch:
+    inputs:
+      builder:
+        description: 'PDF builder to use'
+        required: true
+        default: typst
+        type: choice
+        options:
+          - typst
+          - typepdf
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set build date
+        id: date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      - if: ${{ inputs.builder == 'typst' }}
+        uses: ./.github/actions/build-pdfs
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Install TypePDF
+        run: cargo install typepdf --locked --quiet
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Build PDFs with TypePDF
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          for src in typst/en/*.typ typst/ru/*.typ; do
+            dest="${src%.typ}_typepdf.pdf"
+            typepdf "$src" "$dest"
+          done
+      - if: ${{ inputs.builder == 'typst' }}
+        name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-pdfs-typst-${{ env.DATE }}
+          path: typst/**/*.pdf
+      - if: ${{ inputs.builder == 'typepdf' }}
+        name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-pdfs-typepdf-${{ env.DATE }}
+          path: typst/**/*_typepdf.pdf
