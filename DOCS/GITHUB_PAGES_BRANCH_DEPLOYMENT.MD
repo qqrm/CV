@@ -1,6 +1,6 @@
 # GitHub Pages Deployment from a Separate Branch
 
-This guide explains how to publish the static bundle (including the `new/` WebAssembly site) from a branch that is different from the default branch.
+This guide explains how to publish the static bundle (including the `new/` WebAssembly site served at `/CV/new/`) from a branch that is different from the default branch.
 
 ## Choose the Pages source branch
 1. Open **Settings → Pages** in the repository on GitHub.
@@ -11,7 +11,7 @@ This guide explains how to publish the static bundle (including the `new/` WebAs
 Use a dedicated branch such as `gh-pages` to avoid committing build artifacts to the main development branches.
 
 ```bash
-# Build the static bundle (includes the `/new/` assets described in DOCS/NEW_SITE_BUILD.MD)
+# Build the static bundle (includes the `/CV/new/` assets described in DOCS/NEW_SITE_BUILD.MD)
 cd new
 trunk build --release
 cd ..
