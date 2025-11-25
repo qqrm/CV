@@ -1,12 +1,9 @@
 use leptos::*;
-use pulldown_cmark::{html, Options, Parser};
+use pulldown_cmark::{Options, Parser, html};
 use wasm_bindgen::prelude::wasm_bindgen;
 
 const CV_MARKDOWN_EN: &str = include_str!("../../profiles/cv/en/CV.MD");
 const CV_MARKDOWN_RU: &str = include_str!("../../profiles/cv/ru/CV_RU.MD");
-
-const SUMMARY_EN: &str = "Engineering leader inspired by Rust. I build strong teams and shape a delivery culture grounded in leading DevOps practices so product, engineering, and compliance move in sync and produce measurable business impact.";
-const SUMMARY_RU: &str = "Инженерный руководитель, вдохновленный Rust. Собираю сильные команды и выстраиваю культуру доставки на лучших DevOps-практиках, чтобы продукт, разработка и комплаенс двигались синхронно и приносили измеримую бизнес-ценность.";
 
 struct ContactLabels {
     github: &'static str,
@@ -40,13 +37,6 @@ impl Language {
         match self {
             Self::En => "Engineering Manager",
             Self::Ru => "Руководитель разработки",
-        }
-    }
-
-    fn summary(self) -> &'static str {
-        match self {
-            Self::En => SUMMARY_EN,
-            Self::Ru => SUMMARY_RU,
         }
     }
 
@@ -94,7 +84,6 @@ impl Language {
             },
         }
     }
-
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -239,7 +228,6 @@ pub fn App() -> impl IntoView {
                     <a class="pill" href=ContactUrls::TELEGRAM target="_blank" rel="noopener">{move || contact_labels().telegram}</a>
                     <a class="pill" href=ContactUrls::LINKEDIN target="_blank" rel="noopener">{move || contact_labels().linkedin}</a>
                 </div>
-                <p class="lede">{move || language.get().summary()}</p>
                 <div class="actions">
                     <a class="button" href=move || language.get().classic_url()>{move || language.get().classic_label()}</a>
                     <a class="button secondary" href=pdf_href>{move || language.get().download_label()}</a>
