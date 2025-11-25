@@ -1,0 +1,165 @@
+name: release-site
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build_sitegen:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            sitegen/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build
+        run: cargo build --release --manifest-path sitegen/Cargo.toml --quiet
+      - uses: ./.github/actions/build-pdfs
+      - name: Package Typst binary
+        run: |
+          mkdir -p sitegen/target/release
+          cp ~/.cargo/bin/typst sitegen/target/release/typst
+      - name: Verify PDFs
+        run: |
+          set -euo pipefail
+          while IFS= read -r file; do
+            if head -c 4 "$file" | grep -q '%PDF'; then
+              echo "$(basename "$file") verified";
+            else
+              echo "$file is not recognized as a PDF" >&2;
+              exit 1;
+            fi;
+          done < <(find typst -type f -name '*.pdf')
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitegen-assets
+          path: |
+            sitegen/target/release/generate
+            sitegen/target/release/typst
+            typst/**/*.pdf
+
+  site:
+    needs: build_sitegen
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Install Trunk
+        uses: jetli/trunk-action@v0.5.0
+        with:
+          version: v0.21.14
+      - name: Download built assets
+        uses: actions/download-artifact@v4
+        with:
+          name: sitegen-assets
+      - name: Install Typst binary
+        run: |
+          mkdir -p typst-bin
+          mv sitegen/target/release/typst typst-bin/typst
+          chmod +x typst-bin/typst
+          echo "$PWD/typst-bin" >> $GITHUB_PATH
+      - name: Move sitegen binary
+        run: mv sitegen/target/release/generate ./sitegen_bin
+      - name: Make binary executable
+        run: chmod +x sitegen_bin
+      - name: Clean previous site output
+        run: |
+          rm -rf docs;
+          rm -rf dist;
+      - name: Generate site
+        run: ./sitegen_bin
+      - name: Build wasm preview
+        run: trunk build --release --config new/Trunk.toml
+      - name: Copy preview into site output
+        run: |
+          mkdir -p dist/new
+          cp -r new/dist/* dist/new/
+      - name: Verify generated PDFs
+        run: |
+          set -euo pipefail
+          while IFS= read -r file; do
+            if head -c 4 "$file" | grep -q '%PDF'; then
+              echo "$(basename "$file") verified";
+            else
+              echo "$file is not recognized as a PDF" >&2;
+              exit 1;
+            fi;
+          done < <(find dist -type f -name '*.pdf')
+      - name: Verify site outputs
+        run: |
+          set -euo pipefail
+          test -s dist/index.html
+          test -s dist/ru/index.html
+          test -s dist/style.css
+          test -s dist/favicon.svg
+          test -s dist/avatar.jpg
+          test -s dist/sitemap.txt
+          pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
+          if [ "$pdf_count" -ne 4 ]; then
+            echo "Expected 4 PDFs in dist but found $pdf_count" >&2
+            exit 1
+          fi
+          test -s dist/new/index.html
+          wasm_count=$(find dist/new -maxdepth 1 -name '*.wasm' | wc -l)
+          js_count=$(find dist/new -maxdepth 1 -name '*.js' | wc -l)
+          css_count=$(find dist/new -maxdepth 1 -name '*.css' | wc -l)
+          if [ "$wasm_count" -lt 1 ] || [ "$js_count" -lt 1 ] || [ "$css_count" -lt 1 ]; then
+            echo "Missing expected wasm/js/css assets in dist/new" >&2
+            exit 1
+          fi
+      - name: Prepare Pages directory
+        run: mv dist docs
+      - name: Copy README_RU
+        run: |
+          cp README_RU.MD docs/;
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Delete previous releases
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          ids=$(gh api repos/${{ github.repository }}/releases --jq '.[].id');
+          echo "$ids" | tail -n +2 | while read id; do
+            gh api repos/${{ github.repository }}/releases/$id -X DELETE;
+          done;
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: sitegen-${{ github.run_number }}
+          files: |
+            sitegen_bin
+            typst/**/*.pdf
