@@ -1,0 +1,53 @@
+name: build-test
+
+permissions:
+  contents: read
+  actions: write
+
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
+on:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-pdfs
+      - name: Cargo build
+        run: cargo build --manifest-path sitegen/Cargo.toml --quiet
+      - name: Cargo test
+        run: cargo test --manifest-path sitegen/Cargo.toml --quiet
+      - name: Generate site
+        run: cargo run --quiet --manifest-path sitegen/Cargo.toml --bin generate -- generate
+      - name: Check site links
+        run: cargo run --manifest-path TOOLS/site_check/Cargo.toml --quiet
+      - name: Verify generated artifacts
+        run: |
+          bash -lc '
+            set -eu
+            for path in \
+              dist/index.html \
+              dist/ru/index.html \
+              dist/Belyakov_en_light.pdf \
+              dist/Belyakov_en_dark.pdf \
+              dist/Belyakov_ru_light.pdf \
+              dist/Belyakov_ru_dark.pdf \
+              dist/sitemap.txt
+            do
+              test -s "$path"
+            done
+          '
+      - name: Upload Typst PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: typst-pdfs
+          path: typst/**/*.pdf
+  pdf-validate:
+    uses: ./.github/workflows/pdf-validate.yml
