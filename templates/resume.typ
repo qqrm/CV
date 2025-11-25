@@ -61,7 +61,13 @@
   ]
 
   #align(center)[= #name]
-  #v(0.25em)
+  #v(0.5em)
+  #align(center)[
+    #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true, stroke: 0.75pt + palette.muted)[
+      #image("../content/avatar.jpg", width: 5cm, height: 5cm)
+    ]
+  ]
+  #v(0.35em)
   #align(center)[
     #set text(size: 11pt, fill: palette.link)
     #h(0.3em)
@@ -72,12 +78,6 @@
     #contact_button(contact_labels.telegram, telegram_url)
     #h(0.35em)
     #contact_button(contact_labels.linkedin, linkedin_url)
-  ]
-  #v(0.5em)
-  #align(center)[
-    #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true, stroke: 0.75pt + palette.muted)[
-      #image("../content/avatar.jpg", width: 5cm, height: 5cm)
-    ]
   ]
 
   #let find_first_section(lines, i: 0) = if i >= lines.len() {
@@ -109,8 +109,13 @@
   } else {
     lines.slice(summary_start)
   }
-  #let replaced_md = ("- **CV:** [" + cv_url + "](" + cv_url + ")\n" + trimmed_lines.join("\n"))
+  #let replaced_md = trimmed_lines.join("\n")
   #cmarker.render(replaced_md)
+  #v(1em)
+  #align(center)[
+    #set text(size: 10pt)
+    #text(weight: "semibold")[CV:] #link(cv_url)[#cv_url]
+  ]
   #v(1.2em)
   #align(center)[
     #set text(size: 10pt, fill: palette.muted)
