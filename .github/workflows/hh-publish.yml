@@ -1,0 +1,188 @@
+name: hh-publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Upload payloads to HeadHunter after generating them
+        type: boolean
+        default: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate HH payloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p hh_payloads
+          payloads=(
+            "resume_ru:CV_RU.MD"
+            "resume_pm_ru:CV_PM_RU.MD"
+            "resume_en:CV.MD"
+          )
+          for entry in "${payloads[@]}"; do
+            IFS=":" read -r name source <<<"$entry"
+            output="hh_payloads/${name}.json"
+            echo "Rendering ${source} -> ${output}"
+            cargo run --manifest-path scripts/convert_cv/Cargo.toml -- "$source" > "$output"
+          done
+
+      - name: Upload payload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hh-payloads
+          path: hh_payloads
+
+      - name: Summarize generated payloads
+        shell: bash
+        run: |
+          if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+            echo "### Generated HeadHunter payloads" >> "$GITHUB_STEP_SUMMARY"
+            ls -1 hh_payloads >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  publish:
+    needs: generate
+    if: ${{ inputs.publish }}
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download payload artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: hh-payloads
+          path: hh_payloads
+
+      - name: Refresh access token
+        id: token
+        shell: bash
+        env:
+          CLIENT_ID_PRIMARY: ${{ secrets.CLIENT_ID }}
+          CLIENT_ID_FALLBACK: ${{ secrets.HH_CLIENT_ID }}
+          CLIENT_SECRET_PRIMARY: ${{ secrets.CLIENT_SECRET }}
+          CLIENT_SECRET_FALLBACK: ${{ secrets.HH_CLIENT_SECRET }}
+          REFRESH_TOKEN_PRIMARY: ${{ secrets.REFRESH_TOKEN }}
+          REFRESH_TOKEN_FALLBACK: ${{ secrets.HH_REFRESH_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          client_id="${CLIENT_ID_PRIMARY:-}"
+          if [[ -z "$client_id" ]]; then
+            client_id="${CLIENT_ID_FALLBACK:-}"
+          fi
+
+          client_secret="${CLIENT_SECRET_PRIMARY:-}"
+          if [[ -z "$client_secret" ]]; then
+            client_secret="${CLIENT_SECRET_FALLBACK:-}"
+          fi
+
+          refresh_token="${REFRESH_TOKEN_PRIMARY:-}"
+          if [[ -z "$refresh_token" ]]; then
+            refresh_token="${REFRESH_TOKEN_FALLBACK:-}"
+          fi
+
+          missing=()
+          [[ -z "$client_id" ]] && missing+=("CLIENT_ID or HH_CLIENT_ID")
+          [[ -z "$client_secret" ]] && missing+=("CLIENT_SECRET or HH_CLIENT_SECRET")
+          [[ -z "$refresh_token" ]] && missing+=("REFRESH_TOKEN or HH_REFRESH_TOKEN")
+          if (( ${#missing[@]} > 0 )); then
+            printf 'Missing secrets: %s\n' "$(IFS=', '; echo "${missing[*]}")" >&2
+            exit 1
+          fi
+
+          response=$(curl -sS -X POST https://hh.ru/oauth/token \
+            --data-urlencode grant_type=refresh_token \
+            --data-urlencode client_id="${client_id}" \
+            --data-urlencode client_secret="${client_secret}" \
+            --data-urlencode refresh_token="${refresh_token}")
+          token=$(echo "$response" | jq -r '.access_token')
+          if [[ -z "$token" || "$token" == "null" ]]; then
+            message=$(echo "$response" | jq -r '.error_description // .error // empty')
+            if [[ -n "$message" ]]; then
+              echo "HeadHunter OAuth error: ${message}" >&2
+            else
+              echo "Unable to extract access token" >&2
+            fi
+            exit 1
+          fi
+          echo "::add-mask::$token"
+          echo "access_token=$token" >> "$GITHUB_OUTPUT"
+
+      - name: Upload resumes to HeadHunter
+        shell: bash
+        env:
+          ACCESS_TOKEN: ${{ steps.token.outputs.access_token }}
+          RESUME_ID_RU_PRIMARY: ${{ secrets.RESUME_ID_RU }}
+          RESUME_ID_RU_FALLBACK: ${{ secrets.HH_RESUME_ID_RU }}
+          RESUME_ID_PM_RU_PRIMARY: ${{ secrets.RESUME_ID_PM_RU }}
+          RESUME_ID_PM_RU_FALLBACK: ${{ secrets.HH_RESUME_ID_PM_RU }}
+          RESUME_ID_EN_PRIMARY: ${{ secrets.RESUME_ID_EN }}
+          RESUME_ID_EN_FALLBACK: ${{ secrets.HH_RESUME_ID_EN }}
+        run: |
+          set -uo pipefail
+
+          resolve_id() {
+            if [[ -n "$1" ]]; then
+              printf '%s\n' "$1"
+            else
+              printf '%s\n' "$2"
+            fi
+          }
+
+          resume_id_ru=$(resolve_id "${RESUME_ID_RU_PRIMARY:-}" "${RESUME_ID_RU_FALLBACK:-}")
+          resume_id_pm_ru=$(resolve_id "${RESUME_ID_PM_RU_PRIMARY:-}" "${RESUME_ID_PM_RU_FALLBACK:-}")
+          resume_id_en=$(resolve_id "${RESUME_ID_EN_PRIMARY:-}" "${RESUME_ID_EN_FALLBACK:-}")
+
+          summary_file="${GITHUB_STEP_SUMMARY:-}"
+          if [[ -n "$summary_file" ]]; then
+            echo "### Upload results" >> "$summary_file"
+          fi
+          entries=(
+            "$resume_id_ru:resume_ru.json:Russian resume"
+            "$resume_id_pm_ru:resume_pm_ru.json:Russian PM resume"
+            "$resume_id_en:resume_en.json:English resume"
+          )
+          status=0
+          for entry in "${entries[@]}"; do
+            IFS=":" read -r resume_id file label <<<"$entry"
+            if [[ -z "$resume_id" ]]; then
+              echo "Skipping ${label}: resume id is not configured" >&2
+              if [[ -n "$summary_file" ]]; then
+                echo "- ⚠️ ${label} (missing RESUME_ID)" >> "$summary_file"
+              fi
+              continue
+            fi
+            payload="hh_payloads/${file}"
+            if [[ ! -f "$payload" ]]; then
+              echo "Payload ${payload} is missing" >&2
+              status=1
+              if [[ -n "$summary_file" ]]; then
+                echo "- ❌ ${label} (payload missing)" >> "$summary_file"
+              fi
+              continue
+            fi
+            echo "Uploading ${label} (${resume_id})"
+            if curl -sS -X PUT "https://api.hh.ru/resumes/${resume_id}" \
+                -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+                -H "Content-Type: application/json" \
+                --data "@${payload}" \
+                --fail > /dev/null; then
+              if [[ -n "$summary_file" ]]; then
+                echo "- ✅ ${label}" >> "$summary_file"
+              fi
+            else
+              echo "Failed to upload ${label}" >&2
+              status=1
+              if [[ -n "$summary_file" ]]; then
+                echo "- ❌ ${label}" >> "$summary_file"
+              fi
+            fi
+          done
+          exit $status
+
