@@ -112,7 +112,7 @@ Role descriptions for typical project roles live in the personas catalog at http
 All Markdown (`.md`) and Mermaid (`.mmd`) files must use **uppercase** filenames. See `DOCS/GUIDELINES.MD` for details.
 
 ## Tooling reference
-For the list of recommended CLI utilities and installation instructions see `TOOLS/ENVIRONMENT.MD`.
+Use `repo-setup.sh` to install the core Rust and Typst toolchain. Document any extra CLI dependencies next to the workflows or scripts that need them instead of maintaining a separate environment manifest.
 
 ## GitHub Pages dual-publish roadmap
 We need to migrate the GitHub Pages build to Rust using Leptos so that a new WebAssembly-powered version ships alongside the current static site. The legacy content must remain available at the root URL, while the Leptos build is served from the `/CV/new` path on the same Pages domain.
