@@ -29,7 +29,7 @@
   #let palette = themes.at(theme, default: themes.light)
 
   #set page(fill: palette.background)
-  #set text(font: "New Computer Modern", fill: palette.text)
+  #set text(font: "Latin Modern Sans", fill: palette.text)
   #show link: set text(fill: palette.link)
   #let default_name = if lang == "ru" { "Алексей Беляков" } else { "Alexey Belyakov" }
   #let name = if name == none { default_name } else { name }
@@ -48,23 +48,30 @@
       linkedin: "LinkedIn",
     )
   }
-  #let contact_separator = [
-    #h(0.35em)
-    #text(fill: palette.muted)[•]
-    #h(0.35em)
+  #let contact_button(label, url) = link(url)[
+    #box(
+      inset: (x: 10pt, y: 4pt),
+      radius: 8pt,
+      stroke: 0.75pt + palette.link,
+      fill: if theme == "dark" { rgb("#0f1a2a") } else { rgb("#e6f6fc") },
+    )[
+      #set text(weight: "semibold", size: 10pt)
+      #label
+    ]
   ]
 
   #align(center)[= #name]
   #v(0.25em)
   #align(center)[
     #set text(size: 11pt, fill: palette.link)
-    #link(github_url)[contact_labels.github]
-    #contact_separator
-    #link(email_url)[contact_labels.email]
-    #contact_separator
-    #link(telegram_url)[contact_labels.telegram]
-    #contact_separator
-    #link(linkedin_url)[contact_labels.linkedin]
+    #h(0.3em)
+    #contact_button(contact_labels.github, github_url)
+    #h(0.35em)
+    #contact_button(contact_labels.email, email_url)
+    #h(0.35em)
+    #contact_button(contact_labels.telegram, telegram_url)
+    #h(0.35em)
+    #contact_button(contact_labels.linkedin, linkedin_url)
   ]
   #v(0.5em)
   #align(center)[
