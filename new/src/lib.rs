@@ -52,8 +52,8 @@ impl Language {
 
     fn classic_label(self) -> &'static str {
         match self {
-            Self::En => "Open classic CV",
-            Self::Ru => "Открыть классическую версию",
+            Self::En => "Web version",
+            Self::Ru => "Веб-версия",
         }
     }
 
@@ -233,17 +233,16 @@ pub fn App() -> impl IntoView {
                 <div class="avatar-wrapper">
                     <img class="avatar" src="avatar.jpg" alt="Alexey Belyakov" />
                 </div>
-                <p class="lede">{move || language.get().summary()}</p>
-                <div class="actions">
-                    <a class="button" href=move || language.get().classic_url()>{move || language.get().classic_label()}</a>
-                    <a class="button secondary" href=pdf_href>{move || language.get().download_label()}</a>
-                </div>
-
                 <div class="contact-actions">
                     <a class="pill" href=ContactUrls::GITHUB target="_blank" rel="noopener">{move || contact_labels().github}</a>
                     <a class="pill" href=ContactUrls::EMAIL>{move || contact_labels().email}</a>
                     <a class="pill" href=ContactUrls::TELEGRAM target="_blank" rel="noopener">{move || contact_labels().telegram}</a>
                     <a class="pill" href=ContactUrls::LINKEDIN target="_blank" rel="noopener">{move || contact_labels().linkedin}</a>
+                </div>
+                <p class="lede">{move || language.get().summary()}</p>
+                <div class="actions">
+                    <a class="button" href=move || language.get().classic_url()>{move || language.get().classic_label()}</a>
+                    <a class="button secondary" href=pdf_href>{move || language.get().download_label()}</a>
                 </div>
             </header>
 
