@@ -1,0 +1,295 @@
+:root {
+    color-scheme: light dark;
+    --bg: #0a0a0b;
+    --card: #111112;
+    --text: #f5f5f5;
+    --muted: #b3b3b3;
+    --accent: #38bdf8;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    --surface-border: rgba(255, 255, 255, 0.12);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+:root[data-theme="light"] {
+    --bg: #ffffff;
+    --card: #f5f5f5;
+    --text: #0a0a0a;
+    --muted: #4a4a4a;
+    --accent: #38bdf8;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    --surface-border: rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="dark"] {
+    --bg: #0a0a0b;
+    --card: #111112;
+    --text: #f5f5f5;
+    --muted: #b3b3b3;
+    --accent: #38bdf8;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    --surface-border: rgba(255, 255, 255, 0.12);
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.08), transparent 36%),
+        radial-gradient(circle at 80% 2%, rgba(255, 255, 255, 0.06), transparent 38%),
+        var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 3vw, 3rem);
+    margin: 0 0 12px;
+}
+
+.eyebrow {
+    color: var(--text);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.lede {
+    max-width: 720px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.button {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #0b1728;
+    background: var(--accent);
+    text-decoration: none;
+    border: 1px solid rgba(56, 189, 248, 0.6);
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.button.secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--surface-border);
+    backdrop-filter: blur(8px);
+}
+
+.button:hover,
+.button:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 50px rgba(0, 0, 0, 0.28);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: linear-gradient(145deg, color-mix(in srgb, var(--card) 95%, transparent), color-mix(in srgb, var(--card) 75%, transparent));
+    border: 1px solid var(--surface-border);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+
+h2 {
+    margin: 0 0 10px;
+}
+
+p {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--muted);
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.cv {
+    background: linear-gradient(145deg, color-mix(in srgb, var(--card) 96%, transparent), color-mix(in srgb, var(--card) 78%, transparent));
+    border: 1px solid var(--surface-border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 32px;
+    line-height: 1.7;
+    color: var(--text);
+}
+
+.cv h1,
+.cv h2,
+.cv h3 {
+    color: var(--text);
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+.cv h1 {
+    font-size: 2rem;
+}
+
+.cv h2 {
+    font-size: 1.4rem;
+}
+
+.cv h3 {
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.cv p {
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+.cv ul {
+    padding-left: 1.2rem;
+    color: var(--muted);
+}
+
+.cv li + li {
+    margin-top: 8px;
+}
+
+.cv a {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.avatar-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0 12px;
+}
+
+.avatar {
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    box-shadow: var(--shadow);
+}
+
+.contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 10px 0 18px;
+}
+
+.pill {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    color: var(--text);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--accent) 12%, var(--card));
+    box-shadow: var(--shadow);
+    font-weight: 600;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease;
+}
+
+.pill:hover,
+.pill:focus {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    box-shadow: 0 14px 50px rgba(0, 0, 0, 0.28);
+}
+
+.floating-controls {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.theme-toggle {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    border: 1px solid var(--surface-border);
+    background: color-mix(in srgb, var(--card) 90%, transparent);
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 50px rgba(0, 0, 0, 0.28);
+}
+
+.theme-toggle img {
+    width: 22px;
+    height: 22px;
+}
+
+.language-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--surface-border);
+    background: color-mix(in srgb, var(--card) 90%, transparent);
+    color: var(--text);
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.language-toggle:hover,
+.language-toggle:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 50px rgba(0, 0, 0, 0.28);
+}
+
+.language-toggle .lang-option {
+    opacity: 0.6;
+}
+
+.language-toggle .lang-option.current {
+    opacity: 1;
+}
+
+.language-toggle .lang-separator {
+    opacity: 0.6;
+}
