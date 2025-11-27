@@ -1,0 +1,244 @@
+name: release-site
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
+concurrency:
+  group: release-site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_sitegen:
+    name: Build site generator and PDFs
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache cargo registry and target
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            sitegen/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build sitegen binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          cargo build --release --manifest-path sitegen/Cargo.toml --quiet
+
+      - name: Build PDFs with Typst
+        uses: ./.github/actions/build-pdfs
+
+      - name: Package Typst binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p sitegen/target/release
+          cp ~/.cargo/bin/typst sitegen/target/release/typst
+
+      - name: Verify built PDFs (typst/)
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r file; do
+            if head -c 4 "$file" | grep -q '%PDF'; then
+              echo "$(basename "$file") verified"
+            else
+              echo "$file is not recognized as a PDF" >&2
+              exit 1
+            fi
+          done < <(find typst -type f -name '*.pdf')
+
+      - name: Upload sitegen assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitegen-assets
+          path: |
+            sitegen/target/release/generate
+            sitegen/target/release/typst
+            typst/**/*.pdf
+
+  site:
+    name: Build site and deploy
+    needs: build_sitegen
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      actions: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain with wasm target
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install Trunk
+        uses: jetli/trunk-action@v0.5.0
+        with:
+          version: v0.21.14
+
+      - name: Download built assets
+        uses: actions/download-artifact@v4
+        with:
+          name: sitegen-assets
+
+      - name: Install Typst binary into PATH
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p typst-bin
+          mv sitegen/target/release/typst typst-bin/typst
+          chmod +x typst-bin/typst
+          echo "$PWD/typst-bin" >> "$GITHUB_PATH"
+
+      - name: Prepare sitegen binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv sitegen/target/release/generate ./sitegen_bin
+          chmod +x ./sitegen_bin
+
+      - name: Clean previous site output
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf docs dist
+
+      - name: Generate site
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./sitegen_bin
+
+      - name: Build wasm preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          trunk build --release --config new/Trunk.toml
+
+      - name: Copy preview into site output
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/new
+          cp -r new/dist/* dist/new/
+
+      - name: Verify generated PDFs (dist/)
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r file; do
+            if head -c 4 "$file" | grep -q '%PDF'; then
+              echo "$(basename "$file") verified"
+            else
+              echo "$file is not recognized as a PDF" >&2
+              exit 1
+            fi
+          done < <(find dist -type f -name '*.pdf')
+
+      - name: Verify site outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s dist/index.html
+          test -s dist/ru/index.html
+          test -s dist/style.css
+          test -s dist/favicon.svg
+          test -s dist/avatar.jpg
+          test -s dist/sitemap.txt
+
+          pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
+          if [ "$pdf_count" -ne 4 ]; then
+            echo "Expected 4 PDFs in dist but found $pdf_count" >&2
+            exit 1
+          fi
+
+          test -s dist/new/index.html
+
+          wasm_count=$(find dist/new -maxdepth 1 -name '*.wasm' | wc -l)
+          js_count=$(find dist/new -maxdepth 1 -name '*.js' | wc -l)
+          css_count=$(find dist/new -maxdepth 1 -name '*.css' | wc -l)
+
+          if [ "$wasm_count" -lt 1 ] || [ "$js_count" -lt 1 ] || [ "$css_count" -lt 1 ]; then
+            echo "Missing expected wasm/js/css assets in dist/new" >&2
+            exit 1
+          fi
+
+      - name: Prepare Pages directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv dist docs
+
+      - name: Copy README_RU
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp README_RU.MD docs/
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Delete previous releases
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ids=$(gh api repos/${{ github.repository }}/releases --jq '.[].id' || echo "")
+          if [ -z "$ids" ]; then
+            echo "No existing releases to clean up"
+            exit 0
+          fi
+
+          echo "$ids" | tail -n +2 | while read -r id; do
+            if [ -n "$id" ]; then
+              echo "Deleting release id $id"
+              gh api repos/${{ github.repository }}/releases/"$id" -X DELETE
+            fi
+          done
+
+      - name: Create release with PDFs and binary
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: sitegen-${{ github.run_number }}
+          files: |
+            sitegen_bin
+            typst/**/*.pdf
