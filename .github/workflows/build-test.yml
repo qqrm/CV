@@ -5,7 +5,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 env:
   CARGO_TERM_PROGRESS_WHEN: never
@@ -20,13 +19,24 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install zizmor
+        run: cargo install --locked zizmor --version 1.18.0
+
+      - name: Scan workflows with zizmor
+        run: zizmor .github/workflows
 
       - name: Rust cache
-        uses: Swatinem/rust-cache@v2
+        uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
 
       - name: Build PDFs
         uses: ./.github/actions/build-pdfs

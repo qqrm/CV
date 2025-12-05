@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 concurrency:
   group: pdf-validate-${{ github.ref }}
@@ -24,6 +23,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Build PDFs with Typst
         uses: ./.github/actions/build-pdfs

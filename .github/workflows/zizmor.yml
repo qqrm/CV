@@ -1,0 +1,29 @@
+name: zizmor
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/**
+      - .github/actions/**
+      - .github/**/action.yml
+      - .github/**/action.yaml
+
+permissions:
+  security-events: write
+  contents: read
+
+jobs:
+  scan:
+    name: Run zizmor on workflows
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53bff3c73c8543d2f0e8 # v4.1.6
+        with:
+          persist-credentials: false
+
+      - name: Analyze workflows with zizmor
+        uses: zizmorcore/zizmor-action@e673c3917a1aef3c65c972347ed84ccd013ecda4 # v0.2.0
+        with:
+          inputs: .github/
