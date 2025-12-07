@@ -3,10 +3,6 @@ name: build-test
 on:
   pull_request:
 
-permissions:
-  contents: read
-  actions: write
-
 env:
   CARGO_TERM_PROGRESS_WHEN: never
   SITEGEN_MANIFEST: sitegen/Cargo.toml
