@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 concurrency:
   group: pdf-validate-${{ github.ref }}
