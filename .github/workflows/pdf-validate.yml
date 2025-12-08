@@ -3,9 +3,9 @@ name: pdf-validate
 on:
   workflow_dispatch:
   workflow_call:
-
-permissions:
-  contents: read
+    permissions:
+      contents: read
+      actions: write
 
 concurrency:
   group: pdf-validate-${{ github.ref }}
