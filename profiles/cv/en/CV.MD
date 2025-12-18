@@ -1,24 +1,26 @@
 # Alexey Belyakov
 
 ## Summary
-Engineering leader inspired by Rust. I build strong teams and shape a delivery culture grounded in leading DevOps practices so product, engineering, and compliance move in sync and produce measurable business impact.
+Engineering leader with an SRE mindset. I build cross-functional teams, standardize release engineering, and couple DevOps/SRE practices with people growth so regulated businesses get predictable delivery, lower risk, and faster ROI.
 
 ## Core Skills
-Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • SRE • SLO • MTTR • Observability • Incident response • SBOM • Dependency policy • Secure delivery • Program management • Roadmaps • OKR/KPI • Hiring and coaching
+People management and coaching • Cross-functional leadership • Program and portfolio management • Roadmaps • OKR/KPI • Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • Release governance • SRE • SLI/SLO/Error budgets • MTTR • Observability • Incident response • Golden environments • DevSecOps • SBOM • Dependency policy • Secure delivery • Compliance-ready SDLC
 
 ## Experience
 
 ### Engineering Manager • [Inline Group](https://www.inlinegroup.ru/)
 *March 2023 – Present*
 
-Led DevOps, backend, and QA teams while we moved SAP workflows into a Rust ecosystem. Set up GitOps and automated environments so releases stayed steady. Built hiring and onboarding funnels for backend, DevOps, and QA. Introduced delivery steps and release gates that removed manual blockers. Moved CI/CD and environments to regulated Linux distributions to meet client rules. Planned budgets and timelines for extra requests while keeping costs within approved limits. Added DevSecOps checks to stop repeating blockers. Helped Rust developers grow through reviews, workshops, and personal plans.
+Built and led cross-functional DevOps, backend, and QA teams to migrate SAP workflows into a Rust ecosystem with reliable delivery. Established release governance, SLOs, and incident drills so cadence became predictable and MTTR stayed low. Replanned the portfolio to deliver a three-year roadmap in roughly 18 months, accelerating time to market and business impact.
+
+Standardized CI/CD, GitOps, and golden environments with mandatory checks to reduce release risk and cost. Shifted SDLC and runtime environments onto regulated Linux distributions to satisfy strict client compliance without losing delivery speed. Owned hiring, onboarding, and career growth for backend, DevOps, and QA, and kept budgets and timelines inside approved limits while adding DevSecOps guardrails.
 
 **Stack:** Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
 
 ### Software Engineer • [Kaspersky](https://www.kaspersky.com/)
 *May 2020 – March 2023*
 
-Supported and extended a blockchain voting service on Exonum. Added weight-based voting and improved ballot flows. Raised unit and integration test coverage and simplified pipelines during a move to Microsoft tooling.
+Supported and extended a production blockchain voting service on Exonum, prioritizing improvements from user feedback. Added weight-based voting, streamlined ballot flows, and raised unit and integration test coverage. Simplified pipelines during a migration to Microsoft tooling and led refactors to keep the stack current.
 
 **Stack:** Rust, Exonum, Protobuf, Serde, Git.
 
@@ -42,13 +44,13 @@ Developed CAD libraries for KOMPAS. Built a Change View Plane feature for 3D wor
 - Junior C++ Developer at T4B: MetaTrader plugins and a management web app.
 
 ## Leadership System
-- Weekly portfolio reviews on KPI, budget, and blockers.
-- Quarterly planning across product, engineering, and ops.
-- Continuous improvement via retrospectives, surveys, and small experiments.
-- Reporting with Jira dashboards, Confluence scorecards, and short memos.
+- Weekly portfolio reviews on KPI, SLO health, release risk, and budget.
+- Quarterly planning across product, engineering, ops, and compliance.
+- Continuous improvement via retrospectives, surveys, incident reviews, and small experiments.
+- Release readiness and reporting through Jira dashboards, Confluence scorecards, and concise memos.
 
 ## Education
 Bauman Moscow State Technical University, IU7 Software Engineering • Specialist, 2015
 
 ## Keywords
-Engineering Manager • Rust • Microservices • DevOps • SRE • SLO • MTTR • CI/CD • Program Management • Supply Chain Security • Hiring • Coaching • Migration Leadership
+Engineering Manager • People Management • Rust • DevOps • SRE • Reliability • SLO • MTTR • CI/CD • GitOps • Release Engineering • Compliance • Program Management • Supply Chain Security • Hiring • Coaching • Migration Leadership
