@@ -11,7 +11,7 @@ People management and coaching • Cross-functional leadership • Program and p
 ### Engineering Manager • [Inline Group](https://www.inlinegroup.ru/)
 *March 2023 – Present*
 
-Built and led cross-functional DevOps, backend, and QA teams to migrate SAP workflows into a Rust ecosystem with reliable delivery. Established release governance, SLOs, and incident drills so cadence became predictable and MTTR stayed low. Replanned the portfolio to deliver a three-year roadmap in roughly 18 months, accelerating time to market and business impact.
+Built and led cross-functional DevOps, backend, and QA teams to migrate a SAP-based procurement system from monolith to Rust microservices with reliable delivery. Established release governance, SLOs, and incident drills so cadence became predictable and MTTR stayed low. Replanned the portfolio to deliver a three-year roadmap in roughly 18 months, accelerating time to market and business impact.
 
 Standardized CI/CD, GitOps, and golden environments with mandatory checks to reduce release risk and cost. Shifted SDLC and runtime environments onto regulated Linux distributions to satisfy strict client compliance without losing delivery speed. Owned hiring, onboarding, and career growth for backend, DevOps, and QA, and kept budgets and timelines inside approved limits while adding DevSecOps guardrails.
 
