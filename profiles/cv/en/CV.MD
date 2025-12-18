@@ -1,7 +1,7 @@
 # Alexey Belyakov
 
 ## Summary
-Engineering leader with an SRE mindset. I build cross-functional teams, standardize release engineering, and couple DevOps/SRE practices with people growth so regulated businesses get predictable delivery, lower risk, and faster ROI.
+Engineering leader with an SRE mindset and a Rust background. I build cross-functional teams, standardize release engineering, and couple DevOps/SRE practices with people growth so regulated businesses get predictable delivery, lower risk, and faster ROI.
 
 ## Core Skills
 People management and coaching • Cross-functional leadership • Program and portfolio management • Roadmaps • OKR/KPI • Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • Release governance • SRE • SLI/SLO/Error budgets • MTTR • Observability • Incident response • Golden environments • DevSecOps • SBOM • Dependency policy • Secure delivery • Compliance-ready SDLC
