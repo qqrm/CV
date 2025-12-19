@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <script>
+        const p = window.location.pathname;
+        if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+            window.location.replace(p + '/' + window.location.search + window.location.hash);
+        }
+    </script>
+    <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch(e) {}
+    })();
+    </script>
+    <title>Alexey Belyakov - CV</title>
+    <link rel='icon' href='favicon.svg' type='image/svg+xml'>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+<div class='floating-controls'>
+  <button id="language-toggle" class="language-toggle" data-target="ru/" aria-label="Switch to Russian version" title="Switch to Russian version">
+    <span class="lang-option current">EN</span>
+    <span class="lang-separator">/</span>
+    <span class="lang-option">RU</span>
+  </button>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch to dark theme">
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
+  </button>
+</div>
+<header>
+    <h1>Alexey Belyakov</h1>
+    <img class='avatar' src='avatar.jpg' alt='Avatar'>
+    <nav class="header-actions"><a class="action" href="Belyakov_en_light.pdf" data-light-href="Belyakov_en_light.pdf" data-dark-href="Belyakov_en_dark.pdf" data-light-label="Download" data-dark-label="Download">Download</a><a class="action" href="https://github.com/qqrm" rel="noopener">GitHub</a><a class="action" href="mailto:qqrm@vivaldi.net">Email</a><a class="action" href="https://leqqrm.t.me" rel="noopener">Telegram</a><a class="action" href="https://www.linkedin.com/in/qqrm/" rel="noopener">LinkedIn</a></nav>
+</header>
+<div class='content'>
+<h2>Summary</h2>
+<p>Engineering leader with an SRE mindset and a Rust background. I build cross-functional teams, standardize release engineering, and couple DevOps/SRE practices with people growth so regulated businesses get predictable delivery, lower risk, and faster ROI.</p>
+<h2>Core Skills</h2>
+<p>People management and coaching • Cross-functional leadership • Program and portfolio management • Roadmaps • OKR/KPI • Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • Release governance • SRE • SLI/SLO/Error budgets • MTTR • Observability • Incident response • Golden environments • DevSecOps • SBOM • Dependency policy • Secure delivery • Compliance-ready SDLC</p>
+<h2>Experience</h2>
+<h3>Engineering Manager • <a href="https://www.inlinegroup.ru/">Inline Group</a></h3>
+<p><em>March 2023 – Present (DURATION)</em></p>
+<p>Built and led cross-functional DevOps, backend, and QA teams to migrate a SAP-based procurement system from monolith to Rust microservices with reliable delivery. Established release governance, SLOs, and incident drills so cadence became predictable and MTTR stayed low. Replanned the portfolio to deliver a three-year roadmap in roughly 18 months, accelerating time to market and business impact.</p>
+<p>Standardized CI/CD, GitOps, and golden environments with mandatory checks to reduce release risk and cost. Shifted SDLC and runtime environments onto regulated Linux distributions to satisfy strict client compliance without losing delivery speed. Owned hiring, onboarding, and career growth for backend, DevOps, and QA, and kept budgets and timelines inside approved limits while adding DevSecOps guardrails.</p>
+<p><strong>Stack:</strong> Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.</p>
+<h3>Software Engineer • <a href="https://www.kaspersky.com/">Kaspersky</a></h3>
+<p><em>May 2020 – March 2023</em></p>
+<p>Supported and extended a production blockchain voting service on Exonum, prioritizing improvements from user feedback. Added weight-based voting, streamlined ballot flows, and raised unit and integration test coverage. Simplified pipelines during a migration to Microsoft tooling and led refactors to keep the stack current.</p>
+<p><strong>Stack:</strong> Rust, Exonum, Protobuf, Serde, Git.</p>
+<h3>Software Engineer • <a href="https://b2broker.com/">B2Broker</a></h3>
+<p><em>November 2018 – March 2020</em></p>
+<p>Built brokerage automation on MT4 and MT5 APIs. Delivered trade copiers in C++ and Go and a Multi Account Manager. Designed services to normalize and stream trading data with real-time guarantees. Built data collectors for statistical analysis.</p>
+<p><strong>Stack:</strong> MSVC, CMake, Protobuf, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.</p>
+<h3>C++ Engineer • <a href="https://ascon.ru">ASCON</a></h3>
+<p><em>May 2016 – November 2018</em></p>
+<p>Developed CAD libraries for KOMPAS. Built a Change View Plane feature for 3D workflows. Introduced an automated C++ and Python testing framework that reduced manual QA work. Led a refactor to C++17. Moved the organization from SVN to Git. Set up Scrum and documentation standards.</p>
+<p><strong>Stack:</strong> MSVC, C++17, Python 3, Boost, PostgreSQL, Git, Jenkins.</p>
+<h3>Earlier Roles</h3>
+<ul>
+<li>C++ Developer at Concerteza: SS7 sniffers and protocol parsers, Python-based integration tests.</li>
+<li>C++ &amp; JavaScript Developer at LiveTex: Node.js bindings for PostgreSQL and ZeroMQ.</li>
+<li>Junior C++ Developer at T4B: MetaTrader plugins and a management web app.</li>
+</ul>
+<h2>Leadership System</h2>
+<ul>
+<li>Weekly portfolio reviews on KPI, SLO health, release risk, and budget.</li>
+<li>Quarterly planning across product, engineering, ops, and compliance.</li>
+<li>Continuous improvement via retrospectives, surveys, incident reviews, and small experiments.</li>
+<li>Release readiness and reporting through Jira dashboards, Confluence scorecards, and concise memos.</li>
+</ul>
+<h2>Education</h2>
+<p>Bauman Moscow State Technical University, IU7 Software Engineering • Specialist, 2015</p>
+<h2>Keywords</h2>
+<p>Engineering Manager • People Management • Rust • DevOps • SRE • Reliability • SLO • MTTR • CI/CD • GitOps • Release Engineering • Compliance • Program Management • Supply Chain Security • Hiring • Coaching • Migration Leadership</p>
+
+</div>
+<footer class='page-footer'>
+  <p>DATE</p>
+</footer>
+<script>
+(function(){
+  var root = document.documentElement;
+  var key = 'theme';
+  function updateResumeLinks(theme){
+    var anchors = document.querySelectorAll('a[data-light-href], a[data-dark-href]');
+    for (var i = 0; i < anchors.length; i++) {
+      var anchor = anchors[i];
+      var lightHref = anchor.getAttribute('data-light-href');
+      var darkHref = anchor.getAttribute('data-dark-href');
+      var lightLabel = anchor.getAttribute('data-light-label');
+      var darkLabel = anchor.getAttribute('data-dark-label');
+      var hasLight = !!lightHref;
+      var hasDark = !!darkHref;
+
+      var targetHref = theme === 'dark' && hasDark ? darkHref : lightHref || darkHref;
+      if (!targetHref && hasDark) {
+        targetHref = darkHref;
+      }
+      if (targetHref) {
+        anchor.setAttribute('href', targetHref);
+      }
+
+      var label;
+      if (theme === 'dark' && hasDark) {
+        label = darkLabel || lightLabel;
+      } else if (theme === 'dark') {
+        label = lightLabel || darkLabel;
+      } else {
+        label = lightLabel || darkLabel;
+      }
+      if (label) {
+        anchor.textContent = label;
+      }
+
+      if (hasLight && hasDark) {
+        var nextTheme = theme === 'dark' ? 'light' : 'dark';
+        var tooltipLabel = theme === 'dark' ? (lightLabel || 'Light PDF') : (darkLabel || 'Dark PDF');
+        var tooltip = 'Switch to ' + nextTheme + ' theme to access ' + tooltipLabel;
+        anchor.setAttribute('title', tooltip);
+        anchor.setAttribute('aria-label', tooltip);
+      } else {
+        anchor.removeAttribute('title');
+        anchor.removeAttribute('aria-label');
+      }
+    }
+  }
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    updateResumeLinks(theme);
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var next = theme === 'light' ? 'dark' : 'light';
+    btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+    btn.setAttribute('title', 'Switch to ' + next + ' theme');
+  }
+  var saved = localStorage.getItem(key);
+  var start = saved || root.getAttribute('data-theme') || 'light';
+  apply(start);
+  localStorage.setItem(key, start);
+
+  var btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(key, next);
+      apply(next);
+    });
+  }
+
+  var langBtn = document.getElementById('language-toggle');
+  if (langBtn) {
+    langBtn.addEventListener('click', function(){
+      var target = langBtn.getAttribute('data-target');
+      if (target) {
+        window.location.href = target;
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
