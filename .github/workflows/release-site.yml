@@ -79,6 +79,7 @@ jobs:
             sitegen/target/release/generate
             sitegen/target/release/typst
             typst/**/*.pdf
+          overwrite: true
 
   site:
     name: Build site and deploy

@@ -77,6 +77,7 @@ jobs:
         with:
           name: cv-pdfs-typst-${{ env.DATE }}
           path: typst/**/*.pdf
+          overwrite: true
 
       - name: Upload PDFs (TypePDF)
         if: ${{ inputs.builder == 'typepdf' }}
@@ -84,3 +85,4 @@ jobs:
         with:
           name: cv-pdfs-typepdf-${{ env.DATE }}
           path: typst/**/*_typepdf.pdf
+          overwrite: true
