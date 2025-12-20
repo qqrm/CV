@@ -156,8 +156,8 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf dist
+          mv new/dist dist
           mkdir -p dist/old
-          cp -r new/dist/* dist/
           cp -r dist-legacy/* dist/old/
 
       - name: Verify generated PDFs (dist/old)
@@ -194,9 +194,9 @@ jobs:
             exit 1
           fi
 
-          wasm_count=$(find dist -maxdepth 1 -name '*.wasm' | wc -l)
-          js_count=$(find dist -maxdepth 1 -name '*.js' | wc -l)
-          css_count=$(find dist -maxdepth 1 -name '*.css' | wc -l)
+          wasm_count=$(find dist -path dist/old -prune -o -type f -name '*.wasm' -print | wc -l)
+          js_count=$(find dist -path dist/old -prune -o -type f -name '*.js' -print | wc -l)
+          css_count=$(find dist -path dist/old -prune -o -type f -name '*.css' -print | wc -l)
 
           if [ "$wasm_count" -lt 1 ] || [ "$js_count" -lt 1 ] || [ "$css_count" -lt 1 ]; then
             echo "Missing expected wasm/js/css assets in dist" >&2
