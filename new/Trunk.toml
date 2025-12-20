@@ -1,6 +1,6 @@
 [build]
 dist = "dist"
-public_url = "/CV/new/"
+public_url = "/CV/"
 
 [serve]
 open = false

@@ -139,20 +139,28 @@ jobs:
           set -euo pipefail
           ./sitegen_bin
 
-      - name: Build wasm preview
+      - name: Preserve legacy site output
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv dist dist-legacy
+
+      - name: Build wasm site
         shell: bash
         run: |
           set -euo pipefail
           trunk build --release --config new/Trunk.toml
 
-      - name: Copy preview into site output
+      - name: Assemble site output
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p dist/new
-          cp -r new/dist/* dist/new/
+          rm -rf dist
+          mkdir -p dist/old
+          cp -r new/dist/* dist/
+          cp -r dist-legacy/* dist/old/
 
-      - name: Verify generated PDFs (dist/)
+      - name: Verify generated PDFs (dist/old)
         shell: bash
         run: |
           set -euo pipefail
@@ -163,33 +171,35 @@ jobs:
               echo "$file is not recognized as a PDF" >&2
               exit 1
             fi
-          done < <(find dist -type f -name '*.pdf')
+          done < <(find dist/old -type f -name '*.pdf')
 
       - name: Verify site outputs
         shell: bash
         run: |
           set -euo pipefail
           test -s dist/index.html
-          test -s dist/ru/index.html
           test -s dist/style.css
           test -s dist/favicon.svg
           test -s dist/avatar.jpg
-          test -s dist/sitemap.txt
+          test -s dist/old/index.html
+          test -s dist/old/ru/index.html
+          test -s dist/old/style.css
+          test -s dist/old/favicon.svg
+          test -s dist/old/avatar.jpg
+          test -s dist/old/sitemap.txt
 
-          pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
+          pdf_count=$(find dist/old -maxdepth 1 -name '*.pdf' | wc -l)
           if [ "$pdf_count" -ne 4 ]; then
-            echo "Expected 4 PDFs in dist but found $pdf_count" >&2
+            echo "Expected 4 PDFs in dist/old but found $pdf_count" >&2
             exit 1
           fi
 
-          test -s dist/new/index.html
-
-          wasm_count=$(find dist/new -maxdepth 1 -name '*.wasm' | wc -l)
-          js_count=$(find dist/new -maxdepth 1 -name '*.js' | wc -l)
-          css_count=$(find dist/new -maxdepth 1 -name '*.css' | wc -l)
+          wasm_count=$(find dist -maxdepth 1 -name '*.wasm' | wc -l)
+          js_count=$(find dist -maxdepth 1 -name '*.js' | wc -l)
+          css_count=$(find dist -maxdepth 1 -name '*.css' | wc -l)
 
           if [ "$wasm_count" -lt 1 ] || [ "$js_count" -lt 1 ] || [ "$css_count" -lt 1 ]; then
-            echo "Missing expected wasm/js/css assets in dist/new" >&2
+            echo "Missing expected wasm/js/css assets in dist" >&2
             exit 1
           fi
 

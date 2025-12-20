@@ -33,13 +33,6 @@ impl Language {
         }
     }
 
-    fn role_tagline(self) -> &'static str {
-        match self {
-            Self::En => "Engineering Manager",
-            Self::Ru => "Руководитель разработки",
-        }
-    }
-
     fn download_label(self) -> &'static str {
         match self {
             Self::En => "Download PDF",
@@ -203,7 +196,6 @@ pub fn App() -> impl IntoView {
 
         <main class="page">
             <header class="hero">
-                <p class="eyebrow">{move || language.get().role_tagline()}</p>
                 <h1>{move || language.get().name()}</h1>
                 <div class="avatar-wrapper">
                     <img class="avatar" src="avatar.jpg" alt="Alexey Belyakov" />

@@ -115,17 +115,16 @@ All Markdown (`.md`) and Mermaid (`.mmd`) files must use **uppercase** filenames
 Use `repo-setup.sh` to install the core Rust and Typst toolchain. Document any extra CLI dependencies next to the workflows or scripts that need them instead of maintaining a separate environment manifest.
 
 ## GitHub Pages dual-publish roadmap
-We need to migrate the GitHub Pages build to Rust using Leptos so that a new WebAssembly-powered version ships alongside the current static site. The legacy content must remain available at the root URL, while the Leptos build is served from the `/CV/new` path on the same Pages domain.
+We need to migrate the GitHub Pages build to Rust using Leptos so that a new WebAssembly-powered version ships as the default site. The legacy content must remain available at `/CV/old` on the same Pages domain.
 
 ### Deployment approach
-- Keep the existing site output at the repository root of the Pages artifact so that direct links continue to load the legacy experience.
-- Build the Leptos frontend as a Rust 2024 project under the `new/` directory, emitting its WebAssembly bundle and static assets into `new/` within the GitHub Pages artifact. Serve these assets as static files (no server-side rendering).
-- Publish both artifacts in a single GitHub Pages workflow run: copy the legacy files as-is and place the `new/` build output alongside them before uploading the Pages artifact.
-- Add a stable link from the legacy homepage to `/CV/new` without redirecting legacy URLs, so users can opt into the new version while the old URLs remain untouched.
+- Build the Leptos frontend as a Rust 2024 project under the `new/` directory, emitting its WebAssembly bundle and static assets to the root of the Pages artifact. Serve these assets as static files (no server-side rendering).
+- Publish both artifacts in a single GitHub Pages workflow run: copy the legacy files under `old/` and place the Leptos build output at the artifact root before uploading.
+- Keep the legacy experience addressable at `/CV/old/` without redirecting, so existing links still work.
 
 ### Migration tasks (sequential)
 1. **Scaffold the Leptos app**: Initialize a Rust 2024 Leptos project in `new/`, configure `wasm32-unknown-unknown` as a target, and add scripts to build the WebAssembly bundle into `new/dist` (or similar) ready for static hosting.
-2. **Integrate dual builds in CI**: Update the GitHub Pages workflow to run the Leptos WebAssembly build, stage its `dist` output under `new/` in the Pages artifact, and stage the existing static site at the artifact root.
-3. **Expose navigation**: Add a visible link in the legacy site pointing to `/CV/new/` and, optionally, a return link from the new UI back to the legacy root.
-4. **Roll out behind the `/CV/new` path**: Publish both outputs in the same workflow run; verify that `/` still serves the legacy site and `/CV/new/` serves the WebAssembly build without cross-path asset collisions.
-5. **Stabilize and promote**: Capture metrics (load time, bundle size) for the `/CV/new/` build, fix regressions, and only replace the root content once the new version reaches parity.
+2. **Integrate dual builds in CI**: Update the GitHub Pages workflow to run the Leptos WebAssembly build, stage its `dist` output at the artifact root, and stage the existing static site under `old/`.
+3. **Expose navigation**: Add a visible link in the legacy site pointing to `/CV/`, and, optionally, a return link from the new UI back to `/CV/old/`.
+4. **Roll out behind the `/CV/old` path**: Publish both outputs in the same workflow run; verify that `/CV/` serves the WebAssembly build and `/CV/old/` serves the legacy build without cross-path asset collisions.
+5. **Stabilize and promote**: Capture metrics (load time, bundle size) for the `/CV/` build, fix regressions, and monitor `/CV/old/` for compatibility regressions.
