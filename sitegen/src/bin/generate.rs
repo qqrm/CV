@@ -13,7 +13,7 @@ use std::ops::Range;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-const PDF_BASE_URL: &str = "https://qqrm.github.io/CV/";
+const PDF_BASE_URL: &str = "https://qqrm.github.io/CV/old/";
 const GITHUB_URL: &str = "https://github.com/qqrm";
 const TELEGRAM_URL: &str = "https://leqqrm.t.me";
 const EMAIL_URL: &str = "mailto:qqrm@vivaldi.net";

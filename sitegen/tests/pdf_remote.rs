@@ -9,7 +9,10 @@ use ureq::http::header::CONTENT_TYPE;
 use ureq::tls::{RootCerts, TlsConfig};
 use walkdir::WalkDir;
 
-const BASE_URL: &str = "https://qqrm.github.io/CV/";
+const BASE_URLS: [&str; 2] = [
+    "https://qqrm.github.io/CV/old/",
+    "https://qqrm.github.io/CV/",
+];
 const MIN_PDF_SIZE_BYTES: usize = 1024;
 
 struct DistGuard {
@@ -95,81 +98,94 @@ fn deployed_pdfs_are_real() {
         .new_agent();
 
     for relative in &pdfs {
-        let url = format!("{BASE_URL}{relative}");
-        match agent.get(&url).call() {
-            Ok(resp) => {
-                let status = resp.status();
-                if !status.is_success() {
-                    errors.push(format!("{url} -> HTTP {}", status.as_u16()));
-                    continue;
-                }
+        let mut attempts = Vec::new();
+        let mut verified = false;
 
-                let content_type = resp
-                    .headers()
-                    .get(CONTENT_TYPE)
-                    .and_then(|value| value.to_str().ok())
-                    .map(str::to_owned)
-                    .unwrap_or_default();
-                if !content_type.contains("application/pdf") {
-                    errors.push(format!("{url} -> unexpected content-type '{content_type}'"));
-                    continue;
-                }
+        for base in BASE_URLS {
+            let url = format!("{base}{relative}");
+            match agent.get(&url).call() {
+                Ok(resp) => {
+                    let status = resp.status();
+                    if !status.is_success() {
+                        attempts.push(format!("{url} -> HTTP {}", status.as_u16()));
+                        continue;
+                    }
 
-                let mut reader = resp.into_body().into_reader();
-                let mut header = [0_u8; 5];
-                if let Err(err) = reader.read_exact(&mut header) {
-                    errors.push(format!("{url} -> failed to read header: {err}"));
-                    continue;
-                }
-                if &header != b"%PDF-" {
-                    errors.push(format!(
-                        "{url} -> invalid PDF signature: {}",
-                        String::from_utf8_lossy(&header)
-                    ));
-                    continue;
-                }
+                    let content_type = resp
+                        .headers()
+                        .get(CONTENT_TYPE)
+                        .and_then(|value| value.to_str().ok())
+                        .map(str::to_owned)
+                        .unwrap_or_default();
+                    if !content_type.contains("application/pdf") {
+                        attempts.push(format!("{url} -> unexpected content-type '{content_type}'"));
+                        continue;
+                    }
 
-                let mut total_bytes = header.len();
-                let mut buffer = [0_u8; 4096];
-                loop {
-                    match reader.read(&mut buffer) {
-                        Ok(0) => break,
-                        Ok(n) => {
-                            total_bytes += n;
-                        }
-                        Err(err) => {
-                            errors.push(format!("{url} -> read error after header: {err}"));
-                            break;
+                    let mut reader = resp.into_body().into_reader();
+                    let mut header = [0_u8; 5];
+                    if let Err(err) = reader.read_exact(&mut header) {
+                        attempts.push(format!("{url} -> failed to read header: {err}"));
+                        continue;
+                    }
+                    if &header != b"%PDF-" {
+                        attempts.push(format!(
+                            "{url} -> invalid PDF signature: {}",
+                            String::from_utf8_lossy(&header)
+                        ));
+                        continue;
+                    }
+
+                    let mut total_bytes = header.len();
+                    let mut buffer = [0_u8; 4096];
+                    loop {
+                        match reader.read(&mut buffer) {
+                            Ok(0) => break,
+                            Ok(n) => {
+                                total_bytes += n;
+                            }
+                            Err(err) => {
+                                attempts.push(format!("{url} -> read error after header: {err}"));
+                                break;
+                            }
                         }
                     }
-                }
 
-                if total_bytes < MIN_PDF_SIZE_BYTES {
-                    errors.push(format!(
-                        "{url} -> unexpectedly small PDF ({} bytes)",
-                        total_bytes
-                    ));
+                    if total_bytes < MIN_PDF_SIZE_BYTES {
+                        attempts.push(format!(
+                            "{url} -> unexpectedly small PDF ({} bytes)",
+                            total_bytes
+                        ));
+                        continue;
+                    }
+
+                    verified = true;
+                    break;
+                }
+                Err(Error::StatusCode(code)) => {
+                    attempts.push(format!("{url} -> HTTP {code}"));
+                }
+                Err(Error::Io(err)) => {
+                    let message = err.to_string();
+                    if message.contains("Network is unreachable")
+                        || message.contains("failed to lookup address information")
+                    {
+                        eprintln!("Skipping {url} due to network issue: {message}");
+                    } else {
+                        attempts.push(format!("{url} -> IO error: {message}"));
+                    }
+                }
+                Err(Error::Tls(message)) => {
+                    eprintln!("Skipping {url} due to TLS issue: {message}");
+                }
+                Err(other) => {
+                    attempts.push(format!("{url} -> error: {other}"));
                 }
             }
-            Err(Error::StatusCode(code)) => {
-                errors.push(format!("{url} -> HTTP {code}"));
-            }
-            Err(Error::Io(err)) => {
-                let message = err.to_string();
-                if message.contains("Network is unreachable")
-                    || message.contains("failed to lookup address information")
-                {
-                    eprintln!("Skipping {url} due to network issue: {message}");
-                } else {
-                    errors.push(format!("{url} -> IO error: {message}"));
-                }
-            }
-            Err(Error::Tls(message)) => {
-                eprintln!("Skipping {url} due to TLS issue: {message}");
-            }
-            Err(other) => {
-                errors.push(format!("{url} -> error: {other}"));
-            }
+        }
+
+        if !verified {
+            errors.extend(attempts);
         }
     }
 

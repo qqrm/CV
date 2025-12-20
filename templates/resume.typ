@@ -88,7 +88,7 @@
     find_first_section(lines, i: i + 1)
   }
 
-  #let base = "https://qqrm.github.io/CV/"
+  #let base = "https://qqrm.github.io/CV/old/"
   #let slug = if lang == "ru" { "ru/" } else { "" }
   #let cv_url = base + slug
   #let cv_path = if md_path == none {
