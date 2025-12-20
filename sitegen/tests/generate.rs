@@ -177,58 +177,70 @@ fn generates_expected_dist() {
 
     let original_dir = env::current_dir().expect("current dir");
     env::set_current_dir(project_root).expect("set project root");
-    let (start_year, start_month) = read_inline_start().expect("read inline start");
+    let inline_start = read_inline_start().ok();
     env::set_current_dir(original_dir).expect("restore current dir");
-    let start_date =
-        NaiveDate::from_ymd_opt(start_year, start_month, 1).expect("valid inline start date");
-    let today = Utc::now().date_naive();
-    let total_months = (today.year() - start_date.year()) * 12
-        + (today.month() as i32 - start_date.month() as i32);
-    let expected_duration_en = format_duration_en(total_months);
-    let expected_duration_ru = format_duration_ru(total_months);
 
-    let english_fragment = format!("{} - Present", start_date.format("%B %Y"));
-    let english_duration_re = Regex::new(&format!(
-        "{}\\s*\\(([^)]*)\\)",
-        regex::escape(&english_fragment)
-    ))
-    .unwrap();
-    let mut en_matches = english_duration_re.captures_iter(&index_actual);
-    let en_caps = en_matches
-        .next()
-        .expect("English duration fragment not found");
-    assert!(
-        en_matches.next().is_none(),
-        "English inline duration fragment matched more than once"
-    );
-    let actual_duration_en = en_caps.get(1).map(|m| m.as_str()).unwrap();
-    assert_eq!(actual_duration_en, expected_duration_en);
+    if let Some((start_year, start_month)) = inline_start {
+        let start_date =
+            NaiveDate::from_ymd_opt(start_year, start_month, 1).expect("valid inline start date");
+        let today = Utc::now().date_naive();
+        let total_months = (today.year() - start_date.year()) * 12
+            + (today.month() as i32 - start_date.month() as i32);
+        let expected_duration_en = format_duration_en(total_months);
+        let expected_duration_ru = format_duration_ru(total_months);
 
-    let mut ru_fragments = vec![english_fragment.clone()];
-    if let Some(month_name) = russian_month_name(start_month) {
-        let month_title = capitalize_first(month_name);
-        ru_fragments.extend([
-            format!("{month_name} {start_year} - настоящее время"),
-            format!("{month_name} {start_year} - Настоящее время"),
-            format!("{month_title} {start_year} - настоящее время"),
-            format!("{month_title} {start_year} - Настоящее время"),
-        ]);
-    }
-    let mut ru_duration: Option<String> = None;
-    for fragment in ru_fragments {
-        let re = Regex::new(&format!("{}\\s*\\(([^)]*)\\)", regex::escape(&fragment))).unwrap();
-        let mut matches = re.captures_iter(&index_ru_actual);
-        if let Some(caps) = matches.next() {
-            assert!(
-                matches.next().is_none(),
-                "Russian inline duration fragment '{fragment}' matched more than once"
-            );
-            ru_duration = Some(caps.get(1).unwrap().as_str().to_string());
-            break;
+        let english_fragment = format!("{} - Present", start_date.format("%B %Y"));
+        let english_duration_re = Regex::new(&format!(
+            "{}\\s*\\(([^)]*)\\)",
+            regex::escape(&english_fragment)
+        ))
+        .unwrap();
+        let mut en_matches = english_duration_re.captures_iter(&index_actual);
+        let en_caps = en_matches
+            .next()
+            .expect("English duration fragment not found");
+        assert!(
+            en_matches.next().is_none(),
+            "English inline duration fragment matched more than once"
+        );
+        let actual_duration_en = en_caps.get(1).map(|m| m.as_str()).unwrap();
+        assert_eq!(actual_duration_en, expected_duration_en);
+
+        let mut ru_fragments = vec![english_fragment.clone()];
+        if let Some(month_name) = russian_month_name(start_month) {
+            let month_title = capitalize_first(month_name);
+            ru_fragments.extend([
+                format!("{month_name} {start_year} - настоящее время"),
+                format!("{month_name} {start_year} - Настоящее время"),
+                format!("{month_title} {start_year} - настоящее время"),
+                format!("{month_title} {start_year} - Настоящее время"),
+            ]);
         }
+        let mut ru_duration: Option<String> = None;
+        for fragment in ru_fragments {
+            let re = Regex::new(&format!("{}\\s*\\(([^)]*)\\)", regex::escape(&fragment))).unwrap();
+            let mut matches = re.captures_iter(&index_ru_actual);
+            if let Some(caps) = matches.next() {
+                assert!(
+                    matches.next().is_none(),
+                    "Russian inline duration fragment '{fragment}' matched more than once"
+                );
+                ru_duration = Some(caps.get(1).unwrap().as_str().to_string());
+                break;
+            }
+        }
+        let actual_duration_ru = ru_duration.expect("Russian duration fragment not found");
+        assert_eq!(actual_duration_ru, expected_duration_ru);
+    } else {
+        assert!(
+            !index_actual.contains("DURATION"),
+            "Unexpected duration placeholder in English HTML"
+        );
+        assert!(
+            !index_ru_actual.contains("DURATION"),
+            "Unexpected duration placeholder in Russian HTML"
+        );
     }
-    let actual_duration_ru = ru_duration.expect("Russian duration fragment not found");
-    assert_eq!(actual_duration_ru, expected_duration_ru);
 
     assert!(
         index_actual.contains("Last updated:"),

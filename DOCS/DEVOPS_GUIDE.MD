@@ -114,17 +114,14 @@ All Markdown (`.md`) and Mermaid (`.mmd`) files must use **uppercase** filenames
 ## Tooling reference
 Use `repo-setup.sh` to install the core Rust and Typst toolchain. Document any extra CLI dependencies next to the workflows or scripts that need them instead of maintaining a separate environment manifest.
 
-## GitHub Pages dual-publish roadmap
-We need to migrate the GitHub Pages build to Rust using Leptos so that a new WebAssembly-powered version ships as the default site. The legacy content must remain available at `/CV/old` on the same Pages domain.
+## GitHub Pages publish roadmap
+The GitHub Pages build publishes the WebAssembly-powered site built with Leptos at `/CV/`.
 
 ### Deployment approach
 - Build the Leptos frontend as a Rust 2024 project under the `new/` directory, emitting its WebAssembly bundle and static assets to the root of the Pages artifact. Serve these assets as static files (no server-side rendering).
-- Publish both artifacts in a single GitHub Pages workflow run: copy the legacy files under `old/` and place the Leptos build output at the artifact root before uploading.
-- Keep the legacy experience addressable at `/CV/old/` without redirecting, so existing links still work.
+- Generate the Typst PDFs via `sitegen` and copy them into the Pages artifact root alongside the WebAssembly bundle.
 
 ### Migration tasks (sequential)
 1. **Scaffold the Leptos app**: Initialize a Rust 2024 Leptos project in `new/`, configure `wasm32-unknown-unknown` as a target, and add scripts to build the WebAssembly bundle into `new/dist` (or similar) ready for static hosting.
-2. **Integrate dual builds in CI**: Update the GitHub Pages workflow to run the Leptos WebAssembly build, stage its `dist` output at the artifact root, and stage the existing static site under `old/`.
-3. **Expose navigation**: Add a visible link in the legacy site pointing to `/CV/`, and, optionally, a return link from the new UI back to `/CV/old/`.
-4. **Roll out behind the `/CV/old` path**: Publish both outputs in the same workflow run; verify that `/CV/` serves the WebAssembly build and `/CV/old/` serves the legacy build without cross-path asset collisions.
-5. **Stabilize and promote**: Capture metrics (load time, bundle size) for the `/CV/` build, fix regressions, and monitor `/CV/old/` for compatibility regressions.
+2. **Integrate build steps in CI**: Update the GitHub Pages workflow to run the Leptos WebAssembly build and stage its `dist` output at the artifact root alongside generated PDFs.
+3. **Stabilize and promote**: Capture metrics (load time, bundle size) for the `/CV/` build, fix regressions, and monitor the release pipeline for compatibility regressions.

@@ -13,7 +13,7 @@ use std::ops::Range;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-const PDF_BASE_URL: &str = "https://qqrm.github.io/CV/old/";
+const PDF_BASE_URL: &str = "https://qqrm.github.io/CV/";
 const GITHUB_URL: &str = "https://github.com/qqrm";
 const TELEGRAM_URL: &str = "https://leqqrm.t.me";
 const EMAIL_URL: &str = "mailto:qqrm@vivaldi.net";
@@ -387,12 +387,11 @@ fn render_page(data: &TemplateData) -> Result<String, handlebars::RenderError> {
 fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
     info!("Starting site generation");
-    const INLINE_START: (i32, u32) = (2024, 3);
     let inline_start = match read_inline_start() {
-        Ok(v) => v,
+        Ok(value) => Some(value),
         Err(e) => {
             warn!("Failed to read inline start: {e}");
-            INLINE_START
+            None
         }
     };
     let base_url = PDF_BASE_URL;
@@ -404,13 +403,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
     info!("Copied avatar to dist directory");
-    let start_date =
-        NaiveDate::from_ymd_opt(inline_start.0, inline_start.1, 1).expect("Invalid start date");
     let today = Utc::now().date_naive();
-    let total_months = (today.year() - start_date.year()) * 12
-        + (today.month() as i32 - start_date.month() as i32);
-    let duration_en = format_duration_en(total_months);
-    let duration_ru = format_duration_ru(total_months);
     let date_str = today.format("%Y-%m-%d").to_string();
     let footer_text_en = format!("Last updated: {}", date_str);
     let footer_text_ru = format!("Последнее редактирование: {}", date_str);
@@ -428,8 +421,30 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_body_en = html_body_en.replace(&en_pdf, &en_local);
         html_body_en = html_body_en.replace(&ru_pdf, &ru_local);
     }
-    let english_fragment = format!("{} - Present", start_date.format("%B %Y"));
-    if !inject_duration(&mut html_body_en, &english_fragment, &duration_en) {
+    let duration_data = inline_start.and_then(|(year, month)| {
+        let start_date = NaiveDate::from_ymd_opt(year, month, 1)?;
+        let total_months = (today.year() - start_date.year()) * 12
+            + (today.month() as i32 - start_date.month() as i32);
+        let duration_en = format_duration_en(total_months);
+        let duration_ru = format_duration_ru(total_months);
+        let english_fragment = format!("{} - Present", start_date.format("%B %Y"));
+        let mut ru_fragments = vec![english_fragment.clone()];
+        if let Some(month_name) = russian_month_name(month) {
+            let month_lower = month_name;
+            let month_title = capitalize_first(month_lower);
+            ru_fragments.extend([
+                format!("{month_lower} {year} - настоящее время"),
+                format!("{month_lower} {year} - Настоящее время"),
+                format!("{month_title} {year} - настоящее время"),
+                format!("{month_title} {year} - Настоящее время"),
+            ]);
+        }
+        Some((english_fragment, duration_en, duration_ru, ru_fragments))
+    });
+
+    if let Some((english_fragment, duration_en, _, _)) = &duration_data
+        && !inject_duration(&mut html_body_en, english_fragment, duration_en)
+    {
         warn!("English inline duration fragment '{english_fragment}' not found in generated HTML");
     }
     if let Some(end) = html_body_en.find("</h1>") {
@@ -450,28 +465,17 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_body_ru = html_body_ru.replace(&ru_pdf, &ru_local);
         html_body_ru = html_body_ru.replace(&en_pdf, &en_local);
     }
-    let mut ru_fragments = Vec::new();
-    ru_fragments.push(english_fragment.clone());
-    if let Some(month_name) = russian_month_name(inline_start.1) {
-        let month_lower = month_name;
-        let month_title = capitalize_first(month_lower);
-        let year = inline_start.0;
-        ru_fragments.extend([
-            format!("{month_lower} {year} - настоящее время"),
-            format!("{month_lower} {year} - Настоящее время"),
-            format!("{month_title} {year} - настоящее время"),
-            format!("{month_title} {year} - Настоящее время"),
-        ]);
-    }
-    let mut injected_ru = false;
-    for fragment in ru_fragments {
-        if inject_duration(&mut html_body_ru, &fragment, &duration_ru) {
-            injected_ru = true;
-            break;
+    if let Some((_, _, duration_ru, ru_fragments)) = &duration_data {
+        let mut injected_ru = false;
+        for fragment in ru_fragments {
+            if inject_duration(&mut html_body_ru, fragment, duration_ru) {
+                injected_ru = true;
+                break;
+            }
         }
-    }
-    if !injected_ru {
-        warn!("Russian inline duration fragment not found in generated HTML");
+        if !injected_ru {
+            warn!("Russian inline duration fragment not found in generated HTML");
+        }
     }
     if let Some(end) = html_body_ru.find("</h1>") {
         html_body_ru = html_body_ru[end + 5..].trim_start().to_string();

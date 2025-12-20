@@ -6,7 +6,7 @@
 
 This repository implements an automated, multilingual CV generator and publisher with the following goals:
 
-- Maintain a single Engineering Manager narrative in Markdown (`profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD`).
+- Maintain a single CV narrative in Markdown (`profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD`).
 - Render localized Typst PDFs via a shared Typst template (`templates/resume.typ`).
 - Generate a static website backed by the `sitegen` Rust crate, bundling localized landing pages for English and Russian plus downloadable PDFs.
 - Keep all build artifacts out of Git; CI/CD regenerates PDFs and HTML on demand.

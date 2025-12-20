@@ -8,21 +8,6 @@
 
 ## Опыт
 
-### Engineering Manager • [Inline Group](https://www.inlinegroup.ru/)
-*март 2023 - настоящее время*
-
-Руководил поставкой backend, DevOps и QA при миграции закупочной платформы на базе Oracle/SAP с монолита на Rust-микросервисы.
-
-- Контур команды около 25-30 человек, около 12 прямых backend-репортов; DevOps и QA управлялись через тимлидов, фронтенд координировался через API.
-- Поставили около 20 сервисов: доменные и платформенные утилиты, включая логирование, почту и общие компоненты.
-- База данных на сервис: PostgreSQL, Redis для кеша, RabbitMQ для асинхронной интеграции, только forward-only миграции схем.
-- GitLab CI/CD и GitOps, воспроизводимые сборки, теги релизов и практики отката; ежедневные выкладки на dev, stage и release стенды.
-- Усилили автоматизацию QA и регрессию API; тестовый пайплайн сократился с примерно 30 минут до примерно 5-7 минут за счет параллелизации и изоляции.
-- Комплаенс-готовая поставка: регламентированные Linux-дистрибутивы, приватный реестр артефактов с закрепленными и утверждаемыми версиями, сканирование зависимостей (cargo-audit) как гейт CI, поддержка проверок безопасности заказчиков.
-- Определили цели SLI/SLO, учет MTTR и подход к бюджетам ошибок при стабилизации сервисов, фокус на надежность поставки и безопасность.
-
-**Стек:** Rust, Actix Web, RabbitMQ, PostgreSQL, Redis, Docker, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
-
 ### Ведущий Rust инженер • [YADRO](https://yadro.com/)
 *февраль 2022 - март 2023*
 
@@ -70,4 +55,4 @@
 МГТУ им. Баумана, ИУ7 Программная инженерия • Специалист, 2015
 
 ## Ключевые слова
-Engineering Manager • People Management • Rust • DevOps • SRE • Reliability • SLO • MTTR • CI/CD • GitOps • Release Engineering • Compliance • Program Management • Supply Chain Security • Hiring • Coaching • Migration Leadership
+People Management • Rust • DevOps • SRE • Reliability • SLO • MTTR • CI/CD • GitOps • Release Engineering • Compliance • Program Management • Supply Chain Security • Hiring • Coaching • Migration Leadership

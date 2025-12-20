@@ -1,6 +1,6 @@
 # GitHub Pages Deployment from a Separate Branch
 
-This guide explains how to publish the static bundle (including the `new/` WebAssembly site served at `/CV/`) from a branch that is different from the default branch. The legacy site should be staged under `/CV/old/`.
+This guide explains how to publish the static bundle (including the `new/` WebAssembly site served at `/CV/`) from a branch that is different from the default branch.
 
 ## Choose the Pages source branch
 1. Open **Settings → Pages** in the repository on GitHub.
@@ -16,7 +16,7 @@ cd new
 trunk build --release
 cd ..
 
-# Build the legacy site bundle
+# Build the PDF bundle
 RUST_LOG=info cargo run --bin generate --manifest-path sitegen/Cargo.toml
 
 # Prepare a worktree for the Pages branch
@@ -26,8 +26,7 @@ git fetch origin gh-pages:gh-pages
 
 git worktree add /tmp/gh-pages gh-pages
 rsync -av --delete new/dist/ /tmp/gh-pages/
-mkdir -p /tmp/gh-pages/old
-rsync -av --delete dist/ /tmp/gh-pages/old/
+cp dist/*.pdf /tmp/gh-pages/
 (cd /tmp/gh-pages && git add . && git commit -m "Publish site" && git push origin gh-pages)
 
 # Clean up the temporary worktree

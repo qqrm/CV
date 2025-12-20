@@ -1,7 +1,7 @@
 # Repository Specification
 
 ## 1. Purpose and Scope
-- Maintain the source of truth for Alexey Belyakov's Engineering Manager curriculum vitae in English and Russian.
+- Maintain the source of truth for Alexey Belyakov's curriculum vitae in English and Russian.
 - Generate publishable artifacts from the canonical CV narrative: localized Typst PDFs and a static multilingual website for English and Russian.
 - Provide reusable tooling (Rust + Typst) that validates content, renders HTML/PDF outputs, and keeps generated artifacts synchronized with the Markdown sources.
 

@@ -9,10 +9,7 @@ use ureq::http::header::CONTENT_TYPE;
 use ureq::tls::{RootCerts, TlsConfig};
 use walkdir::WalkDir;
 
-const BASE_URLS: [&str; 2] = [
-    "https://qqrm.github.io/CV/old/",
-    "https://qqrm.github.io/CV/",
-];
+const BASE_URLS: [&str; 1] = ["https://qqrm.github.io/CV/"];
 const MIN_PDF_SIZE_BYTES: usize = 1024;
 
 struct DistGuard {
