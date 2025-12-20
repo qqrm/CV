@@ -9,7 +9,7 @@ fn reads_inline_start_from_markdown() {
     let original = env::current_dir().unwrap();
     env::set_current_dir(dir.path()).unwrap();
     fs::create_dir_all("profiles/cv/en").unwrap();
-    fs::write("profiles/cv/en/CV.MD", "* March 2024 – Present").unwrap();
+    fs::write("profiles/cv/en/CV.MD", "* March 2024 - Present").unwrap();
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
     assert_eq!(result.unwrap(), (2024, 3));
@@ -37,7 +37,7 @@ fn read_inline_start_returns_error_for_invalid_month() {
     let original = env::current_dir().unwrap();
     env::set_current_dir(dir.path()).unwrap();
     fs::create_dir_all("profiles/cv/en").unwrap();
-    fs::write("profiles/cv/en/CV.MD", "* Smarch 2024 – Present").unwrap();
+    fs::write("profiles/cv/en/CV.MD", "* Smarch 2024 - Present").unwrap();
     let result = read_inline_start();
     env::set_current_dir(original).unwrap();
     let err = result.expect_err("expected parse error");

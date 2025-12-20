@@ -428,7 +428,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         html_body_en = html_body_en.replace(&en_pdf, &en_local);
         html_body_en = html_body_en.replace(&ru_pdf, &ru_local);
     }
-    let english_fragment = format!("{} – Present", start_date.format("%B %Y"));
+    let english_fragment = format!("{} - Present", start_date.format("%B %Y"));
     if !inject_duration(&mut html_body_en, &english_fragment, &duration_en) {
         warn!("English inline duration fragment '{english_fragment}' not found in generated HTML");
     }
@@ -457,10 +457,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         let month_title = capitalize_first(month_lower);
         let year = inline_start.0;
         ru_fragments.extend([
-            format!("{month_lower} {year} – настоящее время"),
-            format!("{month_lower} {year} – Настоящее время"),
-            format!("{month_title} {year} – настоящее время"),
-            format!("{month_title} {year} – Настоящее время"),
+            format!("{month_lower} {year} - настоящее время"),
+            format!("{month_lower} {year} - Настоящее время"),
+            format!("{month_title} {year} - настоящее время"),
+            format!("{month_title} {year} - Настоящее время"),
         ]);
     }
     let mut injected_ru = false;

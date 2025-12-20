@@ -1,50 +1,56 @@
 # Alexey Belyakov
 
 ## Summary
-Engineering leader with an SRE mindset and a Rust background. I build cross-functional teams, standardize release engineering, and couple DevOps/SRE practices with people growth so regulated businesses get predictable delivery, lower risk, and faster ROI.
+Engineering leader with 15+ years in software and about five years in leadership, focused on regulated and high-trust product delivery. I build cross-functional backend, DevOps, and QA teams, align architecture and release governance, and keep reliability, security, and compliance expectations met.
 
 ## Core Skills
-People management and coaching • Cross-functional leadership • Program and portfolio management • Roadmaps • OKR/KPI • Rust • Actix Web • PostgreSQL • Docker • GitLab CI/CD • GitOps • Release governance • SRE • SLI/SLO/Error budgets • MTTR • Observability • Incident response • Golden environments • DevSecOps • SBOM • Dependency policy • Secure delivery • Compliance-ready SDLC
+People management and coaching • Cross-functional leadership • Program and portfolio management • Roadmaps • OKR/KPI • Rust • Actix Web • PostgreSQL • Redis • Docker • GitLab CI/CD • GitOps • Release governance • SRE • SLI/SLO and error-budget approach • MTTR • Observability • Incident response • Golden environments • DevSecOps • SBOM • Dependency policy • Secure delivery • Compliance-ready SDLC
 
 ## Experience
 
 ### Engineering Manager • [Inline Group](https://www.inlinegroup.ru/)
-*March 2023 – Present*
+*March 2023 - Present*
 
-Built and led cross-functional DevOps, backend, and QA teams to migrate a SAP-based procurement system from monolith to Rust microservices with reliable delivery. Established release governance, SLOs, and incident drills so cadence became predictable and MTTR stayed low. Replanned the portfolio to deliver a three-year roadmap in roughly 18 months, accelerating time to market and business impact.
+Led backend, DevOps, and QA delivery for migrating an Oracle/SAP-based procurement platform from monolith to Rust microservices.
 
-Standardized CI/CD, GitOps, and golden environments with mandatory checks to reduce release risk and cost. Shifted SDLC and runtime environments onto regulated Linux distributions to satisfy strict client compliance without losing delivery speed. Owned hiring, onboarding, and career growth for backend, DevOps, and QA, and kept budgets and timelines inside approved limits while adding DevSecOps guardrails.
+- Led a team scope of about 25-30 people, with about 12 direct backend reports; DevOps and QA were managed via team leads, and frontend work was coordinated through APIs.
+- Delivered about 20 services across domain and platform utilities such as logging, email, and shared components.
+- Designed per-service databases with PostgreSQL, Redis caching, RabbitMQ async integration, and forward-only schema migrations.
+- Built GitLab CI/CD with GitOps, reproducible builds, release tagging, and rollback practices; supported daily deployments across dev, stage, and release stands.
+- Expanded QA automation and API regression coverage; reduced the test pipeline from about 30 minutes to about 5-7 minutes via parallelization and test isolation.
+- Implemented compliance-ready delivery with regulated Linux distributions, a private artifact registry with pinned approvals, dependency scanning (cargo-audit) as a CI gate, and customer security reviews.
+- Defined SLI/SLO targets, MTTR tracking, and error-budget practices when services stabilized, prioritizing delivery reliability and security.
 
-**Stack:** Rust, Actix Web, RabbitMQ, PostgreSQL, Docker, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
+**Stack:** Rust, Actix Web, RabbitMQ, PostgreSQL, Redis, Docker, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
 
 ### Software Engineer • [Kaspersky](https://www.kaspersky.com/)
-*May 2020 – March 2023*
+*May 2020 - March 2023*
 
 Supported and extended a production blockchain voting service on Exonum, prioritizing improvements from user feedback. Added weight-based voting, streamlined ballot flows, and raised unit and integration test coverage. Simplified pipelines during a migration to Microsoft tooling and led refactors to keep the stack current.
 
 **Stack:** Rust, Exonum, Protobuf, Serde, Git.
 
 ### Software Engineer • [B2Broker](https://b2broker.com/)
-*November 2018 – March 2020*
+*November 2018 - March 2020*
 
 Built brokerage automation on MT4 and MT5 APIs. Delivered trade copiers in C++ and Go and a Multi Account Manager. Designed services to normalize and stream trading data with real-time guarantees. Built data collectors for statistical analysis.
 
 **Stack:** MSVC, CMake, Protobuf, gRPC, NATS, YAML, PostgreSQL, Vcpkg, Git.
 
 ### C++ Engineer • [ASCON](https://ascon.ru)
-*May 2016 – November 2018*
+*May 2016 - November 2018*
 
 Developed CAD libraries for KOMPAS. Built a Change View Plane feature for 3D workflows. Introduced an automated C++ and Python testing framework that reduced manual QA work. Led a refactor to C++17. Moved the organization from SVN to Git. Set up Scrum and documentation standards.
 
 **Stack:** MSVC, C++17, Python 3, Boost, PostgreSQL, Git, Jenkins.
 
 ### Earlier Roles
-- C++ Developer at Concerteza: SS7 sniffers and protocol parsers, Python-based integration tests.
+- C++ Developer at Concerteza: real-time protocol parsing for telecom signaling analytics up to about 1.5 Gbps per single thread, CPU and memory optimization, stable processing of continuous event streams, Python-based integration tests.
 - C++ & JavaScript Developer at LiveTex: Node.js bindings for PostgreSQL and ZeroMQ.
 - Junior C++ Developer at T4B: MetaTrader plugins and a management web app.
 
 ## Leadership System
-- Weekly portfolio reviews on KPI, SLO health, release risk, and budget.
+- Weekly portfolio reviews on KPI, SLI/SLO health, release risk, and budget.
 - Quarterly planning across product, engineering, ops, and compliance.
 - Continuous improvement via retrospectives, surveys, incident reviews, and small experiments.
 - Release readiness and reporting through Jira dashboards, Confluence scorecards, and concise memos.

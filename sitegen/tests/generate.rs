@@ -15,7 +15,7 @@ fn normalize_en(content: &str) -> String {
         r#"(?m)^(?P<indent>\s*)<p(?: class=['"]updated-at['"])?>(?:Last updated:\s*)?(?:\d{4}-\d{2}-\d{2})</p>"#,
     )
     .unwrap();
-    let dur_re = Regex::new(r"([A-Za-z]+ \d{4} – Present)\s+\([^)]*\)").unwrap();
+    let dur_re = Regex::new(r"([A-Za-z]+ \d{4} - Present)\s+\([^)]*\)").unwrap();
     let tmp = date_re.replace(content, "${indent}<p>DATE</p>");
     let tmp = dur_re.replace(&tmp, "$1 (DURATION)");
     tmp.to_string()
@@ -27,7 +27,7 @@ fn normalize_ru(content: &str) -> String {
     )
     .unwrap();
     let dur_re =
-        Regex::new(r"(\p{L}+ \d{4} – (?:настоящее время|Настоящее время|Present))\s*\([^)]*\)")
+        Regex::new(r"(\p{L}+ \d{4} - (?:настоящее время|Настоящее время|Present))\s*\([^)]*\)")
             .unwrap();
     let tmp = date_re.replace(content, "${indent}<p>DATE</p>");
     let tmp = dur_re.replace(&tmp, "$1 (DURATION)");
@@ -187,7 +187,7 @@ fn generates_expected_dist() {
     let expected_duration_en = format_duration_en(total_months);
     let expected_duration_ru = format_duration_ru(total_months);
 
-    let english_fragment = format!("{} – Present", start_date.format("%B %Y"));
+    let english_fragment = format!("{} - Present", start_date.format("%B %Y"));
     let english_duration_re = Regex::new(&format!(
         "{}\\s*\\(([^)]*)\\)",
         regex::escape(&english_fragment)
@@ -208,10 +208,10 @@ fn generates_expected_dist() {
     if let Some(month_name) = russian_month_name(start_month) {
         let month_title = capitalize_first(month_name);
         ru_fragments.extend([
-            format!("{month_name} {start_year} – настоящее время"),
-            format!("{month_name} {start_year} – Настоящее время"),
-            format!("{month_title} {start_year} – настоящее время"),
-            format!("{month_title} {start_year} – Настоящее время"),
+            format!("{month_name} {start_year} - настоящее время"),
+            format!("{month_name} {start_year} - Настоящее время"),
+            format!("{month_title} {start_year} - настоящее время"),
+            format!("{month_title} {start_year} - Настоящее время"),
         ]);
     }
     let mut ru_duration: Option<String> = None;

@@ -86,7 +86,7 @@ pub fn month_from_ru(name: &str) -> Option<u32> {
 /// The function expects the English CV Markdown at
 /// `profiles/cv/en/CV.MD` and
 /// looks for a list item starting with the month and year followed by
-/// an en dash or em dash and the word "Present" (English) or
+/// a hyphen, en dash, or em dash and the word "Present" (English) or
 /// "Настоящее время" (Russian).
 ///
 /// Returns a pair `(year, month)` on success.
@@ -102,6 +102,11 @@ pub fn read_inline_start() -> Result<(i32, u32), InlineStartError> {
                 line.trim()
                     .strip_prefix('*')
                     .and_then(|s| s.split_once('—'))
+            })
+            .or_else(|| {
+                line.trim()
+                    .strip_prefix('*')
+                    .and_then(|s| s.split_once('-'))
             })
         {
             let year_str = year_str.trim();
