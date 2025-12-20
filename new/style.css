@@ -93,13 +93,6 @@ body {
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.button.secondary {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--surface-border);
-    backdrop-filter: blur(8px);
-}
-
 .button:hover,
 .button:focus {
     transform: translateY(-1px);

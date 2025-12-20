@@ -23,8 +23,19 @@ Led backend, DevOps, and QA delivery for migrating an Oracle/SAP-based procureme
 
 **Stack:** Rust, Actix Web, RabbitMQ, PostgreSQL, Redis, Docker, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
 
+### Lead Rust Engineer • [YADRO](https://yadro.com/)
+*February 2022 - March 2023*
+
+Backup appliance with deduplication.
+
+- Led delivery of core product components and owned key architecture decisions for storage and restore.
+- Established team engineering practices: planning, reviews, quality standards, CI/CD, and automated testing to improve release predictability.
+- Mentored engineers and supported Rust adoption for former C++ developers through training and guidelines.
+- Owned performance and reliability outcomes: RocksDB and storage tuning, performance testing, incident analysis and root cause fixes.
+- Improved operational readiness via metrics, alerting, and clear documentation and runbooks.
+
 ### Software Engineer • [Kaspersky](https://www.kaspersky.com/)
-*May 2020 - March 2023*
+*May 2020 - February 2022*
 
 Supported and extended a production blockchain voting service on Exonum, prioritizing improvements from user feedback. Added weight-based voting, streamlined ballot flows, and raised unit and integration test coverage. Simplified pipelines during a migration to Microsoft tooling and led refactors to keep the stack current.
 

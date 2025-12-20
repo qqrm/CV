@@ -40,20 +40,6 @@ impl Language {
         }
     }
 
-    fn classic_label(self) -> &'static str {
-        match self {
-            Self::En => "Web version",
-            Self::Ru => "Веб-версия",
-        }
-    }
-
-    fn classic_url(self) -> &'static str {
-        match self {
-            Self::En => "https://qqrm.github.io/CV/",
-            Self::Ru => "https://qqrm.github.io/CV/ru/",
-        }
-    }
-
     fn download_label(self) -> &'static str {
         match self {
             Self::En => "Download PDF",
@@ -229,8 +215,7 @@ pub fn App() -> impl IntoView {
                     <a class="pill" href=ContactUrls::LINKEDIN target="_blank" rel="noopener">{move || contact_labels().linkedin}</a>
                 </div>
                 <div class="actions">
-                    <a class="button" href=move || language.get().classic_url()>{move || language.get().classic_label()}</a>
-                    <a class="button secondary" href=pdf_href>{move || language.get().download_label()}</a>
+                    <a class="button" href=pdf_href>{move || language.get().download_label()}</a>
                 </div>
             </header>
 
