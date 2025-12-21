@@ -1,2 +1,0 @@
-# LinkedIn About
-Engineering Manager focused on throughput, reliability, and people systems. I lead 10-20 engineer orgs shipping Rust microservices with strong SLOs and secure supply chains. Recent wins: doubled release frequency, −25 percent p95 lead time, −35 percent MTTR, dependency risk to zero. I build hiring loops, coaching culture, and clear delivery governance so teams scale without drama. Domains: procurement and catalog services, data pipelines, platform enablement. Open to EM and Head of Backend roles in EU and remote.
