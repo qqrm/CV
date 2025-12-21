@@ -1,3 +1,4 @@
+use reqwest::StatusCode;
 use reqwest::blocking::Client;
 use reqwest::header::CONTENT_TYPE;
 use scraper::{Html, Selector};
@@ -157,6 +158,34 @@ fn check_pdf(client: &Client, url: &Url, pdf_status: &mut Vec<String>, errors: &
     }
 }
 
+fn enqueue_optional_page(
+    client: &Client,
+    url: Url,
+    queue: &mut VecDeque<Url>,
+    errors: &mut Vec<String>,
+) {
+    match client.get(url.clone()).send() {
+        Ok(resp) => {
+            let status = resp.status();
+            if status.is_success() {
+                log_line(&format!("OK {}: {}", status, url));
+                queue.push_back(url);
+            } else if status == StatusCode::NOT_FOUND {
+                log_line(&format!("SKIP {}: {}", status, url));
+            } else {
+                let msg = format!("{} returned {}", url, status);
+                errors.push(msg.clone());
+                log_line(&format!("ERROR {}: {}", status, url));
+            }
+        }
+        Err(e) => {
+            let msg = format!("{} exception {}", url, e);
+            errors.push(msg.clone());
+            log_line(&format!("ERROR exception: {} - {}", url, e));
+        }
+    }
+}
+
 fn main() -> std::process::ExitCode {
     let client = Client::builder()
         .timeout(Duration::from_secs(10))
@@ -170,7 +199,7 @@ fn main() -> std::process::ExitCode {
     let mut queue: VecDeque<Url> = VecDeque::new();
     queue.push_back(base.clone());
     if let Ok(ru_url) = base.join("ru/") {
-        queue.push_back(ru_url);
+        enqueue_optional_page(&client, ru_url, &mut queue, &mut errors);
     }
 
     while let Some(current) = queue.pop_front() {
