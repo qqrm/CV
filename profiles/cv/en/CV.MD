@@ -8,6 +8,21 @@ People management and coaching • Cross-functional leadership • Program and p
 
 ## Experience
 
+### Engineering Manager • Inline Group
+*March 2023 - Present*
+
+Led backend, DevOps, and QA delivery for migrating an Oracle/SAP-based procurement platform from monolith to Rust microservices.
+
+- Led a team scope of about 25-30 people, with about 12 direct backend reports; DevOps and QA were managed via team leads, and frontend work was coordinated through APIs.
+- Delivered about 20 services across domain and platform utilities such as logging, email, and shared components.
+- Designed per-service databases with PostgreSQL, Redis caching, RabbitMQ async integration, and forward-only schema migrations.
+- Built GitLab CI/CD with GitOps, reproducible builds, release tagging, and rollback practices; supported daily deployments across dev, stage, and release stands.
+- Expanded QA automation and API regression coverage; reduced the test pipeline from about 30 minutes to about 5-7 minutes via parallelization and test isolation.
+- Implemented compliance-ready delivery with regulated Linux distributions, a private artifact registry with pinned approvals, dependency scanning (cargo-audit) as a CI gate, and customer security reviews.
+- Defined SLI/SLO targets, MTTR tracking, and error-budget practices when services stabilized, prioritizing delivery reliability and security.
+
+**Stack:** Rust, Actix Web, RabbitMQ, PostgreSQL, Redis, Docker, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
+
 ### Lead Rust Engineer • [YADRO](https://yadro.com/)
 *February 2022 - March 2023*
 

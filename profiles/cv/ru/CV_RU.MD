@@ -8,6 +8,21 @@
 
 ## Опыт
 
+### Engineering Manager • Inline Group
+*март 2023 - настоящее время*
+
+Руководил delivery backend, DevOps и QA по миграции закупочной платформы на Oracle/SAP с монолита на микросервисы на Rust.
+
+- Руководил командой порядка 25–30 человек, около 12 прямых backend-репортов; DevOps и QA управлялись через тимлидов, фронтенд согласовывался через API.
+- Доставил около 20 сервисов домена и платформенных утилит: логирование, email и общие компоненты.
+- Спроектировал per-service базы данных с PostgreSQL, кешированием Redis, асинхронной интеграцией RabbitMQ и forward-only миграциями схемы.
+- Построил GitLab CI/CD с GitOps, воспроизводимыми сборками, релизными тегами и практиками отката; поддерживал ежедневные деплои на dev, stage и release стенды.
+- Расширил QA-автоматизацию и регрессию API; сократил тестовый pipeline примерно с 30 минут до 5–7 минут за счет параллелизации и изоляции тестов.
+- Внедрил комплаенс-ready delivery: регулируемые Linux-дистрибутивы, приватный реестр артефактов с закрепленными approvals, сканирование зависимостей (cargo-audit) как CI gate и customer security reviews.
+- Определил цели SLI/SLO, мониторинг MTTR и практики error-budget после стабилизации сервисов, с упором на надежность и безопасность доставки.
+
+**Стек:** Rust, Actix Web, RabbitMQ, PostgreSQL, Redis, Docker, GitLab CI/CD, Odoo, Grafana, Sentry, Swagger, Telegram Bot API, Mattermost, Clippy, cargo-audit, SonarQube.
+
 ### Ведущий Rust инженер • [YADRO](https://yadro.com/)
 *февраль 2022 - март 2023*
 
