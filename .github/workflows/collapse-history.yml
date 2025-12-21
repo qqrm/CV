@@ -1,0 +1,51 @@
+name: collapse-history
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collapse-history-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  collapse:
+    name: Collapse history to single commit
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Recreate single snapshot commit
+        shell: bash
+        env:
+          GIT_AUTHOR_NAME: History Collapser
+          GIT_AUTHOR_EMAIL: actions@github.com
+          GIT_COMMITTER_NAME: History Collapser
+          GIT_COMMITTER_EMAIL: actions@github.com
+        run: |
+          set -euo pipefail
+
+          if git rev-parse HEAD^ >/dev/null 2>&1; then
+            echo "Current HEAD has parents; rewriting history to a single commit."
+          else
+            echo "Repository already reduced to a single commit; nothing to do."
+            exit 0
+          fi
+
+          snapshot_message="Snapshot: ${GITHUB_SHA}"
+          tree_sha=$(git rev-parse HEAD^{tree})
+          new_commit=$(git commit-tree "${tree_sha}" -m "${snapshot_message}")
+
+          echo "Pushing rewritten history based on commit ${new_commit}."
+          git push origin "${new_commit}:main" --force-with-lease
