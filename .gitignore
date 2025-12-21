@@ -1,0 +1,25 @@
+**/*.aux
+**/*.pdf
+**/*.fdb_latexmk
+**/*.fls
+**/*.log
+**/*.out
+**/*.synctex.gz
+# Rust build
+/target/
+sitegen/target/
+TOOLS/site_check/target/
+scripts/convert_cv/target/
+site_check.log
+/index.html
+docs/index.html
+docs/avatar.jpg
+typst/**/*.pdf
+docs/**/*.pdf
+
+# Build outputs
+/dist/
+docs/ru/index.html
+# Local configuration
+AGENTS.md
+mcp.json
