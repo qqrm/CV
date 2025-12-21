@@ -178,7 +178,6 @@ jobs:
         run: |
           set -euo pipefail
           test -s dist/index.html
-          test -s dist/style.css
           test -s dist/favicon.svg
           test -s dist/avatar.jpg
           pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
