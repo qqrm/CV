@@ -3,9 +3,6 @@
 ## Резюме
 Инженерный руководитель с более чем 15 годами в разработке и около пяти лет в лидерстве, ориентирован на регулируемые и высокодоверенные продукты. Собираю кросс-функциональные backend, DevOps и QA команды, выравниваю архитектуру и управление релизами, удерживаю надежность, безопасность и комплаенс.
 
-## Ключевые навыки
-Управление людьми и менторство • Кросс-функциональное лидерство • Управление программами и портфелем • Дорожные карты • OKR/KPI • Rust • Actix Web • PostgreSQL • Redis • Docker • GitLab CI/CD • GitOps • Управление выпуском изменений • SRE • Показатели надежности SLI/SLO и подход к бюджетам ошибок • MTTR • Наблюдаемость • Реагирование на инциденты • Эталонные окружения • DevSecOps • SBOM • Политики зависимостей • Безопасная поставка • Процесс разработки и выпуска под требования комплаенса
-
 ## Опыт
 
 ### Engineering Manager • Inline Group
@@ -70,4 +67,4 @@
 МГТУ им. Баумана, ИУ7 Программная инженерия • Специалист, 2015
 
 ## Ключевые слова
-People Management • Rust • DevOps • SRE • Reliability • SLO • MTTR • CI/CD • GitOps • Release Engineering • Compliance • Program Management • Supply Chain Security • Hiring • Coaching • Migration Leadership
+People Management • Rust • DevOps • SRE • Reliability • SLO • MTTR • CI/CD • GitOps • Release Engineering • Compliance • Program Management • Supply Chain Security • Hiring • Coaching • Migration Leadership • Cross-Functional Leadership • Portfolio Management • Roadmaps • OKR/KPI • Release Governance • SLI • Error Budgets • Observability • Incident Response • Golden Environments • DevSecOps • SBOM • Dependency Policy • Secure Delivery • Compliance-Ready SDLC

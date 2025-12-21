@@ -3,9 +3,6 @@
 ## Summary
 Engineering leader with 15+ years in software and about five years in leadership, focused on regulated and high-trust product delivery. I build cross-functional backend, DevOps, and QA teams, align architecture and release governance, and keep reliability, security, and compliance expectations met.
 
-## Core Skills
-People management and coaching • Cross-functional leadership • Program and portfolio management • Roadmaps • OKR/KPI • Rust • Actix Web • PostgreSQL • Redis • Docker • GitLab CI/CD • GitOps • Release governance • SRE • SLI/SLO and error-budget approach • MTTR • Observability • Incident response • Golden environments • DevSecOps • SBOM • Dependency policy • Secure delivery • Compliance-ready SDLC
-
 ## Experience
 
 ### Engineering Manager • Inline Group
@@ -70,4 +67,4 @@ Developed CAD libraries for KOMPAS. Built a Change View Plane feature for 3D wor
 Bauman Moscow State Technical University, IU7 Software Engineering • Specialist, 2015
 
 ## Keywords
-People Management • Rust • DevOps • SRE • Reliability • SLO • MTTR • CI/CD • GitOps • Release Engineering • Compliance • Program Management • Supply Chain Security • Hiring • Coaching • Migration Leadership
+People Management • Rust • DevOps • SRE • Reliability • SLO • MTTR • CI/CD • GitOps • Release Engineering • Compliance • Program Management • Supply Chain Security • Hiring • Coaching • Migration Leadership • Cross-Functional Leadership • Portfolio Management • Roadmaps • OKR/KPI • Release Governance • SLI • Error Budgets • Observability • Incident Response • Golden Environments • DevSecOps • SBOM • Dependency Policy • Secure Delivery • Compliance-Ready SDLC
