@@ -147,9 +147,10 @@ jobs:
 
       - name: Build wasm site
         shell: bash
+        working-directory: new
         run: |
           set -euo pipefail
-          trunk build --release --config new/Trunk.toml
+          trunk build --release --config Trunk.toml
 
       - name: Assemble site output
         shell: bash
