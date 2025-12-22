@@ -5,7 +5,7 @@ Engineering leader with 15+ years in software and about five years in leadership
 
 ## Experience
 
-### Engineering Manager • Inline Group
+### Engineering Manager • [Inline Group](https://www.inlinegroup.ru/)
 *March 2023 - Present*
 
 Led backend, DevOps, and QA delivery for migrating an Oracle/SAP-based procurement platform from monolith to Rust microservices.

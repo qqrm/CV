@@ -5,7 +5,7 @@
 
 ## Опыт
 
-### Engineering Manager • Inline Group
+### Engineering Manager • [Inline Group](https://www.inlinegroup.ru/)
 *март 2023 - настоящее время*
 
 Руководил delivery backend, DevOps и QA по миграции закупочной платформы на Oracle/SAP с монолита на микросервисы на Rust.
