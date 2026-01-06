@@ -43,17 +43,9 @@ jobs:
         if: ${{ inputs.builder == 'typst' }}
         uses: ./.github/actions/build-pdfs
 
-      - name: Cache cargo for TypePDF
+      - name: Setup Rust toolchain and cache
         if: ${{ inputs.builder == 'typepdf' }}
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            ~/.cargo/bin
-          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
+        uses: ./.github/actions/setup-rust
 
       - name: Install TypePDF
         if: ${{ inputs.builder == 'typepdf' }}

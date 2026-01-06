@@ -25,8 +25,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Rust cache
-        uses: Swatinem/rust-cache@v2
+      - name: Setup Rust toolchain and cache
+        uses: ./.github/actions/setup-rust
 
       - name: Build PDFs
         uses: ./.github/actions/build-pdfs

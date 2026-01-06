@@ -29,18 +29,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cache cargo registry and target
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            sitegen/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - name: Setup Rust toolchain and cache
+        uses: ./.github/actions/setup-rust
 
       - name: Build sitegen binary
         shell: bash
