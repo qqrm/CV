@@ -1,0 +1,54 @@
+name: 'Setup Typst and build PDFs'
+description: 'Install dependencies and build Typst PDFs.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Disable cargo progress
+      shell: bash
+      run: |
+        set -euo pipefail
+        echo "CARGO_TERM_PROGRESS_WHEN=${CARGO_TERM_PROGRESS_WHEN:-never}" >> "$GITHUB_ENV"
+
+    - name: Cache cargo
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          ~/.cargo/bin
+        key: ${{ runner.os }}-cargo-${{ hashFiles('sitegen/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+
+    - name: Install Typst
+      shell: bash
+      run: |
+        set -euo pipefail
+        if ! command -v typst >/dev/null 2>&1; then
+          # при желании можно зафиксировать версию, например:
+          # cargo install typst-cli --locked --version 0.11.0 --quiet
+          cargo install typst-cli --locked --quiet
+        fi
+
+    - name: Install Latin Modern fonts
+      shell: bash
+      run: |
+        set -euo pipefail
+        if command -v fc-list >/dev/null 2>&1 && fc-list | grep -qi "Latin Modern"; then
+          echo "Latin Modern fonts already installed"
+          exit 0
+        fi
+
+        sudo apt-get update
+        sudo apt-get install -y fontconfig fonts-lmodern
+
+    - name: Compile Typst PDFs
+      shell: bash
+      run: |
+        set -euo pipefail
+        shopt -s nullglob
+        for src in typst/en/*.typ typst/ru/*.typ; do
+          dest="${src%.typ}.pdf"
+          echo "Compiling $src -> $dest"
+          typst compile --root . "$src" "$dest"
+        done
