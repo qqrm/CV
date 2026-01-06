@@ -34,7 +34,7 @@ This repository implements an automated, multilingual CV generator and publisher
       bin/validate.rs
       parser.rs
       renderer.rs
-  content/avatar.jpg
+  content/avatar.png
   DOCS/
     style.css
     favicon.svg

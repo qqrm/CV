@@ -401,7 +401,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         fs::create_dir_all(dist_dir)?;
         info!("Created dist directory");
     }
-    fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
+    fs::copy("content/avatar.png", dist_dir.join("avatar.png"))?;
     info!("Copied avatar to dist directory");
     let today = Utc::now().date_naive();
     let date_str = today.format("%Y-%m-%d").to_string();
@@ -512,7 +512,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         name: "Alexey Belyakov",
         prefix: "",
         footer_text: &footer_text_en,
-        avatar_src: "avatar.jpg",
+        avatar_src: "avatar.png",
         html_body: &html_body_en,
         header_actions: &header_actions_en,
         lang_toggle_label: lang_toggle_en.0,
@@ -527,7 +527,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         name: "Алексей Беляков",
         prefix: "../",
         footer_text: &footer_text_ru,
-        avatar_src: "../avatar.jpg",
+        avatar_src: "../avatar.png",
         html_body: &html_body_ru,
         header_actions: &header_actions_ru,
         lang_toggle_label: lang_toggle_ru.0,

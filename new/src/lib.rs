@@ -198,7 +198,7 @@ pub fn App() -> impl IntoView {
             <header class="hero">
                 <h1>{move || language.get().name()}</h1>
                 <div class="avatar-wrapper">
-                    <img class="avatar" src="avatar.jpg" alt="Alexey Belyakov" />
+                    <img class="avatar" src="avatar.png" alt="Alexey Belyakov" />
                 </div>
                 <div class="contact-actions">
                     <a class="pill" href=ContactUrls::GITHUB target="_blank" rel="noopener">{move || contact_labels().github}</a>
