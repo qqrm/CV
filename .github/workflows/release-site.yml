@@ -169,7 +169,7 @@ jobs:
           set -euo pipefail
           test -s dist/index.html
           test -s dist/favicon.svg
-          test -s dist/avatar.png
+          test -s dist/avatar.jpg
           pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
           if [ "$pdf_count" -ne 4 ]; then
             echo "Expected 4 PDFs in dist but found $pdf_count" >&2
