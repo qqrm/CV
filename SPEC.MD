@@ -7,7 +7,7 @@
 
 ## 2. Authoritative Content Sources
 - `profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD` — canonical CV narratives in English and Russian.
-- `/content/avatar.png` plus `/DOCS/style.css` and `/DOCS/favicon.svg` — shared visual assets for PDFs and the static site.
+- `/content/avatar.jpg` plus `/DOCS/style.css` and `/DOCS/favicon.svg` — shared visual assets for PDFs and the static site.
 
 ## 3. Templates and Layouts
 - Typst entry points under `typst/en` and `typst/ru` (`Belyakov_en.typ`, `Belyakov_en_dark.typ`, `Belyakov_ru.typ`, `Belyakov_ru_dark.typ`) produce localized PDFs using the shared template.

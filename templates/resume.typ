@@ -64,7 +64,7 @@
   #v(0.5em)
   #align(center)[
     #box(width: 5cm, height: 5cm, radius: 2.5cm, clip: true, stroke: 0.75pt + palette.muted)[
-      #image("../content/avatar.png", width: 5cm, height: 5cm)
+      #image("../content/avatar.jpg", width: 5cm, height: 5cm)
     ]
   ]
   #v(0.35em)
