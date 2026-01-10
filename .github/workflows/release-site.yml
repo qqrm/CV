@@ -89,6 +89,7 @@ jobs:
       - name: Install Rust toolchain with wasm target
         uses: dtolnay/rust-toolchain@stable
         with:
+          toolchain: 1.92.0
           targets: wasm32-unknown-unknown
 
       - name: Install Trunk

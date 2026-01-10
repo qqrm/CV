@@ -28,7 +28,8 @@ request is not `qqrm`, the pipeline stops immediately and no jobs run.
 - Validate and sanitize all external inputs when using `workflow_dispatch` or other triggers.
 
 ## Automatic pull request merging
-- The `.github/workflows/auto_merge.yml` workflow merges pull requests as soon as all checks succeed.
+- Dependabot manages Rust toolchain updates via `.github/dependabot.yml`.
+- The `.github/workflows/dependabot-automerge.yml` workflow enables auto-merge for Dependabot PRs once all checks succeed.
 - Do not remove or disable this workflow. Auto-merge helps keep the main branch healthy.
 
 ## Workflow and action naming scheme

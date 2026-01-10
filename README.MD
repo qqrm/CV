@@ -14,4 +14,6 @@ automatically converted into PDFs and a static website.
 
 All build instructions are located in the `typst` folder.
 
+Rust toolchain updates are handled by Dependabot via `.github/dependabot.yml`.
+
 For the Russian README, see [README_RU.MD](./README_RU.MD).
