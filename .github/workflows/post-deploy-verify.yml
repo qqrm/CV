@@ -1,0 +1,53 @@
+name: post-deploy-verify
+
+on:
+  workflow_run:
+    workflows: [release-site]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: post-deploy-verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-deployed-pdfs:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust toolchain and cache
+        uses: ./.github/actions/setup-rust
+
+      - name: Verify deployed PDFs after release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          max_attempts=10
+          attempt=1
+
+          while [ "$attempt" -le "$max_attempts" ]; do
+            echo "Attempt $attempt/$max_attempts: checking deployed PDFs"
+
+            if cargo test --manifest-path sitegen/Cargo.toml --test pdf_remote -- --ignored --nocapture; then
+              echo "Deployed PDF verification passed"
+              exit 0
+            fi
+
+            if [ "$attempt" -eq "$max_attempts" ]; then
+              echo "Deployed PDF verification failed after $max_attempts attempts" >&2
+              exit 1
+            fi
+
+            echo "Deployment may still be propagating; retrying in 30s"
+            sleep 30
+            attempt=$((attempt + 1))
+          done

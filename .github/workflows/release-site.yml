@@ -89,8 +89,15 @@ jobs:
       - name: Install Rust toolchain with wasm target
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: 1.92.0
           targets: wasm32-unknown-unknown
+
+      - name: Verify active Rust toolchain and wasm target
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustc -Vv
+          rustup show active-toolchain
+          rustup target list --installed | grep wasm32-unknown-unknown
 
       - name: Install Trunk
         uses: jetli/trunk-action@v0.5.0
