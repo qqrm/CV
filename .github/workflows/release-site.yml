@@ -210,6 +210,12 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+      - name: Validate deployed PDFs remotely
+        shell: bash
+        run: |
+          set -euo pipefail
+          cargo test --manifest-path sitegen/Cargo.toml --test pdf_remote -- --ignored --quiet
+
       - name: Delete previous releases
         env:
           GITHUB_TOKEN: ${{ github.token }}

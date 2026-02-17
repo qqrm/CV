@@ -38,6 +38,7 @@ impl Drop for DistGuard {
 
 #[test]
 #[serial_test::serial]
+#[ignore = "requires already deployed PDFs and must run only post-deploy"]
 fn deployed_pdfs_are_real() {
     let crate_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
     let project_root = crate_dir.parent().expect("project root");
