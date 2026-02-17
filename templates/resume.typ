@@ -11,6 +11,7 @@
   email_url: CONTACT_URLS.email,
   telegram_url: CONTACT_URLS.telegram,
   linkedin_url: CONTACT_URLS.linkedin,
+  site_path: "",
 ) = [
   #let themes = (
     light: (
@@ -89,7 +90,7 @@
   }
 
   #let base = "https://qqrm.github.io/CV/"
-  #let slug = if lang == "ru" { "ru/" } else { "" }
+  #let slug = if site_path == "" { if lang == "ru" { "ru/" } else { "" } } else { site_path }
   #let cv_url = base + slug
   #let cv_path = if md_path == none {
       if lang == "ru" {

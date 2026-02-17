@@ -172,8 +172,8 @@ jobs:
           test -s dist/favicon.svg
           test -s dist/avatar.jpg
           pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
-          if [ "$pdf_count" -ne 4 ]; then
-            echo "Expected 4 PDFs in dist but found $pdf_count" >&2
+          if [ "$pdf_count" -ne 8 ]; then
+            echo "Expected 8 PDFs in dist but found $pdf_count" >&2
             exit 1
           fi
 

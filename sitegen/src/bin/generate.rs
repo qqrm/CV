@@ -384,9 +384,111 @@ fn render_page(data: &TemplateData) -> Result<String, handlebars::RenderError> {
     hb.render_template(tmpl, data)
 }
 
+struct LocaleConfig<'a> {
+    lang: &'a str,
+    title: &'a str,
+    name: &'a str,
+    markdown_path: &'a str,
+    output_dir: &'a str,
+    prefix: &'a str,
+    avatar_src: &'a str,
+    body_link_from: &'a str,
+    body_link_to: &'a str,
+    header_pdf_prefix: &'a str,
+    lang_toggle_label: &'a str,
+    lang_toggle_target: &'a str,
+    lang_toggle_current: &'a str,
+    lang_toggle_other: &'a str,
+}
+
+struct ProfileConfig<'a> {
+    sitemap_path: &'a str,
+    pdf_name_prefix: &'a str,
+    en: LocaleConfig<'a>,
+    ru: LocaleConfig<'a>,
+}
+
+fn build_header_actions(pdf_prefix: &str, is_ru: bool) -> String {
+    let download_label = if is_ru { "Скачать" } else { "Download" };
+    let email_label = if is_ru { "Почта" } else { "Email" };
+    format!(
+        "<nav class=\"header-actions\">\
+<a class=\"action\" href=\"{pdf_prefix}_light.pdf\" data-light-href=\"{pdf_prefix}_light.pdf\" data-dark-href=\"{pdf_prefix}_dark.pdf\" data-light-label=\"{download_label}\" data-dark-label=\"{download_label}\">{download_label}</a>\
+<a class=\"action\" href=\"{GITHUB_URL}\" rel=\"noopener\">GitHub</a>\
+<a class=\"action\" href=\"{EMAIL_URL}\">{email_label}</a>\
+<a class=\"action\" href=\"{TELEGRAM_URL}\" rel=\"noopener\">Telegram</a>\
+<a class=\"action\" href=\"{LINKEDIN_URL}\" rel=\"noopener\">LinkedIn</a>\
+</nav>"
+    )
+}
+
+fn render_markdown_html(
+    locale: &LocaleConfig,
+    duration_data: &Option<(String, String, String, Vec<String>)>,
+) -> Result<String, Box<dyn Error>> {
+    let markdown = fs::read_to_string(locale.markdown_path)?;
+    let parser = CmarkParser::new_ext(&markdown, Options::all());
+    let mut html_body = String::new();
+    push_html(&mut html_body, parser);
+
+    html_body = html_body.replace(locale.body_link_from, locale.body_link_to);
+
+    for theme in THEME_VARIANTS {
+        let base_en_pdf = format!("{PDF_BASE_URL}Belyakov_en_{theme}.pdf");
+        let base_ru_pdf = format!("{PDF_BASE_URL}Belyakov_ru_{theme}.pdf");
+        let rust_en_pdf = format!("{PDF_BASE_URL}Belyakov_rustdev_en_{theme}.pdf");
+        let rust_ru_pdf = format!("{PDF_BASE_URL}Belyakov_rustdev_ru_{theme}.pdf");
+
+        html_body = html_body.replace(
+            &base_en_pdf,
+            &format!("{}Belyakov_en_{theme}.pdf", locale.prefix),
+        );
+        html_body = html_body.replace(
+            &base_ru_pdf,
+            &format!("{}Belyakov_ru_{theme}.pdf", locale.prefix),
+        );
+        html_body = html_body.replace(
+            &rust_en_pdf,
+            &format!("{}Belyakov_rustdev_en_{theme}.pdf", locale.prefix),
+        );
+        html_body = html_body.replace(
+            &rust_ru_pdf,
+            &format!("{}Belyakov_rustdev_ru_{theme}.pdf", locale.prefix),
+        );
+    }
+
+    if let Some((english_fragment, duration_en, duration_ru, ru_fragments)) = duration_data {
+        if locale.lang == "en" {
+            if !inject_duration(&mut html_body, english_fragment, duration_en) {
+                warn!(
+                    "English inline duration fragment '{english_fragment}' not found in generated HTML"
+                );
+            }
+        } else {
+            let mut injected_ru = false;
+            for fragment in ru_fragments {
+                if inject_duration(&mut html_body, fragment, duration_ru) {
+                    injected_ru = true;
+                    break;
+                }
+            }
+            if !injected_ru {
+                warn!("Russian inline duration fragment not found in generated HTML");
+            }
+        }
+    }
+
+    if let Some(end) = html_body.find("</h1>") {
+        html_body = html_body[end + 5..].trim_start().to_string();
+    }
+    annotate_resume_links(&mut html_body);
+    Ok(html_body)
+}
+
 fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
     info!("Starting site generation");
+
     let inline_start = match read_inline_start() {
         Ok(value) => Some(value),
         Err(e) => {
@@ -394,33 +496,25 @@ fn main() -> Result<(), Box<dyn Error>> {
             None
         }
     };
-    let base_url = PDF_BASE_URL;
-    let sitemap_urls = [base_url.to_string(), format!("{base_url}ru/")];
+
     let dist_dir = Path::new("dist");
     if !dist_dir.exists() {
         fs::create_dir_all(dist_dir)?;
-        info!("Created dist directory");
     }
+
     fs::copy("content/avatar.jpg", dist_dir.join("avatar.jpg"))?;
-    info!("Copied avatar to dist directory");
+    if Path::new("DOCS/style.css").exists() {
+        fs::copy("DOCS/style.css", dist_dir.join("style.css"))?;
+    }
+    if Path::new("DOCS/favicon.svg").exists() {
+        fs::copy("DOCS/favicon.svg", dist_dir.join("favicon.svg"))?;
+    }
+
     let today = Utc::now().date_naive();
     let date_str = today.format("%Y-%m-%d").to_string();
     let footer_text_en = format!("Last updated: {}", date_str);
     let footer_text_ru = format!("Последнее редактирование: {}", date_str);
-    // Prepare HTML bodies
-    let markdown_input = fs::read_to_string("profiles/cv/en/CV.MD")?;
-    let parser = CmarkParser::new_ext(&markdown_input, Options::all());
-    let mut html_body_en = String::new();
-    push_html(&mut html_body_en, parser);
-    html_body_en = html_body_en.replace("../ru/CV_RU.MD", "ru/");
-    for theme in THEME_VARIANTS {
-        let en_pdf = format!("{PDF_BASE_URL}Belyakov_en_{theme}.pdf");
-        let ru_pdf = format!("{PDF_BASE_URL}Belyakov_ru_{theme}.pdf");
-        let en_local = format!("Belyakov_en_{theme}.pdf");
-        let ru_local = format!("Belyakov_ru_{theme}.pdf");
-        html_body_en = html_body_en.replace(&en_pdf, &en_local);
-        html_body_en = html_body_en.replace(&ru_pdf, &ru_local);
-    }
+
     let duration_data = inline_start.and_then(|(year, month)| {
         let start_date = NaiveDate::from_ymd_opt(year, month, 1)?;
         let total_months = (today.year() - start_date.year()) * 12
@@ -430,11 +524,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         let english_fragment = format!("{} - Present", start_date.format("%B %Y"));
         let mut ru_fragments = vec![english_fragment.clone()];
         if let Some(month_name) = russian_month_name(month) {
-            let month_lower = month_name;
-            let month_title = capitalize_first(month_lower);
+            let month_title = capitalize_first(month_name);
             ru_fragments.extend([
-                format!("{month_lower} {year} - настоящее время"),
-                format!("{month_lower} {year} - Настоящее время"),
+                format!("{month_name} {year} - настоящее время"),
+                format!("{month_name} {year} - Настоящее время"),
                 format!("{month_title} {year} - настоящее время"),
                 format!("{month_title} {year} - Настоящее время"),
             ]);
@@ -442,133 +535,136 @@ fn main() -> Result<(), Box<dyn Error>> {
         Some((english_fragment, duration_en, duration_ru, ru_fragments))
     });
 
-    if let Some((english_fragment, duration_en, _, _)) = &duration_data
-        && !inject_duration(&mut html_body_en, english_fragment, duration_en)
-    {
-        warn!("English inline duration fragment '{english_fragment}' not found in generated HTML");
-    }
-    if let Some(end) = html_body_en.find("</h1>") {
-        html_body_en = html_body_en[end + 5..].trim_start().to_string();
-    }
-    annotate_resume_links(&mut html_body_en);
+    let profiles = [
+        ProfileConfig {
+            sitemap_path: "",
+            pdf_name_prefix: "Belyakov",
+            en: LocaleConfig {
+                lang: "en",
+                title: "Alexey Belyakov - CV",
+                name: "Alexey Belyakov",
+                markdown_path: "profiles/cv/en/CV.MD",
+                output_dir: "",
+                prefix: "",
+                avatar_src: "avatar.jpg",
+                body_link_from: "../ru/CV_RU.MD",
+                body_link_to: "ru/",
+                header_pdf_prefix: "Belyakov_en",
+                lang_toggle_label: "Switch to Russian version",
+                lang_toggle_target: "ru/",
+                lang_toggle_current: "EN",
+                lang_toggle_other: "RU",
+            },
+            ru: LocaleConfig {
+                lang: "ru",
+                title: "Алексей Беляков - Резюме",
+                name: "Алексей Беляков",
+                markdown_path: "profiles/cv/ru/CV_RU.MD",
+                output_dir: "ru",
+                prefix: "../",
+                avatar_src: "../avatar.jpg",
+                body_link_from: "../en/CV.MD",
+                body_link_to: "../",
+                header_pdf_prefix: "../Belyakov_ru",
+                lang_toggle_label: "Переключить на английскую версию",
+                lang_toggle_target: "../",
+                lang_toggle_current: "RU",
+                lang_toggle_other: "EN",
+            },
+        },
+        ProfileConfig {
+            sitemap_path: "rust-developer/",
+            pdf_name_prefix: "Belyakov_rustdev",
+            en: LocaleConfig {
+                lang: "en",
+                title: "Alexey Belyakov - Rust Developer CV",
+                name: "Alexey Belyakov",
+                markdown_path: "profiles/rust-developer/en/CV.MD",
+                output_dir: "rust-developer",
+                prefix: "../",
+                avatar_src: "../avatar.jpg",
+                body_link_from: "../ru/CV_RU.MD",
+                body_link_to: "ru/",
+                header_pdf_prefix: "../Belyakov_rustdev_en",
+                lang_toggle_label: "Switch to Russian version",
+                lang_toggle_target: "ru/",
+                lang_toggle_current: "EN",
+                lang_toggle_other: "RU",
+            },
+            ru: LocaleConfig {
+                lang: "ru",
+                title: "Алексей Беляков - Rust Developer Резюме",
+                name: "Алексей Беляков",
+                markdown_path: "profiles/rust-developer/ru/CV_RU.MD",
+                output_dir: "rust-developer/ru",
+                prefix: "../../",
+                avatar_src: "../../avatar.jpg",
+                body_link_from: "../en/CV.MD",
+                body_link_to: "../",
+                header_pdf_prefix: "../../Belyakov_rustdev_ru",
+                lang_toggle_label: "Переключить на английскую версию",
+                lang_toggle_target: "../",
+                lang_toggle_current: "RU",
+                lang_toggle_other: "EN",
+            },
+        },
+    ];
 
-    let markdown_ru = fs::read_to_string("profiles/cv/ru/CV_RU.MD")?;
-    let parser_ru = CmarkParser::new_ext(&markdown_ru, Options::all());
-    let mut html_body_ru = String::new();
-    push_html(&mut html_body_ru, parser_ru);
-    html_body_ru = html_body_ru.replace("../en/CV.MD", "../");
-    for theme in THEME_VARIANTS {
-        let ru_pdf = format!("{PDF_BASE_URL}Belyakov_ru_{theme}.pdf");
-        let en_pdf = format!("{PDF_BASE_URL}Belyakov_en_{theme}.pdf");
-        let ru_local = format!("../Belyakov_ru_{theme}.pdf");
-        let en_local = format!("../Belyakov_en_{theme}.pdf");
-        html_body_ru = html_body_ru.replace(&ru_pdf, &ru_local);
-        html_body_ru = html_body_ru.replace(&en_pdf, &en_local);
-    }
-    if let Some((_, _, duration_ru, ru_fragments)) = &duration_data {
-        let mut injected_ru = false;
-        for fragment in ru_fragments {
-            if inject_duration(&mut html_body_ru, fragment, duration_ru) {
-                injected_ru = true;
-                break;
-            }
+    let mut sitemap_urls = vec![PDF_BASE_URL.to_string(), format!("{PDF_BASE_URL}ru/")];
+
+    for profile in &profiles {
+        for locale in [&profile.en, &profile.ru] {
+            let html_body = render_markdown_html(locale, &duration_data)?;
+            let header_actions =
+                build_header_actions(locale.header_pdf_prefix, locale.lang == "ru");
+            let footer_text = if locale.lang == "ru" {
+                &footer_text_ru
+            } else {
+                &footer_text_en
+            };
+            let page = render_page(&TemplateData {
+                lang: locale.lang,
+                title: locale.title,
+                name: locale.name,
+                prefix: locale.prefix,
+                footer_text,
+                avatar_src: locale.avatar_src,
+                html_body: &html_body,
+                header_actions: &header_actions,
+                lang_toggle_label: locale.lang_toggle_label,
+                lang_toggle_target: locale.lang_toggle_target,
+                lang_toggle_current: locale.lang_toggle_current,
+                lang_toggle_other: locale.lang_toggle_other,
+            })?;
+
+            let out_dir = dist_dir.join(locale.output_dir);
+            fs::create_dir_all(&out_dir)?;
+            fs::write(out_dir.join("index.html"), page)?;
         }
-        if !injected_ru {
-            warn!("Russian inline duration fragment not found in generated HTML");
+
+        if !profile.sitemap_path.is_empty() {
+            sitemap_urls.push(format!("{PDF_BASE_URL}{}", profile.sitemap_path));
+            sitemap_urls.push(format!("{PDF_BASE_URL}{}ru/", profile.sitemap_path));
+        }
+
+        for theme in THEME_VARIANTS {
+            let en_name = format!("{}_en_{theme}.pdf", profile.pdf_name_prefix);
+            let ru_name = format!("{}_ru_{theme}.pdf", profile.pdf_name_prefix);
+            let en_src = Path::new("typst/en").join(&en_name);
+            let ru_src = Path::new("typst/ru").join(&ru_name);
+            let en_dst = dist_dir.join(&en_name);
+            let ru_dst = dist_dir.join(&ru_name);
+            compile_and_copy_pdf(&en_src, &en_dst)?;
+            compile_and_copy_pdf(&ru_src, &ru_dst)?;
         }
     }
-    if let Some(end) = html_body_ru.find("</h1>") {
-        html_body_ru = html_body_ru[end + 5..].trim_start().to_string();
-    }
-    annotate_resume_links(&mut html_body_ru);
 
-    let header_actions_en = format!(
-        "<nav class=\"header-actions\">\
-<a class=\"action\" href=\"Belyakov_en_light.pdf\" data-light-href=\"Belyakov_en_light.pdf\" data-dark-href=\"Belyakov_en_dark.pdf\" data-light-label=\"Download\" data-dark-label=\"Download\">Download</a>\
-<a class=\"action\" href=\"{GITHUB_URL}\" rel=\"noopener\">GitHub</a>\
-<a class=\"action\" href=\"{EMAIL_URL}\">Email</a>\
-<a class=\"action\" href=\"{TELEGRAM_URL}\" rel=\"noopener\">Telegram</a>\
-<a class=\"action\" href=\"{LINKEDIN_URL}\" rel=\"noopener\">LinkedIn</a>\
-</nav>"
-    );
-
-    let header_actions_ru = format!(
-        "<nav class=\"header-actions\">\
-<a class=\"action\" href=\"../Belyakov_ru_light.pdf\" data-light-href=\"../Belyakov_ru_light.pdf\" data-dark-href=\"../Belyakov_ru_dark.pdf\" data-light-label=\"Скачать\" data-dark-label=\"Скачать\">Скачать</a>\
-<a class=\"action\" href=\"{GITHUB_URL}\" rel=\"noopener\">GitHub</a>\
-<a class=\"action\" href=\"{EMAIL_URL}\">Почта</a>\
-<a class=\"action\" href=\"{TELEGRAM_URL}\" rel=\"noopener\">Telegram</a>\
-<a class=\"action\" href=\"{LINKEDIN_URL}\" rel=\"noopener\">LinkedIn</a>\
-</nav>"
-    );
-
-    let lang_toggle_en = ("Switch to Russian version", "ru/", "EN", "RU");
-    let lang_toggle_ru = ("Переключить на английскую версию", "../", "RU", "EN");
-
-    // Render base pages
-    let html_template = render_page(&TemplateData {
-        lang: "en",
-        title: "Alexey Belyakov - CV",
-        name: "Alexey Belyakov",
-        prefix: "",
-        footer_text: &footer_text_en,
-        avatar_src: "avatar.jpg",
-        html_body: &html_body_en,
-        header_actions: &header_actions_en,
-        lang_toggle_label: lang_toggle_en.0,
-        lang_toggle_target: lang_toggle_en.1,
-        lang_toggle_current: lang_toggle_en.2,
-        lang_toggle_other: lang_toggle_en.3,
-    })?;
-
-    let html_template_ru = render_page(&TemplateData {
-        lang: "ru",
-        title: "Алексей Беляков - Резюме",
-        name: "Алексей Беляков",
-        prefix: "../",
-        footer_text: &footer_text_ru,
-        avatar_src: "../avatar.jpg",
-        html_body: &html_body_ru,
-        header_actions: &header_actions_ru,
-        lang_toggle_label: lang_toggle_ru.0,
-        lang_toggle_target: lang_toggle_ru.1,
-        lang_toggle_current: lang_toggle_ru.2,
-        lang_toggle_other: lang_toggle_ru.3,
-    })?;
-
-    let docs_dir = Path::new("dist");
-    if !docs_dir.exists() {
-        fs::create_dir_all(docs_dir)?;
-    }
-    if Path::new("DOCS/style.css").exists() {
-        fs::copy("DOCS/style.css", docs_dir.join("style.css"))?;
-    }
-    if Path::new("DOCS/favicon.svg").exists() {
-        fs::copy("DOCS/favicon.svg", docs_dir.join("favicon.svg"))?;
-    }
-    for theme in THEME_VARIANTS {
-        let en_name = format!("Belyakov_en_{}.pdf", theme);
-        let ru_name = format!("Belyakov_ru_{}.pdf", theme);
-        let en_src = Path::new("typst/en").join(&en_name);
-        let ru_src = Path::new("typst/ru").join(&ru_name);
-        let en_dst = docs_dir.join(&en_name);
-        let ru_dst = docs_dir.join(&ru_name);
-        compile_and_copy_pdf(&en_src, &en_dst)?;
-        compile_and_copy_pdf(&ru_src, &ru_dst)?;
-    }
-    fs::write(docs_dir.join("index.html"), &html_template)?;
-    info!("Wrote English HTML to dist/index.html");
-
-    let ru_root_dir = docs_dir.join("ru");
-    if !ru_root_dir.exists() {
-        fs::create_dir_all(&ru_root_dir)?;
-    }
-    fs::write(ru_root_dir.join("index.html"), &html_template_ru)?;
-    info!("Wrote Russian HTML to dist/ru/index.html");
-
-    let sitemap_content = sitemap_urls.join("\n") + "\n";
-    fs::write(docs_dir.join("sitemap.txt"), sitemap_content)?;
-    info!("Wrote sitemap to dist/sitemap.txt");
+    let sitemap_content = sitemap_urls.join(
+        "
+",
+    ) + "
+";
+    fs::write(dist_dir.join("sitemap.txt"), sitemap_content)?;
     info!("Site generation completed");
     Ok(())
 }
