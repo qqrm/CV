@@ -97,6 +97,7 @@ jobs:
           set -euo pipefail
           rustc -Vv
           rustup show active-toolchain
+          rustup target add wasm32-unknown-unknown
           rustup target list --installed | grep wasm32-unknown-unknown
 
       - name: Install Trunk
