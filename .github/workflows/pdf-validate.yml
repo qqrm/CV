@@ -44,7 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tool: [qpdf, pdfcpu]
+        tool: [qpdf, mutool, pdfinfo]
     permissions:
       contents: read
       actions: write
@@ -64,20 +64,21 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y qpdf
 
-      - name: Setup Go
-        if: matrix.tool == 'pdfcpu'
-        uses: actions/setup-go@v5
-        with:
-          go-version: stable
-          cache: true
-
-      - name: Install pdfcpu
-        if: matrix.tool == 'pdfcpu'
+      - name: Install mutool
+        if: matrix.tool == 'mutool'
         shell: bash
         run: |
           set -euo pipefail
-          go install github.com/pdfcpu/pdfcpu/cmd/pdfcpu@latest
-          # при желании можно зафиксировать версию вместо @latest
+          sudo apt-get update
+          sudo apt-get install -y mupdf-tools
+
+      - name: Install pdfinfo
+        if: matrix.tool == 'pdfinfo'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
 
       - name: Run qpdf checks
         if: matrix.tool == 'qpdf'
@@ -95,17 +96,42 @@ jobs:
           done
           exit "$status"
 
-      - name: Validate PDFs with pdfcpu
-        if: matrix.tool == 'pdfcpu'
+      - name: Validate PDFs with mutool
+        if: matrix.tool == 'mutool'
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p reports
           shopt -s nullglob globstar
+          status=0
           for pdf in typst/**/*.pdf; do
-            # Typst embeds fonts without a FontFamily descriptor, strict mode fails
-            pdfcpu validate -mode relaxed "$pdf" > "reports/$(basename "$pdf" .pdf).txt"
+            report="reports/$(basename "$pdf" .pdf).txt"
+            {
+              echo "== mutool info =="
+              mutool info "$pdf"
+              echo
+              echo "== mutool clean -d (parse/rewrite check) =="
+              mutool clean -d "$pdf" /tmp/$(basename "$pdf")
+            } > "$report" 2>&1 || status=1
           done
+          exit "$status"
+
+      - name: Validate PDFs with pdfinfo
+        if: matrix.tool == 'pdfinfo'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p reports
+          shopt -s nullglob globstar
+          status=0
+          for pdf in typst/**/*.pdf; do
+            report="reports/$(basename "$pdf" .pdf)-pdfinfo.txt"
+            {
+              echo "== pdfinfo =="
+              pdfinfo "$pdf"
+            } > "$report" 2>&1 || status=1
+          done
+          exit "$status"
 
       - name: Upload reports
         if: ${{ hashFiles('reports/*') != '' }}
