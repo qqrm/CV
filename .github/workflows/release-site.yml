@@ -109,7 +109,7 @@ jobs:
           version: v0.21.14
 
       - name: Download built assets
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: sitegen-assets
 
