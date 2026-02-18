@@ -104,7 +104,7 @@ jobs:
           rustup target list --installed | grep wasm32-unknown-unknown || true
 
       - name: Install Trunk
-        uses: jetli/trunk-action@v0.5.0
+        uses: jetli/trunk-action@v0.5.1
         with:
           version: v0.21.14
 
