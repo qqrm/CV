@@ -3,15 +3,6 @@
 ## Summary
 Rust software engineer with 13+ years in backend and platform engineering. I design and ship reliable services for high-load, high-trust domains: API contracts, integrations, resilience, production operations, and predictable releases. A strong side is applying AI in development through specs, engineering standards, verifiable acceptance criteria, and measurable automation.
 
-## Contacts
-- Saint Petersburg, Novocherkasskaya metro area
-- Open to relocation to Moscow; available for occasional business trips
-- Work format: remote, hybrid
-- Phone: +7 (911) 261-70-72
-- Email: [qqrm@vivaldi.net](mailto:qqrm@vivaldi.net)
-- Telegram: [@leqqrm](https://t.me/leqqrm)
-- GitHub: [github.com/qqrm](https://github.com/qqrm)
-
 ## Experience
 
 ### Rust Software Engineer • [Inline Group](https://www.inlinegroup.ru/)
