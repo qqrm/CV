@@ -4,6 +4,8 @@ use wasm_bindgen::prelude::wasm_bindgen;
 
 const CV_MARKDOWN_EN: &str = include_str!("../../profiles/cv/en/CV.MD");
 const CV_MARKDOWN_RU: &str = include_str!("../../profiles/cv/ru/CV_RU.MD");
+const RUST_CV_MARKDOWN_EN: &str = include_str!("../../profiles/rust-developer/en/CV.MD");
+const RUST_CV_MARKDOWN_RU: &str = include_str!("../../profiles/rust-developer/ru/CV_RU.MD");
 
 struct ContactLabels {
     github: &'static str,
@@ -16,6 +18,39 @@ struct ContactLabels {
 enum Language {
     En,
     Ru,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Profile {
+    EngineeringManager,
+    RustDeveloper,
+}
+
+impl Profile {
+    fn markdown(self, lang: Language) -> &'static str {
+        match (self, lang) {
+            (Self::EngineeringManager, Language::En) => CV_MARKDOWN_EN,
+            (Self::EngineeringManager, Language::Ru) => CV_MARKDOWN_RU,
+            (Self::RustDeveloper, Language::En) => RUST_CV_MARKDOWN_EN,
+            (Self::RustDeveloper, Language::Ru) => RUST_CV_MARKDOWN_RU,
+        }
+    }
+
+    fn pdf_name_prefix(self) -> &'static str {
+        match self {
+            Self::EngineeringManager => "Belyakov",
+            Self::RustDeveloper => "Belyakov_rustdev",
+        }
+    }
+
+    fn target_path(self, lang: Language) -> &'static str {
+        match (self, lang) {
+            (Self::EngineeringManager, Language::En) => "/CV/",
+            (Self::EngineeringManager, Language::Ru) => "/CV/ru/",
+            (Self::RustDeveloper, Language::En) => "/CV/rust-developer/",
+            (Self::RustDeveloper, Language::Ru) => "/CV/rust-developer/ru/",
+        }
+    }
 }
 
 impl Language {
@@ -133,15 +168,41 @@ fn body_without_title(markdown: &str) -> String {
     trimmed.join("\n")
 }
 
+fn route_from_pathname(pathname: &str) -> (Profile, Language) {
+    let normalized = pathname.trim_end_matches('/');
+    let is_rust_profile =
+        normalized.ends_with("/rust-developer") || normalized.contains("/rust-developer/");
+    let language = if normalized.ends_with("/ru") {
+        Language::Ru
+    } else {
+        Language::En
+    };
+
+    if is_rust_profile {
+        (Profile::RustDeveloper, language)
+    } else {
+        (Profile::EngineeringManager, language)
+    }
+}
+
+fn initial_route() -> (Profile, Language) {
+    let pathname = window()
+        .location()
+        .pathname()
+        .unwrap_or_else(|_| String::from("/CV/"));
+    route_from_pathname(&pathname)
+}
+
 #[component]
 pub fn App() -> impl IntoView {
-    let (language, set_language) = create_signal(Language::En);
+    let (profile, initial_language) = initial_route();
+    let (language, set_language) = create_signal(initial_language);
     let (theme, set_theme) = create_signal(Theme::Dark);
 
     let rendered_cv = create_memo(move |_| {
         let markdown = match language.get() {
-            Language::En => CV_MARKDOWN_EN,
-            Language::Ru => CV_MARKDOWN_RU,
+            Language::En => profile.markdown(Language::En),
+            Language::Ru => profile.markdown(Language::Ru),
         };
 
         render_markdown(&body_without_title(markdown))
@@ -155,7 +216,8 @@ pub fn App() -> impl IntoView {
 
     let pdf_href = move || {
         format!(
-            "https://github.com/qqrm/CV/releases/latest/download/Belyakov_{}_{}.pdf",
+            "https://github.com/qqrm/CV/releases/latest/download/{}_{}_{}.pdf",
+            profile.pdf_name_prefix(),
             language.get().pdf_prefix(),
             theme.get().pdf_suffix()
         )
@@ -182,7 +244,11 @@ pub fn App() -> impl IntoView {
                     Language::En => "Переключить на русский",
                     Language::Ru => "Switch to English",
                 }
-                on:click=move |_| set_language.update(|current| *current = current.toggle())
+                on:click=move |_| {
+                    let next_language = language.get().toggle();
+                    set_language.set(next_language);
+                    let _ = window().location().set_href(profile.target_path(next_language));
+                }
             >
                 <span class=move || format!("lang-option {}", if language.get() == Language::En { "current" } else { "" })>
                     "EN"
