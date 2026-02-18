@@ -186,6 +186,8 @@ jobs:
         run: |
           set -euo pipefail
           test -s dist/index.html
+          test -s dist/rust-developer/index.html
+          test -s dist/rust-developer/ru/index.html
           test -s dist/favicon.svg
           test -s dist/avatar.jpg
           test -s dist/rust-developer/index.html
