@@ -438,6 +438,8 @@ fn render_markdown_html(
         let base_ru_pdf = format!("{PDF_BASE_URL}Belyakov_ru_{theme}.pdf");
         let rust_en_pdf = format!("{PDF_BASE_URL}Belyakov_rustdev_en_{theme}.pdf");
         let rust_ru_pdf = format!("{PDF_BASE_URL}Belyakov_rustdev_ru_{theme}.pdf");
+        let cto_en_pdf = format!("{PDF_BASE_URL}Belyakov_cto_en_{theme}.pdf");
+        let cto_ru_pdf = format!("{PDF_BASE_URL}Belyakov_cto_ru_{theme}.pdf");
 
         html_body = html_body.replace(
             &base_en_pdf,
@@ -454,6 +456,14 @@ fn render_markdown_html(
         html_body = html_body.replace(
             &rust_ru_pdf,
             &format!("{}Belyakov_rustdev_ru_{theme}.pdf", locale.prefix),
+        );
+        html_body = html_body.replace(
+            &cto_en_pdf,
+            &format!("{}Belyakov_cto_en_{theme}.pdf", locale.prefix),
+        );
+        html_body = html_body.replace(
+            &cto_ru_pdf,
+            &format!("{}Belyakov_cto_ru_{theme}.pdf", locale.prefix),
         );
     }
 
@@ -602,6 +612,42 @@ fn main() -> Result<(), Box<dyn Error>> {
                 body_link_from: "../en/CV.MD",
                 body_link_to: "../",
                 header_pdf_prefix: "../../Belyakov_rustdev_ru",
+                lang_toggle_label: "Переключить на английскую версию",
+                lang_toggle_target: "../",
+                lang_toggle_current: "RU",
+                lang_toggle_other: "EN",
+            },
+        },
+        ProfileConfig {
+            sitemap_path: "cto/",
+            pdf_name_prefix: "Belyakov_cto",
+            en: LocaleConfig {
+                lang: "en",
+                title: "Alexey Belyakov - CTO CV",
+                name: "Alexey Belyakov",
+                markdown_path: "profiles/cto/en/CV.MD",
+                output_dir: "cto",
+                prefix: "../",
+                avatar_src: "../avatar.jpg",
+                body_link_from: "../ru/CV_RU.MD",
+                body_link_to: "ru/",
+                header_pdf_prefix: "../Belyakov_cto_en",
+                lang_toggle_label: "Switch to Russian version",
+                lang_toggle_target: "ru/",
+                lang_toggle_current: "EN",
+                lang_toggle_other: "RU",
+            },
+            ru: LocaleConfig {
+                lang: "ru",
+                title: "Алексей Беляков - CTO Резюме",
+                name: "Алексей Беляков",
+                markdown_path: "profiles/cto/ru/CV_RU.MD",
+                output_dir: "cto/ru",
+                prefix: "../../",
+                avatar_src: "../../avatar.jpg",
+                body_link_from: "../en/CV.MD",
+                body_link_to: "../",
+                header_pdf_prefix: "../../Belyakov_cto_ru",
                 lang_toggle_label: "Переключить на английскую версию",
                 lang_toggle_target: "../",
                 lang_toggle_current: "RU",
