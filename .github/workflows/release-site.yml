@@ -62,7 +62,7 @@ jobs:
           done < <(find typst -type f -name '*.pdf')
 
       - name: Upload sitegen assets
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sitegen-assets
           path: |
