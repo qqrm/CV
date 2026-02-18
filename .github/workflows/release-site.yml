@@ -160,10 +160,11 @@ jobs:
           set -euo pipefail
           rm -rf dist
           mv new/dist dist
+          mkdir -p dist/ru dist/rust-developer/ru
+          cp dist/index.html dist/ru/index.html
+          cp dist/index.html dist/rust-developer/index.html
+          cp dist/index.html dist/rust-developer/ru/index.html
           cp dist-legacy/*.pdf dist/
-          if [ -d dist-legacy/rust-developer ]; then
-            cp -R dist-legacy/rust-developer dist/rust-developer
-          fi
           if [ -f dist-legacy/sitemap.txt ]; then
             cp dist-legacy/sitemap.txt dist/sitemap.txt
           fi
