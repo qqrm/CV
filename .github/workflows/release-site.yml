@@ -160,10 +160,12 @@ jobs:
           set -euo pipefail
           rm -rf dist
           mv new/dist dist
-          mkdir -p dist/ru dist/rust-developer/ru
+          mkdir -p dist/ru dist/rust-developer/ru dist/cto/ru
           cp dist/index.html dist/ru/index.html
           cp dist/index.html dist/rust-developer/index.html
           cp dist/index.html dist/rust-developer/ru/index.html
+          cp dist/index.html dist/cto/index.html
+          cp dist/index.html dist/cto/ru/index.html
           cp dist-legacy/*.pdf dist/
           if [ -f dist-legacy/sitemap.txt ]; then
             cp dist-legacy/sitemap.txt dist/sitemap.txt
@@ -187,16 +189,17 @@ jobs:
         run: |
           set -euo pipefail
           test -s dist/index.html
+          test -s dist/ru/index.html
           test -s dist/rust-developer/index.html
           test -s dist/rust-developer/ru/index.html
+          test -s dist/cto/index.html
+          test -s dist/cto/ru/index.html
           test -s dist/favicon.svg
           test -s dist/avatar.jpg
-          test -s dist/rust-developer/index.html
-          test -s dist/rust-developer/ru/index.html
           test -s dist/sitemap.txt
           pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
-          if [ "$pdf_count" -ne 8 ]; then
-            echo "Expected 8 PDFs in dist but found $pdf_count" >&2
+          if [ "$pdf_count" -ne 12 ]; then
+            echo "Expected 12 PDFs in dist but found $pdf_count" >&2
             exit 1
           fi
 

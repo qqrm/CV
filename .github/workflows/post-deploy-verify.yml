@@ -52,19 +52,19 @@ jobs:
             attempt=$((attempt + 1))
           done
 
-      - name: Verify deployed rust-developer pages
+      - name: Verify deployed profile pages
         shell: bash
         run: |
           set -euo pipefail
 
           base_url="https://qqrm.github.io/CV"
-          paths=("/rust-developer/" "/rust-developer/ru/")
+          paths=("/rust-developer/" "/rust-developer/ru/" "/cto/" "/cto/ru/")
 
           max_attempts=10
           attempt=1
 
           while [ "$attempt" -le "$max_attempts" ]; do
-            echo "Attempt $attempt/$max_attempts: checking deployed rust-developer pages"
+            echo "Attempt $attempt/$max_attempts: checking deployed profile pages"
             all_ok=1
 
             for path in "${paths[@]}"; do
@@ -80,12 +80,12 @@ jobs:
             done
 
             if [ "$all_ok" -eq 1 ]; then
-              echo "Deployed rust-developer pages verification passed"
+              echo "Deployed profile pages verification passed"
               exit 0
             fi
 
             if [ "$attempt" -eq "$max_attempts" ]; then
-              echo "Deployed rust-developer pages verification failed after $max_attempts attempts" >&2
+              echo "Deployed profile pages verification failed after $max_attempts attempts" >&2
               exit 1
             fi
 
