@@ -6,6 +6,8 @@ const CV_MARKDOWN_EN: &str = include_str!("../../profiles/cv/en/CV.MD");
 const CV_MARKDOWN_RU: &str = include_str!("../../profiles/cv/ru/CV_RU.MD");
 const RUST_CV_MARKDOWN_EN: &str = include_str!("../../profiles/rust-developer/en/CV.MD");
 const RUST_CV_MARKDOWN_RU: &str = include_str!("../../profiles/rust-developer/ru/CV_RU.MD");
+// GitHub Pages serves this app from /CV/, so the avatar URL needs the base prefix.
+const AVATAR_SRC: &str = "/CV/avatar.jpg";
 
 struct ContactLabels {
     github: &'static str,
@@ -14,13 +16,13 @@ struct ContactLabels {
     linkedin: &'static str,
 }
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 enum Language {
     En,
     Ru,
 }
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 enum Profile {
     EngineeringManager,
     RustDeveloper,
@@ -264,7 +266,7 @@ pub fn App() -> impl IntoView {
             <header class="hero">
                 <h1>{move || language.get().name()}</h1>
                 <div class="avatar-wrapper">
-                    <img class="avatar" src="avatar.jpg" alt="Alexey Belyakov" />
+                    <img class="avatar" src=AVATAR_SRC alt="Alexey Belyakov" />
                 </div>
                 <div class="contact-actions">
                     <a class="pill" href=ContactUrls::GITHUB target="_blank" rel="noopener">{move || contact_labels().github}</a>
@@ -289,4 +291,34 @@ pub fn start() {
     console_error_panic_hook::set_once();
     wasm_logger::init(wasm_logger::Config::default());
     mount_to_body(|| view! { <App/> });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{route_from_pathname, Language, Profile, AVATAR_SRC};
+
+    #[test]
+    fn route_detection_handles_all_supported_paths() {
+        assert_eq!(
+            route_from_pathname("/CV/"),
+            (Profile::EngineeringManager, Language::En)
+        );
+        assert_eq!(
+            route_from_pathname("/CV/ru/"),
+            (Profile::EngineeringManager, Language::Ru)
+        );
+        assert_eq!(
+            route_from_pathname("/CV/rust-developer/"),
+            (Profile::RustDeveloper, Language::En)
+        );
+        assert_eq!(
+            route_from_pathname("/CV/rust-developer/ru/"),
+            (Profile::RustDeveloper, Language::Ru)
+        );
+    }
+
+    #[test]
+    fn avatar_src_is_absolute_for_nested_routes() {
+        assert_eq!(AVATAR_SRC, "/CV/avatar.jpg");
+    }
 }
