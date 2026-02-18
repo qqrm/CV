@@ -29,7 +29,7 @@ jobs:
         uses: ./.github/actions/build-pdfs
 
       - name: Upload PDFs artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: typst-pdfs
           path: typst/**/*.pdf
@@ -109,7 +109,7 @@ jobs:
 
       - name: Upload reports
         if: ${{ hashFiles('reports/*') != '' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.tool }}-reports
           path: reports

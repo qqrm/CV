@@ -62,7 +62,7 @@ jobs:
           done < <(find typst -type f -name '*.pdf')
 
       - name: Upload sitegen assets
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sitegen-assets
           path: |
@@ -160,7 +160,14 @@ jobs:
           set -euo pipefail
           rm -rf dist
           mv new/dist dist
+          mkdir -p dist/ru dist/rust-developer/ru
+          cp dist/index.html dist/ru/index.html
+          cp dist/index.html dist/rust-developer/index.html
+          cp dist/index.html dist/rust-developer/ru/index.html
           cp dist-legacy/*.pdf dist/
+          if [ -f dist-legacy/sitemap.txt ]; then
+            cp dist-legacy/sitemap.txt dist/sitemap.txt
+          fi
 
       - name: Verify generated PDFs (dist)
         shell: bash
@@ -180,8 +187,13 @@ jobs:
         run: |
           set -euo pipefail
           test -s dist/index.html
+          test -s dist/rust-developer/index.html
+          test -s dist/rust-developer/ru/index.html
           test -s dist/favicon.svg
           test -s dist/avatar.jpg
+          test -s dist/rust-developer/index.html
+          test -s dist/rust-developer/ru/index.html
+          test -s dist/sitemap.txt
           pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
           if [ "$pdf_count" -ne 8 ]; then
             echo "Expected 8 PDFs in dist but found $pdf_count" >&2
