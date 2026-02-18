@@ -27,6 +27,11 @@ request is not `qqrm`, the pipeline stops immediately and no jobs run.
 - Reference sensitive data through GitHub Secrets and avoid hardcoding credentials.
 - Validate and sanitize all external inputs when using `workflow_dispatch` or other triggers.
 
+## PDF validation tooling policy
+- PDF validation workflows must stay within Rust ecosystem tools and shell-friendly CLI utilities.
+- Do not introduce Go-based tooling (`actions/setup-go`, `go install`, `pdfcpu`) into CI workflows.
+- Prefer the current validator set in `.github/workflows/pdf-validate.yml` (`qpdf`, `mutool`, `pdfinfo`) unless there is a documented team decision to replace them.
+
 ## Automatic pull request merging
 - Dependabot manages Rust toolchain updates via `.github/dependabot.yml`.
 - The `.github/workflows/dependabot-automerge.yml` workflow enables auto-merge for Dependabot PRs once all checks succeed.
