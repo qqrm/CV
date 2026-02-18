@@ -65,7 +65,7 @@ jobs:
 
       - name: Upload PDFs (Typst)
         if: ${{ inputs.builder == 'typst' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: cv-pdfs-typst-${{ env.DATE }}
           path: typst/**/*.pdf
@@ -73,7 +73,7 @@ jobs:
 
       - name: Upload PDFs (TypePDF)
         if: ${{ inputs.builder == 'typepdf' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: cv-pdfs-typepdf-${{ env.DATE }}
           path: typst/**/*_typepdf.pdf
