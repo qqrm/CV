@@ -20,6 +20,8 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      ARCHIVE_PASSWORD: ${{ secrets.ARCHIVE_PASSWORD }}
 
     steps:
       - name: Checkout repository
@@ -27,7 +29,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Recreate single snapshot commit
+      - name: Create encrypted snapshot and collapse history
         shell: bash
         env:
           GIT_AUTHOR_NAME: History Collapser
@@ -44,14 +46,87 @@ jobs:
             exit 0
           fi
 
-          snapshot_message="Snapshot: ${GITHUB_SHA} [skip ci]"
-          tree_sha=$(git rev-parse HEAD^{tree})
-          new_commit=$(git commit-tree "${tree_sha}" \
-            -m "${snapshot_message}" \
-            -m "skip-checks:true")
+          PREV_SHA=""
+          if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
+            PREV_SHA="${{ github.event.before }}"
+          elif git rev-parse HEAD^ >/dev/null 2>&1; then
+            PREV_SHA="$(git rev-parse HEAD^)"
+          fi
 
-          echo "Pushing rewritten history based on commit ${new_commit}."
-          git push origin "${new_commit}:main" --force-with-lease
+          if [ -z "${PREV_SHA}" ] || [ "${PREV_SHA}" = "0000000000000000000000000000000000000000" ]; then
+            echo "No valid PREV_SHA available; skipping snapshot creation."
+          else
+            if [ -z "${ARCHIVE_PASSWORD:-}" ]; then
+              echo "ARCHIVE_PASSWORD is not set; refusing to create encrypted snapshot." >&2
+              exit 1
+            fi
+
+            git cat-file -e "${PREV_SHA}^{commit}"
+            echo "Creating encrypted snapshot from PREV_SHA ${PREV_SHA}."
+
+            export_dir="$(mktemp -d)"
+            paths_file="$(mktemp)"
+            trap 'rm -rf "${export_dir}"; rm -f "${paths_file}"' EXIT
+
+            git ls-tree -r --name-only "${PREV_SHA}" > "${paths_file}"
+
+            while IFS= read -r path; do
+              [ -z "$path" ] && continue
+              case "$path" in
+                .snapshots/*)
+                  continue
+                  ;;
+              esac
+
+              entry="$(git ls-tree "${PREV_SHA}" "$path")"
+              mode="$(printf '%s\n' "$entry" | awk '{print $1}')"
+              type="$(printf '%s\n' "$entry" | awk '{print $2}')"
+              oid="$(printf '%s\n' "$entry" | awk '{print $3}')"
+
+              case "$type" in
+                blob)
+                  mkdir -p "${export_dir}/$(dirname "$path")"
+                  if [ "$mode" = "120000" ]; then
+                    target="$(git cat-file -p "$oid")"
+                    ln -s "$target" "${export_dir}/$path"
+                  else
+                    git cat-file -p "$oid" > "${export_dir}/$path"
+                    if [ "$mode" = "100755" ]; then
+                      chmod +x "${export_dir}/$path"
+                    fi
+                  fi
+                  ;;
+                commit)
+                  echo "Submodule detected at $path; refusing to snapshot." >&2
+                  exit 1
+                  ;;
+                *)
+                  echo "Unsupported git object type '$type' at $path; refusing to snapshot." >&2
+                  exit 1
+                  ;;
+              esac
+            done < "${paths_file}"
+
+            if ! command -v 7z >/dev/null 2>&1; then
+              sudo apt-get update
+              sudo apt-get install -y p7zip-full
+            fi
+
+            mkdir -p .snapshots
+            rm -f .snapshots/previous.repo.7z
+            (
+              cd "${export_dir}"
+              7z a -t7z -mx=9 -mhe=on -p"${ARCHIVE_PASSWORD}" "${GITHUB_WORKSPACE}/.snapshots/previous.repo.7z" . >/dev/null 2>&1
+            )
+
+            echo "Encrypted snapshot written to .snapshots/previous.repo.7z"
+          fi
+
+          snapshot_message="Snapshot: ${GITHUB_SHA} [skip ci]"
+          git checkout --orphan _collapsed_tmp
+          git add -A
+          git commit -m "${snapshot_message}" -m "skip-checks:true"
+          git push origin HEAD:main --force-with-lease
 
       - name: Delete workflow run history
         shell: bash
@@ -62,34 +137,37 @@ jobs:
         run: |
           set -euo pipefail
 
-          echo "Deleting workflow run history for $REPO"
+          echo "Deleting completed workflow run history for $REPO"
           deleted=0
+          max_deleted=2000
 
-          for page in $(seq 1 1000); do
-            json="$(gh api "repos/$REPO/actions/runs?per_page=100&page=$page")"
-            page_len="$(echo "$json" | jq '.workflow_runs | length')"
-            if [ "$page_len" -eq 0 ]; then
+          while true; do
+            if [ "$deleted" -ge "$max_deleted" ]; then
+              echo "Reached max_deleted=$max_deleted; stopping cleanup loop."
               break
             fi
 
-            ids="$(echo "$json" | jq -r '.workflow_runs[].id')"
+            json="$(gh api "repos/$REPO/actions/runs?per_page=100&page=1")"
+            ids="$(echo "$json" | jq -r --arg current "$CURRENT_RUN_ID" '.workflow_runs[] | select(.status == "completed" and (.id | tostring) != $current) | .id')"
+
+            if [ -z "$ids" ]; then
+              echo "No more completed runs to delete."
+              break
+            fi
+
             while IFS= read -r id; do
               [ -z "$id" ] && continue
 
-              if [ "$id" = "$CURRENT_RUN_ID" ]; then
-                echo "Skip current run $id"
-                continue
+              if [ "$deleted" -ge "$max_deleted" ]; then
+                echo "Reached max_deleted=$max_deleted; stopping cleanup loop."
+                break 2
               fi
 
               echo "DELETE run $id"
               gh api -X DELETE "repos/$REPO/actions/runs/$id" >/dev/null
               deleted=$((deleted + 1))
-
-              if [ $((deleted % 50)) -eq 0 ]; then
-                echo "Deleted so far: $deleted (sleep 2s)"
-                sleep 2
-              fi
+              sleep 0.2
             done <<< "$ids"
           done
 
-          echo "Done. Deleted: $deleted"
+          echo "Done. Deleted completed runs: $deleted"
