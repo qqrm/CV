@@ -10,7 +10,6 @@ permissions:
 env:
   CARGO_TERM_PROGRESS_WHEN: never
   SITEGEN_MANIFEST: sitegen/Cargo.toml
-  SITE_CHECK_MANIFEST: TOOLS/site_check/Cargo.toml
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -31,33 +30,83 @@ jobs:
       - name: Build PDFs
         uses: ./.github/actions/build-pdfs
 
-      - name: Cargo build
+      - name: Build sitegen
         run: cargo build --manifest-path "$SITEGEN_MANIFEST" --quiet
 
-      - name: Cargo test
+      - name: Test sitegen
         run: cargo test --manifest-path "$SITEGEN_MANIFEST" --quiet
 
-      - name: Generate site
-        run: cargo run --quiet --manifest-path "$SITEGEN_MANIFEST" --bin generate -- generate
+      - name: Install wasm target
+        run: rustup target add wasm32-unknown-unknown
 
-      - name: Check site links
-        run: cargo run --quiet --manifest-path "$SITE_CHECK_MANIFEST"
+      - name: Install Trunk
+        uses: jetli/trunk-action@v0.5.1
+        with:
+          version: v0.21.14
 
-      - name: Verify generated artifacts
+      - name: Build Leptos site
+        run: trunk build --release --config Trunk.toml
+
+      - name: Assemble production-like dist
         shell: bash
         run: |
-          set -eu
+          set -euo pipefail
+
+          routed_pages=(
+            "ru/index.html"
+            "rust-developer/index.html"
+            "rust-developer/ru/index.html"
+            "cto/index.html"
+            "cto/ru/index.html"
+          )
+
+          for page in "${routed_pages[@]}"; do
+            mkdir -p "dist/$(dirname "$page")"
+            cp dist/index.html "dist/$page"
+          done
+
+          cargo run --quiet --manifest-path "$SITEGEN_MANIFEST" --bin generate -- --out dist-assets
+          cp dist-assets/*.pdf dist/
+          cp dist-assets/sitemap.txt dist/sitemap.txt
+
+      - name: Verify production-like artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+
           for path in \
             dist/index.html \
             dist/ru/index.html \
-            dist/Belyakov_en_light.pdf \
-            dist/Belyakov_en_dark.pdf \
-            dist/Belyakov_ru_light.pdf \
-            dist/Belyakov_ru_dark.pdf \
+            dist/rust-developer/index.html \
+            dist/rust-developer/ru/index.html \
+            dist/cto/index.html \
+            dist/cto/ru/index.html \
+            dist/favicon.svg \
+            dist/avatar.jpg \
+            dist/sun.svg \
+            dist/moon.svg \
             dist/sitemap.txt
           do
             test -s "$path"
           done
+
+          pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
+          if [ "$pdf_count" -ne 12 ]; then
+            echo "Expected 12 PDFs in dist root, found $pdf_count" >&2
+            exit 1
+          fi
+
+          wasm_count=$(find dist -type f \( -name '*.wasm' -o -name '*.wasm.gz' -o -name '*.wasm.br' \) | wc -l)
+          js_count=$(find dist -type f \( -name '*.js' -o -name '*.js.gz' -o -name '*.js.br' \) | wc -l)
+          css_count=$(find dist -type f \( -name '*.css' -o -name '*.css.gz' -o -name '*.css.br' \) | wc -l)
+
+          if [ "$wasm_count" -lt 1 ] || [ "$js_count" -lt 1 ] || [ "$css_count" -lt 1 ]; then
+            echo "Missing wasm/js/css assets in dist" >&2
+            exit 1
+          fi
+
+          grep -q '/CV/' dist/index.html
+          rg -n "releases/latest/download/" dist >/dev/null
 
       - name: Upload Typst PDFs
         uses: actions/upload-artifact@v6

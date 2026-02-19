@@ -1,25 +1,28 @@
 **/*.aux
-**/*.pdf
 **/*.fdb_latexmk
 **/*.fls
 **/*.log
 **/*.out
 **/*.synctex.gz
+
 # Rust build
 /target/
 sitegen/target/
-TOOLS/site_check/target/
 scripts/convert_cv/target/
-site_check.log
-/index.html
-docs/index.html
-docs/avatar.jpg
+
+# Typst outputs
 typst/**/*.pdf
+
+# Site outputs
+/dist/
+docs/index.html
+docs/ru/index.html
+docs/avatar.jpg
 docs/**/*.pdf
 
-# Build outputs
-/dist/
-docs/ru/index.html
+# WASM/trunk artifacts
+**/*.wasm
+
 # Local configuration
 AGENTS.md
 mcp.json

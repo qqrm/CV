@@ -124,10 +124,10 @@ Use `repo-setup.sh` to install the core Rust and Typst toolchain. Document any e
 The GitHub Pages build publishes the WebAssembly-powered site built with Leptos at `/CV/`.
 
 ### Deployment approach
-- Build the Leptos frontend as a Rust 2024 project under the `new/` directory, emitting its WebAssembly bundle and static assets to the root of the Pages artifact. Serve these assets as static files (no server-side rendering).
+- Build the Leptos frontend as a Rust 2024 project at repository root, emitting its WebAssembly bundle and static assets to the Pages artifact output directory. Serve these assets as static files (no server-side rendering).
 - Generate the Typst PDFs via `sitegen` and copy them into the Pages artifact root alongside the WebAssembly bundle.
 
 ### Migration tasks (sequential)
-1. **Scaffold the Leptos app**: Initialize a Rust 2024 Leptos project in `new/`, configure `wasm32-unknown-unknown` as a target, and add scripts to build the WebAssembly bundle into `new/dist` (or similar) ready for static hosting.
+1. **Scaffold the Leptos app**: Use the root Rust 2024 Leptos project, configure `wasm32-unknown-unknown` as a target, and build the WebAssembly bundle into `dist/` via Trunk for static hosting.
 2. **Integrate build steps in CI**: Update the GitHub Pages workflow to run the Leptos WebAssembly build and stage its `dist` output at the artifact root alongside generated PDFs.
 3. **Stabilize and promote**: Capture metrics (load time, bundle size) for the `/CV/` build, fix regressions, and monitor the release pipeline for compatibility regressions.
