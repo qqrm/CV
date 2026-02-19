@@ -1,24 +1,48 @@
 # Architecture Overview
 
-This document outlines how the resume is generated and how the CI/CD pipeline operates.
+This document outlines how the CV artifacts are generated and deployed.
 
 ## CV Generation Workflow
-The `sitegen` tool transforms Markdown and Typst sources into HTML pages and PDF files.
 
-### Module structure
-The `sitegen` crate separates responsibilities between two modules:
+- Markdown in `profiles/**` is the canonical narrative source.
+- Typst entry points in `typst/en` and `typst/ru` compile to 12 canonical PDFs.
+- Leptos (root crate) renders the website; Trunk bundles it for GitHub Pages at `/CV/`.
+- A shared assembly script prepares the final Pages artifact by adding route index files, canonical PDFs, and `sitemap.txt`.
 
-- `parser` converts raw files into structured data. It exposes helpers such as `month_from_en`, `month_from_ru`, `read_inline_start`, and the `InlineStartError` type.
-- `renderer` produces template-friendly strings, for example `format_duration_en` and `format_duration_ru`.
+### Canonical PDF filenames
 
-These modules are independent and are re-exported by the crate root so the binaries can rely on a concise API without cross-module coupling. Binary entry points like `generate` and `validate` build on these modules to produce the final artifacts.
+- `Belyakov_en_light.pdf`
+- `Belyakov_en_dark.pdf`
+- `Belyakov_ru_light.pdf`
+- `Belyakov_ru_dark.pdf`
+- `Belyakov_rustdev_en_light.pdf`
+- `Belyakov_rustdev_en_dark.pdf`
+- `Belyakov_rustdev_ru_light.pdf`
+- `Belyakov_rustdev_ru_dark.pdf`
+- `Belyakov_cto_en_light.pdf`
+- `Belyakov_cto_en_dark.pdf`
+- `Belyakov_cto_ru_light.pdf`
+- `Belyakov_cto_ru_dark.pdf`
 
-### Language switching
-Generated HTML pages use lightweight JavaScript to persist the theme preference, annotate PDF download links for light/dark variants, and provide locale-aware navigation.
+### Website routes
+
+The deployed Pages routes are stable:
+
+- `/CV/`
+- `/CV/ru/`
+- `/CV/rust-developer/`
+- `/CV/rust-developer/ru/`
+- `/CV/cto/`
+- `/CV/cto/ru/`
 
 ![CV generation workflow](diagrams/CV_GENERATION.svg)
 
 ## CI/CD Pipeline
-GitHub Actions automate checks, merging and releases.
+
+GitHub Actions runs:
+
+- PR CI: builds canonical PDFs + Trunk site, assembles and validates the same `dist/` structure used in deployment.
+- Release deploy: builds Trunk and canonical PDFs, assembles Pages artifact, deploys Pages, and publishes release PDF assets.
+- Post-deploy verify: `curl` checks for public routes and representative PDF URLs.
 
 ![CI/CD pipeline](diagrams/CI_PIPELINE.svg)

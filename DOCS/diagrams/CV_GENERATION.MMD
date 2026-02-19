@@ -1,7 +1,7 @@
 flowchart TD
-    A[Markdown sources] --> B[sitegen]
-    B --> C[HTML output]
-    B --> D[Typst PDFs]
-    C --> E[DOCS/ folder]
+    A[Markdown sources] --> B[Typst canonical PDF build]
+    A --> C[Leptos app]
+    C --> D[Trunk dist bundle]
+    B --> E[Assemble dist script]
     D --> E
-
+    E --> F[Pages artifact: routes + PDFs + sitemap]

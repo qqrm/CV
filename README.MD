@@ -1,7 +1,8 @@
 # Alexey Belyakov CV
 
-This repository contains the source files for my CV. The Markdown versions are
-automatically converted into PDFs and a static website.
+This repository contains the source files for my CV. Markdown profiles are the
+source of truth, Typst builds the PDF artifacts, and Leptos + Trunk builds the
+GitHub Pages website.
 
 - [English CV](./profiles/cv/en/CV.MD)
 - [Russian CV](./profiles/cv/ru/CV_RU.MD)
@@ -12,8 +13,6 @@ automatically converted into PDFs and a static website.
 - [Web version (en)](https://qqrm.github.io/CV/)
 - [Web version (ru)](https://qqrm.github.io/CV/ru/)
 
-All build instructions are located in the `typst` folder.
-
-Rust toolchain updates are handled by Dependabot via `.github/dependabot.yml`.
+Build and deployment details are documented in `DOCS/`.
 
 For the Russian README, see [README_RU.MD](./README_RU.MD).

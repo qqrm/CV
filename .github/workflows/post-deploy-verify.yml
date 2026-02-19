@@ -63,7 +63,7 @@ jobs:
               echo "$pages_pdf_url -> HTTP 200, content-type '$page_pdf_type'"
             fi
 
-            release_status=$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' "$release_pdf_url")
+            release_status=$(curl --silent --show-error --location --head --output /dev/null --write-out '%{http_code}' "$release_pdf_url")
             if [ "$release_status" -ne 200 ]; then
               echo "$release_pdf_url -> HTTP $release_status"
               all_ok=0

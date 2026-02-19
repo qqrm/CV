@@ -2,12 +2,12 @@
 
 ## 1. Project Overview
 
-This repository implements an automated, multilingual CV generator and publisher with the following goals:
+This repository automates multilingual CV publication:
 
-- Maintain canonical CV narratives in Markdown (`profiles/...`).
-- Render localized Typst PDFs via a shared Typst template (`templates/resume.typ`).
-- Build the static website from the root Leptos app with Trunk.
-- Keep all build artifacts out of Git; CI/CD regenerates PDFs and website assets on demand.
+- Markdown profiles in `profiles/**` are authoritative content.
+- Typst builds 12 canonical PDF outputs.
+- Leptos + Trunk builds the static website.
+- CI/CD assembles and validates deploy artifacts without committing generated output.
 
 ## 2. Repository Structure
 
@@ -20,22 +20,19 @@ This repository implements an automated, multilingual CV generator and publisher
   profiles/
   templates/
   typst/
-  sitegen/
-    src/bin/generate.rs   # Copies canonical PDFs + writes sitemap.txt
-    src/bin/validate.rs
+  scripts/assemble_pages_dist.sh
   content/
 ```
 
 ## 3. Application Logic
 
 - Leptos (root crate) is the authoritative website implementation for GitHub Pages.
-- Typst compiles 12 canonical PDFs (light/dark for each profile and language).
-- `sitegen generate` no longer renders HTML: it validates PDF signatures, copies canonical PDFs, and creates `sitemap.txt`.
-- `sitegen validate` ensures required Markdown inputs exist.
+- Typst compiles exactly 12 canonical PDFs (light/dark × 3 profiles × 2 locales).
+- `scripts/assemble_pages_dist.sh` creates route entry points, copies canonical PDFs to `dist/`, and writes `dist/sitemap.txt`.
 
 ## 4. Multilanguage and Routing
 
-GitHub Pages routes are fixed and preserved:
+GitHub Pages routes are fixed:
 
 - `/CV/`
 - `/CV/ru/`
@@ -44,37 +41,37 @@ GitHub Pages routes are fixed and preserved:
 - `/CV/cto/`
 - `/CV/cto/ru/`
 
-The deploy workflow creates route directories and copies `dist/index.html` into each route entry point.
-
 ## 5. Data Handling
 
 - Markdown is the source of truth.
-- Typst outputs canonical PDFs under `typst/en` and `typst/ru`.
-- The final Pages artifact contains the Trunk bundle, route entrypoints, top-level canonical PDFs, and `sitemap.txt`.
+- Typst outputs canonical PDFs to `typst/en` and `typst/ru`.
+- Final Pages artifact includes Trunk bundle assets, route index files, top-level canonical PDFs, and `sitemap.txt`.
 
 ## 6. CI/CD Requirements
 
 ### 6.1 Pull Requests
 
-- Build and test `sitegen`.
-- Build canonical PDFs via the shared composite action.
-- Build Leptos with Trunk from repo root.
-- Assemble a production-like `dist/` and verify required files, routes, and bundle markers (`/CV/`, release PDF URL prefix).
-- No production network checks in PR CI.
+- Build canonical PDFs with `.github/actions/build-pdfs`.
+- Build Leptos with `trunk build --release --config Trunk.toml`.
+- Assemble `dist/` via `scripts/assemble_pages_dist.sh`.
+- Validate artifact structure locally in CI (no production network checks).
 
 ### 6.2 Main Branch Deploy
 
-- Build sitegen binary and canonical PDFs.
-- Build Leptos bundle from root with Trunk.
-- Assemble `dist/` using route copies + `sitegen` assets (`*.pdf`, `sitemap.txt`).
-- Publish Pages artifact and create a release attaching `sitegen_bin` and canonical PDFs.
+- Build canonical PDFs.
+- Build Leptos bundle with Trunk.
+- Assemble `dist/` with routes, PDFs, and sitemap.
+- Publish Pages artifact.
+- Create a release that uploads the 12 canonical PDFs.
 
 ### 6.3 Post-deploy Verification
 
-- Run bounded retry checks with `curl` against production routes and representative PDF/release URLs.
+- Run bounded `curl` retries for all pages routes.
+- Verify a Pages-hosted canonical PDF returns `200` with PDF content type.
+- Verify `releases/latest/download/Belyakov_en_light.pdf` returns `200`.
 
 ## 7. CLI Interface
 
-- `cargo run --manifest-path sitegen/Cargo.toml --bin validate`
-- `cargo run --manifest-path sitegen/Cargo.toml --bin generate -- --out <DIR>`
 - `trunk build --release --config Trunk.toml`
+- `scripts/assemble_pages_dist.sh`
+- Typst compilation via `.github/actions/build-pdfs` (canonical naming only)
