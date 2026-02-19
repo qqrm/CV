@@ -160,12 +160,25 @@ jobs:
           set -euo pipefail
           rm -rf dist
           mv new/dist dist
-          mkdir -p dist/ru dist/rust-developer/ru dist/cto/ru
+          mkdir -p dist/ru
           cp dist/index.html dist/ru/index.html
-          cp dist/index.html dist/rust-developer/index.html
-          cp dist/index.html dist/rust-developer/ru/index.html
-          cp dist/index.html dist/cto/index.html
-          cp dist/index.html dist/cto/ru/index.html
+          profile_pages=(
+            "rust-developer/index.html"
+            "rust-developer/ru/index.html"
+            "cto/index.html"
+            "cto/ru/index.html"
+          )
+
+          for page in "${profile_pages[@]}"; do
+            if [ ! -f "dist-legacy/$page" ]; then
+              echo "Missing legacy profile page: dist-legacy/$page" >&2
+              exit 1
+            fi
+
+            mkdir -p "dist/$(dirname "$page")"
+            cp "dist-legacy/$page" "dist/$page"
+          done
+
           cp dist-legacy/*.pdf dist/
           if [ -f dist-legacy/sitemap.txt ]; then
             cp dist-legacy/sitemap.txt dist/sitemap.txt
@@ -197,6 +210,8 @@ jobs:
           test -s dist/favicon.svg
           test -s dist/avatar.jpg
           test -s dist/sitemap.txt
+          grep -Fq 'Chief Technology Officer (CTO)' dist/cto/index.html
+          grep -Fq 'Технический директор (CTO)' dist/cto/ru/index.html
           pdf_count=$(find dist -maxdepth 1 -name '*.pdf' | wc -l)
           if [ "$pdf_count" -ne 12 ]; then
             echo "Expected 12 PDFs in dist but found $pdf_count" >&2
