@@ -10,6 +10,7 @@ permissions:
 env:
   CARGO_TERM_PROGRESS_WHEN: never
   SITEGEN_MANIFEST: sitegen/Cargo.toml
+  SITEGEN_TARGET: x86_64-unknown-linux-gnu
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -31,10 +32,10 @@ jobs:
         uses: ./.github/actions/build-pdfs
 
       - name: Build sitegen
-        run: cargo build --manifest-path "$SITEGEN_MANIFEST" --quiet
+        run: cargo build --manifest-path "$SITEGEN_MANIFEST" --target "$SITEGEN_TARGET" --quiet
 
       - name: Test sitegen
-        run: cargo test --manifest-path "$SITEGEN_MANIFEST" --quiet
+        run: cargo test --manifest-path "$SITEGEN_MANIFEST" --target "$SITEGEN_TARGET" --quiet
 
       - name: Install wasm target
         run: rustup target add wasm32-unknown-unknown
@@ -65,7 +66,7 @@ jobs:
             cp dist/index.html "dist/$page"
           done
 
-          cargo run --quiet --manifest-path "$SITEGEN_MANIFEST" --bin generate -- --out dist-assets
+          cargo run --quiet --manifest-path "$SITEGEN_MANIFEST" --target "$SITEGEN_TARGET" --bin generate -- --out dist-assets
           cp dist-assets/*.pdf dist/
           cp dist-assets/sitemap.txt dist/sitemap.txt
 
