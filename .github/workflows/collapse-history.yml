@@ -43,9 +43,11 @@ jobs:
             exit 0
           fi
 
-          snapshot_message="Snapshot: ${GITHUB_SHA}"
+          snapshot_message="Snapshot: ${GITHUB_SHA} [skip ci]"
           tree_sha=$(git rev-parse HEAD^{tree})
-          new_commit=$(git commit-tree "${tree_sha}" -m "${snapshot_message}")
+          new_commit=$(git commit-tree "${tree_sha}" \
+            -m "${snapshot_message}" \
+            -m "skip-checks:true")
 
           echo "Pushing rewritten history based on commit ${new_commit}."
           git push origin "${new_commit}:main" --force-with-lease
