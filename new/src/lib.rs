@@ -6,6 +6,8 @@ const CV_MARKDOWN_EN: &str = include_str!("../../profiles/cv/en/CV.MD");
 const CV_MARKDOWN_RU: &str = include_str!("../../profiles/cv/ru/CV_RU.MD");
 const RUST_CV_MARKDOWN_EN: &str = include_str!("../../profiles/rust-developer/en/CV.MD");
 const RUST_CV_MARKDOWN_RU: &str = include_str!("../../profiles/rust-developer/ru/CV_RU.MD");
+const CTO_CV_MARKDOWN_EN: &str = include_str!("../../profiles/cto/en/CV.MD");
+const CTO_CV_MARKDOWN_RU: &str = include_str!("../../profiles/cto/ru/CV_RU.MD");
 // GitHub Pages serves this app from /CV/, so the avatar URL needs the base prefix.
 const AVATAR_SRC: &str = "/CV/avatar.jpg";
 
@@ -26,6 +28,7 @@ enum Language {
 enum Profile {
     EngineeringManager,
     RustDeveloper,
+    Cto,
 }
 
 impl Profile {
@@ -35,6 +38,8 @@ impl Profile {
             (Self::EngineeringManager, Language::Ru) => CV_MARKDOWN_RU,
             (Self::RustDeveloper, Language::En) => RUST_CV_MARKDOWN_EN,
             (Self::RustDeveloper, Language::Ru) => RUST_CV_MARKDOWN_RU,
+            (Self::Cto, Language::En) => CTO_CV_MARKDOWN_EN,
+            (Self::Cto, Language::Ru) => CTO_CV_MARKDOWN_RU,
         }
     }
 
@@ -42,6 +47,7 @@ impl Profile {
         match self {
             Self::EngineeringManager => "Belyakov",
             Self::RustDeveloper => "Belyakov_rustdev",
+            Self::Cto => "Belyakov_cto",
         }
     }
 
@@ -51,6 +57,8 @@ impl Profile {
             (Self::EngineeringManager, Language::Ru) => "/CV/ru/",
             (Self::RustDeveloper, Language::En) => "/CV/rust-developer/",
             (Self::RustDeveloper, Language::Ru) => "/CV/rust-developer/ru/",
+            (Self::Cto, Language::En) => "/CV/cto/",
+            (Self::Cto, Language::Ru) => "/CV/cto/ru/",
         }
     }
 }
@@ -174,6 +182,7 @@ fn route_from_pathname(pathname: &str) -> (Profile, Language) {
     let normalized = pathname.trim_end_matches('/');
     let is_rust_profile =
         normalized.ends_with("/rust-developer") || normalized.contains("/rust-developer/");
+    let is_cto_profile = normalized.ends_with("/cto") || normalized.contains("/cto/");
     let language = if normalized.ends_with("/ru") {
         Language::Ru
     } else {
@@ -182,6 +191,8 @@ fn route_from_pathname(pathname: &str) -> (Profile, Language) {
 
     if is_rust_profile {
         (Profile::RustDeveloper, language)
+    } else if is_cto_profile {
+        (Profile::Cto, language)
     } else {
         (Profile::EngineeringManager, language)
     }
@@ -314,6 +325,14 @@ mod tests {
         assert_eq!(
             route_from_pathname("/CV/rust-developer/ru/"),
             (Profile::RustDeveloper, Language::Ru)
+        );
+        assert_eq!(
+            route_from_pathname("/CV/cto/"),
+            (Profile::Cto, Language::En)
+        );
+        assert_eq!(
+            route_from_pathname("/CV/cto/ru/"),
+            (Profile::Cto, Language::Ru)
         );
     }
 
