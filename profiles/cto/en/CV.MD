@@ -1,11 +1,5 @@
 # Alexey Belyakov
 
-## Contacts
-- Phone: +7 (911) 261-70-72 (preferred contact method)
-- Email: qqrm@vivaldi.net
-- Telegram: @leqqrm
-- GitHub: https://github.com/qqrm
-
 ## Summary
 Technical leader, team lead, and engineering manager with 15+ years in software engineering and around 5 years in people and delivery management. Core focus: backend, platform architecture, reliability, and operations. Led cross-functional backend, DevOps, and QA teams; built roadmaps; managed technical debt; established release discipline and engineering standards. Delivered controlled monolith-to-service transformation, implemented CI/CD and test automation, and treated quality as a repeatable system rather than one-off effort. Worked in high-trust and regulated environments, passed security reviews, and built governed delivery processes.
 
