@@ -107,7 +107,7 @@ jobs:
           fi
 
           grep -q '/CV/' dist/index.html
-          rg -n "releases/latest/download/" dist >/dev/null
+          grep -R -n "releases/latest/download/" dist >/dev/null
 
       - name: Upload Typst PDFs
         uses: actions/upload-artifact@v6
