@@ -5,8 +5,6 @@ Technical leader, team lead, and engineering manager with 15+ years in software 
 
 A separate strength is practical AI adoption in engineering. I use a contextual programming approach: specifications, standards, and verifiable acceptance criteria; I automate workflows, measure outcomes, and maintain quality.
 
-## Specialization
-- Chief Technology Officer (CTO)
 
 ## Experience
 
