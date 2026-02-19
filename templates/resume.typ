@@ -89,9 +89,6 @@
     find_first_section(lines, i: i + 1)
   }
 
-  #let base = "https://qqrm.github.io/CV/"
-  #let slug = if site_path == "" { if lang == "ru" { "ru/" } else { "" } } else { site_path }
-  #let cv_url = base + slug
   #let cv_path = if md_path == none {
       if lang == "ru" {
         "../profiles/cv/ru/CV_RU.MD"
@@ -112,11 +109,6 @@
   }
   #let replaced_md = trimmed_lines.join("\n")
   #cmarker.render(replaced_md)
-  #v(1em)
-  #align(center)[
-    #set text(size: 10pt)
-    #text(weight: "semibold")[CV:] #link(cv_url)[#cv_url]
-  ]
   #v(1.2em)
   #align(center)[
     #set text(size: 10pt, fill: palette.muted)
