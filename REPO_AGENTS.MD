@@ -13,6 +13,7 @@ Run the repository setup script before starting any task:
 The helper configures the canonical `origin` remote, installs the Typst CLI, and ensures required fonts are present for local PDF builds.
 The GitHub CLI (`gh`) is already authenticated in this environment. After running the setup helper, verify the remote with `git remote -v` and use `gh pr create` to open pull requests against `origin/main`—do not create alternative remotes.
 When changing CV content, keep English and Russian versions in sync and update any related fixtures accordingly.
+For PDF outputs and static site versions, do not add a separate contact section that duplicates the contact buttons shown near the profile image.
 Before committing, run tests:
 
 ```bash
