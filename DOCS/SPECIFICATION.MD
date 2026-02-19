@@ -28,7 +28,7 @@ This repository automates multilingual CV publication:
 
 - Leptos (root crate) is the authoritative website implementation for GitHub Pages.
 - Typst compiles exactly 12 canonical PDFs (light/dark × 3 profiles × 2 locales).
-- `scripts/assemble_pages_dist.sh` creates route entry points, copies canonical PDFs to `dist/`, and writes `dist/sitemap.txt`.
+- `scripts/assemble_pages_dist.sh` creates route entry points, copies canonical PDFs to `dist/`, and validates `dist/robots.txt`.
 
 ## 4. Multilanguage and Routing
 
@@ -45,7 +45,7 @@ GitHub Pages routes are fixed:
 
 - Markdown is the source of truth.
 - Typst outputs canonical PDFs to `typst/en` and `typst/ru`.
-- Final Pages artifact includes Trunk bundle assets, route index files, top-level canonical PDFs, and `sitemap.txt`.
+- Final Pages artifact includes Trunk bundle assets, route index files, top-level canonical PDFs, and `robots.txt`.
 
 ## 6. CI/CD Requirements
 
@@ -60,7 +60,7 @@ GitHub Pages routes are fixed:
 
 - Build canonical PDFs.
 - Build Leptos bundle with Trunk.
-- Assemble `dist/` with routes, PDFs, and sitemap.
+- Assemble `dist/` with routes, PDFs, and robots.txt.
 - Publish Pages artifact.
 - Create a release that uploads the 12 canonical PDFs.
 

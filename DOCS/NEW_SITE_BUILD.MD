@@ -33,4 +33,4 @@ The final `dist/` includes:
 - `index.html` and routed pages (`ru`, `rust-developer`, `cto` paths)
 - Trunk-generated runtime assets (`.wasm`, `.js`, `.css`)
 - 12 canonical PDFs at `dist/` root
-- `sitemap.txt` with the six published URLs
+- `robots.txt` with `Disallow: /`

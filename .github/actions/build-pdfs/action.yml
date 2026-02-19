@@ -9,24 +9,41 @@ runs:
         set -euo pipefail
         echo "CARGO_TERM_PROGRESS_WHEN=${CARGO_TERM_PROGRESS_WHEN:-never}" >> "$GITHUB_ENV"
 
-    - name: Cache cargo
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          ~/.cargo/bin
-        key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cargo-
-
     - name: Install Typst
       shell: bash
       run: |
         set -euo pipefail
-        if ! command -v typst >/dev/null 2>&1; then
-          cargo install typst-cli --locked --quiet
+
+        if ! command -v curl >/dev/null 2>&1; then
+          sudo apt-get update
+          sudo apt-get install -y curl
         fi
+
+        tmp_dir="$(mktemp -d)"
+        trap 'rm -rf "$tmp_dir"' EXIT
+
+        curl --fail --silent --show-error --location \
+          --output "$tmp_dir/typst.tar.xz" \
+          "https://github.com/typst/typst/releases/latest/download/typst-x86_64-unknown-linux-musl.tar.xz"
+
+        tar -xJf "$tmp_dir/typst.tar.xz" -C "$tmp_dir"
+
+        install_dir="$HOME/.local/bin"
+        mkdir -p "$install_dir"
+
+        typst_bin="$(find "$tmp_dir" -type f -name typst | head -n 1)"
+        if [ -z "$typst_bin" ]; then
+          echo "Failed to locate typst binary in downloaded archive" >&2
+          exit 1
+        fi
+
+        mv "$typst_bin" "$install_dir/typst"
+        chmod +x "$install_dir/typst"
+
+        echo "$install_dir" >> "$GITHUB_PATH"
+        export PATH="$install_dir:$PATH"
+
+        typst --version
 
     - name: Install Latin Modern fonts
       shell: bash

@@ -34,11 +34,16 @@ jobs:
             "https://qqrm.github.io/CV/cto/ru/"
           )
 
+          robots_url="https://qqrm.github.io/CV/robots.txt"
+          sitemap_url="https://qqrm.github.io/CV/sitemap.txt"
           pages_pdf_url="https://qqrm.github.io/CV/Belyakov_en_light.pdf"
           release_pdf_url="https://github.com/qqrm/CV/releases/latest/download/Belyakov_en_light.pdf"
 
           max_attempts=10
           attempt=1
+
+          robots_tmp="$(mktemp)"
+          trap 'rm -f "$robots_tmp"' EXIT
 
           while [ "$attempt" -le "$max_attempts" ]; do
             echo "Attempt $attempt/$max_attempts"
@@ -53,6 +58,22 @@ jobs:
                 echo "$url -> HTTP 200"
               fi
             done
+
+            robots_status=$(curl --silent --show-error --location --output "$robots_tmp" --write-out '%{http_code}' "$robots_url")
+            if [ "$robots_status" -ne 200 ] || ! grep -q "Disallow: /" "$robots_tmp"; then
+              echo "$robots_url -> HTTP $robots_status, missing expected Disallow rule"
+              all_ok=0
+            else
+              echo "$robots_url -> HTTP 200 with expected Disallow rule"
+            fi
+
+            sitemap_status=$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' "$sitemap_url")
+            if [ "$sitemap_status" -eq 200 ]; then
+              echo "$sitemap_url -> HTTP 200 (expected non-200)"
+              all_ok=0
+            else
+              echo "$sitemap_url -> HTTP $sitemap_status (expected non-200)"
+            fi
 
             page_pdf_status=$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' "$pages_pdf_url")
             page_pdf_type=$(curl --silent --show-error --location --output /dev/null --write-out '%{content_type}' "$pages_pdf_url")

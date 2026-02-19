@@ -12,4 +12,16 @@
 - [PDF на русском (тёмная тема)](https://github.com/qqrm/CV/releases/latest/download/Belyakov_ru_dark.pdf)
 - [Сайт](https://qqrm.github.io/CV/)
 
-Все инструкции по сборке находятся в каталоге `typst`.
+## Развёрнутые профили
+
+- Профиль по умолчанию (Engineering Manager)
+  - EN: https://qqrm.github.io/CV/
+  - RU: https://qqrm.github.io/CV/ru/
+- Rust Developer
+  - EN: https://qqrm.github.io/CV/rust-developer/
+  - RU: https://qqrm.github.io/CV/rust-developer/ru/
+- CTO
+  - EN: https://qqrm.github.io/CV/cto/
+  - RU: https://qqrm.github.io/CV/cto/ru/
+
+Все инструкции по сборке находятся в каталоге `DOCS/`.
