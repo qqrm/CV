@@ -10,6 +10,8 @@ const CTO_CV_MARKDOWN_EN: &str = include_str!("../profiles/cto/en/CV.MD");
 const CTO_CV_MARKDOWN_RU: &str = include_str!("../profiles/cto/ru/CV_RU.MD");
 // GitHub Pages serves this app from /CV/, so the avatar URL needs the base prefix.
 const AVATAR_SRC: &str = "/CV/avatar.jpg";
+const MOON_SRC: &str = "/CV/moon.svg";
+const SUN_SRC: &str = "/CV/sun.svg";
 
 struct ContactLabels {
     github: &'static str,
@@ -246,8 +248,8 @@ pub fn App() -> impl IntoView {
                 on:click=move |_| set_theme.update(|current| *current = current.toggle())
             >
                 {move || match theme.get() {
-                    Theme::Light => view! { <img src="moon.svg" alt="Moon icon"/> },
-                    Theme::Dark => view! { <img src="sun.svg" alt="Sun icon"/> },
+                    Theme::Light => view! { <img src=MOON_SRC alt="Moon icon"/> },
+                    Theme::Dark => view! { <img src=SUN_SRC alt="Sun icon"/> },
                 }}
             </button>
 
@@ -306,7 +308,7 @@ pub fn start() {
 
 #[cfg(test)]
 mod tests {
-    use super::{route_from_pathname, Language, Profile, AVATAR_SRC};
+    use super::{route_from_pathname, Language, Profile, AVATAR_SRC, MOON_SRC, SUN_SRC};
 
     #[test]
     fn route_detection_handles_all_supported_paths() {
@@ -339,5 +341,13 @@ mod tests {
     #[test]
     fn avatar_src_is_absolute_for_nested_routes() {
         assert_eq!(AVATAR_SRC, "/CV/avatar.jpg");
+    }
+
+    #[test]
+    fn theme_icon_srcs_are_absolute_for_nested_routes() {
+        assert_eq!(MOON_SRC, "/CV/moon.svg");
+        assert_eq!(SUN_SRC, "/CV/sun.svg");
+        assert!(MOON_SRC.starts_with("/CV/"));
+        assert!(SUN_SRC.starts_with("/CV/"));
     }
 }

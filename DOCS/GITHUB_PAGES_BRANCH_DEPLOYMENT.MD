@@ -23,7 +23,7 @@ for src in typst/en/*.typ typst/ru/*.typ; do
   fi
 done
 
-# Assemble deploy artifact (routes + sitemap + PDFs)
+# Assemble deploy artifact (routes + PDFs + robots)
 scripts/assemble_pages_dist.sh
 
 # Prepare a worktree for Pages branch

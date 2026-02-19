@@ -7,11 +7,14 @@ required_dist_assets=(
   dist/avatar.jpg
   dist/sun.svg
   dist/moon.svg
+  dist/robots.txt
 )
 
 for path in "${required_dist_assets[@]}"; do
   test -s "$path"
 done
+
+grep -q "Disallow: /" dist/robots.txt
 
 routed_pages=(
   dist/ru/index.html
@@ -27,14 +30,6 @@ for page in "${routed_pages[@]}"; do
   test -s "$page"
 done
 
-cat > dist/sitemap.txt <<'SITEMAP'
-https://qqrm.github.io/CV/
-https://qqrm.github.io/CV/ru/
-https://qqrm.github.io/CV/rust-developer/
-https://qqrm.github.io/CV/rust-developer/ru/
-https://qqrm.github.io/CV/cto/
-https://qqrm.github.io/CV/cto/ru/
-SITEMAP
 
 canonical_pdfs=(
   Belyakov_en_light.pdf
@@ -62,8 +57,6 @@ for pdf in "${canonical_pdfs[@]}"; do
   cp "$src" "dist/$pdf"
   test -s "dist/$pdf"
 done
-
-test -s dist/sitemap.txt
 
 pdf_count=$(find dist -maxdepth 1 -type f -name '*.pdf' | wc -l)
 if [ "$pdf_count" -ne 12 ]; then

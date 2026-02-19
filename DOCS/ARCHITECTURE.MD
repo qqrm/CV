@@ -7,7 +7,7 @@ This document outlines how the CV artifacts are generated and deployed.
 - Markdown in `profiles/**` is the canonical narrative source.
 - Typst entry points in `typst/en` and `typst/ru` compile to 12 canonical PDFs.
 - Leptos (root crate) renders the website; Trunk bundles it for GitHub Pages at `/CV/`.
-- A shared assembly script prepares the final Pages artifact by adding route index files, canonical PDFs, and `sitemap.txt`.
+- A shared assembly script prepares the final Pages artifact by adding route index files, canonical PDFs, and `robots.txt`.
 
 ### Canonical PDF filenames
 

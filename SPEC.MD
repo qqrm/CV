@@ -28,7 +28,7 @@
 
 ## 6. Testing and Quality Gates
 - Validate canonical PDF generation and signatures in CI.
-- Validate assembled `dist/` includes required routes, static assets, runtime bundle files, 12 PDFs, and sitemap.
+- Validate assembled `dist/` includes required routes, static assets, runtime bundle files, 12 PDFs, and robots.txt.
 - Run `cargo test` inside `scripts/convert_cv` when modifying that helper.
 
 ## 7. Repository Layout Summary
@@ -52,4 +52,4 @@
   - `Belyakov_rustdev_ru_light.pdf`, `Belyakov_rustdev_ru_dark.pdf`
   - `Belyakov_cto_en_light.pdf`, `Belyakov_cto_en_dark.pdf`
   - `Belyakov_cto_ru_light.pdf`, `Belyakov_cto_ru_dark.pdf`
-- `dist/sitemap.txt` with the six published Pages URLs.
+- `dist/robots.txt` with `Disallow: /`.
