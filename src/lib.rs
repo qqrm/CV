@@ -2,12 +2,12 @@ use leptos::*;
 use pulldown_cmark::{Options, Parser, html};
 use wasm_bindgen::prelude::wasm_bindgen;
 
-const CV_MARKDOWN_EN: &str = include_str!("../../profiles/cv/en/CV.MD");
-const CV_MARKDOWN_RU: &str = include_str!("../../profiles/cv/ru/CV_RU.MD");
-const RUST_CV_MARKDOWN_EN: &str = include_str!("../../profiles/rust-developer/en/CV.MD");
-const RUST_CV_MARKDOWN_RU: &str = include_str!("../../profiles/rust-developer/ru/CV_RU.MD");
-const CTO_CV_MARKDOWN_EN: &str = include_str!("../../profiles/cto/en/CV.MD");
-const CTO_CV_MARKDOWN_RU: &str = include_str!("../../profiles/cto/ru/CV_RU.MD");
+const CV_MARKDOWN_EN: &str = include_str!("../profiles/cv/en/CV.MD");
+const CV_MARKDOWN_RU: &str = include_str!("../profiles/cv/ru/CV_RU.MD");
+const RUST_CV_MARKDOWN_EN: &str = include_str!("../profiles/rust-developer/en/CV.MD");
+const RUST_CV_MARKDOWN_RU: &str = include_str!("../profiles/rust-developer/ru/CV_RU.MD");
+const CTO_CV_MARKDOWN_EN: &str = include_str!("../profiles/cto/en/CV.MD");
+const CTO_CV_MARKDOWN_RU: &str = include_str!("../profiles/cto/ru/CV_RU.MD");
 // GitHub Pages serves this app from /CV/, so the avatar URL needs the base prefix.
 const AVATAR_SRC: &str = "/CV/avatar.jpg";
 

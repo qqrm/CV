@@ -1,6 +1,6 @@
 # GitHub Pages Deployment from a Separate Branch
 
-This guide explains how to publish the static bundle (including the `new/` WebAssembly site served at `/CV/`) from a branch that is different from the default branch.
+This guide explains how to publish the static bundle (including the root WebAssembly site served at `/CV/`) from a branch that is different from the default branch.
 
 ## Choose the Pages source branch
 1. Open **Settings → Pages** in the repository on GitHub.
@@ -25,7 +25,7 @@ RUST_LOG=info cargo run --bin generate --manifest-path sitegen/Cargo.toml
 git fetch origin gh-pages:gh-pages
 
 git worktree add /tmp/gh-pages gh-pages
-rsync -av --delete new/dist/ /tmp/gh-pages/
+rsync -av --delete dist/ /tmp/gh-pages/
 cp dist/*.pdf /tmp/gh-pages/
 (cd /tmp/gh-pages && git add . && git commit -m "Publish site" && git push origin gh-pages)
 

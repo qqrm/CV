@@ -1,6 +1,6 @@
-# New WebAssembly Site Build
+# WebAssembly Site Build
 
-The `new/` directory hosts the Leptos-based, client-rendered CV. Use Trunk to produce a static bundle under `new/dist` so it can be published to GitHub Pages at `/CV/`.
+The repository root hosts the Leptos-based, client-rendered CV. Use Trunk to produce a static bundle under `dist/` so it can be published to GitHub Pages at `/CV/`.
 
 ## Prerequisites
 - Install the WebAssembly target: `rustup target add wasm32-unknown-unknown`.
@@ -10,8 +10,7 @@ The `new/` directory hosts the Leptos-based, client-rendered CV. Use Trunk to pr
 From the repository root run:
 
 ```bash
-cd new
-trunk build --release
+trunk build --release --config Trunk.toml
 ```
 
-The output appears in `new/dist/` with asset URLs scoped to `/CV/` for default hosting.
+The output appears in `dist/` with asset URLs scoped to `/CV/` via `public_url` in `Trunk.toml`.
