@@ -1,39 +1,45 @@
 # GitHub Pages Deployment from a Separate Branch
 
-This guide explains how to publish the static bundle (including the root WebAssembly site served at `/CV/`) from a branch that is different from the default branch.
+This guide explains how to publish the Leptos/Trunk bundle from a branch that is different from the default branch.
 
 ## Choose the Pages source branch
-1. Open **Settings → Pages** in the repository on GitHub.
-2. In **Source**, select the branch that will host the built assets (e.g., `gh-pages`) and set the folder to `/` unless you intentionally keep assets under `/docs`.
-3. Save the configuration. GitHub Pages will pull content only from this branch going forward.
+1. Open **Settings → Pages** in GitHub.
+2. In **Source**, select the branch that hosts built assets (for example `gh-pages`) and choose folder `/` unless using `/docs` intentionally.
+3. Save. GitHub Pages will publish only from that branch.
 
 ## Manually publish from a feature branch
-Use a dedicated branch such as `gh-pages` to avoid committing build artifacts to the main development branches.
 
 ```bash
-# Build the static bundle (includes the `/CV/` assets described in DOCS/NEW_SITE_BUILD.MD)
-cd new
-trunk build --release
-cd ..
+# Build website bundle from repository root
+trunk build --release --config Trunk.toml
 
-# Build the PDF bundle
-RUST_LOG=info cargo run --bin generate --manifest-path sitegen/Cargo.toml
+# Build canonical PDFs (or run the same canonical naming commands used in CI)
+for src in typst/en/*.typ typst/ru/*.typ; do
+  stem="${src%.typ}"
+  if [[ "$stem" == *_dark ]]; then
+    typst compile --root . "$src" "${stem}.pdf"
+  else
+    typst compile --root . "$src" "${stem}_light.pdf"
+  fi
+done
 
-# Prepare a worktree for the Pages branch
+# Assemble deploy artifact (routes + sitemap + PDFs)
+scripts/assemble_pages_dist.sh
+
+# Prepare a worktree for Pages branch
 # If the branch does not exist remotely yet, create it once with: git switch --orphan gh-pages
 # Otherwise, fetch the latest copy
 git fetch origin gh-pages:gh-pages
 
 git worktree add /tmp/gh-pages gh-pages
 rsync -av --delete dist/ /tmp/gh-pages/
-cp dist/*.pdf /tmp/gh-pages/
 (cd /tmp/gh-pages && git add . && git commit -m "Publish site" && git push origin gh-pages)
 
-# Clean up the temporary worktree
+# Clean up
 rm -rf /tmp/gh-pages
 ```
 
 Notes:
-- Keep only the built assets on the Pages branch. Store source files on regular development branches.
-- Re-run the build and repeat the copy whenever the static site changes.
-- If you use a custom domain or `CNAME`, ensure it lives on the Pages branch root alongside the built files.
+- Keep only built assets on the Pages branch.
+- Re-run build + assembly whenever source content changes.
+- If using `CNAME`, keep it in the Pages branch root.

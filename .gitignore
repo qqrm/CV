@@ -7,7 +7,6 @@
 
 # Rust build
 /target/
-sitegen/target/
 scripts/convert_cv/target/
 
 # Typst outputs

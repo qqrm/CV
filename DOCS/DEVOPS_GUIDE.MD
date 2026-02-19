@@ -33,7 +33,6 @@ request is not `qqrm`, the pipeline stops immediately and no jobs run.
 - Prefer the current validator set in `.github/workflows/pdf-validate.yml` (`qpdf`, `mutool`, `pdfinfo`) unless there is a documented team decision to replace them.
 
 ## Automatic pull request merging
-- Dependabot manages Rust toolchain updates via `.github/dependabot.yml`.
 - The `.github/workflows/dependabot-automerge.yml` workflow enables auto-merge for Dependabot PRs once all checks succeed.
 - Do not remove or disable this workflow. Auto-merge helps keep the main branch healthy.
 
@@ -99,18 +98,6 @@ act pull_request -n
 ```
 
 
-## Enabling Logs
-`sitegen` binaries use [`env_logger`](https://docs.rs/env_logger/) for logging. Set the
-`RUST_LOG` environment variable to control verbosity:
-
-```bash
-RUST_LOG=info cargo run --bin generate
-RUST_LOG=debug cargo run --bin validate
-```
-
-The default level is `warn`. Increase to `debug` for more details or
-lower to `error` to reduce noise.
-
 ## Personas catalog
 Role descriptions for typical project roles live in the personas catalog at https://qqrm.github.io/codex-tools/. Each Markdown file documents expectations for a role and can be reused in documentation or onboarding materials.
 
@@ -125,7 +112,7 @@ The GitHub Pages build publishes the WebAssembly-powered site built with Leptos 
 
 ### Deployment approach
 - Build the Leptos frontend as a Rust 2024 project at repository root, emitting its WebAssembly bundle and static assets to the Pages artifact output directory. Serve these assets as static files (no server-side rendering).
-- Generate the Typst PDFs via `sitegen` and copy them into the Pages artifact root alongside the WebAssembly bundle.
+- Generate the canonical Typst PDFs and copy them into the Pages artifact root alongside the WebAssembly bundle.
 
 ### Migration tasks (sequential)
 1. **Scaffold the Leptos app**: Use the root Rust 2024 Leptos project, configure `wasm32-unknown-unknown` as a target, and build the WebAssembly bundle into `dist/` via Trunk for static hosting.
