@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: collapse-history-${{ github.ref }}
@@ -51,3 +52,44 @@ jobs:
 
           echo "Pushing rewritten history based on commit ${new_commit}."
           git push origin "${new_commit}:main" --force-with-lease
+
+      - name: Delete workflow run history
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          echo "Deleting workflow run history for $REPO"
+          deleted=0
+
+          for page in $(seq 1 1000); do
+            json="$(gh api "repos/$REPO/actions/runs?per_page=100&page=$page")"
+            page_len="$(echo "$json" | jq '.workflow_runs | length')"
+            if [ "$page_len" -eq 0 ]; then
+              break
+            fi
+
+            ids="$(echo "$json" | jq -r '.workflow_runs[].id')"
+            while IFS= read -r id; do
+              [ -z "$id" ] && continue
+
+              if [ "$id" = "$CURRENT_RUN_ID" ]; then
+                echo "Skip current run $id"
+                continue
+              fi
+
+              echo "DELETE run $id"
+              gh api -X DELETE "repos/$REPO/actions/runs/$id" >/dev/null
+              deleted=$((deleted + 1))
+
+              if [ $((deleted % 50)) -eq 0 ]; then
+                echo "Deleted so far: $deleted (sleep 2s)"
+                sleep 2
+              fi
+            done <<< "$ids"
+          done
+
+          echo "Done. Deleted: $deleted"
