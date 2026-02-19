@@ -19,13 +19,58 @@ jobs:
     name: Collapse history to single commit
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    env:
+      ARCHIVE_PASSWORD: ${{ secrets.ARCHIVE_PASSWORD }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Create encrypted previous-state snapshot bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          prev_sha=""
+          if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
+            prev_sha="${{ github.event.before }}"
+          elif git rev-parse HEAD^ >/dev/null 2>&1; then
+            prev_sha="$(git rev-parse HEAD^)"
+          fi
+
+          if [ -z "$prev_sha" ] || [ "$prev_sha" = "0000000000000000000000000000000000000000" ]; then
+            echo "No valid previous commit available; skipping snapshot creation."
+            exit 0
+          fi
+
+          if ! git cat-file -e "${prev_sha}^{commit}" 2>/dev/null; then
+            echo "Previous commit ${prev_sha} is not available; skipping snapshot creation."
+            exit 0
+          fi
+
+          mkdir -p .snapshots
+          rm -f /tmp/previous.bundle .snapshots/previous.bundle.7z
+
+          git bundle create /tmp/previous.bundle "$prev_sha"
+
+          if [ -z "${ARCHIVE_PASSWORD:-}" ]; then
+            echo "ARCHIVE_PASSWORD is not set; refusing to create encrypted snapshot." >&2
+            exit 1
+          fi
+
+          if ! command -v 7z >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y p7zip-full
+          fi
+
+          7z a -t7z -mx=9 -mhe=on -p"$ARCHIVE_PASSWORD" \
+            ".snapshots/previous.bundle.7z" "/tmp/previous.bundle" >/dev/null
+
+          rm -f /tmp/previous.bundle
+          echo "Encrypted snapshot created for previous commit ${prev_sha}."
 
       - name: Recreate single snapshot commit
         shell: bash
@@ -45,13 +90,13 @@ jobs:
           fi
 
           snapshot_message="Snapshot: ${GITHUB_SHA} [skip ci]"
-          tree_sha=$(git rev-parse HEAD^{tree})
-          new_commit=$(git commit-tree "${tree_sha}" \
-            -m "${snapshot_message}" \
-            -m "skip-checks:true")
 
-          echo "Pushing rewritten history based on commit ${new_commit}."
-          git push origin "${new_commit}:main" --force-with-lease
+          git checkout --orphan _collapsed_tmp
+          git add -A
+          git commit -m "${snapshot_message}" -m "skip-checks:true"
+
+          echo "Pushing rewritten history with a single commit on main."
+          git push origin HEAD:main --force-with-lease
 
       - name: Delete workflow run history
         shell: bash
@@ -62,34 +107,29 @@ jobs:
         run: |
           set -euo pipefail
 
-          echo "Deleting workflow run history for $REPO"
+          echo "Deleting completed workflow run history for $REPO"
           deleted=0
+          max_deleted=2000
 
-          for page in $(seq 1 1000); do
-            json="$(gh api "repos/$REPO/actions/runs?per_page=100&page=$page")"
-            page_len="$(echo "$json" | jq '.workflow_runs | length')"
-            if [ "$page_len" -eq 0 ]; then
+          while true; do
+            json="$(gh api "repos/$REPO/actions/runs?per_page=100&page=1")"
+            ids="$(echo "$json" | jq -r --arg current "$CURRENT_RUN_ID" '.workflow_runs[] | select((.id|tostring) != $current and .status == "completed") | .id')"
+
+            if [ -z "$ids" ]; then
               break
             fi
 
-            ids="$(echo "$json" | jq -r '.workflow_runs[].id')"
             while IFS= read -r id; do
               [ -z "$id" ] && continue
-
-              if [ "$id" = "$CURRENT_RUN_ID" ]; then
-                echo "Skip current run $id"
-                continue
-              fi
-
               echo "DELETE run $id"
               gh api -X DELETE "repos/$REPO/actions/runs/$id" >/dev/null
               deleted=$((deleted + 1))
-
-              if [ $((deleted % 50)) -eq 0 ]; then
-                echo "Deleted so far: $deleted (sleep 2s)"
-                sleep 2
+              if [ "$deleted" -ge "$max_deleted" ]; then
+                echo "Reached max deletions ($max_deleted); stopping to avoid infinite loop."
+                break 2
               fi
+              sleep 0.2
             done <<< "$ids"
           done
 
-          echo "Done. Deleted: $deleted"
+          echo "Done. Deleted completed runs: $deleted"
