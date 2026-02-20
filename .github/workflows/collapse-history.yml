@@ -29,22 +29,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create encrypted snapshot and collapse history
+      - name: Create encrypted snapshot
         shell: bash
-        env:
-          GIT_AUTHOR_NAME: History Collapser
-          GIT_AUTHOR_EMAIL: actions@github.com
-          GIT_COMMITTER_NAME: History Collapser
-          GIT_COMMITTER_EMAIL: actions@github.com
         run: |
           set -euo pipefail
-
-          if git rev-parse HEAD^ >/dev/null 2>&1; then
-            echo "Current HEAD has parents; rewriting history to a single commit."
-          else
-            echo "Repository already reduced to a single commit; nothing to do."
-            exit 0
-          fi
 
           PREV_SHA=""
           if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
@@ -55,78 +43,75 @@ jobs:
 
           if [ -z "${PREV_SHA}" ] || [ "${PREV_SHA}" = "0000000000000000000000000000000000000000" ]; then
             echo "No valid PREV_SHA available; skipping snapshot creation."
-          else
-            if [ -z "${ARCHIVE_PASSWORD:-}" ]; then
-              echo "ARCHIVE_PASSWORD is not set; refusing to create encrypted snapshot." >&2
-              exit 1
-            fi
-
-            git cat-file -e "${PREV_SHA}^{commit}"
-            echo "Creating encrypted snapshot from PREV_SHA ${PREV_SHA}."
-
-            export_dir="$(mktemp -d)"
-            paths_file="$(mktemp)"
-            trap 'rm -rf "${export_dir}"; rm -f "${paths_file}"' EXIT
-
-            git ls-tree -r --name-only "${PREV_SHA}" > "${paths_file}"
-
-            while IFS= read -r path; do
-              [ -z "$path" ] && continue
-              case "$path" in
-                .snapshots/*)
-                  continue
-                  ;;
-              esac
-
-              entry="$(git ls-tree "${PREV_SHA}" "$path")"
-              mode="$(printf '%s\n' "$entry" | awk '{print $1}')"
-              type="$(printf '%s\n' "$entry" | awk '{print $2}')"
-              oid="$(printf '%s\n' "$entry" | awk '{print $3}')"
-
-              case "$type" in
-                blob)
-                  mkdir -p "${export_dir}/$(dirname "$path")"
-                  if [ "$mode" = "120000" ]; then
-                    target="$(git cat-file -p "$oid")"
-                    ln -s "$target" "${export_dir}/$path"
-                  else
-                    git cat-file -p "$oid" > "${export_dir}/$path"
-                    if [ "$mode" = "100755" ]; then
-                      chmod +x "${export_dir}/$path"
-                    fi
-                  fi
-                  ;;
-                commit)
-                  echo "Submodule detected at $path; refusing to snapshot." >&2
-                  exit 1
-                  ;;
-                *)
-                  echo "Unsupported git object type '$type' at $path; refusing to snapshot." >&2
-                  exit 1
-                  ;;
-              esac
-            done < "${paths_file}"
-
-            if ! command -v 7z >/dev/null 2>&1; then
-              sudo apt-get update
-              sudo apt-get install -y p7zip-full
-            fi
-
-            mkdir -p .snapshots
-            rm -f .snapshots/previous.repo.7z
-            (
-              cd "${export_dir}"
-              7z a -t7z -mx=9 -mhe=on -p"${ARCHIVE_PASSWORD}" "${GITHUB_WORKSPACE}/.snapshots/previous.repo.7z" . >/dev/null 2>&1
-            )
-
-            echo "Encrypted snapshot written to .snapshots/previous.repo.7z"
+            exit 0
           fi
 
-          snapshot_message="Snapshot: ${GITHUB_SHA} [skip ci]"
-          git checkout --orphan _collapsed_tmp
-          git add -A
-          git commit -m "${snapshot_message}" -m "skip-checks:true"
-          git push origin HEAD:main --force-with-lease
+          git cat-file -e "${PREV_SHA}^{commit}"
+
+          if [ -z "${ARCHIVE_PASSWORD:-}" ]; then
+            echo "ARCHIVE_PASSWORD is not set; refusing to create encrypted snapshot." >&2
+            exit 1
+          fi
+
+          echo "Creating encrypted snapshot from PREV_SHA ${PREV_SHA}."
+
+          export_dir="$(mktemp -d)"
+          entries_file="$(mktemp)"
+          trap 'rm -rf "${export_dir}"; rm -f "${entries_file}"' EXIT
+
+          git ls-tree -r "${PREV_SHA}" > "${entries_file}"
+
+          while IFS=$'\t' read -r meta path; do
+            [ -z "${path}" ] && continue
+
+            case "${path}" in
+              .snapshots/*)
+                continue
+                ;;
+            esac
+
+            mode="${meta%% *}"
+            rest="${meta#* }"
+            type="${rest%% *}"
+            oid="${rest#* }"
+
+            case "${type}" in
+              blob)
+                mkdir -p "${export_dir}/$(dirname "${path}")"
+                if [ "${mode}" = "120000" ]; then
+                  target="$(git cat-file -p "${oid}")"
+                  ln -s "${target}" "${export_dir}/${path}"
+                else
+                  git cat-file -p "${oid}" > "${export_dir}/${path}"
+                  if [ "${mode}" = "100755" ]; then
+                    chmod +x "${export_dir}/${path}"
+                  fi
+                fi
+                ;;
+              commit)
+                echo "Submodule detected at ${path}; refusing to snapshot." >&2
+                exit 1
+                ;;
+              *)
+                echo "Unsupported git object type '${type}' at ${path}; refusing to snapshot." >&2
+                exit 1
+                ;;
+            esac
+          done < "${entries_file}"
+
+          if ! command -v 7z >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y p7zip-full
+          fi
+
+          mkdir -p .snapshots
+          rm -f .snapshots/previous.repo.7z
+          (
+            cd "${export_dir}"
+            7z a -t7z -mx=9 -mhe=on -p"${ARCHIVE_PASSWORD}" "${GITHUB_WORKSPACE}/.snapshots/previous.repo.7z" . >/dev/null 2>&1
+          )
+
+          echo "Encrypted snapshot written to .snapshots/previous.repo.7z"
 
       - name: Delete workflow run history
         shell: bash
@@ -171,3 +156,27 @@ jobs:
           done
 
           echo "Done. Deleted completed runs: $deleted"
+
+      - name: Collapse history to single commit
+        shell: bash
+        env:
+          GIT_AUTHOR_NAME: History Collapser
+          GIT_AUTHOR_EMAIL: actions@github.com
+          GIT_COMMITTER_NAME: History Collapser
+          GIT_COMMITTER_EMAIL: actions@github.com
+        run: |
+          set -euo pipefail
+
+          count="$(git rev-list --count --max-count=2 HEAD)"
+          if [ "$count" -le 1 ]; then
+            echo "Repository already reduced to a single commit; nothing to do."
+            exit 0
+          fi
+
+          echo "Current branch has multiple commits; rewriting history to a single commit."
+
+          snapshot_message="Snapshot: ${GITHUB_SHA} [skip ci]"
+          git checkout --orphan _collapsed_tmp
+          git add -A
+          git commit -m "${snapshot_message}" -m "skip-checks:true"
+          git push origin HEAD:main --force-with-lease
