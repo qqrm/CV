@@ -14,7 +14,7 @@ A separate strength is practical AI adoption in engineering. I use a contextual 
 I lead the technology direction of a corporate platform in procurement and internal-process domains for a leading oil-and-gas company. End-to-end ownership of technology strategy, architecture, delivery, quality, and operations. Focus: controlled monolith-to-services transformation without stopping product development and without reliability degradation.
 
 **Operating model and scope:**
-- Program team of 40-45 people.
+- Project team of 40-45 people.
 - Cross-functional backend, DevOps, and QA teams managed via team leads and a unified release flow.
 - Cross-team alignment through API contracts, joint planning, release synchronization, and shared quality criteria.
 
