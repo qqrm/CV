@@ -167,7 +167,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          if git rev-list --max-count=2 HEAD | wc -l | grep -qx '1'; then
+          count="$(git rev-list --count --max-count=2 HEAD)"
+          if [ "$count" -le 1 ]; then
             echo "Repository already reduced to a single commit; nothing to do."
             exit 0
           fi
