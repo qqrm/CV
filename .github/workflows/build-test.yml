@@ -44,7 +44,7 @@ jobs:
         run: scripts/assemble_pages_dist.sh
 
       - name: Upload Typst PDFs
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: typst-pdfs-ci
           path: |
