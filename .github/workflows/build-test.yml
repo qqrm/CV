@@ -33,9 +33,10 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
 
       - name: Install Trunk
-        uses: jetli/trunk-action@v0.5.1
+        uses: taiki-e/install-action@v2
         with:
-          version: v0.21.14
+          tool: trunk@0.21.14
+          fallback: none
 
       - name: Build Leptos site
         run: trunk build --release --config Trunk.toml
