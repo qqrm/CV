@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::{mount::mount_to_body, prelude::*};
 use pulldown_cmark::{Options, Parser, html};
 use wasm_bindgen::prelude::wasm_bindgen;
 
@@ -211,10 +211,10 @@ fn initial_route() -> (Profile, Language) {
 #[component]
 pub fn App() -> impl IntoView {
     let (profile, initial_language) = initial_route();
-    let (language, set_language) = create_signal(initial_language);
-    let (theme, set_theme) = create_signal(Theme::Dark);
+    let (language, set_language) = signal(initial_language);
+    let (theme, set_theme) = signal(Theme::Dark);
 
-    let rendered_cv = create_memo(move |_| {
+    let rendered_cv = Memo::new(move |_| {
         let markdown = match language.get() {
             Language::En => profile.markdown(Language::En),
             Language::Ru => profile.markdown(Language::Ru),
@@ -223,7 +223,7 @@ pub fn App() -> impl IntoView {
         render_markdown(&body_without_title(markdown))
     });
 
-    create_effect(move |_| {
+    Effect::new(move || {
         if let Some(root) = document().document_element() {
             let _ = root.set_attribute("data-theme", theme.get().as_attr());
         }
@@ -245,7 +245,7 @@ pub fn App() -> impl IntoView {
             <button
                 class="theme-toggle"
                 aria-label=move || theme.get().toggle_label(language.get())
-                on:click=move |_| set_theme.update(|current| *current = current.toggle())
+                on:click=move |_| set_theme.set(theme.get().toggle())
             >
                 {move || match theme.get() {
                     Theme::Light => view! { <img src=MOON_SRC alt="Moon icon"/> },
@@ -293,7 +293,7 @@ pub fn App() -> impl IntoView {
             </header>
 
             <section class="content">
-                <article class="cv" inner_html=rendered_cv></article>
+                <article class="cv" inner_html=move || rendered_cv.get()></article>
             </section>
         </main>
     }
@@ -308,7 +308,7 @@ pub fn start() {
 
 #[cfg(test)]
 mod tests {
-    use super::{route_from_pathname, Language, Profile, AVATAR_SRC, MOON_SRC, SUN_SRC};
+    use super::{AVATAR_SRC, Language, MOON_SRC, Profile, SUN_SRC, route_from_pathname};
 
     #[test]
     fn route_detection_handles_all_supported_paths() {
