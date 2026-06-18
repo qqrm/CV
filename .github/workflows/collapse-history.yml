@@ -1,9 +1,6 @@
 name: collapse-history
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
