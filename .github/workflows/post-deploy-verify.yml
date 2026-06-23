@@ -1,0 +1,123 @@
+name: post-deploy-verify
+
+on:
+  workflow_run:
+    workflows: [release-site]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: post-deploy-verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-deployed-site:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Verify deployed pages and assets
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          pages=(
+            "https://qqrm.github.io/CV/"
+            "https://qqrm.github.io/CV/ru/"
+          )
+
+          robots_url="https://qqrm.github.io/CV/robots.txt"
+          sitemap_url="https://qqrm.github.io/CV/sitemap.txt"
+          pages_pdf_url="https://qqrm.github.io/CV/Belyakov_en_light.pdf"
+          font_url="https://qqrm.github.io/CV/NotoSans-Regular.ttf"
+          text_assets=(
+            "https://qqrm.github.io/CV/cv.md"
+            "https://qqrm.github.io/CV/cv_ru.md"
+            "https://qqrm.github.io/CV/cv.txt"
+            "https://qqrm.github.io/CV/cv_ru.txt"
+            "https://qqrm.github.io/CV/cv.html"
+            "https://qqrm.github.io/CV/cv_ru.html"
+            "https://qqrm.github.io/CV/llms.txt"
+          )
+
+          max_attempts=10
+          attempt=1
+
+          robots_tmp="$(mktemp)"
+          trap 'rm -f "$robots_tmp"' EXIT
+
+          while [ "$attempt" -le "$max_attempts" ]; do
+            echo "Attempt $attempt/$max_attempts"
+            all_ok=1
+
+            for url in "${pages[@]}"; do
+              status=$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' "$url")
+              if [ "$status" -ne 200 ]; then
+                echo "$url -> HTTP $status"
+                all_ok=0
+              else
+                echo "$url -> HTTP 200"
+              fi
+            done
+
+            robots_status=$(curl --silent --show-error --location --output "$robots_tmp" --write-out '%{http_code}' "$robots_url")
+            if [ "$robots_status" -ne 200 ] || ! grep -q "Disallow: /" "$robots_tmp"; then
+              echo "$robots_url -> HTTP $robots_status, missing expected Disallow rule"
+              all_ok=0
+            else
+              echo "$robots_url -> HTTP 200 with expected Disallow rule"
+            fi
+
+            sitemap_status=$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' "$sitemap_url")
+            if [ "$sitemap_status" -eq 200 ]; then
+              echo "$sitemap_url -> HTTP 200 (expected non-200)"
+              all_ok=0
+            else
+              echo "$sitemap_url -> HTTP $sitemap_status (expected non-200)"
+            fi
+
+            page_pdf_status=$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' "$pages_pdf_url")
+            page_pdf_type=$(curl --silent --show-error --location --output /dev/null --write-out '%{content_type}' "$pages_pdf_url")
+            if [ "$page_pdf_status" -ne 200 ] || [[ "$page_pdf_type" != *"application/pdf"* ]]; then
+              echo "$pages_pdf_url -> HTTP $page_pdf_status, content-type '$page_pdf_type'"
+              all_ok=0
+            else
+              echo "$pages_pdf_url -> HTTP 200, content-type '$page_pdf_type'"
+            fi
+
+            font_status=$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' "$font_url")
+            if [ "$font_status" -ne 200 ]; then
+              echo "$font_url -> HTTP $font_status"
+              all_ok=0
+            else
+              echo "$font_url -> HTTP 200"
+            fi
+
+            for url in "${text_assets[@]}"; do
+              status=$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' "$url")
+              if [ "$status" -ne 200 ]; then
+                echo "$url -> HTTP $status"
+                all_ok=0
+              else
+                echo "$url -> HTTP 200"
+              fi
+            done
+
+            if [ "$all_ok" -eq 1 ]; then
+              echo "Post-deploy verification passed"
+              exit 0
+            fi
+
+            if [ "$attempt" -eq "$max_attempts" ]; then
+              echo "Post-deploy verification failed after $max_attempts attempts" >&2
+              exit 1
+            fi
+
+            echo "Deployment may still be propagating; retrying in 30s"
+            sleep 30
+            attempt=$((attempt + 1))
+          done

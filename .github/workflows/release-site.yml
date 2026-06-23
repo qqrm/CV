@@ -1,0 +1,85 @@
+name: release-site
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
+concurrency:
+  group: release-site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  site:
+    name: Build site and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Rust toolchain and cache
+        uses: ./.github/actions/setup-rust
+
+      - name: Install Rust wasm target
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup target add wasm32-unknown-unknown
+
+      - name: Install Trunk
+        uses: taiki-e/install-action@v2
+        with:
+          tool: trunk@0.21.14
+          fallback: none
+
+      - name: Build PDFs with Typst
+        uses: ./.github/actions/build-pdfs
+
+      - name: Clean previous site output
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf docs dist
+
+      - name: Build wasm site
+        shell: bash
+        run: |
+          set -euo pipefail
+          trunk build --release --config Trunk.toml
+
+      - name: Assemble site output
+        shell: bash
+        run: |
+          set -euo pipefail
+          scripts/assemble_pages_dist.sh
+
+      - name: Prepare Pages directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv dist docs
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

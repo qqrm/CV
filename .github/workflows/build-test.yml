@@ -1,0 +1,59 @@
+name: build-test
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  actions: write
+
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Rust toolchain and cache
+        uses: ./.github/actions/setup-rust
+
+      - name: Build PDFs
+        uses: ./.github/actions/build-pdfs
+
+      - name: Install wasm target
+        run: rustup target add wasm32-unknown-unknown
+
+      - name: Install Trunk
+        uses: taiki-e/install-action@v2
+        with:
+          tool: trunk@0.21.14
+          fallback: none
+
+      - name: Build Leptos site
+        run: trunk build --release --config Trunk.toml
+
+      - name: Assemble production-like dist
+        run: scripts/assemble_pages_dist.sh
+
+      - name: Upload Typst PDFs
+        uses: actions/upload-artifact@v7
+        with:
+          name: typst-pdfs-ci
+          path: |
+            typst/en/*_light.pdf
+            typst/en/*_dark.pdf
+            typst/ru/*_light.pdf
+            typst/ru/*_dark.pdf
+          overwrite: true
+
+  pdf-validate:
+    uses: ./.github/workflows/pdf-validate.yml
