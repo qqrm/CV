@@ -40,7 +40,7 @@ jobs:
           rustup target add wasm32-unknown-unknown
 
       - name: Install Trunk
-        uses: taiki-e/install-action@v2.85.4
+        uses: taiki-e/install-action@v2.85.8
         with:
           tool: trunk@0.21.14
           fallback: none
