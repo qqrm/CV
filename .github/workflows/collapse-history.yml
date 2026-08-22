@@ -127,3 +127,31 @@ jobs:
           git add -A
           git commit -m "${snapshot_message}" -m "skip-checks:true"
           git push origin HEAD:main --force-with-lease=refs/heads/main:"$base_sha"
+
+      - name: Verify workflows survived the collapse
+        if: steps.target.outputs.should_collapse == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.CV_HISTORY_COLLAPSE_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          # The orphan force-push above makes GitHub mark some workflows
+          # state=deleted while their files are still on main. A PR-only
+          # workflow can never revive itself, because no event reaches it.
+          orphaned=""
+          for path in .github/workflows/*.yml .github/workflows/*.yaml; do
+            [ -e "$path" ] || continue
+            state="$(gh api "repos/$REPO/actions/workflows/$(basename "$path")" --jq '.state' 2>/dev/null || echo missing)"
+            [ "$state" = "active" ] && continue
+            orphaned="$orphaned $path($state)"
+          done
+
+          if [ -n "$orphaned" ]; then
+            echo "::error::Collapse orphaned these workflows:$orphaned"
+            echo "Revive them with a commit that touches each file."
+            exit 1
+          fi
+
+          echo "All workflows still active."
