@@ -1,3 +1,4 @@
+# Revive by pushing a commit that touches this file (see build-test.yml note).
 name: Enable Dependabot auto-merge
 
 on:

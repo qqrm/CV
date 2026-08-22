@@ -1,3 +1,6 @@
+# NOTE: collapse-history purges run history and force-pushes an orphan commit,
+# after which GitHub marks PR-only workflows state=deleted and stops firing them.
+# Revive by pushing a commit that touches this file.
 name: build-test
 
 on:
