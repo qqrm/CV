@@ -1,10 +1,10 @@
-# revive-marker: touched to re-register after a history collapse
-# NOTE: collapse-history purges run history and force-pushes an orphan commit,
-# after which GitHub marks PR-only workflows state=deleted and stops firing them.
-# Revive by pushing a commit that touches this file.
 name: build-test
 
 on:
+  # Mandatory: collapse-history purges the run history, and GitHub drops
+  # any workflow that has neither runs nor workflow_dispatch. A PR-only
+  # workflow can never revive itself, because no event reaches it.
+  workflow_dispatch:
   pull_request:
 
 permissions:
