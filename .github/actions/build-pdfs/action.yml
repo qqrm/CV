@@ -1,0 +1,109 @@
+name: 'Setup Typst and build PDFs'
+description: 'Install dependencies and build Typst PDFs.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Disable cargo progress
+      shell: bash
+      run: |
+        set -euo pipefail
+        echo "CARGO_TERM_PROGRESS_WHEN=${CARGO_TERM_PROGRESS_WHEN:-never}" >> "$GITHUB_ENV"
+
+    - name: Install Typst
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        if ! command -v curl >/dev/null 2>&1; then
+          sudo apt-get update
+          sudo apt-get install -y curl
+        fi
+
+        tmp_dir="$(mktemp -d)"
+        trap 'rm -rf "$tmp_dir"' EXIT
+
+        typst_version="${TYPST_VERSION:-0.15.0}"
+        typst_url="https://github.com/typst/typst/releases/download/v${typst_version}/typst-x86_64-unknown-linux-musl.tar.xz"
+
+        curl --fail --silent --show-error --location \
+          --retry 5 --retry-delay 2 --retry-all-errors \
+          --output "$tmp_dir/typst.tar.xz" \
+          "$typst_url"
+
+        tar -xJf "$tmp_dir/typst.tar.xz" -C "$tmp_dir"
+
+        install_dir="$HOME/.local/bin"
+        mkdir -p "$install_dir"
+
+        typst_bin="$(find "$tmp_dir" -type f -name typst | head -n 1)"
+        if [ -z "$typst_bin" ]; then
+          echo "Failed to locate typst binary in downloaded archive" >&2
+          exit 1
+        fi
+
+        mv "$typst_bin" "$install_dir/typst"
+        chmod +x "$install_dir/typst"
+
+        echo "$install_dir" >> "$GITHUB_PATH"
+        export PATH="$install_dir:$PATH"
+
+        typst --version
+
+    - name: Validate bundled PDF font
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        for font in \
+          content/fonts/NotoSans-Regular.ttf \
+          content/fonts/NotoSans-Bold.ttf \
+          content/fonts/NotoSans-Italic.ttf \
+          content/fonts/NotoSans-BoldItalic.ttf
+        do
+          test -s "$font"
+        done
+
+        typst fonts --font-path content/fonts | grep -Fx "Noto Sans"
+
+    - name: Compile Typst PDFs with canonical names
+      shell: bash
+      run: |
+        set -euo pipefail
+        shopt -s nullglob
+
+        rm -f typst/en/*.pdf typst/ru/*.pdf
+
+        for src in typst/en/*.typ typst/ru/*.typ; do
+          stem="${src%.typ}"
+          if [[ "$stem" == *_dark ]]; then
+            dest="${stem}.pdf"
+          else
+            dest="${stem}_light.pdf"
+          fi
+
+          echo "Compiling $src -> $dest"
+          typst compile --root . --font-path content/fonts "$src" "$dest"
+        done
+
+    - name: Validate canonical PDF outputs
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        expected=(
+          typst/en/Belyakov_en_light.pdf
+          typst/en/Belyakov_en_dark.pdf
+          typst/ru/Belyakov_ru_light.pdf
+          typst/ru/Belyakov_ru_dark.pdf
+        )
+
+        for pdf in "${expected[@]}"; do
+          test -s "$pdf"
+          head -c 4 "$pdf" | grep -q '%PDF'
+        done
+
+        actual_count=$(find typst -maxdepth 2 -type f -name '*.pdf' | wc -l)
+        if [ "$actual_count" -ne 4 ]; then
+          echo "Expected exactly 4 canonical PDFs, found $actual_count" >&2
+          exit 1
+        fi
