@@ -113,7 +113,7 @@ jobs:
               mutool info "$pdf"
               echo
               echo "== mutool clean -d (parse/rewrite check) =="
-              mutool clean -d "$pdf" /tmp/$(basename "$pdf")
+              mutool clean -d "$pdf" "/tmp/$(basename "$pdf")"
             } > "$report" 2>&1 || status=1
           done
           exit "$status"
