@@ -1,26 +1,27 @@
 version: 2
+multi-ecosystem-groups:
+  maintenance:
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "12:00"
+      timezone: "Europe/Moscow"
 
-# Keep dependencies and actions up-to-date. This includes the Rust toolchain
-# (the `rust-toolchain.toml` file), Cargo dependencies, and GitHub Actions.
 updates:
-  # Update the Rust toolchain (rust-toolchain.toml) to the latest stable
-  - package-ecosystem: "rust-toolchain"
-    directory: "/"
-    schedule:
-      interval: weekly
-    # Limit the number of simultaneous PRs for the toolchain
-    open-pull-requests-limit: 1
-
-  # Update Cargo dependencies defined in Cargo.toml/Cargo.lock
-  - package-ecosystem: "cargo"
-    directory: "/"
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 10
-
-  # Update GitHub Actions used in workflows
   - package-ecosystem: "github-actions"
     directory: "/"
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 10
+    patterns: ["*"]
+    multi-ecosystem-group: "maintenance"
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: "cargo"
+    directory: "/"
+    patterns: ["*"]
+    multi-ecosystem-group: "maintenance"
+    cooldown:
+      default-days: 7
+    groups:
+      security:
+        applies-to: "security-updates"
+        patterns: ["*"]

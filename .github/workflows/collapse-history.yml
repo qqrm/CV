@@ -1,6 +1,8 @@
 name: collapse-history
 
-on:
+# This existing maintenance policy checks out fixed main, never PR code or artifacts.
+# Its retention policy is independent of dependency auto-merge and requires a separate decision.
+on: # zizmor: ignore[dangerous-triggers]
   workflow_run:
     workflows: [post-deploy-verify]
     types: [completed]
@@ -30,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
           ref: main

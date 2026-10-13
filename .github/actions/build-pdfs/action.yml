@@ -3,12 +3,6 @@ description: 'Install dependencies and build Typst PDFs.'
 runs:
   using: 'composite'
   steps:
-    - name: Disable cargo progress
-      shell: bash
-      run: |
-        set -euo pipefail
-        echo "CARGO_TERM_PROGRESS_WHEN=${CARGO_TERM_PROGRESS_WHEN:-never}" >> "$GITHUB_ENV"
-
     - name: Install Typst
       shell: bash
       run: |
@@ -22,7 +16,7 @@ runs:
         tmp_dir="$(mktemp -d)"
         trap 'rm -rf "$tmp_dir"' EXIT
 
-        typst_version="${TYPST_VERSION:-0.15.0}"
+        typst_version="0.15.0"
         typst_url="https://github.com/typst/typst/releases/download/v${typst_version}/typst-x86_64-unknown-linux-musl.tar.xz"
 
         curl --fail --silent --show-error --location \
@@ -30,9 +24,11 @@ runs:
           --output "$tmp_dir/typst.tar.xz" \
           "$typst_url"
 
+        echo "59b207df01be2dab9f13e80f73d04d7ff8273ffd46b3dd1b9eef5c60f3eeabea  $tmp_dir/typst.tar.xz" | sha256sum --check --strict
+
         tar -xJf "$tmp_dir/typst.tar.xz" -C "$tmp_dir"
 
-        install_dir="$HOME/.local/bin"
+        install_dir="$RUNNER_TEMP/typst-bin"
         mkdir -p "$install_dir"
 
         typst_bin="$(find "$tmp_dir" -type f -name typst | head -n 1)"
@@ -44,10 +40,7 @@ runs:
         mv "$typst_bin" "$install_dir/typst"
         chmod +x "$install_dir/typst"
 
-        echo "$install_dir" >> "$GITHUB_PATH"
-        export PATH="$install_dir:$PATH"
-
-        typst --version
+        "$install_dir/typst" --version
 
     - name: Validate bundled PDF font
       shell: bash
@@ -63,7 +56,7 @@ runs:
           test -s "$font"
         done
 
-        typst fonts --font-path content/fonts | grep -Fx "Noto Sans"
+        "$RUNNER_TEMP/typst-bin/typst" fonts --font-path content/fonts | grep -Fx "Noto Sans"
 
     - name: Compile Typst PDFs with canonical names
       shell: bash
@@ -82,7 +75,7 @@ runs:
           fi
 
           echo "Compiling $src -> $dest"
-          typst compile --root . --font-path content/fonts "$src" "$dest"
+          "$RUNNER_TEMP/typst-bin/typst" compile --root . --font-path content/fonts "$src" "$dest"
         done
 
     - name: Validate canonical PDF outputs

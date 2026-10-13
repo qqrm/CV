@@ -29,11 +29,13 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
-      actions: write
+
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
 
       - name: Set build date
         shell: bash
@@ -65,7 +67,7 @@ jobs:
 
       - name: Upload PDFs (Typst)
         if: ${{ inputs.builder == 'typst' }}
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: cv-pdfs-typst-${{ env.DATE }}
           path: typst/**/*.pdf
@@ -73,7 +75,7 @@ jobs:
 
       - name: Upload PDFs (TypePDF)
         if: ${{ inputs.builder == 'typepdf' }}
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: cv-pdfs-typepdf-${{ env.DATE }}
           path: typst/**/*_typepdf.pdf

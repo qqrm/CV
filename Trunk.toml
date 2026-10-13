@@ -1,4 +1,5 @@
 [build]
+locked = true
 dist = "dist"
 public_url = "/CV/"
 

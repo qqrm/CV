@@ -1,11 +1,12 @@
-name: build-test
+name: CI
 
 on:
   pull_request:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
-  actions: write
 
 env:
   CARGO_TERM_PROGRESS_WHEN: never
@@ -21,7 +22,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
 
       - name: Setup Rust toolchain and cache
         uses: ./.github/actions/setup-rust
@@ -33,7 +36,7 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
 
       - name: Install Trunk
-        uses: taiki-e/install-action@v2.87.26
+        uses: taiki-e/install-action@f7e5d7c961414b23f5b25b2da9294395d08513ad
         with:
           tool: trunk@0.21.14
           fallback: none
@@ -45,7 +48,7 @@ jobs:
         run: scripts/assemble_pages_dist.sh
 
       - name: Upload Typst PDFs
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: typst-pdfs-ci
           path: |
@@ -57,3 +60,17 @@ jobs:
 
   pdf-validate:
     uses: ./.github/workflows/pdf-validate.yml
+
+  ci-gate:
+    if: always()
+    needs: [ci, pdf-validate]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require every build and test job to succeed
+        env:
+          RESULT_0: ${{ needs.ci.result }}
+          RESULT_1: ${{ needs.pdf-validate.result }}
+        run: |
+          test "$RESULT_0" = success
+          test "$RESULT_1" = success

@@ -1,6 +1,7 @@
 name: post-deploy-verify
 
-on:
+# Read-only HTTP checks against fixed public URLs; no checkout or workflow artifacts.
+on: # zizmor: ignore[dangerous-triggers]
   workflow_run:
     workflows: [release-site]
     types: [completed]
