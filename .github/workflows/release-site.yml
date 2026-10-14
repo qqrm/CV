@@ -5,6 +5,11 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      expected_sha:
+        description: 'Optional exact main commit expected by the dependency merge controller'
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -18,6 +23,7 @@ concurrency:
 
 jobs:
   site:
+    if: github.ref == 'refs/heads/main'
     name: Build site and deploy
     runs-on: ubuntu-latest
     timeout-minutes: 40
@@ -27,6 +33,17 @@ jobs:
       id-token: write
 
     steps:
+      - name: Verify the publication commit
+        env:
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+          ACTUAL_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -n "$EXPECTED_SHA" ]; then
+            [[ "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]
+            test "$ACTUAL_SHA" = "$EXPECTED_SHA"
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:

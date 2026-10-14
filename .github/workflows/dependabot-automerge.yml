@@ -1,10 +1,11 @@
 name: Dependabot Automerge
 
 # workflow_run is intentional: no checkout, artifacts, or PR-controlled execution.
-# The native gates and --match-head-commit bind the write to the checked commit.
+# CV retains history collapse; this controller enforces the merge policy instead
+# of requiring native status checks on the rewritten, intentionally skipped commit.
 on: # zizmor: ignore[dangerous-triggers]
   workflow_run:
-    workflows: [CI, Workflow Security]
+    workflows: [CI, Workflow Security, CodeQL]
     types: [completed]
 
 # Metadata only: never check out PR code or consume its artifacts here.
@@ -12,9 +13,10 @@ permissions:
   contents: write
   pull-requests: write
   checks: read
+  actions: write
 
 concurrency:
-  group: dependabot-automerge-${{ github.event.workflow_run.head_branch }}
+  group: cv-main-write
   cancel-in-progress: false
 
 jobs:
@@ -26,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Enable native auto-merge for the checked Dependabot commit
+      - name: Merge the checked Dependabot commit and start publication
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
@@ -38,17 +40,57 @@ jobs:
             echo 'No associated pull request; nothing to merge.'
             exit 0
           fi
-          info="$(gh pr view "$pr" --repo "$REPO" --json author,isCrossRepository,headRefOid,baseRefName,isDraft,state,statusCheckRollup)"
+          info="$(gh pr view "$pr" --repo "$REPO" --json author,isCrossRepository,headRefOid,baseRefName,isDraft,state,mergeStateStatus,statusCheckRollup)"
           if ! jq -e --arg sha "$CHECKED_SHA" '
+            # eligibility-policy-begin
             (.author.login == "app/dependabot" or .author.login == "dependabot[bot]") and
             .isCrossRepository == false and .baseRefName == "main" and
             .state == "OPEN" and .isDraft == false and .headRefOid == $sha and
+            .mergeStateStatus == "CLEAN" and
             (["ci-gate", "workflow-security-gate"] -
-              [.statusCheckRollup[] | select(.status == "COMPLETED" and .conclusion == "SUCCESS") | .name] | length == 0)
+              [.statusCheckRollup[] | select(.status == "COMPLETED" and .conclusion == "SUCCESS") | .name] | length == 0) and
+            all(.statusCheckRollup[];
+              if .__typename == "CheckRun" then
+                .status == "COMPLETED" and
+                (.conclusion == "SUCCESS" or .conclusion == "NEUTRAL" or .conclusion == "SKIPPED")
+              elif .__typename == "StatusContext" then .state == "SUCCESS"
+              else false end)
+            # eligibility-policy-end
           ' <<< "$info" >/dev/null; then
-            echo 'The current Dependabot commit has not passed both required gates.'
+            echo 'The current Dependabot commit is not ready; no merge.'
             exit 0
           fi
-          # Native protection enforces checks and an up-to-date branch, without reviews.
-          gh pr merge "$pr" --repo "$REPO" --auto --squash \
+
+          # Repeat provenance verification using only GitHub metadata, never PR code.
+          commits="$(gh api "repos/$REPO/pulls/$pr/commits?per_page=100" --paginate --slurp)"
+          jq -e --arg sha "$CHECKED_SHA" '
+            # provenance-policy-begin
+            add | length > 0 and .[-1].sha == $sha and
+            all(.[]; .author.login == "dependabot[bot]" and
+              .committer.login == "web-flow" and .commit.verification.verified == true)
+            # provenance-policy-end
+          ' <<< "$commits" >/dev/null
+
+          base_sha="$(gh api "repos/$REPO/git/ref/heads/main" --jq .object.sha)"
+          comparison="$(gh api "repos/$REPO/compare/$base_sha...$CHECKED_SHA")"
+          if ! jq -e --arg base "$base_sha" '
+            # freshness-policy-begin
+            .behind_by == 0 and .merge_base_commit.sha == $base
+            # freshness-policy-end
+          ' <<< "$comparison" >/dev/null; then
+            echo 'Dependabot must refresh the batch after main changed; no merge.'
+            exit 0
+          fi
+
+          # Serialize with collapse and require the exact checked PR head.
+          gh pr merge "$pr" --repo "$REPO" --squash \
             --match-head-commit "$CHECKED_SHA"
+          merged="$(gh pr view "$pr" --repo "$REPO" --json state,mergeCommit)"
+          jq -e '.state == "MERGED"' <<< "$merged" >/dev/null
+          merge_sha="$(jq -r '.mergeCommit.oid' <<< "$merged")"
+          [[ "$merge_sha" =~ ^[0-9a-f]{40}$ ]]
+
+          # GITHUB_TOKEN pushes do not trigger push workflows. Explicit dispatch
+          # keeps publication automatic without adding a PAT or an approval.
+          gh workflow run release-site.yml --repo "$REPO" --ref main \
+            -f expected_sha="$merge_sha"

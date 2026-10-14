@@ -29,6 +29,11 @@ jobs:
       - name: Setup Rust toolchain and cache
         uses: ./.github/actions/setup-rust
 
+      - name: Test site and content converter
+        run: |
+          cargo test --locked
+          cargo test --locked --manifest-path scripts/convert_cv/Cargo.toml
+
       - name: Build PDFs
         uses: ./.github/actions/build-pdfs
 
@@ -61,9 +66,25 @@ jobs:
   pdf-validate:
     uses: ./.github/workflows/pdf-validate.yml
 
+  dependency-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: taiki-e/install-action@f7e5d7c961414b23f5b25b2da9294395d08513ad
+        with:
+          tool: cargo-audit@0.22.2
+          fallback: none
+      - name: Audit both committed lockfiles
+        run: |
+          cargo audit --deny unsound
+          cargo audit --deny unsound --file scripts/convert_cv/Cargo.lock
+
   ci-gate:
     if: always()
-    needs: [ci, pdf-validate]
+    needs: [ci, pdf-validate, dependency-audit]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
@@ -71,6 +92,8 @@ jobs:
         env:
           RESULT_0: ${{ needs.ci.result }}
           RESULT_1: ${{ needs.pdf-validate.result }}
+          AUDIT_RESULT: ${{ needs.dependency-audit.result }}
         run: |
           test "$RESULT_0" = success
           test "$RESULT_1" = success
+          test "$AUDIT_RESULT" = success

@@ -18,8 +18,9 @@ This document describes how we work with CI/CD and infrastructure in our project
 - Monitor CI from the terminal using `gh run watch` to follow pipeline progress without leaving the shell.
 
 ### Security check
-All automated workflows start with a security step. If the author of a pull
-request is not `qqrm`, the pipeline stops immediately and no jobs run.
+Pull requests from every author run read-only build and security checks. Write
+workflows never execute pull-request code. Dependency merges independently verify
+signed Dependabot commits through GitHub metadata.
 
 ### Workflow permissions and secrets
 - Define a `permissions` block in each GitHub Actions workflow.
@@ -33,7 +34,28 @@ request is not `qqrm`, the pipeline stops immediately and no jobs run.
 - Prefer the current validator set in `.github/workflows/pdf-validate.yml` (`qpdf`, `mutool`, `pdfinfo`) unless there is a documented team decision to replace them.
 
 ## Automatic pull request merging
-- The `.github/workflows/dependabot-automerge.yml` workflow enables auto-merge for Dependabot PRs once all checks succeed.
+- CV intentionally retains post-publication Git history collapse and deletion of
+  completed CI runs. The owner confirmed this policy on 2026-10-14. It is an
+  exception to the other repositories' native required-check protection.
+- The `.github/workflows/dependabot-automerge.yml` controller merges the exact
+  signed Dependabot head after `ci-gate` and `workflow-security-gate` succeed,
+  other reported checks finish without failure, and the branch includes current
+  `main`. Drafts, forks, changed heads and stale batches are rejected. No review
+  or cron merge sweep is required.
+- Merge and collapse jobs share a concurrency group. This serializes these two
+  controllers; it does not prevent the owner from independently writing `main`.
+  These workflow checks are not equivalent to strict server-side branch rules.
+- After a merge made with `GITHUB_TOKEN`, the controller explicitly dispatches
+  `release-site` for `main` with the expected merge SHA. Publication rejects a
+  changed SHA; it never publishes an arbitrary pull-request ref. This avoids a
+  missing release caused by GitHub's suppression of token-generated push events.
+- Successful publication runs `post-deploy-verify`, then `collapse-history`.
+  Collapse keeps its exact-SHA/force-with-lease checks and existing deletion policy.
+  Completed check logs will intentionally disappear; historical PR check links
+  are therefore not permanent audit evidence.
+- Retain the existing branch policy that permits force-push history collapse.
+  Do not add strict native required checks without first changing the retention
+  policy. Failed or stale dependency batches remain open for correction.
 - Do not remove or disable this workflow. Auto-merge helps keep the main branch healthy.
 
 ## Workflow and action naming scheme

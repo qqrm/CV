@@ -1,7 +1,7 @@
 name: collapse-history
 
 # This existing maintenance policy checks out fixed main, never PR code or artifacts.
-# Its retention policy is independent of dependency auto-merge and requires a separate decision.
+# The owner explicitly retains Git/CI history collapse as CV's policy exception.
 on: # zizmor: ignore[dangerous-triggers]
   workflow_run:
     workflows: [post-deploy-verify]
@@ -13,7 +13,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: collapse-history-main
+  group: cv-main-write
   cancel-in-progress: false
 
 jobs:
