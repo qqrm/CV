@@ -39,6 +39,13 @@ class MergePolicyTests(unittest.TestCase):
     def test_checked_bot_needs_no_human_review(self):
         self.assertTrue(evaluate("eligibility", ready_pr(), sha="checked"))
 
+    def test_merged_checked_head_can_recover_failed_dispatch(self):
+        pr = ready_pr()
+        pr.update(state="MERGED", mergeCommit={"oid": "a" * 40}, mergeStateStatus="UNKNOWN")
+        self.assertTrue(evaluate("eligibility", pr, sha="checked"))
+        pr["headRefOid"] = "other"
+        self.assertFalse(evaluate("eligibility", pr, sha="checked"))
+
     def test_wrong_identity_or_target_is_rejected(self):
         for key, value in [("author", {"login": "qqrm"}),
                            ("isCrossRepository", True), ("isDraft", True),
