@@ -1,0 +1,104 @@
+name: release-site
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      expected_sha:
+        description: 'Optional exact main commit expected by the dependency merge controller'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
+concurrency:
+  group: release-site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  site:
+    if: github.ref == 'refs/heads/main'
+    name: Build site and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Verify the publication commit
+        env:
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+          ACTUAL_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -n "$EXPECTED_SHA" ]; then
+            [[ "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]
+            test "$ACTUAL_SHA" = "$EXPECTED_SHA"
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Setup Rust toolchain and cache
+        uses: ./.github/actions/setup-rust
+
+      - name: Install Rust wasm target
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup target add wasm32-unknown-unknown
+
+      - name: Install Trunk
+        uses: taiki-e/install-action@f7e5d7c961414b23f5b25b2da9294395d08513ad
+        with:
+          tool: trunk@0.21.14
+          fallback: none
+
+      - name: Build PDFs with Typst
+        uses: ./.github/actions/build-pdfs
+
+      - name: Clean previous site output
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf docs dist
+
+      - name: Build wasm site
+        shell: bash
+        run: |
+          set -euo pipefail
+          trunk build --release --config Trunk.toml
+
+      - name: Assemble site output
+        shell: bash
+        run: |
+          set -euo pipefail
+          scripts/assemble_pages_dist.sh
+
+      - name: Prepare Pages directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv dist docs
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
+        with:
+          path: ./docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346

@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_PROGRESS_WHEN: never
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Setup Rust toolchain and cache
+        uses: ./.github/actions/setup-rust
+
+      - name: Test site and content converter
+        run: |
+          cargo test --locked
+          cargo test --locked --manifest-path scripts/convert_cv/Cargo.toml
+
+      - name: Build PDFs
+        uses: ./.github/actions/build-pdfs
+
+      - name: Install wasm target
+        run: rustup target add wasm32-unknown-unknown
+
+      - name: Install Trunk
+        uses: taiki-e/install-action@f7e5d7c961414b23f5b25b2da9294395d08513ad
+        with:
+          tool: trunk@0.21.14
+          fallback: none
+
+      - name: Build Leptos site
+        run: trunk build --release --config Trunk.toml
+
+      - name: Assemble production-like dist
+        run: scripts/assemble_pages_dist.sh
+
+      - name: Upload Typst PDFs
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: typst-pdfs-ci
+          path: |
+            typst/en/*_light.pdf
+            typst/en/*_dark.pdf
+            typst/ru/*_light.pdf
+            typst/ru/*_dark.pdf
+          overwrite: true
+
+  pdf-validate:
+    uses: ./.github/workflows/pdf-validate.yml
+
+  dependency-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: taiki-e/install-action@f7e5d7c961414b23f5b25b2da9294395d08513ad
+        with:
+          tool: cargo-audit@0.22.2
+          fallback: none
+      - name: Audit both committed lockfiles
+        run: |
+          cargo audit --deny unsound
+          cargo audit --deny unsound --file scripts/convert_cv/Cargo.lock
+
+  ci-gate:
+    if: always()
+    needs: [ci, pdf-validate, dependency-audit]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require every build and test job to succeed
+        env:
+          RESULT_0: ${{ needs.ci.result }}
+          RESULT_1: ${{ needs.pdf-validate.result }}
+          AUDIT_RESULT: ${{ needs.dependency-audit.result }}
+        run: |
+          test "$RESULT_0" = success
+          test "$RESULT_1" = success
+          test "$AUDIT_RESULT" = success

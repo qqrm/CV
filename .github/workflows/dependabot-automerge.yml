@@ -1,0 +1,113 @@
+name: Dependabot Automerge
+
+# workflow_run is intentional: no checkout, artifacts, or PR-controlled execution.
+# CV retains history collapse; this controller enforces the merge policy instead
+# of requiring native status checks on the rewritten, intentionally skipped commit.
+on: # zizmor: ignore[dangerous-triggers]
+  workflow_run:
+    workflows: [CI, Workflow Security, CodeQL]
+    types: [completed]
+
+# Metadata only: never check out PR code or consume its artifacts here.
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+  actions: write
+
+concurrency:
+  group: cv-main-write
+  cancel-in-progress: false
+
+jobs:
+  automerge:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Merge the checked Dependabot commit and start publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          CHECKED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          pr="$(jq -r '.workflow_run.pull_requests[0].number // empty' "$GITHUB_EVENT_PATH")"
+          if [[ ! "$pr" =~ ^[0-9]+$ ]]; then
+            echo 'No associated pull request; nothing to merge.'
+            exit 0
+          fi
+          info="$(gh pr view "$pr" --repo "$REPO" --json author,isCrossRepository,headRefOid,baseRefName,isDraft,state,mergeCommit,mergeStateStatus,statusCheckRollup)"
+          if ! jq -e --arg sha "$CHECKED_SHA" '
+            # eligibility-policy-begin
+            (.author.login == "app/dependabot" or .author.login == "dependabot[bot]") and
+            .isCrossRepository == false and .baseRefName == "main" and
+            .isDraft == false and .headRefOid == $sha and
+            ((.state == "OPEN" and .mergeStateStatus == "CLEAN") or
+             (.state == "MERGED" and (.mergeCommit.oid | test("^[a-f0-9]{40}$")))) and
+            (["ci-gate", "workflow-security-gate"] -
+              [.statusCheckRollup[] | select(.status == "COMPLETED" and .conclusion == "SUCCESS") | .name] | length == 0) and
+            all(.statusCheckRollup[];
+              if .__typename == "CheckRun" then
+                .status == "COMPLETED" and
+                (.conclusion == "SUCCESS" or .conclusion == "NEUTRAL" or .conclusion == "SKIPPED")
+              elif .__typename == "StatusContext" then .state == "SUCCESS"
+              else false end)
+            # eligibility-policy-end
+          ' <<< "$info" >/dev/null; then
+            echo 'The current Dependabot commit is not ready; no merge.'
+            exit 0
+          fi
+
+          # Repeat provenance verification using only GitHub metadata, never PR code.
+          commits="$(gh api "repos/$REPO/pulls/$pr/commits?per_page=100" --paginate --slurp)"
+          jq -e --arg sha "$CHECKED_SHA" '
+            # provenance-policy-begin
+            add | length > 0 and .[-1].sha == $sha and
+            all(.[]; .author.login == "dependabot[bot]" and
+              .committer.login == "web-flow" and .commit.verification.verified == true)
+            # provenance-policy-end
+          ' <<< "$commits" >/dev/null
+
+          if jq -e '.state == "OPEN"' <<< "$info" >/dev/null; then
+            base_sha="$(gh api "repos/$REPO/git/ref/heads/main" --jq .object.sha)"
+            comparison="$(gh api "repos/$REPO/compare/$base_sha...$CHECKED_SHA")"
+            if ! jq -e --arg base "$base_sha" '
+              # freshness-policy-begin
+              .behind_by == 0 and .merge_base_commit.sha == $base
+              # freshness-policy-end
+            ' <<< "$comparison" >/dev/null; then
+              echo 'Dependabot must refresh the batch after main changed; no merge.'
+              exit 0
+            fi
+
+            # Serialize with collapse and require the exact checked PR head.
+            gh pr merge "$pr" --repo "$REPO" --squash \
+              --match-head-commit "$CHECKED_SHA"
+          fi
+          merged="$(gh pr view "$pr" --repo "$REPO" --json state,mergeCommit)"
+          jq -e '.state == "MERGED"' <<< "$merged" >/dev/null
+          merge_sha="$(jq -r '.mergeCommit.oid' <<< "$merged")"
+          [[ "$merge_sha" =~ ^[0-9a-f]{40}$ ]]
+
+          # Recovery after a transient dispatch failure is allowed only while the
+          # same immutable merge is still the target branch head.
+          current="$(gh api "repos/$REPO/git/ref/heads/main" --jq .object.sha)"
+          if [ "$current" != "$merge_sha" ]; then
+            echo 'Target branch advanced; do not publish an unrelated commit.'
+            exit 0
+          fi
+          # GITHUB_TOKEN pushes do not trigger push workflows. Explicit dispatch
+          # keeps publication automatic without adding a PAT or an approval.
+          runs="$(gh api "repos/$REPO/actions/workflows/release-site.yml/runs?head_sha=$merge_sha&per_page=100")"
+          if jq -e --arg sha "$merge_sha" '.workflow_runs | any(.[];
+              .head_sha == $sha and (.event == "push" or .event == "workflow_dispatch") and
+              (.status != "completed" or .conclusion == "success"))' <<< "$runs" >/dev/null; then
+            echo 'This merge already has an active or successful publication run.'
+            exit 0
+          fi
+          gh workflow run release-site.yml --repo "$REPO" --ref main \
+            -f expected_sha="$merge_sha"

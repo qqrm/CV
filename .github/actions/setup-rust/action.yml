@@ -1,0 +1,20 @@
+name: 'Setup Rust toolchain and cache'
+description: 'Install Rust toolchain and cache cargo artifacts.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
+      with:
+        toolchain: stable
+
+    - name: Cache cargo registry and target
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          ~/.cargo/bin
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+        restore-keys: ${{ runner.os }}-cargo-
