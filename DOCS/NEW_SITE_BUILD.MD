@@ -31,6 +31,11 @@ scripts/assemble_pages_dist.sh
 
 The final `dist/` includes:
 - `index.html` and the `ru` routed page
+- `services/ru/index.html` and `services/services.css` for the standalone B2B page
 - Trunk-generated runtime assets (`.wasm`, `.js`, `.css`)
 - 4 canonical PDFs at `dist/` root
 - `robots.txt` with `Disallow: /`
+
+On pull requests, CI also uploads this assembled directory as the `site-preview`
+artifact for review. It does not deploy the artifact. Preview with `/CV/` as the
+site's base path; see [B2B_SERVICES.MD](B2B_SERVICES.MD).

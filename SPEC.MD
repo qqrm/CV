@@ -11,6 +11,7 @@
 - `profiles/cv/en/CV.MD`, `profiles/cv/ru/CV_RU.MD` — canonical CV narratives.
 - `typst/en`, `typst/ru` — Typst entry points for light/dark PDF outputs.
 - `src/lib.rs` — Leptos website that renders the Markdown CV.
+- `services/ru/index.html`, `services/services.css` — separate Russian B2B services page.
 - `scripts/assemble_pages_dist.sh` — production-like Pages artifact assembly.
 
 ## Artifact Contract
@@ -20,12 +21,14 @@ CI must:
 - Build the Leptos site with Trunk.
 - Build exactly 4 canonical PDFs.
 - Assemble `dist/` with `/CV/` and `/CV/ru/` route entry points.
+- Include the standalone services HTML and CSS under `dist/services/`.
 - Validate assembled `dist/` includes required static assets, runtime bundle files, 4 PDFs, and `robots.txt`.
 
 ## Canonical Routes
 
 - `/CV/`
 - `/CV/ru/`
+- `/CV/services/ru/`
 
 ## Canonical PDFs
 
