@@ -36,12 +36,14 @@ GitHub Pages routes are fixed:
 
 - `/CV/`
 - `/CV/ru/`
+- `/CV/services/ru/` (standalone Russian services page)
 
 ## 5. Data Handling
 
 - Markdown is the source of truth.
 - Typst outputs canonical PDFs to `typst/en` and `typst/ru`.
 - Final Pages artifact includes Trunk bundle assets, route index files, top-level canonical PDFs, and `robots.txt`.
+- The services page is authored in `services/ru/index.html`, styled by `services/services.css`, and copied by the assembly script without changing either CV narrative.
 
 ## 6. CI/CD Requirements
 

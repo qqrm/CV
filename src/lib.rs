@@ -293,6 +293,20 @@ pub fn App() -> impl IntoView {
                 </div>
                 <div class="actions">
                     <a class="button" href=pdf_href>{move || language.get().download_label()}</a>
+                    <a
+                        class="pill"
+                        href="/CV/services/ru/"
+                        hreflang="ru"
+                        lang=move || match language.get() {
+                            Language::En => "en",
+                            Language::Ru => "ru",
+                        }
+                    >
+                        {move || match language.get() {
+                            Language::En => "B2B services (RU)",
+                            Language::Ru => "Услуги для бизнеса",
+                        }}
+                    </a>
                 </div>
             </header>
 

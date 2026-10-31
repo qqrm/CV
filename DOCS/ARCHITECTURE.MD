@@ -22,6 +22,11 @@ The deployed Pages routes are stable:
 
 - `/CV/`
 - `/CV/ru/`
+- `/CV/services/ru/` — standalone Russian B2B services page, with its own CSS and no WASM dependency.
+
+The services page sources are in `services/`. The assembly script copies them
+into `dist/services/`; the CV Markdown and PDF pipeline remain separate.
+See [B2B services maintenance and evidence](B2B_SERVICES.MD) for scope and sources.
 
 ![CV generation workflow](diagrams/CV_GENERATION.svg)
 

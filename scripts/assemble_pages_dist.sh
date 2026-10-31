@@ -31,6 +31,13 @@ for page in "${routed_pages[@]}"; do
   test -s "$page"
 done
 
+# Keep the Russian services page independent of the CV's WASM application.
+mkdir -p dist/services/ru
+cp services/ru/index.html dist/services/ru/index.html
+cp services/services.css dist/services/services.css
+test -s dist/services/ru/index.html
+test -s dist/services/services.css
+
 canonical_pdfs=(
   Belyakov_en_light.pdf
   Belyakov_en_dark.pdf
