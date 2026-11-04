@@ -52,6 +52,13 @@ impl Language {
         }
     }
 
+    fn services_path(self) -> &'static str {
+        match self {
+            Self::En => "/CV/services/en/",
+            Self::Ru => "/CV/services/ru/",
+        }
+    }
+
     fn title(self) -> &'static str {
         match self {
             Self::En => "Head of Engineering",
@@ -225,6 +232,7 @@ pub fn App() -> impl IntoView {
     Effect::new(move || {
         if let Some(root) = document().document_element() {
             let _ = root.set_attribute("data-theme", theme.get().as_attr());
+            let _ = root.set_attribute("lang", language.get().pdf_prefix());
         }
     });
 
@@ -295,15 +303,15 @@ pub fn App() -> impl IntoView {
                     <a class="button" href=pdf_href>{move || language.get().download_label()}</a>
                     <a
                         class="pill"
-                        href="/CV/services/ru/"
-                        hreflang="ru"
+                        href=move || language.get().services_path()
+                        hreflang=move || language.get().pdf_prefix()
                         lang=move || match language.get() {
                             Language::En => "en",
                             Language::Ru => "ru",
                         }
                     >
                         {move || match language.get() {
-                            Language::En => "B2B services (RU)",
+                            Language::En => "B2B services",
                             Language::Ru => "Услуги для бизнеса",
                         }}
                     </a>

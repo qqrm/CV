@@ -31,12 +31,20 @@ for page in "${routed_pages[@]}"; do
   test -s "$page"
 done
 
-# Keep the Russian services page independent of the CV's WASM application.
-mkdir -p dist/services/ru
-cp services/ru/index.html dist/services/ru/index.html
+# Keep both services pages independent of the CV's WASM application.
+for lang in ru en; do
+  mkdir -p "dist/services/$lang"
+  cp "services/$lang/index.html" "dist/services/$lang/index.html"
+  test -s "dist/services/$lang/index.html"
+done
+# Trunk fingerprints the CV stylesheet; provide its shared source at a stable
+# path for the static service pages as well.
+cp style.css dist/style.css
 cp services/services.css dist/services/services.css
-test -s dist/services/ru/index.html
+cp services/theme.js dist/services/theme.js
+test -s dist/style.css
 test -s dist/services/services.css
+test -s dist/services/theme.js
 
 canonical_pdfs=(
   Belyakov_en_light.pdf
@@ -62,6 +70,10 @@ write_static_html() {
   local title="$2"
   local src="$3"
   local out="$4"
+  local services_label="B2B services"
+  if [[ "$lang" == ru ]]; then
+    services_label="Услуги для бизнеса"
+  fi
 
   {
     cat <<HTML
@@ -80,6 +92,7 @@ write_static_html() {
   </style>
 </head>
 <body>
+<nav><a href="/CV/services/$lang/" lang="$lang" hreflang="$lang">$services_label</a></nav>
 <pre>
 HTML
     sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' "$src"

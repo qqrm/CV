@@ -1,39 +1,20 @@
 :root {
-    color-scheme: light dark;
-    --bg: #ffffff;
-    --surface: #f5f7f9;
-    --text: #15191f;
-    --muted: #4d5764;
-    --accent: #38bdf8;
-    --link: #036b98;
-    --border: #dce1e7;
+    --surface: var(--card);
+    --link: var(--accent);
+    --border: var(--surface-border);
     --button-text: #0b1728;
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: 16px;
     line-height: 1.65;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #0a0a0b;
-        --surface: #14171c;
-        --text: #f5f5f5;
-        --muted: #bfc6ce;
-        --link: #38bdf8;
-        --border: #303740;
-    }
+:root[data-theme="light"] {
+    --link: #036b98;
 }
 
 *,
 *::before,
 *::after {
     box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
 }
 
 .page-width {
@@ -75,7 +56,7 @@ h3 {
     text-wrap: balance;
 }
 
-h1 {
+.services-page .hero h1 {
     max-width: 25ch;
     font-size: clamp(2.15rem, 4.8vw, 3.6rem);
     font-weight: 750;
@@ -131,6 +112,46 @@ main {
     padding-block: 30px;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+}
+
+.language-switch {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.language-switch a {
+    display: grid;
+    place-items: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.language-switch a[aria-current="page"] {
+    background: var(--accent);
+    color: var(--button-text);
+}
+
+.language-switch a:hover {
+    text-decoration: underline;
+}
+
 .identity {
     display: grid;
     gap: 2px;
@@ -158,8 +179,10 @@ main {
     font-weight: 600;
 }
 
-.hero {
+.services-page .hero {
     padding-block: 60px 48px;
+    margin-bottom: 0;
+    text-align: left;
 }
 
 .eyebrow {
@@ -192,7 +215,7 @@ main {
     max-width: 100%;
     padding: 11px 18px;
     border: 1px solid var(--accent);
-    border-radius: 8px;
+    border-radius: 12px;
     background: var(--accent);
     color: var(--button-text);
     font-size: 0.96rem;
@@ -246,6 +269,16 @@ main {
     gap: 64px;
     padding-block: 64px;
     border-bottom: 1px solid var(--border);
+}
+
+.offers {
+    display: grid;
+    gap: 24px;
+    margin-top: 28px;
+}
+
+.offer {
+    padding: 32px;
 }
 
 .offer-intro > p:not(.eyebrow),
@@ -410,6 +443,10 @@ main {
         padding-block: 44px;
     }
 
+    .offer {
+        padding: 28px;
+    }
+
     .offer-intro > h2 {
         max-width: 28ch;
     }
@@ -435,7 +472,12 @@ main {
         padding-block: 22px 10px;
     }
 
-    .hero {
+    .header-actions {
+        justify-content: flex-start;
+        gap: 8px 20px;
+    }
+
+    .services-page .hero {
         padding-block: 32px;
     }
 
@@ -464,6 +506,11 @@ main {
         padding-block: 36px;
     }
 
+    .offer {
+        padding: 24px 18px;
+        border-radius: 16px;
+    }
+
     .pilot,
     .brief {
         padding: 18px;
@@ -480,7 +527,7 @@ main {
 }
 
 @media print {
-    :root {
+    :root[data-theme] {
         color-scheme: light;
         --bg: #ffffff;
         --surface: #ffffff;
@@ -502,19 +549,19 @@ main {
     }
 
     .skip-link,
-    .header-contact,
+    .header-actions,
     .offer-nav,
     .hero > .button {
         display: none;
     }
 
     .site-header,
-    .hero,
+    .services-page .hero,
     .site-footer {
         padding-block: 12px;
     }
 
-    h1 {
+    .services-page .hero h1 {
         font-size: 25pt;
     }
 
@@ -539,6 +586,18 @@ main {
     .section-block {
         display: block;
         padding-block: 22px;
+    }
+
+    body,
+    .offer {
+        background: #ffffff;
+        box-shadow: none;
+    }
+
+    .offer {
+        padding-inline: 0;
+        border: 0;
+        border-radius: 0;
     }
 
     .offer-intro,

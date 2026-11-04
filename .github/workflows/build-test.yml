@@ -52,6 +52,22 @@ jobs:
       - name: Assemble production-like dist
         run: scripts/assemble_pages_dist.sh
 
+      - name: Verify bilingual services in Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/cv-browser" --no-save --ignore-scripts playwright@1.62.1
+          node "$RUNNER_TEMP/cv-browser/node_modules/playwright/cli.js" install chromium --with-deps
+          CV_PLAYWRIGHT_MODULE="$RUNNER_TEMP/cv-browser/node_modules/playwright" node scripts/check_services_browser.cjs
+
+      - name: Upload B2B browser preview
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: b2b-preview
+          path: artifacts/b2b-preview/
+          retention-days: 7
+          if-no-files-found: warn
+          overwrite: true
+
       - name: Upload site for PR review
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9

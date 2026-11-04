@@ -1,11 +1,12 @@
-# Russian B2B Services Page
+# Bilingual B2B Services Pages
 
 ## Scope and delivery
 
-The page at `/CV/services/ru/` describes three proposed engagements: an agent-assisted
-development audit and pilot, automation of one engineering process, and an
-end-to-end B2B product pilot. Each offer identifies the deliverables, scope,
-customer inputs, acceptance checks, and an indicative pilot duration.
+The pages at `/CV/services/ru/` and `/CV/services/en/` describe three proposed
+engagements: an agent-assisted development audit and pilot, automation of one
+engineering process, and an end-to-end B2B product pilot. Each offer identifies
+the deliverables, scope, customer inputs, acceptance checks, and an indicative
+pilot duration.
 
 These are proposed service formats, not historical client outcomes. Duration,
 price, tool and infrastructure budgets, access rules, and acceptance criteria
@@ -13,14 +14,29 @@ must be agreed before work starts. The page makes no commitment to a legal
 entity, a billing arrangement, a response SLA, or a guaranteed business benefit.
 
 The original English and Russian CV content, PDF templates, and CV routes remain
-unchanged. Both interactive CV views and the no-JavaScript fallback link to the
-new page. The service page itself requires neither JavaScript nor WebAssembly.
+unchanged. Each interactive CV view and its generated static HTML link to the
+matching service language. The no-JavaScript fallback lists both languages.
+The service pages include a direct RU/EN switch and language alternatives in
+the document head. Reading the content and switching languages require neither
+JavaScript nor WebAssembly.
+
+The English copy preserves all three offers, their scope limits, customer
+inputs, and twelve acceptance checks. Durations remain estimates in working
+weeks. The audience label is adapted to English-speaking B2B readers without
+claiming international operations or new commercial results. Technical evidence
+links and the archived-project label are the same in both languages.
 
 ## Source layout and review
 
 - `services/ru/index.html`: Russian copy and semantic HTML.
-- `services/services.css`: responsive light/dark presentation, separate from CV styles.
-- `scripts/assemble_pages_dist.sh`: copies both files into the final Pages artifact.
+- `services/en/index.html`: English copy with the same sections and anchor IDs.
+- `style.css`: shared Noto Sans fonts, theme tokens, gradient background, and cards.
+- `services/services.css`: shared service-page layout and responsive language controls.
+- `services/theme.js`: optional enhancement that reads the CV's `cv-theme` preference;
+  the light fallback matches the current CV, including when storage is unavailable.
+- `scripts/assemble_pages_dist.sh`: includes both pages, shared styles, and the
+  optional theme script in the existing Pages artifact. A stable `dist/style.css`
+  copy serves the static pages alongside Trunk's fingerprinted CV stylesheet.
 
 Run the existing checks and production build:
 
@@ -36,8 +52,19 @@ scripts/assemble_pages_dist.sh
 PR CI builds the complete site and four PDFs and uploads `site-preview` without
 deploying it. To inspect a downloaded artifact locally, extract its contents
 into a `CV/` directory beneath a temporary web root, serve that root, and open
-`/CV/services/ru/`. This preserves the same base path used by GitHub Pages.
-Check the service and CV links, narrow screens, keyboard navigation, and print.
+`/CV/services/en/` or `/CV/services/ru/`. This preserves the same base path used
+by GitHub Pages. Check both directions of the language switch, CV links in each
+locale (including after an in-app language switch), contact anchors, keyboard
+navigation, narrow screens, stored light/dark themes, and print. Confirm that
+all relative assets resolve in the assembled artifact and that content remains
+readable with JavaScript disabled.
+
+The existing CI build runs `scripts/check_services_browser.cjs` against its
+assembled `dist/` with pinned Playwright and Chromium. It checks both languages
+at 320, 375, 768, 1024, and 1440 pixels in light and dark themes, then exercises
+the service/CV navigation and no-JavaScript fallbacks. The browser is restricted
+to the temporary localhost server. Screenshots and a machine-readable report
+are uploaded as `b2b-preview` alongside `site-preview`, without a deployment.
 
 The initial delivery is a draft PR. Publication requires the owner's approval:
 merging to `main` triggers the existing `release-site` workflow. Do not enable

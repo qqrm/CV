@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,10 +7,14 @@
     <meta name="googlebot" content="noindex, nofollow, noarchive" />
     <meta name="description" content="Алексей Беляков: аудит и пилот агентной разработки, автоматизация инженерных процессов, разработка B2B-продуктов. Определённый объём работ и проверяемая приёмка." />
     <title>B2B-разработка и автоматизация — Алексей Беляков</title>
+    <script src="../theme.js"></script>
+    <link rel="stylesheet" href="../../style.css" />
     <link rel="stylesheet" href="../services.css" />
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" hreflang="ru" href="../ru/" />
+    <link rel="alternate" hreflang="en" href="../en/" />
   </head>
-  <body>
+  <body class="services-page">
     <a class="skip-link" href="#main">Перейти к содержанию</a>
 
     <header class="site-header page-width">
@@ -18,7 +22,13 @@
         <span class="identity-name">Алексей Беляков</span>
         <span class="identity-link">Профессиональное резюме</span>
       </a>
-      <a class="header-contact" href="#contact">Обсудить задачу <span aria-hidden="true">↗</span></a>
+      <div class="header-actions">
+        <nav class="language-switch" aria-label="Язык страницы">
+          <a href="../ru/" lang="ru" hreflang="ru" aria-current="page" aria-label="Русская версия">RU</a>
+          <a href="../en/" lang="en" hreflang="en" aria-label="English version">EN</a>
+        </nav>
+        <a class="header-contact" href="#contact">Обсудить задачу <span aria-hidden="true">↗</span></a>
+      </div>
     </header>
 
     <main id="main" class="page-width">
@@ -37,7 +47,7 @@
       </nav>
 
       <div class="offers">
-        <article id="agentic" class="offer" aria-labelledby="agentic-title">
+        <article id="agentic" class="offer card" aria-labelledby="agentic-title">
           <div class="offer-intro">
             <p class="eyebrow">01 / Агентная разработка</p>
             <h2 id="agentic-title">Аудит и внедрение на задачах команды</h2>
@@ -75,7 +85,7 @@
           </dl>
         </article>
 
-        <article id="automation" class="offer" aria-labelledby="automation-title">
+        <article id="automation" class="offer card" aria-labelledby="automation-title">
           <div class="offer-intro">
             <p class="eyebrow">02 / Инженерная автоматизация</p>
             <h2 id="automation-title">Один процесс — от запуска до результата</h2>
@@ -113,7 +123,7 @@
           </dl>
         </article>
 
-        <article id="product" class="offer" aria-labelledby="product-title">
+        <article id="product" class="offer card" aria-labelledby="product-title">
           <div class="offer-intro">
             <p class="eyebrow">03 / B2B-продукт</p>
             <h2 id="product-title">Рабочий сценарий перед большой разработкой</h2>
