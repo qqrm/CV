@@ -68,7 +68,13 @@ async function main() {
       const page = await context.newPage();
       page.setDefaultTimeout(15000);
       page.on('pageerror', (error) => errors.push(error.message));
-      page.on('requestfailed', (request) => errors.push(`Request failed: ${request.url()}`));
+      page.on('requestfailed', (request) => {
+        // Chromium may cancel modulepreloads when scripts are disabled. The
+        // no-JS fallback must not depend on the CV's WASM loader completing.
+        // Missing assets still fail via HTTP errors and the JS-enabled cases.
+        if (!javaScriptEnabled && request.resourceType() === 'script') return;
+        errors.push(`Request failed: ${request.url()} (${request.failure()?.errorText})`);
+      });
       page.on('response', (response) => {
         if (response.status() >= 400) errors.push(`HTTP ${response.status()}: ${response.url()}`);
       });
@@ -179,6 +185,8 @@ async function main() {
         await expectPage(page, servicesPath(other), other);
         await page.locator('.site-footer a').click();
         await page.waitForURL(`${origin}${cvPath(other)}`);
+        await page.waitForLoadState('networkidle');
+        await page.evaluate(() => document.fonts.ready);
         await page.locator(`noscript a[href="${servicesPath(other)}"]`).click();
         await expectPage(page, servicesPath(other), other);
         await open(page, lang === 'en' ? '/CV/cv.html' : '/CV/cv_ru.html');
