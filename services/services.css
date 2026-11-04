@@ -348,6 +348,14 @@ main {
     margin-top: 18px;
 }
 
+.section-copy h3:not(:first-child) {
+    margin-top: 24px;
+}
+
+.section-copy h3 + p {
+    margin-top: 10px;
+}
+
 .evidence-item + .evidence-item {
     margin-top: 32px;
     padding-top: 28px;

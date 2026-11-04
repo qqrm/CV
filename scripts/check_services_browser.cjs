@@ -15,6 +15,7 @@ const mime = {
   '.pdf': 'application/pdf', '.txt': 'text/plain; charset=utf-8',
 };
 const servicesPath = (lang) => `/CV/services/${lang}/`;
+const servicesUrl = (lang) => `https://qqrm.github.io${servicesPath(lang)}`;
 const cvPath = (lang) => lang === 'en' ? '/CV/' : '/CV/ru/';
 const otherLanguage = (lang) => lang === 'en' ? 'ru' : 'en';
 
@@ -40,6 +41,7 @@ async function main() {
   let browser;
   try {
     await fs.access(path.join(dist, 'services/en/index.html'));
+    const sitemap = await fs.readFile(path.join(dist, 'sitemap.xml'), 'utf8');
     await new Promise((resolve, reject) => {
       server.once('error', reject);
       server.listen(0, '127.0.0.1', resolve);
@@ -55,6 +57,7 @@ async function main() {
 
     async function check(name, width, theme, callback, javaScriptEnabled = true) {
       const errors = [];
+      const requests = [];
       const context = await browser.newContext({
         viewport: { width, height: width <= 375 ? 1000 : 1100 },
         deviceScaleFactor: 1, colorScheme: theme, reducedMotion: 'reduce', javaScriptEnabled,
@@ -67,6 +70,7 @@ async function main() {
       });
       const page = await context.newPage();
       page.setDefaultTimeout(15000);
+      page.on('request', (request) => requests.push(new URL(request.url()).pathname));
       page.on('pageerror', (error) => errors.push(error.message));
       page.on('requestfailed', (request) => {
         // Chromium may cancel modulepreloads when scripts are disabled. The
@@ -79,7 +83,7 @@ async function main() {
         if (response.status() >= 400) errors.push(`HTTP ${response.status()}: ${response.url()}`);
       });
       try {
-        const details = await callback(page);
+        const details = await callback(page, requests);
         assert.deepEqual(errors, [], 'Browser and asset errors');
         results.checks.push({ name, passed: true, ...details });
         console.log(`PASS ${name}`);
@@ -132,17 +136,88 @@ async function main() {
       return details;
     }
 
+    async function inspectSearchMetadata(page, lang) {
+      const metadata = await page.evaluate((xml) => {
+        const meta = (name) => document.querySelector(`head meta[name="${name}"]`)?.content || '';
+        const map = new DOMParser().parseFromString(xml, 'application/xml');
+        return {
+          title: document.title, description: meta('description'), robots: meta('robots'), googlebot: meta('googlebot'),
+          canonical: [...document.querySelectorAll('head link[rel="canonical"]')].map((link) => link.href),
+          alternates: [...document.querySelectorAll('head link[rel="alternate"][hreflang]')]
+            .map((link) => [link.hreflang, link.getAttribute('href')]),
+          og: Object.fromEntries([...document.querySelectorAll('head meta[property^="og:"]')]
+            .map((tag) => [tag.getAttribute('property'), tag.content])),
+          schemas: [...document.querySelectorAll('script[type="application/ld+json"]')].map((script) => JSON.parse(script.textContent)),
+          offers: Object.fromEntries([...document.querySelectorAll('.offer')]
+            .map((offer) => [offer.id, offer.querySelector('h2').textContent.trim()])),
+          mailtos: [...document.querySelectorAll('a[href^="mailto:"]')].map((link) => link.href),
+          sitemapError: Boolean(map.querySelector('parsererror')),
+          sitemapNamespace: map.documentElement.namespaceURI,
+          sitemapUrls: [...map.getElementsByTagName('loc')].map((node) => node.textContent.trim()),
+        };
+      }, sitemap);
+      const canonical = servicesUrl(lang);
+      assert.deepEqual(metadata.canonical, [canonical]);
+      assert.deepEqual(metadata.alternates.sort(), [
+        ['en', servicesUrl('en')], ['ru', servicesUrl('ru')], ['x-default', servicesUrl('en')],
+      ]);
+      const rules = metadata.robots.toLowerCase().split(/\s*,\s*/);
+      assert.ok(rules.includes('index') && rules.includes('follow'), 'Services must permit indexing and link discovery');
+      assert.doesNotMatch(`${metadata.robots},${metadata.googlebot}`, /noindex|nofollow|nosnippet|max-snippet\s*:\s*0/i);
+      assert.ok(metadata.title.trim() && metadata.description.trim());
+      for (const value of [metadata.title, metadata.description]) {
+        assert.equal(/[А-Яа-яЁё]/.test(value), lang === 'ru', 'Metadata must match the page language');
+      }
+      assert.equal(metadata.og['og:url'], canonical);
+      assert.equal(metadata.og['og:title'], metadata.title);
+      assert.equal(metadata.og['og:description'], metadata.description);
+      assert.equal(metadata.schemas.length, 1);
+      const schema = metadata.schemas[0];
+      assert.equal(schema['@context'], 'https://schema.org');
+      assert.equal(schema['@graph'].length, 5);
+      const nodes = (type) => schema['@graph'].filter((node) => node['@type'] === type);
+      assert.equal(nodes('Person').length, 1);
+      assert.equal(nodes('WebPage').length, 1);
+      assert.equal(nodes('Service').length, 3);
+      const person = nodes('Person')[0];
+      const webpage = nodes('WebPage')[0];
+      assert.ok(person['@id']);
+      assert.equal(webpage['@id'], `${canonical}#webpage`);
+      assert.equal(webpage.url, canonical);
+      assert.equal(webpage.inLanguage, lang);
+      for (const id of ['agentic', 'automation', 'product']) {
+        const service = nodes('Service').find((node) => node['@id'] === `${canonical}#${id}`);
+        assert.ok(service, `Missing structured service: ${id}`);
+        assert.equal(service.url, `${canonical}#${id}`);
+        assert.equal(service.name, metadata.offers[id]);
+        assert.equal(service.provider['@id'], person['@id']);
+      }
+      assert.equal(metadata.mailtos.length, 4, 'Each offer and the contact section need an email link');
+      for (const href of metadata.mailtos) {
+        const mail = new URL(href);
+        assert.equal(mail.pathname, 'qqrm@vivaldi.net');
+        const subject = mail.searchParams.get('subject') || '';
+        assert.ok(subject.includes(`[${lang.toUpperCase()}]`), 'Contact subject must identify the page language');
+        assert.ok(subject.replace(/\[(RU|EN)\]/, '').trim().length > 8, 'Contact subject must describe the enquiry');
+      }
+      assert.equal(metadata.sitemapError, false, 'Sitemap must be valid XML');
+      assert.equal(metadata.sitemapNamespace, 'http://www.sitemaps.org/schemas/sitemap/0.9');
+      assert.deepEqual(metadata.sitemapUrls.sort(), ['en', 'ru'].map(servicesUrl));
+    }
+
     for (const lang of ['en', 'ru']) {
       for (const width of [320, 375, 768, 1024, 1440]) {
         for (const theme of ['light', 'dark']) {
-          await check(`${lang}-${width}-${theme}`, width, theme, async (page) => {
+          await check(`${lang}-${width}-${theme}`, width, theme, async (page, requests) => {
             await open(page, servicesPath(lang));
             const details = await inspectServices(page, lang, width, theme);
+            assert.deepEqual(requests.filter((url) => /\.wasm(?:\.(?:gz|br))?$/.test(url)), [], 'Services must not load the CV WASM bundle');
             if (width === 1440 || (width === 375 && theme === 'dark')) {
               await screenshot(page, `${lang}-${width}-${theme}.png`);
             }
-            if (lang === 'en' && width === 1440 && theme === 'dark') {
-              await screenshot(page, 'en-full-dark.png', true);
+            if (width === 1440 && theme === 'dark') {
+              await inspectSearchMetadata(page, lang);
+              await screenshot(page, `${lang}-full-dark.png`, true);
             }
             return details;
           });

@@ -16,8 +16,8 @@ entity, a billing arrangement, a response SLA, or a guaranteed business benefit.
 The original English and Russian CV content, PDF templates, and CV routes remain
 unchanged. Each interactive CV view and its generated static HTML link to the
 matching service language. The no-JavaScript fallback lists both languages.
-The service pages include a direct RU/EN switch and language alternatives in
-the document head. Reading the content and switching languages require neither
+The service pages include a direct RU/EN switch, absolute language alternatives,
+and a self-canonical URL in the document head. Reading the content and switching languages require neither
 JavaScript nor WebAssembly.
 
 The English copy preserves all three offers, their scope limits, customer
@@ -34,6 +34,7 @@ links and the archived-project label are the same in both languages.
 - `services/services.css`: shared service-page layout and responsive language controls.
 - `services/theme.js`: optional enhancement that reads the CV's `cv-theme` preference;
   the light fallback matches the current CV, including when storage is unavailable.
+- `services/sitemap.xml`: the two service URLs, copied to `/CV/sitemap.xml`.
 - `scripts/assemble_pages_dist.sh`: includes both pages, shared styles, and the
   optional theme script in the existing Pages artifact. A stable `dist/style.css`
   copy serves the static pages alongside Trunk's fingerprinted CV stylesheet.
@@ -68,8 +69,15 @@ are uploaded as `b2b-preview` alongside `site-preview`, without a deployment.
 
 The initial delivery is a draft PR. Publication requires the owner's approval:
 merging to `main` triggers the existing `release-site` workflow. Do not enable
-auto-merge or manually dispatch publication during review. This page does not
-change the site's existing `noindex, nofollow, noarchive` or `robots.txt` policy.
+auto-merge or manually dispatch publication during review. The subsequent request
+for search visibility removes `noindex` from the two service pages only. The CV
+and static CV exports retain their existing tags. The project-level `robots.txt`
+is unchanged and does not establish the effective origin-root policy.
+
+The 2026-11-04 copy revision makes both language versions more direct while preserving their
+scope and acceptance criteria. Search metadata and JSON-LD describe the visible
+services without adding business outcomes. See [SERVICES_DISCOVERY.MD](SERVICES_DISCOVERY.MD)
+for the primary-source research, hosting limitation, and measurement plan.
 
 ## Public evidence review — 2026-10-31
 

@@ -42,9 +42,11 @@ done
 cp style.css dist/style.css
 cp services/services.css dist/services/services.css
 cp services/theme.js dist/services/theme.js
+cp services/sitemap.xml dist/sitemap.xml
 test -s dist/style.css
 test -s dist/services/services.css
 test -s dist/services/theme.js
+test -s dist/sitemap.xml
 
 canonical_pdfs=(
   Belyakov_en_light.pdf
