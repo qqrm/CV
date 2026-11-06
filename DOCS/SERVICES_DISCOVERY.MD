@@ -64,17 +64,27 @@ origin root, `https://qqrm.github.io/robots.txt`, not the project subdirectory.
 See [Google's placement rules](https://developers.google.com/crawling/docs/robots-txt/create-robots-txt)
 and [Yandex's robots guidance](https://www.yandex.com/support/webmaster/en/controlling-robot/robots-txt).
 
-The live origin-root response could not be retrieved in this review. The GitHub
-connector also returned 404 for the repository `qqrm/qqrm.github.io`; that is not
-evidence of the live robots URL's HTTP status. The project robots file is left
-unchanged. It must not be described as an effective host-wide block or as proof
-that a search crawler can access the services.
+Live publication verification on 2026-11-06 retrieved the origin-root URL itself:
+`https://qqrm.github.io/robots.txt` returned HTTP 404. Google's
+[documented handling of robots HTTP responses](https://developers.google.com/crawling/docs/robots-txt/robots-txt-spec#handling-of-errors-and-http-status-codes)
+treats that response as no crawl restrictions. This observation concerns the
+live host, not the existence of a GitHub repository with a similar name.
+`/CV/robots.txt` still returned HTTP 200 with `Disallow: /`; it is a nested
+compatibility artifact, not an effective host-wide policy.
 
-After approved publication, check the actual root robots response, page response
-headers, and fetched HTML. A host-level deny or `X-Robots-Tag: noindex` can still
-prevent discovery despite the HTML changes. If the root policy blocks the
-services or required assets, the owner must change that policy at its actual
-hosting location. Do not attempt to solve it with another nested robots file.
+Both public service pages returned HTTP 200 with `text/html; charset=utf-8`,
+`robots=index, follow`, and no `X-Robots-Tag` header. Their HTML and the HTTP 200
+XML sitemap matched the source bytes in published commit
+`8f652086a2cdfcd8383305de03e48c7cd5111727`. Each page had its own canonical,
+reciprocal absolute RU/EN alternatives, and EN as `x-default`. The RU-to-EN and
+EN-to-RU navigation links were also exercised in a browser.
+
+These are publication-time observations, not proof of search-engine indexing.
+The post-deploy verifier checks the root response, page headers, HTML, sitemap,
+and required assets on subsequent releases. A host-level deny or restrictive
+`X-Robots-Tag` can still prevent discovery after a later hosting change.
+If the root policy blocks the services or required assets, change that policy
+at its actual hosting location; another nested robots file cannot fix it.
 Robots directives are not access control for private data.
 
 ## Search intent to validate
@@ -97,11 +107,17 @@ does not improve the buyer's ability to evaluate the work.
 
 ## Publication and measurement sequence
 
-1. Review the RU/EN previews and CI results. Keep PR #509 in Draft until the owner
-   approves publication; merging to `main` starts the existing release workflow.
-2. After approval and deployment, verify HTTP 200 responses, effective robots and
-   headers, canonical URLs, the reciprocal language links, and
-   `https://qqrm.github.io/CV/sitemap.xml` on the public host.
+1. Review the RU/EN previews and CI results before publication. PR #509 was merged
+   on 2026-11-05, but its inherited skip markers suppressed push workflows.
+   On 2026-11-06, the owner-authorized recovery dispatched the existing
+   `release-site` workflow on `main` with the exact `expected_sha`. Its source
+   tree matched the PR head that had passed all 15 checks, including CI and
+   Workflow Security. The deployment and its post-deploy checks succeeded.
+2. For every deployment, verify HTTP 200 responses, effective robots and headers,
+   canonical URLs, reciprocal language links, and
+   `https://qqrm.github.io/CV/sitemap.xml` on the public host. Use
+   `python3 .github/scripts/verify_deployed_site.py` for the same fixed-URL checks
+   that run automatically after a successful release.
 3. With the owner's authorized accounts, verify the site in Google Search Console,
    Bing Webmaster Tools, and Yandex Webmaster. Submit the sitemap and inspect both
    service URLs. No account is connected or verified by this PR.
