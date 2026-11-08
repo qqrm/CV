@@ -20,6 +20,7 @@ const cvPath = (lang) => lang === 'en' ? '/CV/' : '/CV/ru/';
 const otherLanguage = (lang) => lang === 'en' ? 'ru' : 'en';
 
 const server = http.createServer(async (request, response) => {
+  let handle = null;
   try {
     const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
     if (!pathname.startsWith('/CV/')) { response.writeHead(404).end(); return; }
@@ -27,11 +28,26 @@ const server = http.createServer(async (request, response) => {
     if (filename !== dist && !filename.startsWith(`${dist}${path.sep}`)) {
       response.writeHead(403).end(); return;
     }
-    if ((await fs.stat(filename)).isDirectory()) filename = path.join(filename, 'index.html');
-    const content = await fs.readFile(filename);
-    response.writeHead(200, { 'Content-Type': mime[path.extname(filename)] || 'application/octet-stream' });
-    response.end(content);
+    handle = await fs.open(filename, 'r');
+    try {
+      const stats = await handle.stat();
+      if (stats.isDirectory()) {
+        await handle.close();
+        handle = null;
+        filename = path.join(filename, 'index.html');
+        handle = await fs.open(filename, 'r');
+      }
+      const content = await handle.readFile();
+      await handle.close();
+      handle = null;
+      response.writeHead(200, { 'Content-Type': mime[path.extname(filename)] || 'application/octet-stream' });
+      response.end(content);
+    } catch (inner) {
+      if (handle) { try { await handle.close(); } catch {} handle = null; }
+      throw inner;
+    }
   } catch (error) {
+    if (handle) { try { await handle.close(); } catch {} handle = null; }
     response.writeHead(error.code === 'ENOENT' ? 404 : 500).end();
   }
 });
