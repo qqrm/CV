@@ -1,144 +1,119 @@
 # Alexey Belyakov
 
 **Head of Engineering**
-Engineering leadership • AI-native software delivery • C++/Rust systems modernization
+Task-to-release time cut by ~50% • C++/Rust modernization • AI-native engineering
 
 Contacts: qqrm@vivaldi.net • Telegram: @leqqrm • LinkedIn: linkedin.com/in/qqrm • GitHub: github.com/qqrm • Moscow · open to relocation
 
 ## Summary
-Head of Engineering / Engineering Manager with 15+ years in software development; 7+ years in engineering leadership — from tech lead of an SDS core to Head of Development: an organization of up to 45 specialists, 5+ cross-functional teams through team and tech leads. Background in C++ and Rust systems engineering and DevOps.
 
-Focus: AI-native software delivery — in my current team all production code is written by LLM coding agents; I build the engineering system around them: decomposition, contracts, orchestration, independent verification, final acceptance. I haven't reviewed code line-by-line in over a year — acceptance runs on executable evidence, accountability stays with the human. Currently owning a production software-defined storage product after completing its C++ to Rust migration, with a second engineer alongside. I stepped back into a hands-on role deliberately — to prove an AI-first delivery model on a production product. My next step is into management: what interests me is not implementing tasks but the processes and systems that make implementation maximally effective. Target roles: Head of Engineering, Director of Engineering, CTO at a product company.
+Cut task-to-release lead time by approximately half and took an enterprise procurement product from one planning module to 20 modules in production at Inline Group.
 
-## Core competencies
-**Engineering leadership:** engineering org design, Agile, Scrum and Kanban processes, running 1:1s, performance reviews, headcount planning, goal setting, hiring and onboarding, growing tech leads, ownership models, architecture governance, roadmap, delivery and release management, stakeholder management, technical-debt management.
+Led an engineering organization of up to 45 specialists across 5+ cross-functional teams through team and tech leads. Owned technical strategy, architecture, development and infrastructure budgets. My focus is product delivery, modernization costs and engineering risk.
 
-**AI adoption and agentic delivery:** AI adoption in engineering organizations, agentic SDLC, coding-agent workflows (Claude Code, Codex, MCP), agent harness and skill design, context and token optimization, task decomposition and isolation, executable acceptance, CI verification gates, effective AI review of AI-generated code, behavioral equivalence testing.
-
-**DevOps:** CI/CD pipelines, GitOps, Kubernetes, containerized and virtualized test environments, build and cache infrastructure, observability.
-
-**DevSecOps and AppSec:** supply-chain security, secret scanning, SAST, infrastructure and configuration linting, protected merge flow.
-
-## How I work with coding agents
-- **Honest division of labor:** agents write all of the code in my current team; my work is the engineering system around them — from decomposition and contracts to verification and final acceptance. Accountability stays with the human.
-- **Portable harness:** one operating model across harnesses; parallel agents isolated in disposable environments.
-- **Model-task fit:** model choice is the single largest factor in agent effectiveness.
-- **The boundary I push:** maximum delegation without losing quality or accountability — humans keep intent, constraints and accountability, not routine implementation.
-
-<!-- pdf-pagebreak -->
+Currently responsible for a production software-defined storage (SDS) product following its C++ to Rust migration. Coding agents wrote the implementation; I owned architecture, delivery and acceptance. I took this hands-on role to test the delivery model on a production product. Seeking Head of Engineering or Director of Engineering roles where I can apply that experience across teams.
 
 ## Experience
 
 ### Staff Engineer — Rust & Agentic Engineering • NDA
 *July 2025 – Present*
 
-A Russian infrastructure software vendor (~300 people, name under NDA). Own the technical side of my domain — a production SDS product — after completing its end-to-end migration from C++ to Rust. LLM agents wrote all of the code; architecture, execution model, acceptance and delivery were mine throughout.
+Infrastructure software vendor, approximately 300 employees; company name under NDA. Responsible for the technical domain of a production SDS product. Completed its C++ to Rust migration with a second engineer; the resulting project contains 400K+ lines of code. Agents wrote the code; architecture, acceptance and delivery were my responsibility.
 
-Key results:
-- **400k+ lines of code in the product after the C++→Rust migration** — all of it written by agents (the Rust core: ≈1.2M lines written in the first four months, rewrites included); executable behavioral-equivalence gates and performance budgets on production-critical workloads.
-- **Pinned semantic oracle** — the original C++ system frozen as an isolated golden reference; Rust behavior is checked against it by scheduled differential runs.
-- **Proof-carrying acceptance** — a migration claim lands only when reference behavior, component owner, executable gate and retained artifact agree; a green CI alone proves nothing.
-- **Governed agent operating model** — repository policies, isolated tasks, explicit budgets and stop conditions, independent review: architecture drift and gratuitous abstractions do not survive.
-- **Tiered verification** — MR and merge-train gates; scheduled differential, property-based, mutation, fuzz and formal checks, full-stack E2E and AppSec controls; durability scenarios (reopen/replay, crash windows, power loss, raw-device, integrity soaks) with explicit confidence boundaries.
-- **CI and lab platform** — GitLab fast lanes and full gates, disposable environments, shared compiler cache, exact merge-train validation; performance qualification on an isolated target: CPU/NUMA pinning, controlled I/O preflight, retained provenance, alternating Original/Rust runs, throughput and p99 latency budgets.
-- **Team** — the second engineer is now ready to own the migrated product; architecture, acceptance and delivery practices packaged for the company's next AI-first projects.
-- **Direct agent-tooling spend** — $1.2K for the entire migration (three $200/mo subscriptions across two engineers, two months) — two orders of magnitude below the token bills GitHub ($120K) and Bun ($165K) published for migrations of comparable scale (table below).
-- **Full cost including payroll** — ~$70K (~12 engineer-months × $5–6K + $1.2K of subscriptions) — less than GitHub and Bun spent on tokens alone; pre-agent migrations of this scale took years and were measured in millions (table below).
+- **Modernization delivered with estimated engineering labor and reported subscriptions of $61.2–73.2K:** approximately 12 engineer-months × $5–6K + $1.2K. Partial estimate; [cost period and excluded infrastructure/support costs].
+- **Release decisions made traceable to evidence:** tied acceptance to the original C++ behavior, an accountable component owner, an executable check and a retained artifact. Covered recovery, data integrity, security and performance with explicit limits on what the checks establish. [Production impact; critical workload coverage].
+- **A second engineer prepared to own the migrated product:** transferred architecture, acceptance and delivery practices. [Independent releases / operational ownership after handover].
+- **A delivery model prepared for reuse:** documented task boundaries, agent budgets, independent review and acceptance rules for subsequent company projects. [Teams adopting the model; measured results].
 
-Comparison with published migrations — direct agent spend and full cost:
+**Subscription basis:** 3 × $200/month × 2 months = $1.2K. [Coverage of the full migration period].
 
-| Migration | Scale and timeline | Direct agent spend | Full cost |
-| --- | --- | --- | --- |
-| [Government system (published study)](https://research.vu.nl/files/229574141/Cost_driven_software_migration.pdf) | 4 years; 156 + 78 person-months; 95 of 126 use cases | \* | €5M (budget) |
-| [GitHub: Copilot runtime, TypeScript → Rust](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/) | 430K lines of source → 800K+ lines of Rust; 14.5 weeks | ~$120K — actual token bill | >$130K — lower bound |
-| [Bun: Zig → Rust](https://bun.com/blog/bun-in-rust) | ~1M lines; up to 64 agents in parallel; full test suite green in 11 days | ~$165K — estimated at API rates | >$175K — lower bound |
-| **This migration: production SDS, C++ → Rust** | **400K+ lines in the project; core — ≈1.2M lines in the first 4 months, rewrites included** | **$1.2K — actual subscriptions** | **~$70K — incl. payroll: ~12 eng-months × $5–6K + subscriptions** |
+**Stack:** Rust, C++, GitLab CI/CD, Docker, sccache; differential, property-based, mutation, fuzz and formal verification.
 
-\* Migration carried out without coding agents. Only direct agent spend is directly comparable; full budgets are almost never disclosed. Lower bounds for GitHub and Bun — published token spend plus publicly known engineer time (~3 weeks and ~11 days of one engineer) at ~$20K/mo.
-
-**Stack:** Rust, C++, GitLab CI/CD and merge trains, Docker, Dev Containers, sccache, Cargo/xtask, cargo-nextest, proptest, cargo-mutants, cargo-fuzz, Kani, LikeC4/MCP, Claude Code, Codex, cargo-deny, OSV-Scanner, Semgrep, Trivy, Gitleaks.
+<!-- pdf-pagebreak -->
 
 ### Head of Development • Inline Group
 *March 2023 – July 2025*
 
-Created ASEZ 2.0 — an enterprise e-procurement system for a large state-owned enterprise customer (oil & gas) — and took it from a single planning module to twenty modules, release and production, where it runs to this day. Organization of up to 45 specialists and 5+ cross-functional teams through team and tech leads; owned technical strategy, architecture, development and infrastructure budget, TCO and cost optimization.
+Led development of ASEZ 2.0, an enterprise e-procurement platform for a large oil-and-gas customer. Scope: up to 45 specialists in 5+ cross-functional teams through team and tech leads; technical strategy, architecture, development and infrastructure budgets.
 
-Key results:
-- **Engineering from scratch** — service ownership, architecture review, release-readiness rules, technical decision loop; implemented Agile, Scrum and Kanban; made key hires and grew tech leads.
-- **Microservices on shared infrastructure** — the monolith became about twenty domain and platform services: PostgreSQL per service, Redis, asynchronous RabbitMQ integration, forward-only schema migrations.
-- **Delivery** — daily releases across dev, test and release environments, task-to-release lead time halved: GitLab CI/CD and GitOps with reproducible builds, release tags and rollbacks.
-- **Quality** — API regression from 30 minutes to 5–7; observability, incident lifecycle, reliability and recovery metrics, root-cause analysis: 1–2 production defects per quarter after hardening.
-- **Rust adoption** — competence transfer to the team, including developers coming from SAP; supporting people through the stack change was part of the leadership work.
-- **Controlled AI adoption** — task and review templates, risk boundaries, team training, acceptance rules and quality control.
+- **Expanded the product from one planning module to 20 modules and brought it into production.** Built the engineering organization, hired key specialists and developed tech leads. [Active users / procurement volume / commercial impact].
+- **Cut task-to-release lead time by approximately half** through GitLab CI/CD, GitOps, reproducible builds and release/rollback procedures. Established daily releases across development, test and release environments.
+- **Cut API regression runtime by 23–25 minutes per run:** from 30 minutes to 5–7 minutes. [Method; runs/year; actual engineer time saved].
+- **Recorded 1–2 production defects per quarter after hardening;** used observability, incident follow-up and root-cause analysis to manage production quality. [Measurement period; severity; earlier baseline].
 
-**Stack:** Rust, Actix Web, PostgreSQL, Redis, RabbitMQ, Docker, Kubernetes, GitLab CI/CD, GitOps, Grafana, Sentry, OpenAPI, SonarQube, cargo audit.
-
-<!-- pdf-pagebreak -->
+**Stack:** Rust, Actix Web, PostgreSQL, Redis, RabbitMQ, Kubernetes, GitLab CI/CD, GitOps, Grafana, Sentry.
 
 ### Lead Rust Engineer • YADRO
 *February 2022 – March 2023*
 
-Product: a backup appliance (hardware and software) with deduplication. Role: tech lead of the system core.
+Tech lead of the core of a backup appliance with deduplication; responsible for storage and recovery components.
 
-Key results:
-- **Core storage and recovery components** — development and architecture ownership.
-- **Engineering practices** — planning, review, quality, CI/CD, test automation.
-- **Team migration to Rust** — training and reviewing developers coming from C++, introducing practices and approaches.
-- **Performance and reliability** — RocksDB and storage tuning, load testing, incident root-cause fixes.
+- Developed core storage and recovery components. [Release milestone; deployment scale; recovery-time result].
+- Tuned RocksDB and storage behavior and fixed incident root causes. [Throughput / latency / recurring incidents before → after].
+- Trained engineers moving from C++ to Rust and introduced review and automated verification. [Engineers reaching independent delivery; time to readiness].
 
 **Stack:** Rust, RocksDB.
 
 ### Rust Developer • Kaspersky
 *May 2020 – February 2022*
 
-Developed and maintained a production voting service built on Exonum: added weighted voting, simplified the ballot flows, expanded test coverage and streamlined CI during the move to Microsoft tooling.
+Developed and maintained a production voting service built on Exonum.
 
-**Stack:** Rust, Exonum, Protobuf, Serde, Git.
+- Enabled weighted voting. [Customer scenarios; usage].
+- Simplified ballot submission flows. [Completion rate / user effort / support impact].
+- Expanded test coverage and streamlined CI during the move to Microsoft tooling. [Release time / escaped defects before → after].
+
+**Stack:** Rust, Exonum, Protobuf, Serde.
+
+<!-- pdf-pagebreak -->
 
 ### C++/Go Developer • B2Broker
 *November 2018 – March 2020*
 
-Automated broker infrastructure at a cryptocurrency broker on the MT4/MT5 APIs: built C++/Go trade copiers and a Multi Account Manager, normalized and streamed real-time trading data, and developed data-quality controls.
+Automated infrastructure for a cryptocurrency broker using MT4/MT5 APIs.
 
-**Stack:** C++, Go, MSVC, CMake, Protobuf, gRPC, NATS, YAML, PostgreSQL, vcpkg, Git.
+- Enabled trade copying and multi-account management through C++/Go trade copiers and a Multi Account Manager. [Accounts served; commercial usage].
+- Delivered normalized, real-time trading data streams. [Throughput; latency; consuming systems].
+- Added data-quality controls for trading integrations. [Manual hours saved / data errors detected].
+
+**Stack:** C++, Go, MT4/MT5, gRPC, NATS, PostgreSQL.
 
 ### Lead C++ Engineer • ASCON
 *May 2016 – November 2018*
 
-Developed CAD libraries for KOMPAS and shipped 3D workflow features. Introduced automated testing in C++ and Python, led the move to C++17, migrated the team from SVN to Git, and established review, planning and documentation practices.
-
-**Stack:** C++17, MSVC, Python 3, Boost, PostgreSQL, Git, Jenkins.
+Developed CAD libraries and shipped 3D workflow features for KOMPAS; introduced C++/Python tests and led the move to C++17 and Git.
+[Feature adoption / release-quality impact].
 
 ### Earlier experience (2011–2016)
-- Concerteza: optimized real-time C++ protocol parsing for telecom signaling analytics to about 1.5 Gbps per thread; added Python integration tests for continuous event processing.
-- LiveTex: developed C++ and JavaScript components, including Node.js bindings for PostgreSQL and ZeroMQ.
-- T4B: started as a C++ developer building MetaTrader plugins and a management web application.
 
-<!-- pdf-pagebreak -->
+**Concerteza:** optimized C++ protocol parsing for telecom analytics to approximately 1.5 Gbps per thread; added Python integration tests. [Earlier throughput / infrastructure impact].
 
-## Education
+**LiveTex:** built C++/JavaScript components, including Node.js bindings for PostgreSQL and ZeroMQ. [Production usage / product impact].
+
+**T4B:** built C++ MetaTrader plugins and a management web application. [User adoption / manual work replaced].
+
+## Education and languages
+
 Bauman Moscow State Technical University, Department IU7 (Software Engineering), Specialist degree (five-year, master's-equivalent), 2015.
+Russian — native. English — C1.
 
-## Languages
-- Russian — native
-- English — C1
+## Leadership and delivery
 
-## Technical skills
-**Programming languages:** Rust, C++ (C++17), Python, SQL, Bash, JavaScript.
+- Engineering organization design, hiring and development of team and tech leads; roadmap, budget and technical-debt decisions.
+- Product launches, release management, production quality and incident follow-up.
+- AI adoption with explicit acceptance criteria, independent verification and human accountability.
+- Systems modernization in Rust/C++, storage and enterprise platforms; CI/CD, GitOps, DevSecOps.
 
-**Backend and data:** Actix Web, async Rust, PostgreSQL, Redis, RabbitMQ, RocksDB, gRPC, Protobuf, REST/OpenAPI.
+## Technical foundation
 
-**Infrastructure and delivery:** Linux, Docker, devcontainers, Kubernetes, GitLab CI/CD, GitHub Actions, GitOps, sccache, QEMU-based test labs.
+**Systems and data:** Rust, C++17, Python, SQL, Linux; Actix Web, PostgreSQL, Redis, RabbitMQ, RocksDB, gRPC, Protobuf.
 
-**DevSecOps and AppSec:** cargo-deny, cargo-audit, OSV-Scanner, gitleaks, Semgrep, Trivy, hadolint, yamllint, shellcheck, CODEOWNERS, protected branches and merge trains, pinned toolchains and image digests.
+**Delivery and operations:** Docker, Kubernetes, GitLab CI/CD, GitHub Actions, GitOps, QEMU test environments, Grafana, Sentry.
 
-**Quality and verification:** cargo-nextest, clippy, rustfmt, taplo, cargo-llvm-cov, proptest, cargo-mutants, cargo-fuzz, Kani, differential and end-to-end testing, load and performance testing.
+**Verification and security:** differential and E2E testing, proptest, cargo-mutants, cargo-fuzz, Kani, performance testing; cargo-deny, OSV-Scanner, Semgrep, Trivy, Gitleaks.
 
-**Observability and operations:** Grafana, Sentry, incident lifecycle, SRE practices.
-
-**AI tooling:** Claude Code, Codex, MCP servers, agent skills and hooks, subagent orchestration, LLM-based code review, token and context optimization.
-
-**Domains:** AI-assisted software development, backend, microservices, platform engineering, software-defined storage (SDS), storage and distributed systems, virtualization, private cloud, remote and distributed teams, systems modernization, enterprise platforms, CAD, fintech and trading integrations, blockchain systems, high-throughput systems.
+**AI engineering:** Claude Code, Codex, MCP, agent orchestration, task isolation, executable acceptance and independent review.
 
 ## Outside of work
-I enjoy film and poetry, play ukulele and guitar, and hike. I collect phones with physical keyboards and vinyl.
+
+Film and poetry, ukulele and guitar, hiking; collecting phones with physical keyboards and vinyl.

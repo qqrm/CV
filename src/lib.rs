@@ -68,8 +68,8 @@ impl Language {
 
     fn subtitle(self) -> &'static str {
         match self {
-            Self::En => "Engineering leadership • AI-native software delivery • C++/Rust systems modernization",
-            Self::Ru => "Руководство разработкой • разработка с ИИ-агентами • модернизация систем на C++/Rust",
+            Self::En => "Task-to-release time cut by ~50% • C++/Rust modernization • AI-native engineering",
+            Self::Ru => "Срок от задачи до релиза сокращён примерно вдвое • C++/Rust • ИИ-агенты",
         }
     }
 

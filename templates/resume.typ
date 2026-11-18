@@ -47,9 +47,9 @@
     "Head of Engineering"
   }
   #let default_subtitle = if lang == "ru" {
-    "Руководство разработкой • разработка с ИИ-агентами • модернизация систем на C++/Rust"
+    "Срок от задачи до релиза сокращён примерно вдвое • C++/Rust • ИИ-агенты"
   } else {
-    "Engineering leadership • AI-native software delivery • C++/Rust systems modernization"
+    "Task-to-release time cut by ~50% • C++/Rust modernization • AI-native engineering"
   }
   #let title = if title == none { default_title } else { title }
   #let subtitle = if subtitle == none { default_subtitle } else { subtitle }
