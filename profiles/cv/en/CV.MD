@@ -8,7 +8,7 @@ Contacts: qqrm@vivaldi.net • Telegram: @leqqrm • LinkedIn: linkedin.com/in/q
 ## Summary
 Head of Engineering / Engineering Manager with 15+ years in software development; 7+ years in engineering leadership — from technical lead to Head of Development: an organization of up to 45 specialists, 5+ cross-functional teams through team and tech leads. Background in C++ and Rust systems engineering and DevOps.
 
-Focus: AI-native software delivery — in my current team all production code is written by LLM coding agents; I build the engineering system around them: decomposition, contracts, orchestration, independent verification, final acceptance. I haven't reviewed code line-by-line in over a year — acceptance runs on executable evidence, accountability stays with the human. Currently owning a production infrastructure software product after completing its C++ to Rust migration, with a second engineer alongside. I stepped back into a hands-on role deliberately — to prove an AI-first delivery model on a production product. My next step is into management: what interests me is not implementing tasks but the processes and systems that make implementation maximally effective. Target roles: Head of Engineering, Director of Engineering, CTO at a product company.
+Focus: AI-native software delivery — in my current team all production code is written by LLM coding agents; I build the engineering system around them: decomposition, contracts, orchestration, independent verification, final acceptance. I haven't reviewed code line-by-line in over a year — acceptance runs on executable evidence, accountability stays with the human. Currently owning a production software-defined storage product after completing its C++ to Rust migration, with a second engineer alongside. I stepped back into a hands-on role deliberately — to prove an AI-first delivery model on a production product. My next step is into management: what interests me is not implementing tasks but the processes and systems that make implementation maximally effective. Target roles: Head of Engineering, Director of Engineering, CTO at a product company.
 
 ## Core competencies
 **Engineering leadership:** engineering org design, Agile, Scrum and Kanban processes, running 1:1s, performance reviews, headcount planning, goal setting, hiring and onboarding, growing tech leads, ownership models, architecture governance, roadmap, delivery and release management, stakeholder management, technical-debt management.
@@ -32,7 +32,7 @@ Focus: AI-native software delivery — in my current team all production code is
 ### Staff Engineer — Rust & Agentic Engineering • NDA
 *July 2025 – Present*
 
-A Russian infrastructure software vendor (~300 people, name under NDA). Own the technical side of my domain — a production infrastructure software product — after completing its end-to-end migration from C++ to Rust. LLM agents wrote all of the code; architecture, execution model, acceptance and delivery were mine throughout.
+A Russian infrastructure software vendor (~300 people, name under NDA). Own the technical side of my domain — a production software-defined storage product — after completing its end-to-end migration from C++ to Rust. LLM agents wrote all of the code; architecture, execution model, acceptance and delivery were mine throughout.
 
 Key results:
 - **400k+ lines of code in the product after the C++→Rust migration** — all of it written by agents (the Rust core: ≈1.2M lines written in the first four months, rewrites included); executable behavioral-equivalence gates and performance budgets on production-critical workloads.
@@ -52,7 +52,7 @@ Comparison with published migrations — direct agent spend and full cost:
 | [Government system (published study)](https://research.vu.nl/files/229574141/Cost_driven_software_migration.pdf) | 4 years; 156 + 78 person-months; 95 of 126 use cases | \* | €5M (budget) |
 | [GitHub: Copilot runtime, TypeScript → Rust](https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/) | 430K lines of source → 800K+ lines of Rust; 14.5 weeks | ~$120K — actual token bill | >$130K — lower bound |
 | [Bun: Zig → Rust](https://bun.com/blog/bun-in-rust) | ~1M lines; up to 64 agents in parallel; full test suite green in 11 days | ~$165K — estimated at API rates | >$175K — lower bound |
-| **This migration: production infrastructure software, C++ → Rust** | **400K+ lines in the project; core — ≈1.2M lines in the first 4 months, rewrites included** | **$1.2K — actual subscriptions** | **~$70K — incl. payroll: ~12 eng-months × $5–6K + subscriptions** |
+| **This migration: production software-defined storage, C++ → Rust** | **400K+ lines in the project; core — ≈1.2M lines in the first 4 months, rewrites included** | **$1.2K — actual subscriptions** | **~$70K — incl. payroll: ~12 eng-months × $5–6K + subscriptions** |
 
 \* Migration carried out without coding agents. Only direct agent spend is directly comparable; full budgets are almost never disclosed. Lower bounds for GitHub and Bun — published token spend plus publicly known engineer time (~3 weeks and ~11 days of one engineer) at ~$20K/mo.
 
@@ -138,7 +138,7 @@ Bauman Moscow State Technical University, Department IU7 (Software Engineering),
 
 **AI tooling:** Claude Code, Codex, MCP servers, agent skills and hooks, subagent orchestration, LLM-based code review, token and context optimization.
 
-**Domains:** AI-assisted software development, backend, microservices, platform engineering, storage and distributed systems, virtualization, private cloud, remote and distributed teams, systems modernization, enterprise platforms, CAD, fintech and trading integrations, blockchain systems, high-throughput systems.
+**Domains:** AI-assisted software development, backend, microservices, platform engineering, software-defined storage, storage and distributed systems, virtualization, private cloud, remote and distributed teams, systems modernization, enterprise platforms, CAD, fintech and trading integrations, blockchain systems, high-throughput systems.
 
 ## Outside of work
 I enjoy film and poetry, play ukulele and guitar, and hike. I collect phones with physical keyboards and vinyl.
