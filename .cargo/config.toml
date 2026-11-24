@@ -1,0 +1,3 @@
+# Intentionally no global [build].target override.
+# Host tools (e.g., sitegen) must build for the runner default target;
+# Trunk sets wasm32 target explicitly for web builds.

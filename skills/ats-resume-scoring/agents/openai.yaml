@@ -1,0 +1,4 @@
+interface:
+  display_name: "ATS Resume Scoring"
+  short_description: "Score and tailor resumes for ATS screening"
+  default_prompt: "Use $ats-resume-scoring to score this resume against a job description and produce a defensible ATS-optimized variant."
