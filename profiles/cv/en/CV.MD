@@ -1,19 +1,21 @@
 # Alexey Belyakov
 
 **Head of Engineering**
-Engineering leadership • AI-native software delivery • C++/Rust systems modernization
+AI Transformation • Agentic Software Development • Systems Engineering
 
 Contacts: qqrm@vivaldi.net • Telegram: @leqqrm • LinkedIn: linkedin.com/in/qqrm • GitHub: github.com/qqrm • Moscow · open to relocation
 
 ## Summary
-Head of Engineering / Engineering Manager with 15+ years in software development; 7+ years in engineering leadership — from technical lead to Head of Development: an organization of up to 45 specialists, 5+ cross-functional teams through team and tech leads. Background in C++ and Rust systems engineering and DevOps.
+Engineering leader specializing in AI transformation of software engineering organizations. 15+ years in software development and 7+ years in engineering leadership, from technical lead to ownership of an organization of up to 45 specialists across 5+ cross-functional teams through team and tech leads. My technical foundation is C++/Rust systems engineering, distributed systems and DevOps. Built and scaled engineering teams, owned technical strategy and development and infrastructure budgets, and reduced task-to-release lead time by approximately 50%.
 
-Focus: AI-native software delivery — in my current team all production code is written by LLM coding agents; I build the engineering system around them: decomposition, contracts, orchestration, independent verification, final acceptance. I haven't reviewed code line-by-line in over a year — acceptance runs on executable evidence, accountability stays with the human. Currently owning a production software-defined storage product after completing its C++ to Rust migration, with a second engineer alongside. I stepped back into a hands-on role deliberately — to prove an AI-first delivery model on a production product. My next step is into management: what interests me is not implementing tasks but the processes and systems that make implementation maximally effective. Target roles: Head of Engineering, Director of Engineering, CTO at a product company.
+I design AI-native engineering operating models that turn coding agents into a governed production delivery capability: task decomposition, explicit contracts, orchestration, independent verification, security, cost controls and evidence-based acceptance. Most recently, I deliberately returned to a hands-on Staff Engineer role to validate this model on a production software-defined storage product, leading its C++ to Rust migration in a two-engineer team with agent-written code. My focus is scaling these practices across engineering organizations while retaining human accountability for architecture, reliability and delivery outcomes.
+
+Target roles: Head of Engineering, Director of Engineering, AI Engineering Transformation Lead, CTO in a product company.
 
 ## Core competencies
 **Engineering leadership:** engineering org design, Agile, Scrum and Kanban processes, running 1:1s, performance reviews, headcount planning, goal setting, hiring and onboarding, growing tech leads, ownership models, architecture governance, roadmap, delivery and release management, stakeholder management, technical-debt management.
 
-**AI adoption and agentic delivery:** AI adoption in engineering organizations, agentic SDLC, coding-agent workflows (Claude Code, Codex, MCP), agent harness and skill design, context and token optimization, task decomposition and isolation, executable acceptance, CI verification gates, effective AI review of AI-generated code, behavioral equivalence testing.
+**AI transformation and agentic software delivery:** engineering operating model design, engineering productivity, change management, AI adoption in engineering organizations, agentic SDLC, coding-agent workflows (Claude Code, Codex, MCP), agent harness and skill design, context and token optimization, task decomposition and isolation, executable acceptance, CI verification gates, effective AI review of AI-generated code, behavioral equivalence testing.
 
 **DevOps:** CI/CD pipelines, GitOps, Kubernetes, containerized and virtualized test environments, build and cache infrastructure, observability.
 
