@@ -47,9 +47,9 @@
     "Head of Engineering"
   }
   #let default_subtitle = if lang == "ru" {
-    "AI Transformation • агентная разработка ПО • эффективность инженерных команд"
+    "AI Transformation • агентная разработка ПО • системная инженерия"
   } else {
-    "AI Transformation • Agentic Software Development • Engineering Productivity"
+    "AI Transformation • Agentic Software Development • Systems Engineering"
   }
   #let title = if title == none { default_title } else { title }
   #let subtitle = if subtitle == none { default_subtitle } else { subtitle }

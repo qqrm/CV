@@ -1,14 +1,14 @@
 # Alexey Belyakov
 
 **Head of Engineering**
-AI Transformation • Agentic Software Development • Engineering Productivity
+AI Transformation • Agentic Software Development • Systems Engineering
 
 Contacts: qqrm@vivaldi.net • Telegram: @leqqrm • LinkedIn: linkedin.com/in/qqrm • GitHub: github.com/qqrm • Moscow · open to relocation
 
 ## Summary
-Engineering leader specializing in AI transformation of software engineering organizations. 15+ years in software development and 7+ years in engineering leadership, including ownership of an organization of up to 45 specialists across 5+ cross-functional teams. Built and scaled engineering teams, owned technical strategy and development and infrastructure budgets, and reduced task-to-release lead time by approximately 50%.
+Engineering leader specializing in AI transformation of software engineering organizations. 15+ years in software development and 7+ years in engineering leadership, from technical lead to ownership of an organization of up to 45 specialists across 5+ cross-functional teams through team and tech leads. My technical foundation is C++/Rust systems engineering, distributed systems and DevOps. Built and scaled engineering teams, owned technical strategy and development and infrastructure budgets, and reduced task-to-release lead time by approximately 50%.
 
-I design AI-native engineering operating models that turn coding agents into a governed production delivery capability: task decomposition, orchestration, independent verification, security, cost controls and evidence-based acceptance. Most recently, I deliberately returned to a hands-on Staff Engineer role to validate this model on a production software-defined storage product, leading its C++ to Rust migration in a two-engineer team with agent-written code. My focus is scaling these practices across engineering organizations while retaining human accountability for architecture, reliability and delivery outcomes.
+I design AI-native engineering operating models that turn coding agents into a governed production delivery capability: task decomposition, explicit contracts, orchestration, independent verification, security, cost controls and evidence-based acceptance. Most recently, I deliberately returned to a hands-on Staff Engineer role to validate this model on a production software-defined storage product, leading its C++ to Rust migration in a two-engineer team with agent-written code. My focus is scaling these practices across engineering organizations while retaining human accountability for architecture, reliability and delivery outcomes.
 
 Target roles: Head of Engineering, Director of Engineering, AI Engineering Transformation Lead, CTO in a product company.
 
