@@ -47,9 +47,9 @@
     "Head of Engineering"
   }
   #let default_subtitle = if lang == "ru" {
-    "Руководство разработкой • разработка с ИИ-агентами • модернизация систем на C++/Rust"
+    "AI Transformation • агентная разработка ПО • эффективность инженерных команд"
   } else {
-    "Engineering leadership • AI-native software delivery • C++/Rust systems modernization"
+    "AI Transformation • Agentic Software Development • Engineering Productivity"
   }
   #let title = if title == none { default_title } else { title }
   #let subtitle = if subtitle == none { default_subtitle } else { subtitle }

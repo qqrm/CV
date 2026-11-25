@@ -1,4 +1,6 @@
-# Alexey Belyakov CV
+# Alexey Belyakov — Head of Engineering | AI Transformation
+
+Engineering leader specializing in AI transformation and agentic software delivery. 15+ years in software development, 7+ years in engineering leadership, and experience leading up to 45 specialists across 5+ cross-functional teams.
 
 This repository contains the source files for my CV. Markdown is the source of truth, Typst builds the PDF artifacts, and Leptos + Trunk builds the GitHub Pages website.
 
